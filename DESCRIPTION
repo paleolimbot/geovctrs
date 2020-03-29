@@ -1,5 +1,5 @@
 Package: geovctrs
-Title: Geometry vectors
+Title: Common Classes and Data Structures for Geometry Vectors
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Dewey",
@@ -7,8 +7,9 @@ Authors@R:
            role = c("aut", "cre"),
            email = "dewey@fishandwhistle.net",
            comment = c(ORCID = "0000-0002-9415-4582"))
-Description: Provides data structures to convert various
-  representations of geometry.
+Description: Provides a set of common data structures
+  to unite the plethora of geospatial processing packages
+  in the R package ecosystem.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -16,7 +17,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.0.2
 Suggests: 
     testthat (>= 2.1.0),
-    tidyselect (>= 1.0.0),
     vdiffr
 Imports: 
     rlang,

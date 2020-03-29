@@ -4,10 +4,11 @@
 \name{geovctrs-package}
 \alias{geovctrs}
 \alias{geovctrs-package}
-\title{geovctrs: Geometry vectors}
+\title{geovctrs: Common Classes and Data Structures for Geometry Vectors}
 \description{
-Provides data structures to convert various
-  representations of geometry.
+Provides a set of common data structures
+  to unite the plethora of geospatial processing packages
+  in the R package ecosystem.
 }
 \seealso{
 Useful links:
