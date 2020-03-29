@@ -4,10 +4,10 @@
 \alias{geo_collection}
 \title{Collections of coordinate vectors}
 \usage{
-geo_collection(..., srid = NA)
+geo_collection(feature = list(), srid = NA)
 }
 \arguments{
-\item{...}{One or more features. Splicing is supported.}
+\item{feature}{A list of one or more features.}
 
 \item{srid}{A spatial reference identifier}
 }

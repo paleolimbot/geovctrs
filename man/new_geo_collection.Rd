@@ -3,28 +3,17 @@
 \name{new_geo_collection}
 \alias{new_geo_collection}
 \alias{validate_geo_collection}
-\alias{vec_ptype_abbr.geo_collection}
-\alias{format.geo_collection}
-\alias{print.geo_collection}
 \alias{is_geo_collection}
 \title{S3 Details for coordinate vector collections}
 \usage{
-new_geo_collection(x, srid = NA_integer_)
+new_geo_collection(x = list(feature = list(), srid = integer()))
 
 validate_geo_collection(x)
-
-\method{vec_ptype_abbr}{geo_collection}(x, ...)
-
-\method{format}{geo_collection}(x, ...)
-
-\method{print}{geo_collection}(x, ...)
 
 is_geo_collection(x)
 }
 \arguments{
-\item{x}{A (possibly) \code{\link[=list]{list()}} of geo coordinate vectors}
-
-\item{srid}{A spatial reference identifier}
+\item{x}{A (possibly) \code{\link[=geo_collection]{geo_collection()}}}
 
 \item{...}{Unused}
 }
