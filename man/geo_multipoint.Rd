@@ -4,10 +4,10 @@
 \alias{geo_multipoint}
 \title{Create a multipoint}
 \usage{
-geo_multipoint(xy, srid = NA)
+geo_multipoint(feature, srid = NA)
 }
 \arguments{
-\item{xy}{A \code{\link[=geo_xy]{geo_xy()}}}
+\item{feature}{A \code{\link[=geo_collection]{geo_collection()}} of \code{\link[=geo_point]{geo_point()}}s.}
 
 \item{srid}{A spatial reference identifier.}
 }
@@ -18,6 +18,8 @@ A \code{\link[=geo_collection]{geo_collection()}} of length 1.
 Create a multipoint
 }
 \examples{
-geo_multipoint(geo_xy(1:5, 2:6))
+geo_multipoint(
+  geo_point(geo_xy(10, 30))
+)
 
 }

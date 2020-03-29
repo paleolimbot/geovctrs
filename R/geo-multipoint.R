@@ -2,20 +2,33 @@
 #' Create a multipoint
 #'
 #' @inheritParams geo_point
+#' @param feature A [geo_collection()] of [geo_point()]s.
 #'
 #' @return A [geo_collection()] of length 1.
 #' @export
 #'
 #' @examples
-#' geo_multipoint(geo_xy(1:5, 2:6))
+#' geo_multipoint(
+#'   geo_point(geo_xy(10, 30))
+#' )
 #'
-geo_multipoint <- function(xy, srid = NA)  {
-  xy <- vec_cast(xy, geo_xy())
-  stopifnot(vec_size(srid) == 1)
+geo_multipoint <- function(feature, srid = NA) {
+  feature <- vec_cast(feature, geo_collection())
+  values <- field(feature, "feature")
+  is_point <- vapply(values, inherits, "geo_point", FUN.VALUE = logical(1))
+  if (!all(is_point)) {
+    abort("All features must be `geo_point()`s")
+  }
 
-  point <- new_geo_multipoint(list(xy = xy))
-  validate_geo_multipoint(point)
-  new_geo_collection(list(feature = list(point), srid = srid))
+  xy <- lapply(values, `[[`, "xy")
+
+  feat <- new_geo_multipoint(
+    list(
+      xy = vec_c(!!!xy)
+    )
+  )
+
+  new_geo_collection(list(feature = list(feat), srid = srid))
 }
 
 new_geo_multipoint <- function(x) {
