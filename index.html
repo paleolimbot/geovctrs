@@ -78,8 +78,8 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="r"># install.packages("remotes")
-re,motes::install_github("paleolimbot/geovctrs")</pre></div>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="co"># install.packages("remotes")</span>
+<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"paleolimbot/geovctrs"</span>)</pre></div>
 <p>If you can load the package, you’re good to go!</p>
 <div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">geovctrs</span>)</pre></div>
 </div>
@@ -93,6 +93,9 @@ re,motes::install_github("paleolimbot/geovctrs")</pre></div>
 <span class="fu"><a href="reference/new_geo_wkb.html">as_geo_wkb</a></span>(<span class="fu"><a href="reference/geo_wkt.html">geo_wkt</a></span>(<span class="st">"LINESTRING (30 10, 10 30, 40 40)"</span>))
 <span class="co">#&gt; &lt;geo_wkb [1]&gt;</span>
 <span class="co">#&gt; &lt;raw [57]&gt;</span></pre></div>
+<p>Plot geometry vectors in any format!</p>
+<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="reference/geo_plot.html">geo_plot</a></span>(<span class="fu"><a href="reference/geo_wkt.html">geo_wkt</a></span>(<span class="st">"LINESTRING (30 10, 10 30, 40 40)"</span>))</pre></div>
+<p><img src="reference/figures/README-ex-plot-1.png" width="100%"></p>
 </div>
 </div>
   </div>
