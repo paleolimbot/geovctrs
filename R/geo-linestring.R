@@ -13,9 +13,9 @@ geo_linestring <- function(xy, srid = NA)  {
   xy <- vec_cast(xy, geo_xy())
   stopifnot(vec_size(srid) == 1)
 
-  point <- new_geo_linestring(list(xy = xy))
-  validate_geo_linestring(point)
-  new_geo_collection(list(feature = list(point), srid = srid))
+  feat <- new_geo_linestring(list(xy = xy))
+  validate_geo_linestring(feat)
+  new_geo_collection(list(feature = list(feat), srid = srid))
 }
 
 new_geo_linestring <- function(x) {
