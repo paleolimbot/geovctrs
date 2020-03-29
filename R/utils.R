@@ -92,3 +92,19 @@ as_part_identifier <- function(xy, ...) {
   # recombine and reorder
   lapply(c(all[1], group_vars), `[`, row_order)
 }
+
+summarise_srids <- function(srids) {
+  srid <- unique(srids)
+  final_srid <- srid[1]
+  if (length(srid) > 1) {
+    rlang::warn(
+      sprintf(
+        "Summarising SRID: (%s) => %s",
+        paste(srid, collapse = ", "),
+        final_srid
+      )
+    )
+  }
+
+  final_srid
+}
