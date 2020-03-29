@@ -29,7 +29,7 @@ geo_multipolygon <- function(feature, srid = NA) {
     list(
       xy = vec_c(!!!xy),
       ring = vec_c(!!!ring),
-      parts = inverse.rle(part_rle)
+      part = inverse.rle(part_rle)
     )
   )
 
