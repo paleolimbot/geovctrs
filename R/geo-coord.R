@@ -7,22 +7,28 @@
 #' @param y,to See [vctrs::vec_cast()] and [vctrs::vec_ptype2()]
 #' @param ... Unused
 #'
-#' @export
+#' @noRd
 #'
 is_geo_coord <- function(x) {
   inherits(x, "geo_coord")
 }
 
 #' @rdname is_geo_coord
-#' @export
+#' @noRd
 geo_coord <- function() {
   structure(list(), class = "geo_coord")
 }
 
+#' Vctrs details for coordinate vectors
+#'
+#' Coordinate vectors are an internal data structure
+#' that will probably be phased out in future versions.
+#'
+#' @param x,y,to,... See [vctrs::vec_cast()] and [vctrs::vec_ptype2()]
+#'
 #' @method vec_ptype2 geo_coord
 #' @export
 #' @export vec_ptype2.geo_coord
-#' @rdname is_geo_coord
 vec_ptype2.geo_coord <- function(x, y, ...) {
   UseMethod("vec_ptype2.geo_coord", y)
 }
@@ -105,7 +111,7 @@ as.data.frame.geo_coord <- function(x, ...) {
 #' @method vec_cast geo_coord
 #' @export
 #' @export vec_cast.geo_coord
-#' @rdname is_geo_coord
+#' @rdname vec_ptype2.geo_coord
 vec_cast.geo_coord <- function(x, to, ...) {
   UseMethod("vec_cast.geo_coord")
 }

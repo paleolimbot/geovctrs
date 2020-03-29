@@ -2,7 +2,7 @@
 test_that("geo_coord_point() class works", {
   tbl_point <- geo_coord_point(geo_xy(0, 1))
   expect_output(print(tbl_point), "geo_coord_point")
-  expect_output(print(tibble(tbl_point)), "tblpnt")
+  expect_output(print(tibble(tbl_point)), "geo_pt")
   expect_is(tbl_point, "geo_coord_point")
   expect_is(tbl_point, "geo_coord")
 
@@ -17,7 +17,7 @@ test_that("geo_coord_point() class works", {
 test_that("geo_coord_multipoint() class works", {
   tbl_point <- geo_coord_multipoint(geo_xy(0, 1), feature = 1)
   expect_output(print(tbl_point), "geo_coord_multipoint")
-  expect_output(print(tibble(tbl_point)), "tblmpnt")
+  expect_output(print(tibble(tbl_point)), "geo_mpt")
   expect_is(tbl_point, "geo_coord_multipoint")
   expect_is(tbl_point, "geo_coord")
   expect_true(is_geo_coord_multipoint(tbl_point))

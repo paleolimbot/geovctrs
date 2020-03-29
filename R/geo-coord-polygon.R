@@ -1,6 +1,6 @@
 
 #' @rdname geo_coord_point
-#' @export
+#' @noRd
 geo_coord_polygon <- function(xy, feature = 1L, piece = 1L) {
   xy <- vec_cast(xy, geo_xy())
   feature <- vec_cast(feature, integer())
@@ -16,7 +16,7 @@ geo_coord_polygon <- function(xy, feature = 1L, piece = 1L) {
 }
 
 #' @rdname geo_coord_point
-#' @export
+#' @noRd
 geo_coord_multipolygon <- function(xy, feature = 1L, piece = 1L, part = 1L) {
   xy <- vec_cast(xy, geo_xy())
   feature <- vec_cast(feature, integer())
@@ -39,7 +39,7 @@ geo_coord_multipolygon <- function(xy, feature = 1L, piece = 1L, part = 1L) {
 #' @param x A (possibly) [geo_coord_polygon()] or [geo_coord_multipolygon()]
 #' @param ... Unused
 #'
-#' @export
+#' @noRd
 #'
 new_geo_coord_polygon <- function(x = list(xy = geo_xy(), feature = integer(0), piece = integer(0))) {
   vec_assert(x$xy, geo_xy())
@@ -49,7 +49,7 @@ new_geo_coord_polygon <- function(x = list(xy = geo_xy(), feature = integer(0), 
 }
 
 #' @rdname new_geo_coord_polygon
-#' @export
+#' @noRd
 new_geo_coord_multipolygon <- function(x = list(xy = geo_xy(),
                                               feature = integer(0),
                                               part = integer(0),
@@ -62,88 +62,81 @@ new_geo_coord_multipolygon <- function(x = list(xy = geo_xy(),
 }
 
 #' @rdname new_geo_coord_polygon
-#' @export
+#' @noRd
 validate_geo_coord_polygon <- function(x) {
   # Can't think of validation that is't already done in new*
   invisible(x)
 }
 
 #' @rdname new_geo_coord_polygon
-#' @export
+#' @noRd
 validate_geo_coord_multipolygon <- function(x) {
   # Can't think of any validation that isn't already done in new_*
   invisible(x)
 }
 
 #' @rdname new_geo_coord_polygon
-#' @export
+#' @noRd
 is_geo_coord_polygon <- function(x) {
   inherits(x, "geo_coord_polygon")
 }
 
 #' @rdname new_geo_coord_polygon
-#' @export
+#' @noRd
 is_geo_coord_multipolygon <- function(x) {
   inherits(x, "geo_coord_multipolygon")
 }
 
 #' @export
-#' @rdname new_geo_coord_polygon
 format.geo_coord_polygon <- function(x, ...) {
   format.geo_coord_linestring(x, ...)
 }
 
 #' @export
-#' @rdname new_geo_coord_polygon
 print.geo_coord_polygon <- function(x, ...) {
   print.geo_coord_linestring(x, ...)
 }
 
 #' @export
-#' @rdname new_geo_coord_polygon
 format.geo_coord_multipolygon <- function(x, ...) {
   format.geo_coord_multilinestring(x, ...)
 }
 
 #' @export
-#' @rdname new_geo_coord_polygon
 print.geo_coord_multipolygon <- function(x, ...) {
   print.geo_coord_multilinestring(x, ...)
 }
 
-#' @rdname new_geo_coord_polygon
 #' @export
 vec_ptype_abbr.geo_coord_polygon <- function(x, ...) {
-  "tblply"
+  "geo_ply"
 }
 
-#' @rdname new_geo_coord_polygon
 #' @export
 vec_ptype_abbr.geo_coord_multipolygon <- function(x, ...) {
-  "tblmply"
+  "geo_mply"
 }
 
 #' @rdname new_geo_coord_polygon
-#' @export
+#' @noRd
 as_geo_coord_polygon <- function(x, ...) {
   UseMethod("as_geo_coord_polygon")
 }
 
 #' @rdname new_geo_coord_polygon
-#' @export
+#' @noRd
 as_geo_coord_polygon.default <- function(x, ...) {
   vec_cast(x, new_geo_coord_polygon())
 }
 
 #' @rdname new_geo_coord_polygon
-#' @export
+#' @noRd
 as_geo_coord_multipolygon <- function(x, ...) {
   UseMethod("as_geo_coord_multipolygon")
 }
 
 #' @rdname new_geo_coord_polygon
-#' @export
+#' @noRd
 as_geo_coord_multipolygon.default <- function(x, ...) {
   vec_cast(x, new_geo_coord_multipolygon())
 }
-

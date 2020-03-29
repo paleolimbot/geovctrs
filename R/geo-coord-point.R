@@ -16,7 +16,7 @@
 #' @param part An ID used to separate parts within a feature of a multi* geometry
 #'
 #' @return A vctr
-#' @export
+#' @noRd
 #'
 #' @examples
 #' geo_coord_point(geo_xy(30, 10))
@@ -35,7 +35,7 @@ geo_coord_point <- function(xy, feature = seq_len(vec_size(xy))) {
 }
 
 #' @rdname geo_coord_point
-#' @export
+#' @noRd
 geo_coord_multipoint <- function(xy, feature = seq_len(vec_size(xy))) {
   feature <- vec_cast(feature, integer())
   xy <- vec_cast(xy, geo_xy())
@@ -53,7 +53,7 @@ geo_coord_multipoint <- function(xy, feature = seq_len(vec_size(xy))) {
 #' @param x A (possibly) [geo_coord_point()] or [geo_coord_multipoint()]
 #' @param ... Unused
 #'
-#' @export
+#' @noRd
 #'
 new_geo_coord_point <- function(x = list(xy = geo_xy(), feature = integer(0))) {
   vec_assert(x$xy, geo_xy())
@@ -62,7 +62,7 @@ new_geo_coord_point <- function(x = list(xy = geo_xy(), feature = integer(0))) {
 }
 
 #' @rdname new_geo_coord_point
-#' @export
+#' @noRd
 new_geo_coord_multipoint <- function(x = list(xy = geo_xy(), feature = integer(0))) {
   vec_assert(x$xy, geo_xy())
   vec_assert(x$feature, integer())
@@ -70,7 +70,7 @@ new_geo_coord_multipoint <- function(x = list(xy = geo_xy(), feature = integer(0
 }
 
 #' @rdname new_geo_coord_point
-#' @export
+#' @noRd
 validate_geo_coord_point <- function(x) {
   if (length(unique(field(x, "feature"))) != length(field(x, "feature"))) {
     abort(
@@ -82,32 +82,30 @@ validate_geo_coord_point <- function(x) {
 }
 
 #' @rdname new_geo_coord_point
-#' @export
+#' @noRd
 validate_geo_coord_multipoint <- function(x) {
   # Can't think of any validation that isn't already done in new_*
   invisible(x)
 }
 
 #' @rdname new_geo_coord_point
-#' @export
+#' @noRd
 is_geo_coord_point <- function(x) {
   inherits(x, "geo_coord_point")
 }
 
 #' @rdname new_geo_coord_point
-#' @export
+#' @noRd
 is_geo_coord_multipoint <- function(x) {
   inherits(x, "geo_coord_multipoint")
 }
 
 #' @export
-#' @rdname new_geo_coord_point
 format.geo_coord_point <- function(x, ...) {
   sprintf("<feat `%s` %s>", field(x, "feature"), format(field(x, "xy"), ...))
 }
 
 #' @export
-#' @rdname new_geo_coord_point
 print.geo_coord_point <- function(x, ...) {
   cat(
     sprintf(
@@ -120,49 +118,45 @@ print.geo_coord_point <- function(x, ...) {
 }
 
 #' @export
-#' @rdname new_geo_coord_point
 format.geo_coord_multipoint <- function(x, ...) {
   sprintf("<feat `%s.1` %s>", field(x, "feature"), format(field(x, "xy"), ...))
 }
 
 #' @export
-#' @rdname new_geo_coord_point
 print.geo_coord_multipoint <- function(x, ...) {
   print.geo_coord_point(x, ...)
 }
 
-#' @rdname new_geo_coord_point
 #' @export
 vec_ptype_abbr.geo_coord_point <- function(x, ...) {
-  "tblpnt"
+  "geo_pt"
 }
 
-#' @rdname new_geo_coord_point
 #' @export
 vec_ptype_abbr.geo_coord_multipoint <- function(x, ...) {
-  "tblmpnt"
+  "geo_mpt"
 }
 
 #' @rdname new_geo_coord_point
-#' @export
+#' @noRd
 as_geo_coord_point <- function(x, ...) {
   UseMethod("as_geo_coord_point")
 }
 
 #' @rdname new_geo_coord_point
-#' @export
+#' @noRd
 as_geo_coord_point.default <- function(x, ...) {
   vec_cast(x, new_geo_coord_point())
 }
 
 #' @rdname new_geo_coord_point
-#' @export
+#' @noRd
 as_geo_coord_multipoint <- function(x, ...) {
   UseMethod("as_geo_coord_multipoint")
 }
 
 #' @rdname new_geo_coord_point
-#' @export
+#' @noRd
 as_geo_coord_multipoint.default <- function(x, ...) {
   vec_cast(x, new_geo_coord_multipoint())
 }

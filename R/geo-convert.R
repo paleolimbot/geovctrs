@@ -8,7 +8,6 @@
 #'
 #' @examples
 #' geo_convert(geo_wkt("POINT (20 10)"), geo_wkb())
-#' geo_convert(geo_wkt("POINT (20 10)"), geo_coord())
 #'
 geo_convert <- function(x, to) {
   geo_restore(to, cpp_convert(x, to))

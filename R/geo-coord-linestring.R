@@ -1,6 +1,6 @@
 
 #' @rdname geo_coord_point
-#' @export
+#' @noRd
 geo_coord_linestring <- function(xy, feature = 1L) {
   xy <- vec_cast(xy, geo_xy())
   feature <- vec_cast(feature, integer())
@@ -14,7 +14,7 @@ geo_coord_linestring <- function(xy, feature = 1L) {
 }
 
 #' @rdname geo_coord_point
-#' @export
+#' @noRd
 geo_coord_multilinestring <- function(xy, feature = 1L, part = 1L) {
   xy <- vec_cast(xy, geo_xy())
   feature <- vec_cast(feature, integer())
@@ -35,7 +35,7 @@ geo_coord_multilinestring <- function(xy, feature = 1L, part = 1L) {
 #' @param x A (possibly) [geo_coord_linestring()] or [geo_coord_multilinestring()]
 #' @param ... Unused
 #'
-#' @export
+#' @noRd
 #'
 new_geo_coord_linestring <- function(x = list(xy = geo_xy(), feature = integer(0))) {
   vec_assert(x$xy, geo_xy())
@@ -44,7 +44,7 @@ new_geo_coord_linestring <- function(x = list(xy = geo_xy(), feature = integer(0
 }
 
 #' @rdname new_geo_coord_linestring
-#' @export
+#' @noRd
 new_geo_coord_multilinestring <- function(x = list(xy = geo_xy(),
                                                  feature = integer(0),
                                                  part = integer(0))) {
@@ -55,45 +55,42 @@ new_geo_coord_multilinestring <- function(x = list(xy = geo_xy(),
 }
 
 #' @rdname new_geo_coord_linestring
-#' @export
+#' @noRd
 validate_geo_coord_linestring <- function(x) {
   # Can't think of validation that is't already done in new*
   invisible(x)
 }
 
 #' @rdname new_geo_coord_linestring
-#' @export
+#' @noRd
 validate_geo_coord_multilinestring <- function(x) {
   # Can't think of any validation that isn't already done in new_*
   invisible(x)
 }
 
 #' @rdname new_geo_coord_linestring
-#' @export
+#' @noRd
 is_geo_coord_linestring <- function(x) {
   inherits(x, "geo_coord_linestring")
 }
 
 #' @rdname new_geo_coord_linestring
-#' @export
+#' @noRd
 is_geo_coord_multilinestring <- function(x) {
   inherits(x, "geo_coord_multilinestring")
 }
 
 #' @export
-#' @rdname new_geo_coord_linestring
 format.geo_coord_linestring <- function(x, ...) {
   format.geo_coord_point(x, ...)
 }
 
 #' @export
-#' @rdname new_geo_coord_linestring
 print.geo_coord_linestring <- function(x, ...) {
   print.geo_coord_point(x, ...)
 }
 
 #' @export
-#' @rdname new_geo_coord_linestring
 format.geo_coord_multilinestring <- function(x, ...) {
   sprintf(
     "<feat `%s.%s` %s>",
@@ -104,43 +101,40 @@ format.geo_coord_multilinestring <- function(x, ...) {
 }
 
 #' @export
-#' @rdname new_geo_coord_linestring
 print.geo_coord_multilinestring <- function(x, ...) {
   print.geo_coord_multipoint(x, ...)
 }
 
-#' @rdname new_geo_coord_linestring
 #' @export
 vec_ptype_abbr.geo_coord_linestring <- function(x, ...) {
-  "tblls"
+  "geo_ls"
 }
 
-#' @rdname new_geo_coord_linestring
 #' @export
 vec_ptype_abbr.geo_coord_multilinestring <- function(x, ...) {
-  "tblmls"
+  "geo_mls"
 }
 
 #' @rdname new_geo_coord_linestring
-#' @export
+#' @noRd
 as_geo_coord_linestring <- function(x, ...) {
   UseMethod("as_geo_coord_linestring")
 }
 
 #' @rdname new_geo_coord_linestring
-#' @export
+#' @noRd
 as_geo_coord_linestring.default <- function(x, ...) {
   vec_cast(x, new_geo_coord_linestring())
 }
 
 #' @rdname new_geo_coord_linestring
-#' @export
+#' @noRd
 as_geo_coord_multilinestring <- function(x, ...) {
   UseMethod("as_geo_coord_multilinestring")
 }
 
 #' @rdname new_geo_coord_linestring
-#' @export
+#' @noRd
 as_geo_coord_multilinestring.default <- function(x, ...) {
   vec_cast(x, new_geo_coord_multilinestring())
 }
