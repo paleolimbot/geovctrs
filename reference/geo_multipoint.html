@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>S3 Details for coordinate vector collections — new_geo_collection • geovctrs</title>
+<title>Create a multipoint — geo_multipoint • geovctrs</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="S3 Details for coordinate vector collections — new_geo_collection" />
-<meta property="og:description" content="S3 Details for coordinate vector collections" />
+<meta property="og:title" content="Create a multipoint — geo_multipoint" />
+<meta property="og:description" content="Create a multipoint" />
 
 
 
@@ -108,31 +108,50 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>S3 Details for coordinate vector collections</h1>
-    <small class="dont-index">Source: <a href='https://github.com/paleolimbot/geovctrs/blob/master/R/geo-collection.R'><code>R/geo-collection.R</code></a></small>
-    <div class="hidden name"><code>new_geo_collection.Rd</code></div>
+    <h1>Create a multipoint</h1>
+    <small class="dont-index">Source: <a href='https://github.com/paleolimbot/geovctrs/blob/master/R/geo-multipoint.R'><code>R/geo-multipoint.R</code></a></small>
+    <div class="hidden name"><code>geo_multipoint.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>S3 Details for coordinate vector collections</p>
+    <p>Create a multipoint</p>
     </div>
 
-    <pre class="usage"><span class='fu'>new_geo_collection</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>feature</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>()))
-
-<span class='fu'>validate_geo_collection</span>(<span class='no'>x</span>)
-
-<span class='fu'>is_geo_collection</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>geo_multipoint</span>(<span class='no'>xy</span>, <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fl'>NA</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>A (possibly) <code><a href='geo_collection.html'>geo_collection()</a></code></p></td>
+      <th>xy</th>
+      <td><p>A <code><a href='geo_xy.html'>geo_xy()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>srid</th>
+      <td><p>A spatial reference identifier.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>A <code><a href='geo_collection.html'>geo_collection()</a></code> of length 1.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>geo_multipoint</span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>1</span>:<span class='fl'>5</span>, <span class='fl'>2</span>:<span class='fl'>6</span>))</div><div class='output co'>#&gt; &lt;geo_collection[1]&gt;
+#&gt; $feature
+#&gt; $feature[[1]]
+#&gt; $xy
+#&gt; &lt;geo_xy[5]&gt;
+#&gt; [1] (1 2) (2 3) (3 4) (4 5) (5 6)
+#&gt; 
+#&gt; attr(,"class")
+#&gt; [1] "geo_multipoint"
+#&gt; 
+#&gt; 
+#&gt; $srid
+#&gt; [1] NA
+#&gt; </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
