@@ -71,3 +71,24 @@ rep_len_or_fail <- function(x, size) {
     )
   }
 }
+
+as_part_identifier <- function(xy, ...) {
+  # recycle
+  all <- vec_recycle_common(xy = xy, ...)
+
+  if (length(all) == 1 || length(all$xy) == 0) {
+    return(all)
+  }
+
+  # make in-order integers of all ...
+  group_vars <- lapply(all[-1], function(x) {
+    idx <- x[!duplicated(x)]
+    match(x, idx)
+  })
+
+  # order so that groups are together
+  row_order <- do.call(order, group_vars)
+
+  # recombine and reorder
+  lapply(c(all[1], group_vars), `[`, row_order)
+}
