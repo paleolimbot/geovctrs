@@ -23,7 +23,7 @@ You can install the development version from
 
 ``` r
 # install.packages("remotes")
-re,motes::install_github("paleolimbot/geovctrs")
+remotes::install_github("paleolimbot/geovctrs")
 ```
 
 If you can load the package, you’re good to go\!
@@ -45,3 +45,11 @@ as_geo_wkb(geo_wkt("LINESTRING (30 10, 10 30, 40 40)"))
 #> <geo_wkb [1]>
 #> <raw [57]>
 ```
+
+Plot geometry vectors in any format\!
+
+``` r
+geo_plot(geo_wkt("LINESTRING (30 10, 10 30, 40 40)"))
+```
+
+<img src="man/figures/README-ex-plot-1.png" width="100%" />

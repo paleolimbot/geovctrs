@@ -30,7 +30,7 @@ You can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("remotes")
-re,motes::install_github("paleolimbot/geovctrs")
+remotes::install_github("paleolimbot/geovctrs")
 ```
 
 If you can load the package, you're good to go!
@@ -43,7 +43,13 @@ library(geovctrs)
 
 Convert between formats (notice how each format has a nice print method!):
 
-```{r ex-plot}
+```{r}
 geo_wkt("LINESTRING (30 10, 10 30, 40 40)")
 as_geo_wkb(geo_wkt("LINESTRING (30 10, 10 30, 40 40)"))
+```
+
+Plot geometry vectors in any format!
+
+```{r ex-plot}
+geo_plot(geo_wkt("LINESTRING (30 10, 10 30, 40 40)"))
 ```
