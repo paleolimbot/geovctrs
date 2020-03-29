@@ -1,5 +1,5 @@
 
-test_that("geo_multipoolygon() works", {
+test_that("geo_multipolygon() works", {
   # empty
   expect_is(geo_multipolygon(geo_polygon(geo_xy())), "geo_collection")
   expect_length(geo_multipolygon(geo_polygon(geo_xy())), 1)
@@ -13,4 +13,8 @@ test_that("geo_multipoolygon() works", {
     "geo_multipolygon"
   )
   expect_length(geo_multipolygon(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10)))), 1)
+
+  # output
+  expect_output(print(geo_multipolygon(geo_polygon(geo_xy()))), "geo_multipolygon")
+  expect_output(print(geo_multipolygon(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10))))), "geo_multipolygon")
 })

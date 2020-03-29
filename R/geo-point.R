@@ -28,3 +28,12 @@ validate_geo_point <-function(x) {
   stopifnot(vec_size(x$xy) %in% c(0, 1))
   invisible(x)
 }
+
+#' @export
+format.geo_point <- function(x, ..., non_empty = format(x$xy[1])) {
+  if (length(x$xy) == 0) {
+    sprintf("<%s empty>", class(x)[1])
+  } else {
+    sprintf("<%s %s>", class(x)[1], non_empty)
+  }
+}

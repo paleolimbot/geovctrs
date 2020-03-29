@@ -43,3 +43,8 @@ new_geo_multilinestring <- function(x) {
 validate_geo_multilinestring <-function(x) {
   invisible(x)
 }
+
+#' @export
+format.geo_multilinestring <- function(x, ...) {
+  format.geo_linestring(x, ...)
+}

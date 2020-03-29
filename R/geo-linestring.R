@@ -27,3 +27,15 @@ validate_geo_linestring <-function(x) {
   stopifnot(vec_size(x$xy) != 1)
   invisible(x)
 }
+
+#' @export
+format.geo_linestring <- function(x, ...) {
+  format.geo_point(
+    x,
+    ...,
+    non_empty = {
+      first_last <- format(c(x$xy[1], x$xy[length(x$xy)]))
+      sprintf("%s...{%s}...%s", first_last[1], length(x$xy) - 2, first_last[2])
+    }
+  )
+}
