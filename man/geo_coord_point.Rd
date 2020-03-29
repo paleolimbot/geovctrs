@@ -8,7 +8,7 @@
 \alias{geo_coord_multipoint}
 \alias{geo_coord_polygon}
 \alias{geo_coord_multipolygon}
-\title{Coordinate-long representations of geometries}
+\title{Experimental coordinate-long representations of geometries}
 \usage{
 geo_coord_linestring(xy, feature = 1L)
 
@@ -43,8 +43,6 @@ one row per coordinate). Additionally, these can be more easily manipulated
 than some other representations of geometry. \strong{Important}: order matters
 when passing a \verb{geo_coord_*()} to other functions, which assume
 that you use sequential \code{feature}, \code{piece}, and \code{part} values starting at 1.
-Helpers to construct this particular representation of geometry from
-a tibble are in the works.
 }
 \examples{
 geo_coord_point(geo_xy(30, 10))
