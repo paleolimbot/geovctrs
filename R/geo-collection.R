@@ -19,7 +19,6 @@ geo_collection <- function(feature = list(), srid = NA) {
 #' S3 Details for coordinate vector collections
 #'
 #' @param x A (possibly) [geo_collection()]
-#' @param ... Unused
 #'
 #' @export
 #'

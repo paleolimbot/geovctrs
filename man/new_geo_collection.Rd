@@ -14,8 +14,6 @@ is_geo_collection(x)
 }
 \arguments{
 \item{x}{A (possibly) \code{\link[=geo_collection]{geo_collection()}}}
-
-\item{...}{Unused}
 }
 \description{
 S3 Details for coordinate vector collections
