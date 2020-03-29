@@ -9,6 +9,10 @@ geo_polygon(xy, ring = 1L, srid = NA)
 \arguments{
 \item{xy}{A \code{\link[=geo_xy]{geo_xy()}}}
 
+\item{ring}{A vector whose unique value identifies rings.
+These values are considered in order, and the resulting coordinates
+are reordered such that rings are grouped together.}
+
 \item{srid}{A spatial reference identifier.}
 }
 \value{
@@ -18,6 +22,16 @@ A \code{\link[=geo_collection]{geo_collection()}} of length 1.
 Create a polygon
 }
 \examples{
+# a polygon
 geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10)))
+
+# polygon with a hole
+poly_hole <- geo_polygon(
+  geo_xy(
+    c(35, 45, 15, 10, 35, 20, 35, 30, 20),
+    c(10, 45, 40, 20, 10, 30, 35, 30, 20)
+  ),
+  ring = c(1, 1, 1, 1, 1, 2, 2, 2, 2)
+)
 
 }

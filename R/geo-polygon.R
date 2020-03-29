@@ -2,12 +2,25 @@
 #' Create a polygon
 #'
 #' @inheritParams geo_point
+#' @param ring A vector whose unique value identifies rings.
+#'   These values are considered in order, and the resulting coordinates
+#'   are reordered such that rings are grouped together.
 #'
 #' @return A [geo_collection()] of length 1.
 #' @export
 #'
 #' @examples
+#' # a polygon
 #' geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10)))
+#'
+#' # polygon with a hole
+#' poly_hole <- geo_polygon(
+#'   geo_xy(
+#'     c(35, 45, 15, 10, 35, 20, 35, 30, 20),
+#'     c(10, 45, 40, 20, 10, 30, 35, 30, 20)
+#'   ),
+#'   ring = c(1, 1, 1, 1, 1, 2, 2, 2, 2)
+#' )
 #'
 geo_polygon <- function(xy, ring = 1L, srid = NA)  {
   xy <- vec_cast(xy, geo_xy())
@@ -25,6 +38,9 @@ new_geo_polygon <- function(x) {
 }
 
 validate_geo_polygon <-function(x) {
-  stopifnot(!(vec_size(x$xy) %in% c(1, 2)))
+  rings <- split(x$xy, x$ring)
+  lengths <- vapply(rings, length, integer(1))
+  stopifnot(!any(lengths %in% c(1, 2)))
+
   invisible(x)
 }
