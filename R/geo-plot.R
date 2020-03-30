@@ -82,8 +82,7 @@ plot.geo_wkb <- function(x, ...) {
 #' @rdname geo_plot
 #' @export
 geo_plot_add.default <- function(x, ...) {
-  tbl <- geo_convert_geo_collection_lazy(x)
-  geo_plot_add(tbl, ...)
+  geo_plot_add(as_geo_collection(x), ...)
   invisible(x)
 }
 
@@ -152,15 +151,6 @@ geo_plot_add.geo_multipolygon <- function(x, ..., rule = "evenodd") {
     graphics::polypath(field(xy_part, "x"), field(xy_part, "y"), ..., rule = rule)
   }
   invisible(x)
-}
-
-# until the laziness of geo_convert is sorted
-geo_convert_geo_collection_lazy <- function(x) {
-  if (inherits(x, "geo_collection")) {
-    x
-  } else {
-    geo_convert(x, geo_collection())
-  }
 }
 
 separate_groups_with_na <- function(x, groups) {

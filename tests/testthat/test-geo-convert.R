@@ -1,7 +1,7 @@
 
 test_that("wkt conversion works", {
   wkt <- geo_wkt(c("POINT (30 10)", "POINT (20 20)"))
-  wkt_roundtrip <- geo_convert(wkt, new_geo_wkt())
+  wkt_roundtrip <- cpp_convert(wkt, new_geo_wkt())
   expect_is(wkt_roundtrip, "geo_wkt")
   expect_match(wkt_roundtrip, "^POINT")
   expect_match(wkt_roundtrip[1], c("\\(30\\."))
@@ -19,12 +19,12 @@ test_that("wkb conversion works", {
   )
 
   wkb <- geo_wkb(list(wkb_raw))
-  wkb_roundtrip <- geo_convert(wkb, new_geo_wkb())
+  wkb_roundtrip <- cpp_convert(wkb, new_geo_wkb())
   expect_identical(wkb, wkb_roundtrip)
 })
 
 test_that("geo_point conversion works", {
-  tbl <- geo_convert(
+  tbl <- cpp_convert(
     geo_wkt("POINT (10 40)"),
     geo_collection()
   )
@@ -33,7 +33,7 @@ test_that("geo_point conversion works", {
 })
 
 test_that("geo_linestring conversion works", {
-  tbl <- geo_convert(
+  tbl <- cpp_convert(
     geo_wkt("LINESTRING (30 10, 10 30, 40 40)"),
     geo_collection()
   )
@@ -45,7 +45,7 @@ test_that("geo_linestring conversion works", {
 })
 
 test_that("geo_multipoint conversion works", {
-  tbl <- geo_convert(
+  tbl <- cpp_convert(
     geo_wkt("MULTIPOINT ((10 40), (40 30))"),
     geo_collection()
   )
@@ -57,7 +57,7 @@ test_that("geo_multipoint conversion works", {
 })
 
 test_that("geo_multilinestring conversion works", {
-  tbl <- geo_convert(
+  tbl <- cpp_convert(
     geo_wkt("MULTILINESTRING ((10 10, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))"),
     geo_collection()
   )
@@ -84,7 +84,7 @@ test_that("geo_multilinestring conversion works", {
 })
 
 test_that("geo_polygon conversion works", {
-  tbl <- geo_convert(
+  tbl <- cpp_convert(
     geo_wkt("POLYGON ((30 10, 10 30, 40 40, 30 10))"),
     geo_collection()
   )
@@ -98,7 +98,7 @@ test_that("geo_polygon conversion works", {
 })
 
 test_that("geo_multi_polygon conversion works", {
-  tbl <- geo_convert(
+  tbl <- cpp_convert(
     geo_wkt(
       "MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),
             ((20 35, 10 30, 10 10, 30 5, 45 20, 20 35), (30 20, 20 15, 20 25, 30 20)))
@@ -129,7 +129,7 @@ test_that("geo_multi_polygon conversion works", {
 })
 
 test_that("rect conversion works", {
-  rect <- geo_convert(
+  rect <- cpp_convert(
     geo_wkt(
       "MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),
             ((20 35, 10 30, 10 10, 30 5, 45 20, 20 35), (30 20, 20 15, 20 25, 30 20)))
@@ -144,27 +144,27 @@ test_that("rect conversion works", {
 })
 
 test_that("rect conversion works on empty geometries", {
-  expect_identical(geo_convert(geo_wkt("POINT EMPTY"), geo_rect()), geo_rect(Inf, Inf, -Inf, -Inf))
+  expect_identical(cpp_convert(geo_wkt("POINT EMPTY"), geo_rect()), geo_rect(Inf, Inf, -Inf, -Inf))
 })
 
 test_that("xy conversion works", {
   expect_identical(
-    geo_convert(geo_xy(1:2, 6:7), geo_collection()),
+    cpp_convert(geo_xy(1:2, 6:7), geo_collection()),
     c(geo_point(geo_xy(1, 6)), geo_point(geo_xy(2, 7)))
   )
 
   # handling of NA, NaN (inf handled no prob, apparently)
-  expect_equal(geo_convert(geo_xy(NA, NA), geo_wkt()), geo_wkt("POINT EMPTY"))
-  expect_equal(geo_convert(geo_xy(NA, 1), geo_wkt()), geo_wkt("POINT EMPTY"))
-  expect_equal(geo_convert(geo_xy(1, NA), geo_wkt()), geo_wkt("POINT EMPTY"))
-  expect_equal(geo_convert(geo_xy(NaN, 1), geo_wkt()), geo_wkt("POINT EMPTY"))
-  expect_equal(geo_convert(geo_xy(1, NaN), geo_wkt()), geo_wkt("POINT EMPTY"))
-  expect_equal(geo_convert(geo_xy(NaN, NaN), geo_wkt()), geo_wkt("POINT EMPTY"))
+  expect_equal(cpp_convert(geo_xy(NA, NA), geo_wkt()), geo_wkt("POINT EMPTY"))
+  expect_equal(cpp_convert(geo_xy(NA, 1), geo_wkt()), geo_wkt("POINT EMPTY"))
+  expect_equal(cpp_convert(geo_xy(1, NA), geo_wkt()), geo_wkt("POINT EMPTY"))
+  expect_equal(cpp_convert(geo_xy(NaN, 1), geo_wkt()), geo_wkt("POINT EMPTY"))
+  expect_equal(cpp_convert(geo_xy(1, NaN), geo_wkt()), geo_wkt("POINT EMPTY"))
+  expect_equal(cpp_convert(geo_xy(NaN, NaN), geo_wkt()), geo_wkt("POINT EMPTY"))
 })
 
 test_that("empty geometrycollections can  be converted to a GeoCoord", {
   skip("geometrycollections not implemented but should be")
-  geo_convert(geo_wkt("GEOMETRYCOLLECTION EMPTY"), geo_collection())
+  cpp_convert(geo_wkt("GEOMETRYCOLLECTION EMPTY"), geo_collection())
 })
 
 test_that("error occurs with unknown object in conversions", {

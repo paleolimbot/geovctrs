@@ -18,7 +18,7 @@ geo_bbox <- function(x, ..., na.rm = FALSE) {
 #' @rdname geo_bbox
 #' @export
 geo_bbox.default <- function(x, ..., na.rm = FALSE) {
-  rects <- geo_convert(x, geo_rect())
+  rects <- cpp_convert(x, geo_rect())
   xs <- c(field(rects, "xmin"), field(rects, "xmax"))
   ys <- c(field(rects, "ymin"), field(rects, "ymax"))
   xlim <- range(xs[is.finite(xs)], na.rm = na.rm)

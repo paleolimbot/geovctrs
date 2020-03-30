@@ -48,11 +48,11 @@ test_that("plot generics work", {
 
   vdiffr::expect_doppelganger(
     "geo_collection generic",
-    function() plot(geo_convert(geo_wkt("POINT (30 40)"), geo_collection()))
+    function() plot(as_geo_collection(geo_wkt("POINT (30 40)")))
   )
 
   vdiffr::expect_doppelganger(
     "geo_wkb generic",
-    function() plot(geo_convert(geo_wkt("POINT (30 40)"), geo_wkb()))
+    function() plot(as_geo_wkb(geo_wkt("POINT (30 40)")))
   )
 })

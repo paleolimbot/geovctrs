@@ -99,5 +99,17 @@ vec_cast.geo_collection.geo_collection <- function(x, to, ...) {
 #' @method vec_cast.geo_collection geo_xy
 #' @export
 vec_cast.geo_collection.geo_xy <- function(x, to, ...) {
-  geo_convert(x, geo_collection())
+  cpp_convert(x, to)
+}
+
+#' @method vec_cast.geo_collection geo_wkt
+#' @export
+vec_cast.geo_collection.geo_wkt <- function(x, to, ...) {
+  cpp_convert(x, to)
+}
+
+#' @method vec_cast.geo_collection geo_wkb
+#' @export
+vec_cast.geo_collection.geo_wkb <- function(x, to, ...) {
+  cpp_convert(x, to)
 }
