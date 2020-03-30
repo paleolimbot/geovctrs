@@ -162,11 +162,37 @@ test_that("xy conversion works", {
   expect_equal(cpp_convert(geo_xy(NaN, NaN), geo_wkt()), geo_wkt("POINT EMPTY"))
 })
 
-test_that("empty geometrycollections can  be converted to a GeoCoord", {
-  skip("geometrycollections not implemented but should be")
-  cpp_convert(geo_wkt("GEOMETRYCOLLECTION EMPTY"), geo_collection())
+test_that("geometrycollections can  be converted to a GeoCoord", {
+  expect_identical(
+    cpp_convert(geo_wkt("GEOMETRYCOLLECTION EMPTY"), geo_collection()),
+    geo_collection(list(geo_collection()))
+  )
+
+  expect_identical(
+    cpp_convert(
+      geo_wkt(
+        "
+        GEOMETRYCOLLECTION (
+          POINT (40 10),
+          LINESTRING (10 10, 20 20, 10 40),
+          POLYGON ((40 40, 20 45, 45 30, 40 40))
+        )
+        "
+      ),
+      geo_collection()
+    ),
+    geo_collection(
+      list(
+        c(
+          geo_point(geo_xy(40, 10)),
+          geo_linestring(geo_xy(c(10, 20, 10), c(10, 20, 40))),
+          geo_polygon(geo_xy(c(40, 20, 45, 40), c(40, 45, 30, 40)))
+        )
+      )
+    )
+  )
 })
 
 test_that("error occurs with unknown object in conversions", {
-  expect_error(cpp_convert(NULL, new_geo_wkt()), "Can't resolve")
+  expect_error(cpp_convert(as.Date("2020-01-01"), new_geo_wkt()), "Can't resolve")
 })

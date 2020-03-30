@@ -18,6 +18,6 @@ List multipoint_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry
 List multilinestring_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry);
 List multipolygon_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry);
 
-List geometrycollection_to_tbl(GEOSContextHandle_t context, GEOSGeometry* geometry);
+List geometrycollection_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry);
 
 #endif

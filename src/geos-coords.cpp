@@ -105,7 +105,7 @@ List geometry_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry) 
     return multipolygon_to_geo_coord(context, geometry);
 
   } else if(type == GEOSGeomTypes::GEOS_GEOMETRYCOLLECTION) {
-    return geometrycollection_to_tbl(context, geometry);
+    return geometrycollection_to_geo_coord(context, geometry);
 
   } else {
     stop("Can only convert point, linestring, polygon, and multi- variants to a geo_coord");
@@ -226,16 +226,25 @@ List multipolygon_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geomet
   return geo_reclass(new_geo_coord(xVec, yVec, partVec, ringVec), "geo_multipolygon");
 }
 
-List geometrycollection_to_tbl(GEOSContextHandle_t context, GEOSGeometry* geometry) {
-  // an empty collection is often returned in binary operations, so it is useful to handle this
-  // case
-  int nCoordinates = GEOSGetNumCoordinates_r(context, geometry);
-  if (nCoordinates == 0) {
-    return geo_reclass(
-      new_geo_coord(NumericVector::create(), NumericVector::create()),
-      "geo_collection"
-    );
-  } else {
-    stop("Can't create a geo_coord_geometrycollection()");
+List geometrycollection_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry) {
+
+  int nGeometries = GEOSGetNumGeometries_r(context, geometry);
+  List features(nGeometries);
+  IntegerVector srid(nGeometries);
+
+  for (int i=0; i < nGeometries; i++) {
+    const GEOSGeometry* feature = GEOSGetGeometryN_r(context, geometry, i);
+    features[i] = geometry_to_geo_coord(context, (GEOSGeometry*)feature);
+
+    int geomSRID = GEOSGetSRID_r(context, geometry);
+    if (geomSRID == 0) {
+      srid[i] = NA_INTEGER;
+    } else {
+      srid[i] = geomSRID;
+    }
   }
+
+  List out = List::create(_["feature"] = features, _["srid"] = srid);
+  out.attr("class") = CharacterVector::create("geo_collection", "vctrs_rcrd", "vctrs_vctr");
+  return out;
 }
