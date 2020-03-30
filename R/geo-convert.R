@@ -5,7 +5,7 @@
 #' @param to A prototype
 #'
 #' @return A geometry vector, in the format defined by `to`.
-#' @export
+#' @noRd
 #'
 #' @examples
 #' geo_convert(geo_wkt("POINT (20 10)"), geo_wkb())
