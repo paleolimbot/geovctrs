@@ -4,8 +4,6 @@
 \alias{new_geo_xy}
 \alias{is_geo_xy}
 \alias{validate_geo_xy}
-\alias{vec_ptype_abbr.geo_xy}
-\alias{format.geo_xy}
 \alias{as_geo_xy}
 \alias{as_geo_xy.default}
 \alias{as_geo_xy.matrix}
@@ -17,10 +15,6 @@ new_geo_xy(x = list(x = double(), y = double()))
 is_geo_xy(x)
 
 validate_geo_xy(x)
-
-\method{vec_ptype_abbr}{geo_xy}(x, ...)
-
-\method{format}{geo_xy}(x, ...)
 
 as_geo_xy(x, ...)
 

@@ -7,9 +7,6 @@
 \alias{as_geo_collection}
 \alias{as_geo_collection.default}
 \alias{vec_cast.geo_collection}
-\alias{vec_cast.geo_collection.default}
-\alias{vec_cast.geo_collection.geo_collection}
-\alias{vec_cast.geo_collection.geo_xy}
 \title{S3 Details for coordinate vector collections}
 \usage{
 new_geo_collection(x = list(feature = list(), srid = integer()))
@@ -23,12 +20,6 @@ as_geo_collection(x, ...)
 \method{as_geo_collection}{default}(x, ...)
 
 \method{vec_cast}{geo_collection}(x, to, ...)
-
-\method{vec_cast.geo_collection}{default}(x, to, ...)
-
-\method{vec_cast.geo_collection}{geo_collection}(x, to, ...)
-
-\method{vec_cast.geo_collection}{geo_xy}(x, to, ...)
 }
 \arguments{
 \item{x}{A (possibly) \code{\link[=geo_collection]{geo_collection()}}}

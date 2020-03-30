@@ -4,16 +4,10 @@
 \alias{new_geo_wkt}
 \alias{is_geo_wkt}
 \alias{validate_geo_wkt}
-\alias{vec_ptype_abbr.geo_wkt}
 \alias{as_geo_wkt}
 \alias{as_geo_wkt.default}
 \alias{as_geo_wkt.character}
 \alias{vec_cast.geo_wkt}
-\alias{vec_cast.geo_wkt.default}
-\alias{vec_cast.geo_wkt.geo_wkt}
-\alias{vec_cast.geo_wkt.character}
-\alias{vec_cast.character.geo_wkt}
-\alias{vec_cast.geo_wkt.geo_wkb}
 \title{S3 details for geo_wkt}
 \usage{
 new_geo_wkt(x = character())
@@ -22,8 +16,6 @@ is_geo_wkt(x)
 
 validate_geo_wkt(x)
 
-\method{vec_ptype_abbr}{geo_wkt}(x, ...)
-
 as_geo_wkt(x, ...)
 
 \method{as_geo_wkt}{default}(x, ...)
@@ -31,16 +23,6 @@ as_geo_wkt(x, ...)
 \method{as_geo_wkt}{character}(x, ...)
 
 \method{vec_cast}{geo_wkt}(x, to, ...)
-
-\method{vec_cast.geo_wkt}{default}(x, to, ...)
-
-\method{vec_cast.geo_wkt}{geo_wkt}(x, to, ...)
-
-\method{vec_cast.geo_wkt}{character}(x, to, ...)
-
-\method{vec_cast.character}{geo_wkt}(x, to, ...)
-
-\method{vec_cast.geo_wkt}{geo_wkb}(x, to, ...)
 }
 \arguments{
 \item{x}{A character vector containing well-known text}

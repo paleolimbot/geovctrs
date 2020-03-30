@@ -4,8 +4,6 @@
 \alias{new_geo_segment}
 \alias{is_geo_segment}
 \alias{validate_geo_segment}
-\alias{vec_ptype_abbr.geo_segment}
-\alias{format.geo_segment}
 \alias{as_geo_segment}
 \alias{as_geo_segment.default}
 \title{S3 details for geo_segment}
@@ -15,10 +13,6 @@ new_geo_segment(x = list(start = geo_xy(), end = geo_xy()))
 is_geo_segment(x)
 
 validate_geo_segment(x)
-
-\method{vec_ptype_abbr}{geo_segment}(x, ...)
-
-\method{format}{geo_segment}(x, ...)
 
 as_geo_segment(x, ...)
 

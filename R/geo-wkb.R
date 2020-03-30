@@ -68,21 +68,18 @@ validate_geo_wkb <- function(x) {
   invisible(x)
 }
 
-#' @rdname new_geo_wkb
 #' @export
 vec_ptype_abbr.geo_wkb <- function(x, ...) {
   "wkb"
 }
 
 #' @export
-#' @rdname new_geo_wkb
 format.geo_wkb <- function(x, ...) {
   lengths <- vapply(x, length, integer(1))
   format(sprintf("<raw [%s]>", lengths), ...)
 }
 
 #' @export
-#' @rdname new_geo_wkb
 print.geo_wkb <- function(x, ...) {
   cat(
     paste0(
@@ -116,28 +113,24 @@ vec_cast.geo_wkb <- function(x, to, ...) {
 
 #' @method vec_cast.geo_wkb default
 #' @export
-#' @rdname new_geo_wkb
 vec_cast.geo_wkb.default <- function(x, to, ...) {
   vec_default_cast(x, to)
 }
 
 #' @method vec_cast.geo_wkb geo_wkb
 #' @export
-#' @rdname new_geo_wkb
 vec_cast.geo_wkb.geo_wkb <- function(x, to, ...) {
   x
 }
 
 #' @method vec_cast.geo_wkb list
 #' @export
-#' @rdname new_geo_wkb
 vec_cast.geo_wkb.list <- function(x, to, ...) {
   geo_wkb(x)
 }
 
 #' @method vec_cast.geo_wkb geo_wkt
 #' @export
-#' @rdname new_geo_wkb
 vec_cast.geo_wkb.geo_wkt <- function(x, to, ...) {
   cpp_convert(x, new_geo_wkb())
 }

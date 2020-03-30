@@ -4,8 +4,6 @@
 \alias{new_geo_rect}
 \alias{is_geo_rect}
 \alias{validate_geo_rect}
-\alias{vec_ptype_abbr.geo_rect}
-\alias{format.geo_rect}
 \alias{as_geo_rect}
 \alias{as_geo_rect.default}
 \alias{as_geo_rect.matrix}
@@ -19,10 +17,6 @@ new_geo_rect(
 is_geo_rect(x)
 
 validate_geo_rect(x)
-
-\method{vec_ptype_abbr}{geo_rect}(x, ...)
-
-\method{format}{geo_rect}(x, ...)
 
 as_geo_rect(x, ...)
 

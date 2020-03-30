@@ -38,14 +38,12 @@ validate_geo_xy <- function(x) {
   abort("not implemented")
 }
 
-#' @rdname new_geo_xy
 #' @export
 vec_ptype_abbr.geo_xy <- function(x, ...) {
   "xy"
 }
 
 #' @export
-#' @rdname new_geo_xy
 format.geo_xy <- function(x, ...) {
   sprintf(
     "(%s %s)",

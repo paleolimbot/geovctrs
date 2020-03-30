@@ -51,7 +51,6 @@ validate_geo_wkt <- function(x) {
   invisible(x)
 }
 
-#' @rdname new_geo_wkt
 #' @export
 vec_ptype_abbr.geo_wkt <- function(x, ...) {
   "wkt"
@@ -85,35 +84,30 @@ vec_cast.geo_wkt <- function(x, to, ...) {
 
 #' @method vec_cast.geo_wkt default
 #' @export
-#' @rdname new_geo_wkt
 vec_cast.geo_wkt.default <- function(x, to, ...) {
   vec_default_cast(x, to)
 }
 
 #' @method vec_cast.geo_wkt geo_wkt
 #' @export
-#' @rdname new_geo_wkt
 vec_cast.geo_wkt.geo_wkt <- function(x, to, ...) {
   x
 }
 
 #' @method vec_cast.geo_wkt character
 #' @export
-#' @rdname new_geo_wkt
 vec_cast.geo_wkt.character <- function(x, to, ...) {
   as_geo_wkt.character(x)
 }
 
 #' @method vec_cast.character geo_wkt
 #' @export
-#' @rdname new_geo_wkt
 vec_cast.character.geo_wkt <- function(x, to, ...) {
   vec_data(x)
 }
 
 #' @method vec_cast.geo_wkt geo_wkb
 #' @export
-#' @rdname new_geo_wkt
 vec_cast.geo_wkt.geo_wkb <- function(x, to, ...) {
   cpp_convert(x, new_geo_wkt())
 }

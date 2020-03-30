@@ -86,21 +86,18 @@ vec_cast.geo_collection <- function(x, to, ...) {
 
 #' @method vec_cast.geo_collection default
 #' @export
-#' @rdname new_geo_collection
 vec_cast.geo_collection.default <- function(x, to, ...) {
   vec_default_cast(x, to)
 }
 
 #' @method vec_cast.geo_collection geo_collection
 #' @export
-#' @rdname new_geo_collection
 vec_cast.geo_collection.geo_collection <- function(x, to, ...) {
   x
 }
 
 #' @method vec_cast.geo_collection geo_xy
 #' @export
-#' @rdname new_geo_collection
 vec_cast.geo_collection.geo_xy <- function(x, to, ...) {
   geo_convert(x, geo_collection())
 }

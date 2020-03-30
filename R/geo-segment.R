@@ -46,14 +46,12 @@ validate_geo_segment <- function(x) {
   abort("not implemented")
 }
 
-#' @rdname new_geo_segment
 #' @export
 vec_ptype_abbr.geo_segment <- function(x, ...) {
   "segment"
 }
 
 #' @export
-#' @rdname new_geo_segment
 format.geo_segment <- function(x, ...) {
   sprintf(
     "(%s %s)=>(%s %s)",

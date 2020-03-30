@@ -50,14 +50,12 @@ validate_geo_rect <- function(x) {
   abort("not implemented")
 }
 
-#' @rdname new_geo_rect
 #' @export
 vec_ptype_abbr.geo_rect <- function(x, ...) {
   "rect"
 }
 
 #' @export
-#' @rdname new_geo_rect
 format.geo_rect <- function(x, ...) {
   sprintf(
     "(%s %s)x(%s %s)",
