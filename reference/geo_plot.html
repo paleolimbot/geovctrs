@@ -123,7 +123,7 @@ plot call (geometries are promoted to mutli-geometries if needed).</p>
 
 <span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='co'># S3 method for geo_coord</span>
+<span class='co'># S3 method for geo_collection</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for geo_wkt</span>
@@ -135,22 +135,25 @@ plot call (geometries are promoted to mutli-geometries if needed).</p>
 <span class='co'># S3 method for default</span>
 <span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='co'># S3 method for geo_coord_point</span>
+<span class='co'># S3 method for geo_collection</span>
 <span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='co'># S3 method for geo_coord_linestring</span>
+<span class='co'># S3 method for geo_point</span>
 <span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='co'># S3 method for geo_coord_polygon</span>
+<span class='co'># S3 method for geo_linestring</span>
+<span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for geo_polygon</span>
 <span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>rule</span> <span class='kw'>=</span> <span class='st'>"evenodd"</span>)
 
-<span class='co'># S3 method for geo_coord_multipoint</span>
+<span class='co'># S3 method for geo_multipoint</span>
 <span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='co'># S3 method for geo_coord_multilinestring</span>
+<span class='co'># S3 method for geo_multilinestring</span>
 <span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='co'># S3 method for geo_coord_multipolygon</span>
+<span class='co'># S3 method for geo_multipolygon</span>
 <span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>rule</span> <span class='kw'>=</span> <span class='st'>"evenodd"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -188,7 +191,7 @@ holes in polygons. See <code><a href='https://rdrr.io/r/graphics/polypath.html'>
     <span class='st'>"MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),
       ((20 35, 10 30, 10 10, 30 5, 45 20, 20 35), (30 20, 20 15, 20 25, 30 20)))"</span>
   ),
-  <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"grey10"</span>
+  <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"grey90"</span>
 )</div><div class='img'><img src='geo_plot-6.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>

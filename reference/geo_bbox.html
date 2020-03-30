@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>S3 Details for coordinate vector collections — new_geo_collection • geovctrs</title>
+<title>Bounding boxes — geo_bbox • geovctrs</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="S3 Details for coordinate vector collections — new_geo_collection" />
-<meta property="og:description" content="S3 Details for coordinate vector collections" />
+<meta property="og:title" content="Bounding boxes — geo_bbox" />
+<meta property="og:description" content="Bounding boxes" />
 
 
 
@@ -108,56 +108,48 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>S3 Details for coordinate vector collections</h1>
-    <small class="dont-index">Source: <a href='https://github.com/paleolimbot/geovctrs/blob/master/R/geo-collection.R'><code>R/geo-collection.R</code></a></small>
-    <div class="hidden name"><code>new_geo_collection.Rd</code></div>
+    <h1>Bounding boxes</h1>
+    <small class="dont-index">Source: <a href='https://github.com/paleolimbot/geovctrs/blob/master/R/geo-bbox.R'><code>R/geo-bbox.R</code></a></small>
+    <div class="hidden name"><code>geo_bbox.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>S3 Details for coordinate vector collections</p>
+    <p>Bounding boxes</p>
     </div>
 
-    <pre class="usage"><span class='fu'>new_geo_collection</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>feature</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>()))
-
-<span class='fu'>validate_geo_collection</span>(<span class='no'>x</span>)
-
-<span class='fu'>is_geo_collection</span>(<span class='no'>x</span>)
-
-<span class='fu'>as_geo_collection</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>geo_bbox</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>as_geo_collection</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>geo_bbox</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for geo_collection</span>
-<span class='fu'>vec_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>vec_cast.geo_collection</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for geo_collection</span>
-<span class='fu'>vec_cast.geo_collection</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for geo_xy</span>
-<span class='fu'>vec_cast.geo_collection</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>geo_bbox</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A (possibly) <code><a href='geo_collection.html'>geo_collection()</a></code></p></td>
+      <td><p>A geometry-like object</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>Unused</p></td>
     </tr>
     <tr>
-      <th>to</th>
-      <td><p>A prototype to cast to. See <code><a href='https://rdrr.io/pkg/vctrs/man/vec_cast.html'>vctrs::vec_cast()</a></code></p></td>
+      <th>na.rm</th>
+      <td><p>Should NAs be considered?</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>A <code><a href='geo_rect.html'>geo_rect()</a></code> of length 1.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>geo_bbox</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"POINT (30 10)"</span>, <span class='st'>"POINT EMPTY"</span>)))</div><div class='output co'>#&gt; &lt;geo_rect[1]&gt;
+#&gt; [1] (30 10)x(30 10)</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
