@@ -109,22 +109,3 @@ as_geo_rect.matrix <- function(x, ...) {
 as.matrix.geo_rect <- function(x, ...) {
   as.matrix(as.data.frame(x))
 }
-
-#' @export
-#' @rdname new_geo_rect
-geo_size.geo_rect <- function(x, ...) {
-  vec_size(x)
-}
-
-#' @export
-geo_ptype.geo_rect <- function(x, ...) {
-  # returning a geo_wkt() here means that we can use
-  # a geo_rect() as an input to geometry functions without
-  # getting only getting bboxes back
-  geo_wkt()
-}
-
-#' @export
-geo_restore.geo_rect <- function(to, x) {
-  x
-}

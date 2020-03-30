@@ -9,7 +9,7 @@ geo_convert(x, to)
 \arguments{
 \item{x}{A geometry-like object}
 
-\item{to}{A prototype created by \code{\link[=geo_ptype]{geo_ptype()}}}
+\item{to}{A prototype}
 }
 \value{
 A geometry vector, in the format defined by \code{to}.

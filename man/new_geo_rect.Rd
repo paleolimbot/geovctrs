@@ -10,7 +10,6 @@
 \alias{as_geo_rect.default}
 \alias{as_geo_rect.matrix}
 \alias{as.matrix.geo_rect}
-\alias{geo_size.geo_rect}
 \title{S3 details for geo_rect}
 \usage{
 new_geo_rect(
@@ -32,8 +31,6 @@ as_geo_rect(x, ...)
 \method{as_geo_rect}{matrix}(x, ...)
 
 \method{as.matrix}{geo_rect}(x, ...)
-
-\method{geo_size}{geo_rect}(x, ...)
 }
 \arguments{
 \item{x}{A (possibly) \code{\link[=geo_rect]{geo_rect()}}}

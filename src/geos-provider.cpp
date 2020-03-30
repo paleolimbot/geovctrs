@@ -102,6 +102,7 @@ void WKTGeometryExporter::init(GEOSContextHandle_t context, size_t size) {
   this->context = context;
   this->wkt_writer = GEOSWKTWriter_create_r(context);
   CharacterVector data(size);
+  data.attr("class") = CharacterVector::create("geo_wkt", "geo", "vctrs_vctr");
   this->data = data;
 }
 
@@ -154,6 +155,8 @@ void WKBGeometryExporter::init(GEOSContextHandle_t context, size_t size) {
   this->context = context;
   this->wkb_writer = GEOSWKBWriter_create_r(context);
   List data(size);
+  data.attr("class") = CharacterVector::create("geo_wkb", "geo", "vctrs_list_of", "vctrs_vctr");
+  data.attr("ptype") = RawVector::create();
   this->data = data;
 }
 

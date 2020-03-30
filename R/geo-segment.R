@@ -75,22 +75,3 @@ as_geo_segment <- function(x, ...) {
 as_geo_segment.default <- function(x, ...) {
   vec_cast(x, geo_segment())
 }
-
-#' @export
-#' @rdname new_geo_segment
-geo_size.geo_segment <- function(x, ...) {
-  vec_size(x)
-}
-
-#' @export
-geo_ptype.geo_segment <- function(x, ...) {
-  # returning a geo_wkt() here means that we can use
-  # a geo_segment() as an input to geometry functions without
-  # getting only getting bboxes back
-  geo_wkt()
-}
-
-#' @export
-geo_restore.geo_segment <- function(to, x) {
-  x
-}

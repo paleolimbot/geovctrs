@@ -86,16 +86,3 @@ as_geo_xy.matrix <- function(x, ...) {
 as.matrix.geo_xy <- function(x, ...) {
   as.matrix(as.data.frame(x))
 }
-
-#' @export
-geo_ptype.geo_xy <- function(x, ...) {
-  # returning a geo_wkt() here means that we can use
-  # a geo_rect() as an input to geometry functions without
-  # getting only getting bboxes back
-  geo_wkt()
-}
-
-#' @export
-geo_size.geo_xy <- function(x) {
-  vec_size(x)
-}

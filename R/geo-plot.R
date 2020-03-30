@@ -4,7 +4,7 @@
 #' Currently, only geometries of the same type can be plotted in the same
 #' plot call (geometries are promoted to mutli-geometries if needed).
 #'
-#' @inheritParams geo_ptype
+#' @param x A geometry-like object
 #' @param ... Passed to plotting functions for features: [graphics::points()]
 #'   for point and multipoint geometries, [graphics::lines()] for linestring
 #'   and multilinestring geometries, and [graphics::polypath()] for polygon
