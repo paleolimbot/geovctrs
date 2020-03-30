@@ -173,27 +173,38 @@ SEXP WKBGeometryExporter::finish() {
   return data;
 }
 
-// --- nested GeoCoord exporter
+// --- geo_collection() exporter
 
-NestedGeoCoordExporter::NestedGeoCoordExporter() {
+GeoCollectionExporter::GeoCollectionExporter() {
 
 }
 
-void NestedGeoCoordExporter::init(GEOSContextHandle_t context, size_t size) {
+void GeoCollectionExporter::init(GEOSContextHandle_t context, size_t size) {
+  IntegerVector srid(size);
+  this->srid = srid;
   List data(size);
-  data.attr("class") = "nested_geo_coord";
   this->data = data;
   this->context = context;
   this->counter = 0;
 }
 
-void NestedGeoCoordExporter::putNext(GEOSGeometry* geometry) {
-  data[this->counter] = geometry_to_geo_coord(this->context, geometry, this->counter + 1);
+void GeoCollectionExporter::putNext(GEOSGeometry* geometry) {
+  this->data[this->counter] = geometry_to_geo_coord(this->context, geometry);
+
+  int geomSRID = GEOSGetSRID_r(this->context, geometry);
+  if (geomSRID == 0) {
+    this->srid[this->counter] = NA_INTEGER;
+  } else {
+    this->srid[this->counter] = geomSRID;
+  }
+
   this->counter = this->counter + 1;
 }
 
-SEXP NestedGeoCoordExporter::finish() {
-  return this->data;
+SEXP GeoCollectionExporter::finish() {
+  List out = List::create(_["feature"] = this->data, _["srid"] = this->srid);
+  out.attr("class") = CharacterVector::create("geo_collection", "vctrs_rcrd", "vctrs_vctr");
+  return out;
 }
 
 // --- XY
@@ -264,7 +275,7 @@ void GeoRectExporter::putNext(GEOSGeometry* geometry) {
   GEOSGeom_getXMax_r(this->context, geometry, &xmax1);
   GEOSGeom_getYMax_r(this->context, geometry, &ymax1);
 #else
-  List coords = geometry_to_geo_coord(context, geometry, 0);
+  List coords = geometry_to_geo_coord(context, geometry);
   List xy = coords["xy"];
   NumericVector x = as<NumericVector>(xy["x"]);
   NumericVector y = as<NumericVector>(xy["y"]);
@@ -341,8 +352,8 @@ std::unique_ptr<GeometryExporter> resolve_exporter(SEXP ptype) {
   } else if(Rf_inherits(ptype, "geo_rect")) {
     return std::unique_ptr<GeometryExporter> { new GeoRectExporter() };
 
-  } else if(Rf_inherits(ptype, "geo_coord")) {
-    return std::unique_ptr<GeometryExporter> { new NestedGeoCoordExporter() };
+  } else if(Rf_inherits(ptype, "geo_collection")) {
+    return std::unique_ptr<GeometryExporter> { new GeoCollectionExporter() };
   }
 
   stop("Can't resolve GeometryExporter");

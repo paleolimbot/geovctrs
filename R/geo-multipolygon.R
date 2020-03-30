@@ -28,12 +28,12 @@ geo_multipolygon <- function(feature, srid = NA) {
   feat <- new_geo_multipolygon(
     list(
       xy = vec_c(!!!xy),
-      ring = vec_c(!!!ring),
-      part = inverse.rle(part_rle)
+      part = inverse.rle(part_rle),
+      ring = vec_c(!!!ring)
     )
   )
 
-  new_geo_collection(list(feature = list(feat), srid = srid))
+  new_geo_collection(list(feature = list(feat), srid = vec_cast(srid, integer())))
 }
 
 new_geo_multipolygon <- function(x) {

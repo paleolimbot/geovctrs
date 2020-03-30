@@ -103,12 +103,13 @@ public:
 
 // --- nested GeoCoord exporter
 
-class NestedGeoCoordExporter: public GeometryExporter {
+class GeoCollectionExporter: public GeometryExporter {
 public:
   List data;
+  IntegerVector srid;
   size_t counter;
 
-  NestedGeoCoordExporter();
+  GeoCollectionExporter();
   void init(GEOSContextHandle_t context, size_t size);
   void putNext(GEOSGeometry* geometry);
   SEXP finish();

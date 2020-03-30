@@ -28,7 +28,7 @@ geo_multipoint <- function(feature, srid = NA) {
     )
   )
 
-  new_geo_collection(list(feature = list(feat), srid = srid))
+  new_geo_collection(list(feature = list(feat), srid = vec_cast(srid, integer())))
 }
 
 new_geo_multipoint <- function(x) {

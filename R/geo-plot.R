@@ -27,30 +27,28 @@
 #'     "MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),
 #'       ((20 35, 10 30, 10 10, 30 5, 45 20, 20 35), (30 20, 20 15, 20 25, 30 20)))"
 #'   ),
-#'   col = "grey10"
+#'   col = "grey90"
 #' )
 #'
 geo_plot <- function(x, ..., asp = 1, xlim = NULL, ylim = NULL, xlab = "", ylab = "") {
   # until there is a geo_bbox() function
   if (is.null(xlim) || is.null(ylim)) {
-    tbl <- geo_convert_geo_coord_lazy(x)
-    xy <- field(tbl, "xy")
-    obj <- tbl
-  } else {
-    obj <- x
+    bbox <- geo_bbox(x)
+    calc_xlim <- c(field(bbox, "xmin"), field(bbox, "xmax"))
+    calc_ylim <- c(field(bbox, "ymin"), field(bbox, "ymax"))
   }
 
   graphics::plot(
     numeric(0),
     numeric(0),
-    xlim = xlim %||% range(field(xy, "x")),
-    ylim = ylim %||% range(field(xy, "y")),
+    xlim = xlim %||% calc_xlim,
+    ylim = ylim %||% calc_ylim,
     xlab = xlab,
     ylab = ylab,
     asp = asp
   )
 
-  geo_plot_add(obj, ...)
+  geo_plot_add(x, ...)
   invisible(x)
 }
 
@@ -63,7 +61,7 @@ geo_plot_add <- function(x, ...) {
 #' @importFrom graphics plot
 #' @rdname geo_plot
 #' @export
-plot.geo_coord <- function(x, ...) {
+plot.geo_collection <- function(x, ...) {
   geo_plot(x, ...)
 }
 
@@ -84,41 +82,24 @@ plot.geo_wkb <- function(x, ...) {
 #' @rdname geo_plot
 #' @export
 geo_plot_add.default <- function(x, ...) {
-  tbl <- geo_convert_geo_coord_lazy(x)
+  tbl <- geo_convert_geo_collection_lazy(x)
   geo_plot_add(tbl, ...)
   invisible(x)
 }
 
 #' @rdname geo_plot
 #' @export
-geo_plot_add.geo_coord_point <- function(x, ...) {
-  xy <- field(x, "xy")
-  graphics::points(field(xy, "x"), field(xy, "y"), ...)
-  invisible(x)
-}
-
-#' @rdname geo_plot
-#' @export
-geo_plot_add.geo_coord_linestring <- function(x, ...) {
-  xy <- separate_groups_with_na(field(x, "xy"), field(x, "feature"))
-  graphics::lines(field(xy, "x"), field(xy, "y"), ...)
-  invisible(x)
-}
-
-#' @rdname geo_plot
-#' @export
-geo_plot_add.geo_coord_polygon <- function(x, ..., rule = "evenodd") {
-  # have to do one feature at a time because the "holes in polygons" problem
-  for (feature in split(x, field(x, "feature"))) {
-    xy <- separate_groups_with_na(field(feature, "xy"), field(feature, "piece"))
-    graphics::polypath(field(xy, "x"), field(xy, "y"), ..., rule = rule)
+geo_plot_add.geo_collection <- function(x, ...) {
+  # using for() because the user interupt is respected
+  for (item in field(x, "feature")) {
+    geo_plot_add(item, ...)
   }
   invisible(x)
 }
 
 #' @rdname geo_plot
 #' @export
-geo_plot_add.geo_coord_multipoint <- function(x, ...) {
+geo_plot_add.geo_point <- function(x, ...) {
   xy <- field(x, "xy")
   graphics::points(field(xy, "x"), field(xy, "y"), ...)
   invisible(x)
@@ -126,10 +107,36 @@ geo_plot_add.geo_coord_multipoint <- function(x, ...) {
 
 #' @rdname geo_plot
 #' @export
-geo_plot_add.geo_coord_multilinestring <- function(x, ...) {
+geo_plot_add.geo_linestring <- function(x, ...) {
+  xy <- field(x, "xy")
+  graphics::lines(field(xy, "x"), field(xy, "y"), ...)
+  invisible(x)
+}
+
+#' @rdname geo_plot
+#' @export
+geo_plot_add.geo_polygon <- function(x, ..., rule = "evenodd") {
+  # have to do one feature at a time because the "holes in polygons" problem
+  xy <- separate_groups_with_na(field(x, "xy"), field(x, "ring"))
+  graphics::polypath(field(xy, "x"), field(xy, "y"), ..., rule = rule)
+
+  invisible(x)
+}
+
+#' @rdname geo_plot
+#' @export
+geo_plot_add.geo_multipoint <- function(x, ...) {
+  xy <- field(x, "xy")
+  graphics::points(field(xy, "x"), field(xy, "y"), ...)
+  invisible(x)
+}
+
+#' @rdname geo_plot
+#' @export
+geo_plot_add.geo_multilinestring <- function(x, ...) {
   xy <- separate_groups_with_na(
     field(x, "xy"),
-    interaction(field(x, "feature"), field(x, "part"))
+    field(x, "part")
   )
   graphics::lines(field(xy, "x"), field(xy, "y"), ...)
   invisible(x)
@@ -137,21 +144,22 @@ geo_plot_add.geo_coord_multilinestring <- function(x, ...) {
 
 #' @rdname geo_plot
 #' @export
-geo_plot_add.geo_coord_multipolygon <- function(x, ..., rule = "evenodd") {
+geo_plot_add.geo_multipolygon <- function(x, ..., rule = "evenodd") {
   # have to do one part at a time because the "holes in polygons" problem
-  for (feature in split(x, interaction(field(x, "feature"),  field(x, "part")))) {
-    xy <- separate_groups_with_na(field(feature, "xy"), field(feature, "piece"))
-    graphics::polypath(field(xy, "x"), field(xy, "y"), ..., rule = rule)
+  crds <- tibble::tibble(xy = field(x, "xy"), ring = field(x, "ring"))
+  for (crds_feat in split(crds, field(x, "part"))) {
+    xy_part <- separate_groups_with_na(crds_feat$xy, crds_feat$ring)
+    graphics::polypath(field(xy_part, "x"), field(xy_part, "y"), ..., rule = rule)
   }
   invisible(x)
 }
 
 # until the laziness of geo_convert is sorted
-geo_convert_geo_coord_lazy <- function(x) {
-  if (inherits(x, "geo_coord")) {
+geo_convert_geo_collection_lazy <- function(x) {
+  if (inherits(x, "geo_collection")) {
     x
   } else {
-    geo_convert(x, geo_coord())
+    geo_convert(x, geo_collection())
   }
 }
 

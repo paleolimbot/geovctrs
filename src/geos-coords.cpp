@@ -6,34 +6,38 @@ using namespace Rcpp;
 
 // ----- this is needed for some vector functions ------
 
-List geo_coord_reclass(List input, const char* tblClass) {
-  input.attr("class") = CharacterVector::create(tblClass, "geo_coord", "vctrs_rcrd", "vctrs_vctr");
+List geo_coord_reclass(List input, const char* cls) {
+  input.attr("class") = CharacterVector::create(cls, "geo_coord", "vctrs_rcrd", "vctrs_vctr");
+  return input;
+}
+
+List geo_reclass(List input, const char* cls) {
+  input.attr("class") = CharacterVector::create(cls);
   return input;
 }
 
 // ------  unexported details  ----------
 
-List new_geo_coord(NumericVector x, NumericVector y, int feature) {
+List new_geo_coord(NumericVector x, NumericVector y) {
   List xy = List::create(_["x"] = x, _["y"] = y);
 
   List output = List::create(
-    _["xy"] = geo_coord_reclass(xy, "geo_xy"),
-    _["feature"] = rep(feature, x.size())
+    _["xy"] = geo_coord_reclass(xy, "geo_xy")
   );
 
   return output;
 }
 
-List new_geo_coord(NumericVector x, NumericVector y, IntegerVector piece, int feature) {
-  List output = new_geo_coord(x, y, feature);
-  output.push_back(piece, "piece");
+List new_geo_coord(NumericVector x, NumericVector y, IntegerVector ring) {
+  List output = new_geo_coord(x, y);
+  output.push_back(ring, "ring");
   return output;
 }
 
-List new_geo_coord(NumericVector x, NumericVector y, IntegerVector part, IntegerVector piece, int feature) {
-  List output = new_geo_coord(x, y, feature);
+List new_geo_coord(NumericVector x, NumericVector y, IntegerVector part, IntegerVector ring) {
+  List output = new_geo_coord(x, y);
   output.push_back(part, "part");
-  output.push_back(piece, "piece");
+  output.push_back(ring, "ring");
   return output;
 }
 
@@ -68,85 +72,85 @@ unsigned int write_simple_geometry(GEOSContextHandle_t context, const GEOSGeomet
 
 unsigned int write_simple_geometry(GEOSContextHandle_t context, const GEOSGeometry* geometry,
                                    NumericVector xVec, NumericVector yVec, IntegerVector part,
-                                   int partId, IntegerVector piece, int pieceId, int offset) {
+                                   int partId, IntegerVector ring, int ringId, int offset) {
   unsigned int size = write_simple_geometry(context, geometry, xVec, yVec, offset);
   for(unsigned int i=0; i<size; i++) {
     part[offset + i] = partId;
-    piece[offset + i] = pieceId;
+    ring[offset + i] = ringId;
   }
   return size;
 }
 
 // ---------- higher level implementations ----------
 
-List geometry_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry, int feature) {
+List geometry_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry) {
   int type = GEOSGeomTypeId_r(context, geometry);
 
   if (type == GEOSGeomTypes::GEOS_POINT) {
-    return point_to_geo_coord(context, geometry, feature);
+    return point_to_geo_coord(context, geometry);
 
   } else if(type == GEOSGeomTypes::GEOS_LINESTRING) {
-    return linestring_to_geo_coord(context, geometry, feature);
+    return linestring_to_geo_coord(context, geometry);
 
   } else if(type == GEOSGeomTypes::GEOS_POLYGON) {
-    return polygon_to_geo_coord(context, geometry, feature);
+    return polygon_to_geo_coord(context, geometry);
 
   } else if(type == GEOSGeomTypes::GEOS_MULTIPOINT) {
-    return multipoint_to_geo_coord(context, geometry, feature);
+    return multipoint_to_geo_coord(context, geometry);
 
   } else if(type == GEOSGeomTypes::GEOS_MULTILINESTRING) {
-    return multilinestring_to_geo_coord(context, geometry, feature);
+    return multilinestring_to_geo_coord(context, geometry);
 
   } else if(type == GEOSGeomTypes::GEOS_MULTIPOLYGON) {
-    return multipolygon_to_geo_coord(context, geometry, feature);
+    return multipolygon_to_geo_coord(context, geometry);
 
   } else if(type == GEOSGeomTypes::GEOS_GEOMETRYCOLLECTION) {
-    return geometrycollection_to_tbl(context, geometry, feature);
+    return geometrycollection_to_tbl(context, geometry);
 
   } else {
     stop("Can only convert point, linestring, polygon, and multi- variants to a geo_coord");
   }
 }
 
-List point_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry, int feature) {
+List point_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry) {
   int nCoordinates = GEOSGetNumCoordinates_r(context, geometry);
   NumericVector xVec(nCoordinates);
   NumericVector yVec(nCoordinates);
   write_simple_geometry(context, geometry, xVec, yVec, 0);
 
-  return geo_coord_reclass(new_geo_coord(xVec, yVec, feature), "geo_coord_point");
+  return geo_reclass(new_geo_coord(xVec, yVec), "geo_point");
 }
 
-List linestring_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry, int feature) {
+List linestring_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry) {
   int nCoordinates = GEOSGetNumCoordinates_r(context, geometry);
   NumericVector xVec(nCoordinates);
   NumericVector yVec(nCoordinates);
   write_simple_geometry(context, geometry, xVec, yVec, 0);
 
-  return geo_coord_reclass(new_geo_coord(xVec, yVec, feature), "geo_coord_linestring");
+  return geo_reclass(new_geo_coord(xVec, yVec), "geo_linestring");
 }
 
-List polygon_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry, int feature) {
+List polygon_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry) {
   int nInteriorRings = GEOSGetNumInteriorRings_r(context, geometry);
   int nCoordinates = GEOSGetNumCoordinates_r(context, geometry);
 
   NumericVector xVec(nCoordinates);
   NumericVector yVec(nCoordinates);
-  IntegerVector piece(nCoordinates);
+  IntegerVector ringVec(nCoordinates);
 
   unsigned int offset = 0;
   const GEOSGeometry* exterior = GEOSGetExteriorRing_r(context, geometry);
-  offset += write_simple_geometry(context, exterior, xVec, yVec, piece, 1, offset);
+  offset += write_simple_geometry(context, exterior, xVec, yVec, ringVec, 1, offset);
 
   for(int i=0; i<nInteriorRings; i++) {
     const GEOSGeometry* ring = GEOSGetInteriorRingN_r(context, geometry, i);
-    offset += write_simple_geometry(context, ring, xVec, yVec, piece, 2 + i, offset);
+    offset += write_simple_geometry(context, ring, xVec, yVec, ringVec, 2 + i, offset);
   }
 
-  return geo_coord_reclass(new_geo_coord(xVec, yVec, piece, feature), "geo_coord_polygon");
+  return geo_reclass(new_geo_coord(xVec, yVec, ringVec), "geo_polygon");
 }
 
-List multipoint_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry, int feature) {
+List multipoint_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry) {
   int nParts = GEOSGetNumGeometries_r(context, geometry);
   int nCoordinates = GEOSGetNumCoordinates_r(context, geometry);
 
@@ -160,11 +164,10 @@ List multipoint_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry
     offset += write_simple_geometry(context, part, xVec, yVec, offset);
   }
 
-  return geo_coord_reclass(new_geo_coord(xVec, yVec, feature), "geo_coord_multipoint");
+  return geo_reclass(new_geo_coord(xVec, yVec), "geo_multipoint");
 }
 
-List multilinestring_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry,
-                                      int feature) {
+List multilinestring_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry) {
   int nParts = GEOSGetNumGeometries_r(context, geometry);
   int nCoordinates = GEOSGetNumCoordinates_r(context, geometry);
 
@@ -179,19 +182,19 @@ List multilinestring_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geo
     offset += write_simple_geometry(context, part, xVec, yVec, partVec, i+1, offset);
   }
 
-  List output = new_geo_coord(xVec, yVec, feature);
+  List output = new_geo_coord(xVec, yVec);
   output.push_back(partVec, "part");
-  return geo_coord_reclass(output, "geo_coord_multilinestring");
+  return geo_reclass(output, "geo_multilinestring");
 }
 
-List multipolygon_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry, int feature) {
+List multipolygon_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry) {
   int nParts = GEOSGetNumGeometries_r(context, geometry);
   int nCoordinates = GEOSGetNumCoordinates_r(context, geometry);
 
   NumericVector xVec(nCoordinates);
   NumericVector yVec(nCoordinates);
   IntegerVector partVec(nCoordinates);
-  IntegerVector piece(nCoordinates);
+  IntegerVector ringVec(nCoordinates);
 
   unsigned int offset = 0;
 
@@ -204,7 +207,7 @@ List multipolygon_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geomet
       context, exterior,
       xVec, yVec,
       partVec, i + 1,
-      piece, 1,
+      ringVec, 1,
       offset
     );
 
@@ -214,23 +217,23 @@ List multipolygon_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geomet
         context, ring,
         xVec, yVec,
         partVec, i + 1,
-        piece, 2 + j,
+        ringVec, 2 + j,
         offset
       );
     }
   }
 
-  return geo_coord_reclass(new_geo_coord(xVec, yVec, partVec, piece, feature), "geo_coord_multipolygon");
+  return geo_reclass(new_geo_coord(xVec, yVec, partVec, ringVec), "geo_multipolygon");
 }
 
-List geometrycollection_to_tbl(GEOSContextHandle_t context, GEOSGeometry* geometry, int feature) {
+List geometrycollection_to_tbl(GEOSContextHandle_t context, GEOSGeometry* geometry) {
   // an empty collection is often returned in binary operations, so it is useful to handle this
   // case
   int nCoordinates = GEOSGetNumCoordinates_r(context, geometry);
   if (nCoordinates == 0) {
-    return geo_coord_reclass(
-      new_geo_coord(NumericVector::create(), NumericVector::create(), feature),
-      "geo_coord_point"
+    return geo_reclass(
+      new_geo_coord(NumericVector::create(), NumericVector::create()),
+      "geo_collection"
     );
   } else {
     stop("Can't create a geo_coord_geometrycollection()");

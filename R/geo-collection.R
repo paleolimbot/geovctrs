@@ -19,6 +19,7 @@ geo_collection <- function(feature = list(), srid = NA) {
 #' S3 Details for coordinate vector collections
 #'
 #' @param x A (possibly) [geo_collection()]
+#' @inheritParams new_geo_wkt
 #'
 #' @export
 #'
@@ -61,4 +62,45 @@ format.geo_collection <- function(x, ..., top_level = TRUE) {
 #' @export
 is_geo_collection <- function(x) {
   inherits(x, "geo_collection")
+}
+
+#' @rdname new_geo_collection
+#' @export
+as_geo_collection <- function(x, ...) {
+  UseMethod("as_geo_collection")
+}
+
+#' @rdname new_geo_collection
+#' @export
+as_geo_collection.default <- function(x, ...) {
+  vec_cast(x, geo_collection())
+}
+
+#' @method vec_cast geo_collection
+#' @export
+#' @export vec_cast.geo_collection
+#' @rdname new_geo_collection
+vec_cast.geo_collection <- function(x, to, ...) {
+  UseMethod("vec_cast.geo_collection")
+}
+
+#' @method vec_cast.geo_collection default
+#' @export
+#' @rdname new_geo_collection
+vec_cast.geo_collection.default <- function(x, to, ...) {
+  vec_default_cast(x, to)
+}
+
+#' @method vec_cast.geo_collection geo_collection
+#' @export
+#' @rdname new_geo_collection
+vec_cast.geo_collection.geo_collection <- function(x, to, ...) {
+  x
+}
+
+#' @method vec_cast.geo_collection geo_xy
+#' @export
+#' @rdname new_geo_collection
+vec_cast.geo_collection.geo_xy <- function(x, to, ...) {
+  geo_convert(x, geo_collection())
 }

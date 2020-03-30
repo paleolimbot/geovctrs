@@ -4,6 +4,12 @@
 \alias{new_geo_collection}
 \alias{validate_geo_collection}
 \alias{is_geo_collection}
+\alias{as_geo_collection}
+\alias{as_geo_collection.default}
+\alias{vec_cast.geo_collection}
+\alias{vec_cast.geo_collection.default}
+\alias{vec_cast.geo_collection.geo_collection}
+\alias{vec_cast.geo_collection.geo_xy}
 \title{S3 Details for coordinate vector collections}
 \usage{
 new_geo_collection(x = list(feature = list(), srid = integer()))
@@ -11,9 +17,25 @@ new_geo_collection(x = list(feature = list(), srid = integer()))
 validate_geo_collection(x)
 
 is_geo_collection(x)
+
+as_geo_collection(x, ...)
+
+\method{as_geo_collection}{default}(x, ...)
+
+\method{vec_cast}{geo_collection}(x, to, ...)
+
+\method{vec_cast.geo_collection}{default}(x, to, ...)
+
+\method{vec_cast.geo_collection}{geo_collection}(x, to, ...)
+
+\method{vec_cast.geo_collection}{geo_xy}(x, to, ...)
 }
 \arguments{
 \item{x}{A (possibly) \code{\link[=geo_collection]{geo_collection()}}}
+
+\item{...}{Unused}
+
+\item{to}{A prototype to cast to. See \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}}
 }
 \description{
 S3 Details for coordinate vector collections

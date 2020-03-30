@@ -3,23 +3,24 @@
 \name{geo_plot}
 \alias{geo_plot}
 \alias{geo_plot_add}
-\alias{plot.geo_coord}
+\alias{plot.geo_collection}
 \alias{plot.geo_wkt}
 \alias{plot.geo_wkb}
 \alias{geo_plot_add.default}
-\alias{geo_plot_add.geo_coord_point}
-\alias{geo_plot_add.geo_coord_linestring}
-\alias{geo_plot_add.geo_coord_polygon}
-\alias{geo_plot_add.geo_coord_multipoint}
-\alias{geo_plot_add.geo_coord_multilinestring}
-\alias{geo_plot_add.geo_coord_multipolygon}
+\alias{geo_plot_add.geo_collection}
+\alias{geo_plot_add.geo_point}
+\alias{geo_plot_add.geo_linestring}
+\alias{geo_plot_add.geo_polygon}
+\alias{geo_plot_add.geo_multipoint}
+\alias{geo_plot_add.geo_multilinestring}
+\alias{geo_plot_add.geo_multipolygon}
 \title{Plot geometry vectors}
 \usage{
 geo_plot(x, ..., asp = 1, xlim = NULL, ylim = NULL, xlab = "", ylab = "")
 
 geo_plot_add(x, ...)
 
-\method{plot}{geo_coord}(x, ...)
+\method{plot}{geo_collection}(x, ...)
 
 \method{plot}{geo_wkt}(x, ...)
 
@@ -27,17 +28,19 @@ geo_plot_add(x, ...)
 
 \method{geo_plot_add}{default}(x, ...)
 
-\method{geo_plot_add}{geo_coord_point}(x, ...)
+\method{geo_plot_add}{geo_collection}(x, ...)
 
-\method{geo_plot_add}{geo_coord_linestring}(x, ...)
+\method{geo_plot_add}{geo_point}(x, ...)
 
-\method{geo_plot_add}{geo_coord_polygon}(x, ..., rule = "evenodd")
+\method{geo_plot_add}{geo_linestring}(x, ...)
 
-\method{geo_plot_add}{geo_coord_multipoint}(x, ...)
+\method{geo_plot_add}{geo_polygon}(x, ..., rule = "evenodd")
 
-\method{geo_plot_add}{geo_coord_multilinestring}(x, ...)
+\method{geo_plot_add}{geo_multipoint}(x, ...)
 
-\method{geo_plot_add}{geo_coord_multipolygon}(x, ..., rule = "evenodd")
+\method{geo_plot_add}{geo_multilinestring}(x, ...)
+
+\method{geo_plot_add}{geo_multipolygon}(x, ..., rule = "evenodd")
 }
 \arguments{
 \item{x}{A geometry-like object}
@@ -70,7 +73,7 @@ geo_plot(
     "MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),
       ((20 35, 10 30, 10 10, 30 5, 45 20, 20 35), (30 20, 20 15, 20 25, 30 20)))"
   ),
-  col = "grey10"
+  col = "grey90"
 )
 
 }
