@@ -101,7 +101,19 @@ public:
   SEXP finish();
 };
 
-// --- nested GeoCoord exporter
+// --- GeoCollection
+
+class GeoCollectionProvider: public GeometryProvider {
+public:
+  List features;
+  IntegerVector srid;
+  size_t counter;
+
+  GeoCollectionProvider(List data);
+  void init(GEOSContextHandle_t context);
+  GEOSGeometry* getNext();
+  size_t size();
+};
 
 class GeoCollectionExporter: public GeometryExporter {
 public:

@@ -1,6 +1,7 @@
 
 #include "geos-provider.h"
 #include "geos-coords.h"
+#include "geos-coords-write.h"
 #include <Rcpp.h>
 using namespace Rcpp;
 
@@ -176,6 +177,28 @@ SEXP WKBGeometryExporter::finish() {
   return data;
 }
 
+// --- geo_collection provider
+
+GeoCollectionProvider::GeoCollectionProvider(List data) {
+  this->features = data["feature"];
+  this->srid = data["srid"];
+}
+
+void GeoCollectionProvider::init(GEOSContextHandle_t context) {
+  this->context = context;
+  this->counter = 0;
+}
+
+GEOSGeometry* GeoCollectionProvider::getNext() {
+  GEOSGeometry* geometry = feature_from_geo_coord(this->context, this->features[this->counter]);
+  this->counter = this->counter + 1;
+  return geometry;
+}
+
+size_t GeoCollectionProvider::size() {
+  return (this->features).size();
+}
+
 // --- geo_collection() exporter
 
 GeoCollectionExporter::GeoCollectionExporter() {
@@ -339,6 +362,15 @@ std::unique_ptr<GeometryProvider> resolve_provider(SEXP data) {
       return std::unique_ptr<GeometryProvider> { new ConstantGeometryProvider(new XYProvider(x, y)) };
     } else {
       return std::unique_ptr<GeometryProvider> { new XYProvider(x, y) };
+    }
+  } else if(Rf_inherits(data, "geo_collection")) {
+    List col = (List) data;
+    List features = col["feature"];
+
+    if (features.size() ==  1) {
+      return std::unique_ptr<GeometryProvider> { new ConstantGeometryProvider(new GeoCollectionProvider(col)) };
+    } else {
+      return std::unique_ptr<GeometryProvider> { new GeoCollectionProvider(col) };
     }
   }
 

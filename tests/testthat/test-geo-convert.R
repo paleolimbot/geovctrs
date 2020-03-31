@@ -24,24 +24,29 @@ test_that("wkb conversion works", {
 })
 
 test_that("geo_point conversion works", {
-  tbl <- cpp_convert(
-    geo_wkt("POINT (10 40)"),
-    geo_collection()
-  )
+  wkt_empty <- geo_wkt("POINT EMPTY")
+  collection_empty <- geo_point(geo_xy())
+  wkt <- geo_wkt("POINT (10 40)")
+  collection <- geo_point(geo_xy(10, 40))
 
-  expect_identical(tbl, geo_point(geo_xy(10, 40)))
+  expect_identical(cpp_convert(wkt_empty, geo_collection()), collection_empty)
+  expect_identical(cpp_convert(wkt, geo_collection()), collection)
+
+  expect_identical(cpp_convert(collection_empty, geo_wkt()), wkt_empty)
+  expect_identical(cpp_convert(cpp_convert(collection, geo_wkt()), geo_collection()), collection)
 })
 
 test_that("geo_linestring conversion works", {
-  tbl <- cpp_convert(
-    geo_wkt("LINESTRING (30 10, 10 30, 40 40)"),
-    geo_collection()
-  )
+  wkt_empty <- geo_wkt("LINESTRING EMPTY")
+  collection_empty <- geo_linestring(geo_xy())
+  wkt <- geo_wkt("LINESTRING (30 10, 10 30, 40 40)")
+  collection <- geo_linestring(geo_xy(c(30, 10, 40), c(10, 30, 40)))
 
-  expect_identical(
-    tbl,
-    geo_linestring(geo_xy(c(30, 10, 40), c(10, 30, 40)))
-  )
+  expect_identical(cpp_convert(wkt_empty, geo_collection()), collection_empty)
+  expect_identical(cpp_convert(wkt, geo_collection()), collection)
+
+  expect_identical(cpp_convert(collection_empty, geo_wkt()), wkt_empty)
+  expect_identical(cpp_convert(cpp_convert(collection, geo_wkt()), geo_collection()), collection)
 })
 
 test_that("geo_multipoint conversion works", {
