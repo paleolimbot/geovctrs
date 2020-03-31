@@ -45,8 +45,12 @@ GEOSGeometry* feature_from_geo_coord(GEOSContextHandle_t context, List feature) 
 GEOSGeometry* point_from_geo_coord(GEOSContextHandle_t context, List feature) {
   List xy = feature["xy"];
   NumericVector x = xy["x"];
-  GEOSCoordSequence* seq = seq_from_xy(context, xy, 0, x.size());
-  return GEOSGeom_createPoint_r(context, seq);
+  if (x.size() == 0) {
+    return GEOSGeom_createEmptyPoint_r(context);
+  } else {
+    GEOSCoordSequence* seq = seq_from_xy(context, xy, 0, x.size());
+    return GEOSGeom_createPoint_r(context, seq);
+  }
 }
 
 GEOSGeometry* linestring_from_geo_coord(GEOSContextHandle_t context, List feature) {
