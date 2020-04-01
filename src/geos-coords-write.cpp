@@ -216,7 +216,6 @@ GEOSGeometry* geometrycollection_from_geo_coord(GEOSContextHandle_t context, Lis
   for (size_t i=0; i < feature.size(); i++) {
     GEOSGeometry* geometry = feature_from_geo_coord(context, feature[i]);
 
-    int geomSRID = srid[i];
     if (IntegerVector::is_na(srid[i])) {
       GEOSSetSRID_r(context, geometry, 0);
     } else {

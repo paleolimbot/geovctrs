@@ -233,7 +233,7 @@ SEXP GeoCollectionExporter::finish() {
   return out;
 }
 
-// --- XY
+// --- XY provider
 
 XYProvider::XYProvider(NumericVector x, NumericVector y) {
   this->x = x;
@@ -260,6 +260,52 @@ GEOSGeometry* XYProvider::getNext() {
 
 size_t XYProvider::size() {
   return (this->x).size();
+}
+
+// --- XY exporter -----
+
+void XYExporter::init(GEOSContextHandle_t context, size_t size) {
+  NumericVector x(size);
+  NumericVector y(size);
+  this->x = x;
+  this->y = y;
+
+  this->context = context;
+  this->counter = 0;
+}
+
+void XYExporter::putNext(GEOSGeometry* geometry) {
+  if (GEOSGeomTypeId_r(this->context, geometry) != GEOSGeomTypes::GEOS_POINT) {
+    stop("Can't represent a non-point as a geo_xy()");
+  }
+
+  if (GEOSGetSRID_r(context, geometry) != 0) {
+    stop("Can't represent a point with an SRID as a geo_xy()");
+  }
+
+  // geos doesn't differentiate between POINT (nan, nan) and POINT EMPTY
+  double x, y;
+  if (GEOSisEmpty_r(this->context, geometry)) {
+    x = NA_REAL;
+    y = NA_REAL;
+  } else {
+    GEOSGeomGetX_r(this->context, geometry, &x);
+    GEOSGeomGetY_r(this->context, geometry, &y);
+  }
+
+  this->x[this->counter] = x;
+  this->y[this->counter] = y;
+
+  this->counter = this->counter + 1;
+}
+
+SEXP XYExporter::finish() {
+  List result = List::create(
+    _["x"] = this->x,
+    _["y"] = this->y
+  );
+  result.attr("class") = CharacterVector::create("geo_xy", "geo_coord", "vctrs_rcrd", "vctrs_vctr");
+  return result;
 }
 
 
@@ -385,6 +431,8 @@ std::unique_ptr<GeometryExporter> resolve_exporter(SEXP ptype) {
 
   } else if(Rf_inherits(ptype, "geo_collection")) {
     return std::unique_ptr<GeometryExporter> { new GeoCollectionExporter() };
+  } else if(Rf_inherits(ptype, "geo_xy")) {
+    return std::unique_ptr<GeometryExporter> { new XYExporter() };
   }
 
   stop("Can't resolve GeometryExporter");

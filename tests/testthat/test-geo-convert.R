@@ -197,16 +197,23 @@ test_that("rect conversion works on empty geometries", {
 })
 
 test_that("xy conversion works", {
-  expect_identical(
-    cpp_convert(geo_xy(1:2, 6:7), geo_collection()),
-    c(geo_point(geo_xy(1, 6)), geo_point(geo_xy(2, 7)))
-  )
+  collection <- c(geo_point(geo_xy(1, 6)), geo_point(geo_xy(2, 7)))
+  xy <- geo_xy(1:2, 6:7)
+
+  expect_identical(cpp_convert(xy, geo_collection()), collection)
+  expect_identical(cpp_convert(collection, geo_xy()), xy)
 
   # handling of NA, NaN, inf
+  # GEOS doesn't differentiate between POINT (nan nan) and POINT EMPTY,
+  # so neither do we (yet)
   expect_equal(cpp_convert(geo_xy(NA, NA), geo_wkt()), geo_wkt("POINT (nan nan)"))
+  expect_equal(cpp_convert(geo_xy(-Inf, Inf), geo_wkt()), geo_wkt("POINT (-inf inf)"))
+
+  expect_equal(cpp_convert(geo_wkt("POINT (nan nan)"), geo_xy()),  geo_xy(NA, NA))
   expect_equal(cpp_convert(geo_xy(-Inf, Inf), geo_wkt()), geo_wkt("POINT (-inf inf)"))
 })
 
 test_that("error occurs with unknown object in conversions", {
   expect_error(cpp_convert(as.Date("2020-01-01"), new_geo_wkt()), "Can't resolve")
+  expect_error(cpp_convert(geo_wkt("POINT EMPTY"), as.Date("2020-01-01")), "Can't resolve")
 })

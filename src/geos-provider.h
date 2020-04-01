@@ -141,6 +141,17 @@ public:
   size_t size();
 };
 
+class XYExporter: public GeometryExporter {
+public:
+  NumericVector x;
+  NumericVector y;
+  size_t counter;
+
+  void init(GEOSContextHandle_t context, size_t size);
+  void putNext(GEOSGeometry* geometry);
+  SEXP finish();
+};
+
 // --- rect exporter
 
 class GeoRectExporter: public GeometryExporter {
