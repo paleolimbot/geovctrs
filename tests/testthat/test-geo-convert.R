@@ -89,17 +89,29 @@ test_that("geo_multilinestring conversion works", {
 })
 
 test_that("geo_polygon conversion works", {
-  tbl <- cpp_convert(
-    geo_wkt("POLYGON ((30 10, 10 30, 40 40, 30 10))"),
-    geo_collection()
+  wkt_empty <- geo_wkt("POLYGON EMPTY")
+  collection_empty <- geo_polygon(geo_xy())
+  wkt <- geo_wkt("POLYGON ((30 10, 10 30, 40 40, 30 10))")
+  collection <- geo_polygon(geo_xy(c(30, 10, 40, 30), c(10, 30, 40, 10)))
+
+  wkt_hole <- geo_wkt(
+    "POLYGON ((35 10, 45 45, 15 40, 10 20, 35 10), (20 30, 35 35, 30 20, 20 30))"
+  )
+  collection_hole <- geo_polygon(
+    geo_xy(
+      c(35, 45, 15, 10, 35, 20, 35, 30, 20),
+      c(10, 45, 40, 20, 10, 30, 35, 20, 30)
+    ),
+    ring = c(1, 1, 1, 1, 1, 2, 2, 2, 2)
   )
 
-  expect_identical(
-    tbl,
-    geo_polygon(
-      geo_xy(c(30, 10, 40, 30), c(10, 30, 40, 10))
-    )
-  )
+  expect_identical(cpp_convert(wkt_empty, geo_collection()), collection_empty)
+  expect_identical(cpp_convert(wkt, geo_collection()), collection)
+  expect_identical(cpp_convert(wkt_hole, geo_collection()), collection_hole)
+
+  expect_identical(cpp_convert(collection_empty, geo_wkt()), wkt_empty)
+  expect_identical(cpp_convert(cpp_convert(collection, geo_wkt()), geo_collection()), collection)
+  expect_identical(cpp_convert(cpp_convert(collection_hole, geo_wkt()), geo_collection()), collection_hole)
 })
 
 test_that("geo_multi_polygon conversion works", {
