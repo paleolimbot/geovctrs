@@ -235,6 +235,35 @@ test_that("xy conversion works", {
 
   expect_equal(cpp_convert(geo_wkt("POINT (nan nan)"), geo_xy()),  geo_xy(NA, NA))
   expect_equal(cpp_convert(geo_xy(-Inf, Inf), geo_wkt()), geo_wkt("POINT (-inf inf)"))
+
+  # errors: linestring as XY, point with SRID
+  expect_error(cpp_convert(geo_wkt("LINESTRING EMPTY"), geo_xy()), "Can't represent")
+  expect_error(cpp_convert(geo_point(geo_xy(), srid = 1), geo_xy()), "FISH")
+})
+
+test_that("segment conversion works", {
+  segment <- geo_segment(geo_xy(0, 10), geo_xy(20, 30))
+
+  expect_identical(
+    cpp_convert(geo_wkt("LINESTRING (0 10, 20 30)"), geo_segment()),
+    segment
+  )
+
+  expect_identical(
+    cpp_convert(cpp_convert(segment, geo_wkt()), geo_segment()),
+    segment
+  )
+
+  # empty == all NAs
+  expect_identical(
+    cpp_convert(geo_wkt("LINESTRING EMPTY"), geo_segment()),
+    geo_segment(geo_xy(NA, NA), geo_xy(NA, NA))
+  )
+
+  # errors: non linestring, more than two points
+  expect_error(cpp_convert(geo_wkt("POINT (10 30)"), geo_segment()), "non-linestring")
+  expect_error(cpp_convert(geo_wkt("LINESTRING (10 30, 0 0, 10 4)"), geo_segment()), "exactly two points")
+
 })
 
 test_that("error occurs with unknown object in conversions", {

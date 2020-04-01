@@ -152,6 +152,35 @@ public:
   SEXP finish();
 };
 
+// --- segment ----
+
+class SegmentProvider: public GeometryProvider {
+public:
+  NumericVector x0;
+  NumericVector y0;
+  NumericVector x1;
+  NumericVector y1;
+  size_t counter;
+
+  SegmentProvider(NumericVector x0, NumericVector y0, NumericVector x1, NumericVector y1);
+  void init(GEOSContextHandle_t context);
+  GEOSGeometry* getNext();
+  size_t size();
+};
+
+class SegmentExporter: public GeometryExporter {
+public:
+  NumericVector x0;
+  NumericVector y0;
+  NumericVector x1;
+  NumericVector y1;
+  size_t counter;
+
+  void init(GEOSContextHandle_t context, size_t size);
+  void putNext(GEOSGeometry* geometry);
+  SEXP finish();
+};
+
 // --- rect ----
 
 class GeoRectProvider: public GeometryProvider {

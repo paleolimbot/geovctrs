@@ -308,6 +308,109 @@ SEXP XYExporter::finish() {
   return result;
 }
 
+// ---- Segment provider
+
+SegmentProvider::SegmentProvider(NumericVector x0, NumericVector y0,
+                                 NumericVector x1, NumericVector y1) {
+  this->x0 = x0;
+  this->y0 = y0;
+  this->x1 = x1;
+  this->y1 = y1;
+}
+
+void SegmentProvider::init(GEOSContextHandle_t context) {
+  this->context = context;
+  this->counter = 0;
+}
+
+GEOSGeometry* SegmentProvider::getNext() {
+  GEOSCoordSequence* seq = GEOSCoordSeq_create_r(this->context, 2, 2);
+
+  // start
+  GEOSCoordSeq_setX_r(this->context, seq, 0, this->x0[this->counter]);
+  GEOSCoordSeq_setY_r(this->context, seq, 0, this->y0[this->counter]);
+
+  // end
+  GEOSCoordSeq_setX_r(this->context, seq, 1, this->x1[this->counter]);
+  GEOSCoordSeq_setY_r(this->context, seq, 1, this->y1[this->counter]);
+
+  GEOSGeometry* geometry = GEOSGeom_createLineString_r(context, seq);
+
+  this->counter = this->counter + 1;
+  return geometry;
+}
+
+size_t SegmentProvider::size() {
+  return (this->x0).size();
+}
+
+// ---- Segment exporter
+
+void SegmentExporter::init(GEOSContextHandle_t context, size_t size) {
+  NumericVector x0(size);
+  NumericVector y0(size);
+  NumericVector x1(size);
+  NumericVector y1(size);
+  this->x0 = x0;
+  this->y0 = y0;
+  this->x1 = x1;
+  this->y1 = y1;
+
+  this->context = context;
+  this->counter = 0;
+}
+
+void SegmentExporter::putNext(GEOSGeometry* geometry) {
+  if (GEOSGeomTypeId_r(this->context, geometry) != GEOSGeomTypes::GEOS_LINESTRING) {
+    stop("Can't represent a non-linestring as a geo_segment()");
+  }
+
+  if (!GEOSisEmpty_r(context, geometry) && GEOSGeomGetNumPoints_r(context, geometry) != 2) {
+    stop("linestrings must have exactly two points to be represented as a geo_segment()");
+  }
+
+  double x0, y0, x1, y1;
+
+  if (GEOSisEmpty_r(context, geometry)) {
+    x0 = NA_REAL;
+    y0 = NA_REAL;
+    x1 = NA_REAL;
+    y1 = NA_REAL;
+  } else {
+    const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq_r(this->context, geometry);
+    GEOSCoordSeq_getX_r(this->context, seq, 0, &x0);
+    GEOSCoordSeq_getY_r(this->context, seq, 0, &y0);
+    GEOSCoordSeq_getX_r(this->context, seq, 1, &x1);
+    GEOSCoordSeq_getY_r(this->context, seq, 1, &y1);
+  }
+
+  this->x0[this->counter] = x0;
+  this->y0[this->counter] = y0;
+  this->x1[this->counter] = x1;
+  this->y1[this->counter] = y1;
+
+  this->counter = this->counter + 1;
+}
+
+SEXP SegmentExporter::finish() {
+  List p1 = List::create(
+    _["x"] = this->x0,
+    _["y"] = this->y0
+  );
+  p1.attr("class") = CharacterVector::create("geo_xy", "geo_coord", "vctrs_rcrd", "vctrs_vctr");
+
+  List p2 = List::create(
+    _["x"] = this->x1,
+    _["y"] = this->y1
+  );
+  p2.attr("class") = CharacterVector::create("geo_xy", "geo_coord", "vctrs_rcrd", "vctrs_vctr");
+
+  List result = List::create(_["start"] = p1, _["end"] = p2);
+  result.attr("class") = CharacterVector::create("geo_segment", "geo_coord", "vctrs_rcrd", "vctrs_vctr");
+
+  return result;
+}
+
 // ---- GeoRect provider
 
 GeoRectProvider::GeoRectProvider(NumericVector xmin, NumericVector ymin,
@@ -446,6 +549,24 @@ std::unique_ptr<GeometryProvider> resolve_provider(SEXP data) {
     } else {
       return std::unique_ptr<GeometryProvider> { new XYProvider(x, y) };
     }
+  } else if(Rf_inherits(data, "geo_segment")) {
+    List segment = (List) data;
+    List start = segment["start"];
+    List end = segment["end"];
+    NumericVector x0 = start["x"];
+    NumericVector y0 = start["y"];
+    NumericVector x1 = end["x"];
+    NumericVector y1 = end["y"];
+
+    if (x0.size() ==  1) {
+      return std::unique_ptr<GeometryProvider> {
+        new ConstantGeometryProvider(new SegmentProvider(x0, y0, x1, y1))
+      };
+    } else {
+      return std::unique_ptr<GeometryProvider> {
+        new SegmentProvider(x0, y0, x1, y1)
+      };
+    }
   } else if(Rf_inherits(data, "geo_rect")) {
     List rect = (List) data;
     NumericVector xmin = rect["xmin"];
@@ -490,6 +611,8 @@ std::unique_ptr<GeometryExporter> resolve_exporter(SEXP ptype) {
     return std::unique_ptr<GeometryExporter> { new GeoCollectionExporter() };
   } else if(Rf_inherits(ptype, "geo_xy")) {
     return std::unique_ptr<GeometryExporter> { new XYExporter() };
+  } else if(Rf_inherits(ptype, "geo_segment")) {
+    return std::unique_ptr<GeometryExporter> { new SegmentExporter() };
   }
 
   stop("Can't resolve GeometryExporter");
