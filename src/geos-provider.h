@@ -94,6 +94,7 @@ public:
   List data;
   GEOSWKBWriter *wkb_writer;
   size_t counter;
+  int useEWKB;
 
   WKBGeometryExporter();
   void init(GEOSContextHandle_t context, size_t size);

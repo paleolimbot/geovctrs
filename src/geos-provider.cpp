@@ -150,11 +150,17 @@ size_t WKBGeometryProvider::size() {
 
 WKBGeometryExporter::WKBGeometryExporter() {
   this->counter = 0;
+  // -1 = guess, 0 = false, 1 = true
+  this->useEWKB = -1;
 }
 
 void WKBGeometryExporter::init(GEOSContextHandle_t context, size_t size) {
   this->context = context;
   this->wkb_writer = GEOSWKBWriter_create_r(context);
+  if (this->useEWKB == 1) {
+    GEOSWKBWriter_setIncludeSRID_r(this->context, this->wkb_writer, 1);
+  }
+
   List data(size);
   data.attr("class") = CharacterVector::create("geo_wkb", "geo", "vctrs_list_of", "vctrs_vctr");
   data.attr("ptype") = RawVector::create();
@@ -162,6 +168,16 @@ void WKBGeometryExporter::init(GEOSContextHandle_t context, size_t size) {
 }
 
 void WKBGeometryExporter::putNext(GEOSGeometry* geometry) {
+  if (this->useEWKB == -1) {
+    int sridFirst = GEOSGetSRID_r(this->context, geometry);
+    if (sridFirst != 0) {
+      GEOSWKBWriter_setIncludeSRID_r(this->context, this->wkb_writer, 1);
+      this->useEWKB = 1;
+    }  else {
+      this->useEWKB = 0;
+    }
+  }
+
   size_t size;
   unsigned char *buf = GEOSWKBWriter_write_r(this->context, this->wkb_writer, geometry, &size);
   RawVector raw(size);

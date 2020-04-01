@@ -23,6 +23,12 @@ test_that("wkb conversion works", {
   expect_identical(wkb, wkb_roundtrip)
 })
 
+test_that("wkb conversion propogates SRIDs by default", {
+  collection_empty <- geo_collection(list(geo_collection()), srid = 23)
+  collection_wkb <- cpp_convert(collection_empty, geo_wkb())
+  expect_identical(cpp_convert(collection_wkb, geo_collection()), collection_empty)
+})
+
 test_that("geo_point conversion works", {
   wkt_empty <- geo_wkt("POINT EMPTY")
   collection_empty <- geo_point(geo_xy())
@@ -179,6 +185,8 @@ test_that("geo_collection() conversion works", {
 
 test_that("geo_collection() conversion propogates SRIDs", {
   collection_empty <- geo_collection(list(geo_collection()), srid = 23)
+  expect_identical(cpp_convert(collection_empty, geo_collection()), collection_empty)
+
 
   collection <- geo_collection(
     list(
