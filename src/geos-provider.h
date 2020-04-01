@@ -152,7 +152,21 @@ public:
   SEXP finish();
 };
 
-// --- rect exporter
+// --- rect ----
+
+class GeoRectProvider: public GeometryProvider {
+public:
+  NumericVector xmin;
+  NumericVector ymin;
+  NumericVector xmax;
+  NumericVector ymax;
+  size_t counter;
+
+  GeoRectProvider(NumericVector xmin, NumericVector ymin, NumericVector xmax, NumericVector ymax);
+  void init(GEOSContextHandle_t context);
+  GEOSGeometry* getNext();
+  size_t size();
+};
 
 class GeoRectExporter: public GeometryExporter {
 public:

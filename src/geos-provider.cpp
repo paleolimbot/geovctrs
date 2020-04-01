@@ -308,6 +308,47 @@ SEXP XYExporter::finish() {
   return result;
 }
 
+// ---- GeoRect provider
+
+GeoRectProvider::GeoRectProvider(NumericVector xmin, NumericVector ymin,
+                                 NumericVector xmax, NumericVector ymax) {
+  this->xmin = xmin;
+  this->ymin = ymin;
+  this->xmax = xmax;
+  this->ymax = ymax;
+}
+
+void GeoRectProvider::init(GEOSContextHandle_t context) {
+  this->context = context;
+  this->counter = 0;
+}
+
+GEOSGeometry* GeoRectProvider::getNext() {
+  double xmin1, ymin1, xmax1, ymax1;
+  xmin1 = this->xmin[this->counter];
+  ymin1 = this->ymin[this->counter];
+  xmax1 = this->xmax[this->counter];
+  ymax1 = this->ymax[this->counter];
+
+  // counter clockwise!
+  GEOSCoordSequence* seq = GEOSCoordSeq_create_r(this->context, 5, 2);
+  GEOSCoordSeq_setX_r(this->context, seq, 0, xmin1); GEOSCoordSeq_setY_r(this->context, seq, 0, ymin1);
+  GEOSCoordSeq_setX_r(this->context, seq, 1, xmax1); GEOSCoordSeq_setY_r(this->context, seq, 1, ymin1);
+  GEOSCoordSeq_setX_r(this->context, seq, 2, xmax1); GEOSCoordSeq_setY_r(this->context, seq, 2, ymax1);
+  GEOSCoordSeq_setX_r(this->context, seq, 3, xmin1); GEOSCoordSeq_setY_r(this->context, seq, 3, ymax1);
+  GEOSCoordSeq_setX_r(this->context, seq, 4, xmin1); GEOSCoordSeq_setY_r(this->context, seq, 4, ymin1);
+
+  GEOSGeometry* shell = GEOSGeom_createLinearRing_r(context, seq);
+  GEOSGeometry* holes[0];
+  GEOSGeometry* geometry = GEOSGeom_createPolygon_r(context, shell, holes, 0);
+
+  this->counter = this->counter + 1;
+  return geometry;
+}
+
+size_t GeoRectProvider::size() {
+  return (this->xmin).size();
+}
 
 // --- GeoRect exporter
 
@@ -404,6 +445,22 @@ std::unique_ptr<GeometryProvider> resolve_provider(SEXP data) {
       return std::unique_ptr<GeometryProvider> { new ConstantGeometryProvider(new XYProvider(x, y)) };
     } else {
       return std::unique_ptr<GeometryProvider> { new XYProvider(x, y) };
+    }
+  } else if(Rf_inherits(data, "geo_rect")) {
+    List rect = (List) data;
+    NumericVector xmin = rect["xmin"];
+    NumericVector ymin = rect["ymin"];
+    NumericVector xmax = rect["xmax"];
+    NumericVector ymax = rect["ymax"];
+
+    if (xmin.size() ==  1) {
+      return std::unique_ptr<GeometryProvider> {
+        new ConstantGeometryProvider(new GeoRectProvider(xmin, ymin, xmax, ymax))
+      };
+    } else {
+      return std::unique_ptr<GeometryProvider> {
+        new GeoRectProvider(xmin, ymin, xmax, ymax)
+      };
     }
   } else if(Rf_inherits(data, "geo_collection")) {
     List col = (List) data;

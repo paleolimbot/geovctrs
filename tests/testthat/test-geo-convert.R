@@ -192,8 +192,32 @@ test_that("rect conversion works", {
   )
 })
 
-test_that("rect conversion works on empty geometries", {
-  expect_identical(cpp_convert(geo_wkt("POINT EMPTY"), geo_rect()), geo_rect(Inf, Inf, -Inf, -Inf))
+test_that("rect conversion works", {
+  expect_identical(
+    cpp_convert(geo_rect(0, 10, 20, 30), geo_collection()),
+    geo_polygon(
+      geo_xy(
+        c(0, 20, 20, 0, 0),
+        c(10, 10, 30, 30, 10)
+      )
+    )
+  )
+
+  # exporting is more of an operator than an
+  # export operation...maybe that's how it
+  # should be implemented
+
+  # empty bounds
+  expect_identical(
+    cpp_convert(geo_wkt("POINT EMPTY"), geo_rect()),
+    geo_rect(Inf, Inf, -Inf, -Inf)
+  )
+
+  # actual bounds
+  expect_identical(
+    cpp_convert(geo_wkt("LINESTRING (0 10, 20 30)"), geo_rect()),
+    geo_rect(0, 10, 20, 30)
+  )
 })
 
 test_that("xy conversion works", {
