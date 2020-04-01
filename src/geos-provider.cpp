@@ -248,15 +248,11 @@ void XYProvider::init(GEOSContextHandle_t context) {
 GEOSGeometry* XYProvider::getNext() {
   GEOSGeometry* geometry;
 
-  if (NumericVector::is_na(x[this->counter]) || NumericVector::is_na(y[this->counter])) {
-    geometry = GEOSGeom_createEmptyPoint_r(this->context);
-  } else {
-    GEOSCoordSequence* seq = GEOSCoordSeq_create_r(this->context, 1, 2);
-    GEOSCoordSeq_setX_r(this->context, seq, 0, x[this->counter]);
-    GEOSCoordSeq_setY_r(this->context, seq, 0, y[this->counter]);
+  GEOSCoordSequence* seq = GEOSCoordSeq_create_r(this->context, 1, 2);
+  GEOSCoordSeq_setX_r(this->context, seq, 0, x[this->counter]);
+  GEOSCoordSeq_setY_r(this->context, seq, 0, y[this->counter]);
 
-    geometry = GEOSGeom_createPoint_r(this->context, seq);
-  }
+  geometry = GEOSGeom_createPoint_r(this->context, seq);
 
   this->counter = this->counter + 1;
   return geometry;

@@ -202,13 +202,9 @@ test_that("xy conversion works", {
     c(geo_point(geo_xy(1, 6)), geo_point(geo_xy(2, 7)))
   )
 
-  # handling of NA, NaN (inf handled no prob, apparently)
-  expect_equal(cpp_convert(geo_xy(NA, NA), geo_wkt()), geo_wkt("POINT EMPTY"))
-  expect_equal(cpp_convert(geo_xy(NA, 1), geo_wkt()), geo_wkt("POINT EMPTY"))
-  expect_equal(cpp_convert(geo_xy(1, NA), geo_wkt()), geo_wkt("POINT EMPTY"))
-  expect_equal(cpp_convert(geo_xy(NaN, 1), geo_wkt()), geo_wkt("POINT EMPTY"))
-  expect_equal(cpp_convert(geo_xy(1, NaN), geo_wkt()), geo_wkt("POINT EMPTY"))
-  expect_equal(cpp_convert(geo_xy(NaN, NaN), geo_wkt()), geo_wkt("POINT EMPTY"))
+  # handling of NA, NaN, inf
+  expect_equal(cpp_convert(geo_xy(NA, NA), geo_wkt()), geo_wkt("POINT (nan nan)"))
+  expect_equal(cpp_convert(geo_xy(-Inf, Inf), geo_wkt()), geo_wkt("POINT (-inf inf)"))
 })
 
 test_that("error occurs with unknown object in conversions", {
