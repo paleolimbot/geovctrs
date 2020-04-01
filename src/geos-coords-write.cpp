@@ -208,6 +208,30 @@ GEOSGeometry* multipolygon_from_geo_coord(GEOSContextHandle_t context, List feat
   return output;
 }
 
-GEOSGeometry* geometrycollection_from_geo_coord(GEOSContextHandle_t context, List feature) {
-  stop("Can only convert point");
+GEOSGeometry* geometrycollection_from_geo_coord(GEOSContextHandle_t context, List data) {
+  IntegerVector srid = data["srid"];
+  List feature = data["feature"];
+  GEOSGeometry* parts[feature.size()];
+
+  for (size_t i=0; i < feature.size(); i++) {
+    GEOSGeometry* geometry = feature_from_geo_coord(context, feature[i]);
+
+    int geomSRID = srid[i];
+    if (IntegerVector::is_na(srid[i])) {
+      GEOSSetSRID_r(context, geometry, 0);
+    } else {
+      GEOSSetSRID_r(context, geometry, srid[i]);
+    }
+
+    parts[i] = geometry;
+  }
+
+  GEOSGeometry* output = GEOSGeom_createCollection_r(
+    context,
+    GEOSGeomTypes::GEOS_GEOMETRYCOLLECTION,
+    parts,
+    feature.size()
+  );
+
+  return output;
 }

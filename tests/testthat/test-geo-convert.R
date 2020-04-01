@@ -148,6 +148,35 @@ test_that("geo_multipolygon conversion works", {
   expect_identical(cpp_convert(cpp_convert(collection, geo_wkt()), geo_collection()), collection)
 })
 
+test_that("geo_collection() conversion works", {
+  wkt_empty <- geo_wkt("GEOMETRYCOLLECTION EMPTY")
+  collection_empty <- geo_collection(list(geo_collection()))
+  wkt <- geo_wkt(
+    "
+    GEOMETRYCOLLECTION (
+      POINT (40 10),
+      LINESTRING (10 10, 20 20, 10 40),
+      POLYGON ((40 40, 20 45, 45 30, 40 40))
+    )
+    "
+  )
+  collection <- geo_collection(
+    list(
+      c(
+        geo_point(geo_xy(40, 10)),
+        geo_linestring(geo_xy(c(10, 20, 10), c(10, 20, 40))),
+        geo_polygon(geo_xy(c(40, 20, 45, 40), c(40, 45, 30, 40)))
+      )
+    )
+  )
+
+  expect_identical(cpp_convert(wkt_empty, geo_collection()), collection_empty)
+  expect_identical(cpp_convert(wkt, geo_collection()), collection)
+
+  expect_identical(cpp_convert(collection_empty, geo_wkt()), wkt_empty)
+  expect_identical(cpp_convert(cpp_convert(collection, geo_wkt()), geo_collection()), collection)
+})
+
 test_that("rect conversion works", {
   rect <- cpp_convert(
     geo_wkt(
@@ -180,37 +209,6 @@ test_that("xy conversion works", {
   expect_equal(cpp_convert(geo_xy(NaN, 1), geo_wkt()), geo_wkt("POINT EMPTY"))
   expect_equal(cpp_convert(geo_xy(1, NaN), geo_wkt()), geo_wkt("POINT EMPTY"))
   expect_equal(cpp_convert(geo_xy(NaN, NaN), geo_wkt()), geo_wkt("POINT EMPTY"))
-})
-
-test_that("geometrycollections can  be converted to a GeoCoord", {
-  expect_identical(
-    cpp_convert(geo_wkt("GEOMETRYCOLLECTION EMPTY"), geo_collection()),
-    geo_collection(list(geo_collection()))
-  )
-
-  expect_identical(
-    cpp_convert(
-      geo_wkt(
-        "
-        GEOMETRYCOLLECTION (
-          POINT (40 10),
-          LINESTRING (10 10, 20 20, 10 40),
-          POLYGON ((40 40, 20 45, 45 30, 40 40))
-        )
-        "
-      ),
-      geo_collection()
-    ),
-    geo_collection(
-      list(
-        c(
-          geo_point(geo_xy(40, 10)),
-          geo_linestring(geo_xy(c(10, 20, 10), c(10, 20, 40))),
-          geo_polygon(geo_xy(c(40, 20, 45, 40), c(40, 45, 30, 40)))
-        )
-      )
-    )
-  )
 })
 
 test_that("error occurs with unknown object in conversions", {
