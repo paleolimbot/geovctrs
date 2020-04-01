@@ -2,6 +2,35 @@
 #include "geos-coords-write.h"
 using namespace Rcpp;
 
+IntegerVector groups_to_lengths(IntegerVector groups) {
+  if (groups.size() == 0) {
+    return IntegerVector::create();
+  }
+
+  // one pass through to find the number of rings
+  int nGroups = 1;
+  for (size_t i=1; i < groups.size(); i++) {
+    if (groups[i] != groups[i - 1]) {
+      nGroups++;
+    }
+  }
+
+  // one pass through to find their lengths
+  IntegerVector groupLengths(nGroups);
+  int iGroup = 0;
+  size_t lastGroup = 0;
+  for (size_t i=1; i < groups.size(); i++) {
+    if (groups[i] != groups[i - 1]) {
+      groupLengths[iGroup] = i - lastGroup;
+      lastGroup = i;
+      iGroup++;
+    }
+  }
+
+  groupLengths[iGroup] = groups.size() - lastGroup;
+  return groupLengths;
+}
+
 GEOSCoordSequence* seq_from_xy(GEOSContextHandle_t context, List xy, int offset, size_t size) {
   NumericVector x = xy["x"];
   NumericVector y = xy["y"];
@@ -66,32 +95,12 @@ GEOSGeometry* linestring_from_geo_coord(GEOSContextHandle_t context, List featur
 
 GEOSGeometry* polygon_from_geo_coord(GEOSContextHandle_t context, List feature) {
   List xy = feature["xy"];
-  NumericVector ring = feature["ring"];
+  IntegerVector ring = feature["ring"];
   if (ring.size() == 0) {
     return GEOSGeom_createEmptyPolygon_r(context);
   }
 
-  // one pass through to find the number of rings
-  int nRings = 1;
-  for (size_t i=1; i < ring.size(); i++) {
-    if (ring[i] != ring[i - 1]) {
-      nRings++;
-    }
-  }
-
-  // one pass through to find their lengths
-  NumericVector ringLengths(nRings);
-  int iRing = 0;
-  size_t lastRing = 0;
-  for (size_t i=1; i < ring.size(); i++) {
-    if (ring[i] != ring[i - 1]) {
-      ringLengths[iRing] = i - lastRing;
-      lastRing = i;
-      iRing++;
-    }
-  }
-
-  ringLengths[iRing] = ring.size() - lastRing;
+  IntegerVector ringLengths = groups_to_lengths(ring);
 
   // generate outer shell
   GEOSCoordSequence* shellSeq = seq_from_xy(context, xy, 0, ringLengths[0]);
@@ -107,11 +116,25 @@ GEOSGeometry* polygon_from_geo_coord(GEOSContextHandle_t context, List feature) 
   }
 
   // generate polygon
-  return GEOSGeom_createPolygon_r(context, shell, holes, ringLengths.size() - 1);
+  GEOSGeometry* output = GEOSGeom_createPolygon_r(context, shell, holes, ringLengths.size() - 1);
+  return output;
 }
 
 GEOSGeometry* multipoint_from_geo_coord(GEOSContextHandle_t context, List feature) {
-  stop("Can only convert point");
+  List xy = feature["xy"];
+  NumericVector x = xy["x"];
+  if (x.size() == 0) {
+    return GEOSGeom_createEmptyCollection_r(context, GEOSGeomTypes::GEOS_MULTIPOINT);
+  }
+
+  GEOSGeometry* parts[x.size()];
+  for (size_t i=0; i<x.size(); i++) {
+    GEOSCoordSequence* seq = seq_from_xy(context, xy, i, 1);
+    parts[i] = GEOSGeom_createPoint_r(context, seq);
+  }
+
+  GEOSGeometry* output = GEOSGeom_createCollection_r(context, GEOSGeomTypes::GEOS_MULTIPOINT, parts, x.size());
+  return output;
 }
 
 GEOSGeometry* multilinestring_from_geo_coord(GEOSContextHandle_t context, List feature) {

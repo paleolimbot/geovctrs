@@ -24,7 +24,7 @@ geo_multipoint <- function(feature, srid = NA) {
 
   feat <- new_geo_multipoint(
     list(
-      xy = vec_c(!!!xy)
+      xy = vec_c(!!!xy, .ptype = geo_xy())
     )
   )
 
