@@ -19,10 +19,7 @@ static void __errorHandler(const char *fmt, ...) {
   p = buf + strlen(buf) - 1;
   if(strlen(buf) > 0 && *p == '\n') *p = '\0';
 
-  Rcpp::Function error(".stop_geos", Rcpp::Environment::namespace_env("geovctrs"));
-  error(buf);
-
-  return;
+  throw Rcpp::exception(buf);
 }
 
 static void __warningHandler(const char *fmt, ...) {
@@ -40,13 +37,6 @@ static void __warningHandler(const char *fmt, ...) {
 
   return;
 }
-
-static void __countErrorHandler(const char *fmt, void *userdata) {
-  int *i = (int *) userdata;
-  *i = *i + 1;
-}
-
-static void __emptyNoticeHandler(const char *fmt, void *userdata) { }
 
 GEOSContextHandle_t geos_init(void) {
 #ifdef HAVE350

@@ -78,7 +78,7 @@ SEXP UnaryGeometryOperator::operate() {
       result = this->operateNext(geometry);
       this->exporter->putNext(result);
     }
-  } catch(std::exception e) {
+  } catch(Rcpp::exception e) {
     this->finish();
     throw e;
   }
