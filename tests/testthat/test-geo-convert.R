@@ -177,6 +177,27 @@ test_that("geo_collection() conversion works", {
   expect_identical(cpp_convert(cpp_convert(collection, geo_wkt()), geo_collection()), collection)
 })
 
+test_that("geo_collection() conversion propogates SRIDs", {
+  collection_empty <- geo_collection(list(geo_collection()), srid = 23)
+
+  collection <- geo_collection(
+    list(
+      c(
+        # subgeometries all get assigned the same SRID as the parent
+        # in GEOS (I think)
+        geo_point(geo_xy(40, 10), srid = 1721),
+        geo_linestring(geo_xy(c(10, 20, 10), c(10, 20, 40)), srid = 1721),
+        geo_polygon(geo_xy(c(40, 20, 45, 40), c(40, 45, 30, 40)), srid = 1721)
+      ),
+      # a bit awkward...
+      unclass(geo_point(geo_xy(30, 3332)))$feature[[1]]
+    ),
+    srid = c(1721, 2)
+  )
+
+  expect_identical(cpp_convert(collection, geo_collection()), collection)
+})
+
 test_that("rect conversion works", {
   rect <- cpp_convert(
     geo_wkt(
@@ -238,7 +259,7 @@ test_that("xy conversion works", {
 
   # errors: linestring as XY, point with SRID
   expect_error(cpp_convert(geo_wkt("LINESTRING EMPTY"), geo_xy()), "Can't represent")
-  expect_error(cpp_convert(geo_point(geo_xy(), srid = 1), geo_xy()), "FISH")
+  expect_error(cpp_convert(geo_point(geo_xy(), srid = 1), geo_xy()), "point with an SRID")
 })
 
 test_that("segment conversion works", {

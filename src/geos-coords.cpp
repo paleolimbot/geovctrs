@@ -236,7 +236,9 @@ List geometrycollection_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* 
     const GEOSGeometry* feature = GEOSGetGeometryN_r(context, geometry, i);
     features[i] = geometry_to_geo_coord(context, (GEOSGeometry*)feature);
 
-    int geomSRID = GEOSGetSRID_r(context, geometry);
+    // it's worth doing this here, but these will all be the same as the
+    // parent collection
+    int geomSRID = GEOSGetSRID_r(context, feature);
     if (geomSRID == 0) {
       srid[i] = NA_INTEGER;
     } else {
