@@ -116,35 +116,36 @@ test_that("geo_polygon conversion works", {
   expect_identical(cpp_convert(cpp_convert(collection_hole, geo_wkt()), geo_collection()), collection_hole)
 })
 
-test_that("geo_multi_polygon conversion works", {
-  tbl <- cpp_convert(
-    geo_wkt(
-      "MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),
+test_that("geo_multipolygon conversion works", {
+  wkt_empty <- geo_wkt("MULTIPOLYGON EMPTY")
+  collection_empty <- geo_multipolygon(geo_collection())
+  wkt <- geo_wkt(
+    "MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),
             ((20 35, 10 30, 10 10, 30 5, 45 20, 20 35), (30 20, 20 15, 20 25, 30 20)))
-    "),
-    geo_collection()
-  )
-
-  expect_identical(
-    tbl,
-    geo_multipolygon(
-      c(
-        geo_polygon(
-          geo_xy(
-            c(40, 20, 45, 40),
-            c(40, 45, 30, 40)
-          )
-        ),
-        geo_polygon(
-          geo_xy(
-            c(20, 10, 10, 30, 45, 20, 30, 20, 20, 30),
-            c(35, 30, 10, 5,  20, 35, 20, 15, 25, 20)
-          ),
-          ring = c(1, 1, 1, 1, 1, 1, 2, 2, 2, 2)
+    ")
+  collection <- geo_multipolygon(
+    c(
+      geo_polygon(
+        geo_xy(
+          c(40, 20, 45, 40),
+          c(40, 45, 30, 40)
         )
+      ),
+      geo_polygon(
+        geo_xy(
+          c(20, 10, 10, 30, 45, 20, 30, 20, 20, 30),
+          c(35, 30, 10, 5,  20, 35, 20, 15, 25, 20)
+        ),
+        ring = c(1, 1, 1, 1, 1, 1, 2, 2, 2, 2)
       )
     )
   )
+
+  expect_identical(cpp_convert(wkt_empty, geo_collection()), collection_empty)
+  expect_identical(cpp_convert(wkt, geo_collection()), collection)
+
+  expect_identical(cpp_convert(collection_empty, geo_wkt()), wkt_empty)
+  expect_identical(cpp_convert(cpp_convert(collection, geo_wkt()), geo_collection()), collection)
 })
 
 test_that("rect conversion works", {

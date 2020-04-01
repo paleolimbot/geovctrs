@@ -165,7 +165,47 @@ GEOSGeometry* multilinestring_from_geo_coord(GEOSContextHandle_t context, List f
 }
 
 GEOSGeometry* multipolygon_from_geo_coord(GEOSContextHandle_t context, List feature) {
-  stop("Can only convert point");
+  IntegerVector part = feature["part"];
+  if (part.size() == 0) {
+    return GEOSGeom_createEmptyCollection_r(context, GEOSGeomTypes::GEOS_MULTIPOLYGON);
+  }
+
+  List xy = feature["xy"];
+  IntegerVector ring = feature["ring"];
+  IntegerVector partLengths = groups_to_lengths(part);
+
+  GEOSGeometry* parts[partLengths.size()];
+  size_t offset = 0;
+  for (int i=0; i < partLengths.size(); i++) {
+    IntegerVector ringPart = ring[Range(offset, offset + partLengths[i] - 1)];
+    IntegerVector ringLengths = groups_to_lengths(ringPart);
+
+    // generate outer shell
+    GEOSCoordSequence* shellSeq = seq_from_xy(context, xy, offset, ringLengths[0]);
+    GEOSGeometry* shell = GEOSGeom_createLinearRing_r(context, shellSeq);
+    offset += ringLengths[0];
+
+    // generate holes
+    GEOSGeometry* holes[ringLengths.size() - 1];
+    for (int j=1; j < ringLengths.size(); j++) {
+      GEOSCoordSequence* holeSeq = seq_from_xy(context, xy, offset, ringLengths[j]);
+      holes[j - 1] = GEOSGeom_createLinearRing_r(context, holeSeq);
+      offset += ringLengths[j];
+    }
+
+    // generate polygon
+    parts[i] = GEOSGeom_createPolygon_r(context, shell, holes, ringLengths.size() - 1);
+  }
+
+
+  GEOSGeometry* output = GEOSGeom_createCollection_r(
+    context,
+    GEOSGeomTypes::GEOS_MULTIPOLYGON,
+    parts,
+    partLengths.size()
+  );
+
+  return output;
 }
 
 GEOSGeometry* geometrycollection_from_geo_coord(GEOSContextHandle_t context, List feature) {

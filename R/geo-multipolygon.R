@@ -27,9 +27,9 @@ geo_multipolygon <- function(feature, srid = NA) {
 
   feat <- new_geo_multipolygon(
     list(
-      xy = vec_c(!!!xy),
+      xy = vec_c(!!!xy, .ptype = geo_xy()),
       part = inverse.rle(part_rle),
-      ring = vec_c(!!!ring)
+      ring = vec_c(!!!ring, .ptype = integer())
     )
   )
 
