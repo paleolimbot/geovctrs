@@ -63,30 +63,31 @@ test_that("geo_multipoint conversion works", {
 })
 
 test_that("geo_multilinestring conversion works", {
-  tbl <- cpp_convert(
-    geo_wkt("MULTILINESTRING ((10 10, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))"),
-    geo_collection()
-  )
-
-  expect_identical(
-    tbl,
-    geo_multilinestring(
-      c(
-        geo_linestring(
-          geo_xy(
-            c(10, 20, 10),
-            c(10, 20, 40)
-          )
-        ),
-        geo_linestring(
-          geo_xy(
-            c(40, 30, 40, 30),
-            c(40, 30, 20, 10)
-          )
+  wkt_empty <- geo_wkt("MULTILINESTRING EMPTY")
+  collection_empty <- geo_multilinestring(geo_collection())
+  wkt <- geo_wkt("MULTILINESTRING ((10 10, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))")
+  collection <- geo_multilinestring(
+    c(
+      geo_linestring(
+        geo_xy(
+          c(10, 20, 10),
+          c(10, 20, 40)
+        )
+      ),
+      geo_linestring(
+        geo_xy(
+          c(40, 30, 40, 30),
+          c(40, 30, 20, 10)
         )
       )
     )
   )
+
+  expect_identical(cpp_convert(wkt_empty, geo_collection()), collection_empty)
+  expect_identical(cpp_convert(wkt, geo_collection()), collection)
+
+  expect_identical(cpp_convert(collection_empty, geo_wkt()), wkt_empty)
+  expect_identical(cpp_convert(cpp_convert(collection, geo_wkt()), geo_collection()), collection)
 })
 
 test_that("geo_polygon conversion works", {

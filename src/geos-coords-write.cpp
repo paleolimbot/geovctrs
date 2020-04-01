@@ -138,7 +138,30 @@ GEOSGeometry* multipoint_from_geo_coord(GEOSContextHandle_t context, List featur
 }
 
 GEOSGeometry* multilinestring_from_geo_coord(GEOSContextHandle_t context, List feature) {
-  stop("Can only convert point");
+  IntegerVector part = feature["part"];
+  if (part.size() == 0) {
+    return GEOSGeom_createEmptyCollection_r(context, GEOSGeomTypes::GEOS_MULTILINESTRING);
+  }
+
+  List xy = feature["xy"];
+  IntegerVector partLengths = groups_to_lengths(part);
+
+  GEOSGeometry* parts[partLengths.size()];
+  size_t offset = 0;
+  for (int i=0; i < partLengths.size(); i++) {
+    GEOSCoordSequence* lineSeq = seq_from_xy(context, xy, offset, partLengths[i]);
+    parts[i] = GEOSGeom_createLineString_r(context, lineSeq);
+    offset += partLengths[i];
+  }
+
+  GEOSGeometry* output = GEOSGeom_createCollection_r(
+    context,
+    GEOSGeomTypes::GEOS_MULTILINESTRING,
+    parts,
+    partLengths.size()
+  );
+
+  return output;
 }
 
 GEOSGeometry* multipolygon_from_geo_coord(GEOSContextHandle_t context, List feature) {

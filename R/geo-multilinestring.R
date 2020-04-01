@@ -26,7 +26,7 @@ geo_multilinestring <- function(feature, srid = NA) {
 
   feat <- new_geo_multilinestring(
     list(
-      xy = vec_c(!!!xy),
+      xy = vec_c(!!!xy, .ptype = geo_xy()),
       part = inverse.rle(part_rle)
     )
   )
