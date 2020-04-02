@@ -203,20 +203,6 @@ public:
   size_t size();
 };
 
-class GeoRectExporter: public GeometryExporter {
-public:
-  NumericVector xmin;
-  NumericVector ymin;
-  NumericVector xmax;
-  NumericVector ymax;
-  IntegerVector srid;
-  size_t counter;
-
-  void init(GEOSContextHandle_t context, size_t size);
-  void putNext(GEOSGeometry* geometry);
-  SEXP finish();
-};
-
 // --- geometry provider/exporter resolvers
 
 std::unique_ptr<GeometryProvider> resolve_provider(SEXP data);

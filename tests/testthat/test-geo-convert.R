@@ -206,49 +206,6 @@ test_that("geo_collection() conversion propogates SRIDs", {
   expect_identical(cpp_convert(collection, geo_collection()), collection)
 })
 
-test_that("rect conversion works", {
-  rect <- cpp_convert(
-    geo_wkt(
-      "MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),
-            ((20 35, 10 30, 10 10, 30 5, 45 20, 20 35), (30 20, 20 15, 20 25, 30 20)))
-    "),
-    geo_rect()
-  )
-
-  expect_identical(
-    rect,
-    geo_rect(xmin = 10, ymin = 5, xmax = 45, ymax = 45)
-  )
-})
-
-test_that("rect conversion works", {
-  expect_identical(
-    cpp_convert(geo_rect(0, 10, 20, 30), geo_collection()),
-    geo_polygon(
-      geo_xy(
-        c(0, 20, 20, 0, 0),
-        c(10, 10, 30, 30, 10)
-      )
-    )
-  )
-
-  # exporting is more of an operator than an
-  # export operation...maybe that's how it
-  # should be implemented
-
-  # empty bounds
-  expect_identical(
-    cpp_convert(geo_wkt("POINT EMPTY"), geo_rect()),
-    geo_rect(Inf, Inf, -Inf, -Inf)
-  )
-
-  # actual bounds
-  expect_identical(
-    cpp_convert(geo_wkt("LINESTRING (0 10, 20 30)"), geo_rect()),
-    geo_rect(0, 10, 20, 30)
-  )
-})
-
 test_that("xy conversion works", {
   collection <- c(geo_point(geo_xy(1, 6)), geo_point(geo_xy(2, 7)))
   xy <- geo_xy(1:2, 6:7)

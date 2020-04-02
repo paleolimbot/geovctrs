@@ -479,74 +479,6 @@ size_t GeoRectProvider::size() {
   return (this->xmin).size();
 }
 
-// --- GeoRect exporter
-
-void GeoRectExporter::init(GEOSContextHandle_t context, size_t size) {
-  NumericVector xmin(size);
-  NumericVector ymin(size);
-  NumericVector xmax(size);
-  NumericVector ymax(size);
-  IntegerVector srid(size);
-  this->xmin = xmin;
-  this->ymin = ymin;
-  this->xmax = xmax;
-  this->ymax = ymax;
-  this->srid = srid;
-
-  this->context = context;
-  this->counter = 0;
-}
-
-void GeoRectExporter::putNext(GEOSGeometry* geometry) {
-  double xmin1, ymin1, xmax1, ymax1;
-
-  if (GEOSisEmpty_r(this->context, geometry)) {
-    xmin1 = R_PosInf;
-    ymin1 = R_PosInf;
-    xmax1 = R_NegInf;
-    ymax1 = R_NegInf;
-  } else {
-
-#ifdef HAVE361
-  // these functions are not available in GEOS 3.5.x
-  // which is the version on the (common) Xenial build image
-  GEOSGeom_getXMin_r(this->context, geometry, &xmin1);
-  GEOSGeom_getYMin_r(this->context, geometry, &ymin1);
-  GEOSGeom_getXMax_r(this->context, geometry, &xmax1);
-  GEOSGeom_getYMax_r(this->context, geometry, &ymax1);
-#else
-  List coords = geometry_to_geo_coord(context, geometry);
-  List xy = coords["xy"];
-  NumericVector x = as<NumericVector>(xy["x"]);
-  NumericVector y = as<NumericVector>(xy["y"]);
-  xmin1 = min(x);
-  ymin1 = min(y);
-  xmax1 = max(x);
-  ymax1 = max(y);
-#endif
-  }
-
-  this->xmin[this->counter] = xmin1;
-  this->ymin[this->counter] = ymin1;
-  this->xmax[this->counter] = xmax1;
-  this->ymax[this->counter] = ymax1;
-  this->srid[this->counter] = GEOSGetSRID_r(this->context, geometry);
-
-  this->counter = this->counter + 1;
-}
-
-SEXP GeoRectExporter::finish() {
-  List result = List::create(
-    _["xmin"] = this->xmin,
-    _["ymin"] = this->ymin,
-    _["xmax"] = this->xmax,
-    _["ymax"] = this->ymax,
-    _["srid"] = this->srid
-  );
-  result.attr("class") = CharacterVector::create("geo_rect", "geovctr", "vctrs_rcrd", "vctrs_vctr");
-  return result;
-}
-
 // ---------- geometry provider resolvers -------------
 
 std::unique_ptr<GeometryProvider> resolve_provider(SEXP data) {
@@ -634,9 +566,6 @@ std::unique_ptr<GeometryExporter> resolve_exporter(SEXP ptype) {
 
   } else if(Rf_inherits(ptype, "geo_wkb")) {
     return std::unique_ptr<GeometryExporter> { new WKBGeometryExporter() };
-
-  } else if(Rf_inherits(ptype, "geo_rect")) {
-    return std::unique_ptr<GeometryExporter> { new GeoRectExporter() };
 
   } else if(Rf_inherits(ptype, "geo_collection")) {
     return std::unique_ptr<GeometryExporter> { new GeoCollectionExporter() };
