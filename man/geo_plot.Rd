@@ -3,10 +3,10 @@
 \name{geo_plot}
 \alias{geo_plot}
 \alias{geo_plot_add}
-\alias{plot.geo_collection}
-\alias{plot.geo_wkt}
-\alias{plot.geo_wkb}
 \alias{geo_plot_add.default}
+\alias{geo_plot_add.geo_xy}
+\alias{geo_plot_add.geo_segment}
+\alias{geo_plot_add.geo_rect}
 \alias{geo_plot_add.geo_collection}
 \alias{geo_plot_add.geo_point}
 \alias{geo_plot_add.geo_linestring}
@@ -20,13 +20,13 @@ geo_plot(x, ..., asp = 1, xlim = NULL, ylim = NULL, xlab = "", ylab = "")
 
 geo_plot_add(x, ...)
 
-\method{plot}{geo_collection}(x, ...)
-
-\method{plot}{geo_wkt}(x, ...)
-
-\method{plot}{geo_wkb}(x, ...)
-
 \method{geo_plot_add}{default}(x, ...)
+
+\method{geo_plot_add}{geo_xy}(x, ...)
+
+\method{geo_plot_add}{geo_segment}(x, ...)
+
+\method{geo_plot_add}{geo_rect}(x, ...)
 
 \method{geo_plot_add}{geo_collection}(x, ...)
 

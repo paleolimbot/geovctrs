@@ -55,4 +55,19 @@ test_that("plot generics work", {
     "geo_wkb generic",
     function() plot(as_geo_wkb(geo_wkt("POINT (30 40)")))
   )
+
+  vdiffr::expect_doppelganger(
+    "geo_xy generic",
+    function() plot(as_geo_xy(geo_wkt("POINT (30 40)")))
+  )
+
+  vdiffr::expect_doppelganger(
+    "geo_segment generic",
+    function() plot(geo_segment(geo_xy(0, 0), geo_xy(10, -10:10)))
+  )
+
+  vdiffr::expect_doppelganger(
+    "geo_rect generic",
+    function() plot(geo_rect(0:5, 1:6, 10:15, 11:16))
+  )
 })

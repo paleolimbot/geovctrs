@@ -58,31 +58,43 @@ geo_plot_add <- function(x, ...) {
   UseMethod("geo_plot_add")
 }
 
-#' @importFrom graphics plot
-#' @rdname geo_plot
-#' @export
-plot.geo_collection <- function(x, ...) {
-  geo_plot(x, ...)
-}
-
-#' @importFrom graphics plot
-#' @rdname geo_plot
-#' @export
-plot.geo_wkt <- function(x, ...) {
-  geo_plot(x, ...)
-}
-
-#' @importFrom graphics plot
-#' @rdname geo_plot
-#' @export
-plot.geo_wkb <- function(x, ...) {
-  geo_plot(x, ...)
-}
-
 #' @rdname geo_plot
 #' @export
 geo_plot_add.default <- function(x, ...) {
   geo_plot_add(as_geo_collection(x), ...)
+  invisible(x)
+}
+
+#' @rdname geo_plot
+#' @export
+geo_plot_add.geo_xy <- function(x, ...) {
+  graphics::points(field(x, "x"), field(x, "y"), ...)
+  invisible(x)
+}
+
+#' @rdname geo_plot
+#' @export
+geo_plot_add.geo_segment <- function(x, ...) {
+  start <- field(x, "start")
+  end <- field(x, "end")
+
+  graphics::segments(
+    field(start, "x"), field(start, "y"),
+    field(end, "x"), field(end, "y"),
+    ...
+  )
+
+  invisible(x)
+}
+
+#' @rdname geo_plot
+#' @export
+geo_plot_add.geo_rect <- function(x, ...) {
+  graphics::rect(
+    field(x, "xmin"), field(x, "ymin"),
+    field(x, "xmax"), field(x, "ymax"),
+    ...
+  )
   invisible(x)
 }
 
@@ -169,4 +181,40 @@ separate_groups_with_na <- function(x, groups) {
   new_start_i <- start_i + seq_along(lengths) - 1
   indices <- Map(function(x, y) c(x + seq_len(y), NA), start_i, lengths)
   x[vec_c(!!!indices)][-(length(x) + n_groups)]
+}
+
+#' @importFrom graphics plot
+#' @export
+plot.geo_collection <- function(x, ...) {
+  geo_plot(x, ...)
+}
+
+#' @importFrom graphics plot
+#' @export
+plot.geo_wkt <- function(x, ...) {
+  geo_plot(x, ...)
+}
+
+#' @importFrom graphics plot
+#' @export
+plot.geo_wkb <- function(x, ...) {
+  geo_plot(x, ...)
+}
+
+#' @importFrom graphics plot
+#' @export
+plot.geo_xy <- function(x, ...) {
+  geo_plot(x, ...)
+}
+
+#' @importFrom graphics plot
+#' @export
+plot.geo_segment <- function(x, ...) {
+  geo_plot(x, ...)
+}
+
+#' @importFrom graphics plot
+#' @export
+plot.geo_rect <- function(x, ...) {
+  geo_plot(x, ...)
 }
