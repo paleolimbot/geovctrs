@@ -324,11 +324,12 @@ SEXP XYExporter::finish() {
 // ---- Segment provider
 
 SegmentProvider::SegmentProvider(NumericVector x0, NumericVector y0,
-                                 NumericVector x1, NumericVector y1) {
+                                 NumericVector x1, NumericVector y1, IntegerVector srid) {
   this->x0 = x0;
   this->y0 = y0;
   this->x1 = x1;
   this->y1 = y1;
+  this->srid = srid;
 }
 
 void SegmentProvider::init(GEOSContextHandle_t context) {
@@ -348,6 +349,7 @@ GEOSGeometry* SegmentProvider::getNext() {
   GEOSCoordSeq_setY_r(this->context, seq, 1, this->y1[this->counter]);
 
   GEOSGeometry* geometry = GEOSGeom_createLineString_r(context, seq);
+  GEOSSetSRID_r(this->context, geometry, this->srid[this->counter]);
 
   this->counter = this->counter + 1;
   return geometry;
@@ -364,10 +366,12 @@ void SegmentExporter::init(GEOSContextHandle_t context, size_t size) {
   NumericVector y0(size);
   NumericVector x1(size);
   NumericVector y1(size);
+  IntegerVector srid(size);
   this->x0 = x0;
   this->y0 = y0;
   this->x1 = x1;
   this->y1 = y1;
+  this->srid = srid;
 
   this->context = context;
   this->counter = 0;
@@ -401,6 +405,7 @@ void SegmentExporter::putNext(GEOSGeometry* geometry) {
   this->y0[this->counter] = y0;
   this->x1[this->counter] = x1;
   this->y1[this->counter] = y1;
+  this->srid[this->counter] = GEOSGetSRID_r(this->context, geometry);
 
   this->counter = this->counter + 1;
 }
@@ -418,7 +423,7 @@ SEXP SegmentExporter::finish() {
   );
   p2.attr("class") = CharacterVector::create("geo_xy", "vctrs_rcrd", "vctrs_vctr");
 
-  List result = List::create(_["start"] = p1, _["end"] = p2);
+  List result = List::create(_["start"] = p1, _["end"] = p2, _["srid"] = this->srid);
   result.attr("class") = CharacterVector::create("geo_segment", "vctrs_rcrd", "vctrs_vctr");
 
   return result;
@@ -581,14 +586,15 @@ std::unique_ptr<GeometryProvider> resolve_provider(SEXP data) {
     NumericVector y0 = start["y"];
     NumericVector x1 = end["x"];
     NumericVector y1 = end["y"];
+    IntegerVector srid = segment["srid"];
 
     if (x0.size() ==  1) {
       return std::unique_ptr<GeometryProvider> {
-        new ConstantGeometryProvider(new SegmentProvider(x0, y0, x1, y1))
+        new ConstantGeometryProvider(new SegmentProvider(x0, y0, x1, y1, srid))
       };
     } else {
       return std::unique_ptr<GeometryProvider> {
-        new SegmentProvider(x0, y0, x1, y1)
+        new SegmentProvider(x0, y0, x1, y1, srid)
       };
     }
   } else if(Rf_inherits(data, "geo_rect")) {

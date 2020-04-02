@@ -10,11 +10,12 @@
 #' @examples
 #' geo_plot(geo_segment(geo_xy(0, 0), geo_xy(10, -10:10)))
 #'
-geo_segment <- function(start = geo_xy(), end = geo_xy()) {
+geo_segment <- function(start = geo_xy(), end = geo_xy(), srid = 0) {
   result <- new_geo_segment(
     vec_recycle_common(
       start = vec_cast(start, geo_xy()),
-      end = vec_cast(end, geo_xy())
+      end = vec_cast(end, geo_xy()),
+      srid = as_geo_srid(srid)
     )
   )
 
@@ -28,7 +29,7 @@ geo_segment <- function(start = geo_xy(), end = geo_xy()) {
 #'
 #' @export
 #'
-new_geo_segment <- function(x = list(start = geo_xy(), end = geo_xy())) {
+new_geo_segment <- function(x = list(start = geo_xy(), end = geo_xy(), srid = integer())) {
   vec_assert(x$start, geo_xy())
   vec_assert(x$end, geo_xy())
   new_rcrd(x, class = "geo_segment")

@@ -32,7 +32,8 @@ geo_rect <- function(xmin = double(), ymin = double(), xmax = double(), ymax = d
 #'
 #' @export
 #'
-new_geo_rect <- function(x = list(xmin = double(), ymin = double(), xmax = double(), ymax = double())) {
+new_geo_rect <- function(x = list(xmin = double(), ymin = double(),
+                                  xmax = double(), ymax = double(), srid = integer())) {
   vec_assert(x$xmin, double())
   vec_assert(x$ymin, double())
   vec_assert(x$xmax, double())

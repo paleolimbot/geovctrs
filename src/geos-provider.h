@@ -161,9 +161,11 @@ public:
   NumericVector y0;
   NumericVector x1;
   NumericVector y1;
+  IntegerVector srid;
   size_t counter;
 
-  SegmentProvider(NumericVector x0, NumericVector y0, NumericVector x1, NumericVector y1);
+  SegmentProvider(NumericVector x0, NumericVector y0,
+                  NumericVector x1, NumericVector y1, IntegerVector srid);
   void init(GEOSContextHandle_t context);
   GEOSGeometry* getNext();
   size_t size();
@@ -175,6 +177,7 @@ public:
   NumericVector y0;
   NumericVector x1;
   NumericVector y1;
+  IntegerVector srid;
   size_t counter;
 
   void init(GEOSContextHandle_t context, size_t size);
