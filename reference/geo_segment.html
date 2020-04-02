@@ -117,7 +117,7 @@
     <p>Line segments</p>
     </div>
 
-    <pre class="usage"><span class='fu'>geo_segment</span>(<span class='kw'>start</span> <span class='kw'>=</span> <span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(), <span class='kw'>end</span> <span class='kw'>=</span> <span class='fu'><a href='geo_xy.html'>geo_xy</a></span>())</pre>
+    <pre class="usage"><span class='fu'>geo_segment</span>(<span class='kw'>start</span> <span class='kw'>=</span> <span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(), <span class='kw'>end</span> <span class='kw'>=</span> <span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(), <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -126,6 +126,13 @@
       <th>start, end</th>
       <td><p><code><a href='geo_xy.html'>geo_xy()</a></code>s for the start and end
 of the segment, respectively.</p></td>
+    </tr>
+    <tr>
+      <th>srid</th>
+      <td><p>A spatial reference identifier, coerced to
+an integer by <code><a href='geo_srid.html'>as_geo_srid()</a></code>. These identifiers can
+and should be managed outside of geovctrs except for
+0, which is interpreted as "not set".</p></td>
     </tr>
     </table>
 
