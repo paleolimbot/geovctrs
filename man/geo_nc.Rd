@@ -12,6 +12,7 @@ The \link[sf:sf]{sf package}.
 geo_nc
 }
 \description{
-A spatial data package wouldn't be complete without a copy of the  NC
+A spatial data package wouldn't be complete without a copy of the NC
+dataset.
 }
 \keyword{datasets}
