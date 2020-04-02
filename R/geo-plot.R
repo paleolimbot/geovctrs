@@ -185,36 +185,6 @@ separate_groups_with_na <- function(x, groups) {
 
 #' @importFrom graphics plot
 #' @export
-plot.geo_collection <- function(x, ...) {
-  geo_plot(x, ...)
-}
-
-#' @importFrom graphics plot
-#' @export
-plot.geo_wkt <- function(x, ...) {
-  geo_plot(x, ...)
-}
-
-#' @importFrom graphics plot
-#' @export
-plot.geo_wkb <- function(x, ...) {
-  geo_plot(x, ...)
-}
-
-#' @importFrom graphics plot
-#' @export
-plot.geo_xy <- function(x, ...) {
-  geo_plot(x, ...)
-}
-
-#' @importFrom graphics plot
-#' @export
-plot.geo_segment <- function(x, ...) {
-  geo_plot(x, ...)
-}
-
-#' @importFrom graphics plot
-#' @export
-plot.geo_rect <- function(x, ...) {
+plot.geovctr <- function(x, ...) {
   geo_plot(x, ...)
 }
