@@ -68,12 +68,6 @@ as_geo_wkt.default <- function(x, ...) {
   vec_cast(x, geo_wkt())
 }
 
-#' @rdname new_geo_wkt
-#' @export
-as_geo_wkt.character <- function(x, ...) {
-  geo_wkt(x)
-}
-
 #' @method vec_cast geo_wkt
 #' @export
 #' @export vec_cast.geo_wkt
@@ -97,7 +91,7 @@ vec_cast.geo_wkt.geo_wkt <- function(x, to, ...) {
 #' @method vec_cast.geo_wkt character
 #' @export
 vec_cast.geo_wkt.character <- function(x, to, ...) {
-  as_geo_wkt.character(x)
+  geo_wkt(x)
 }
 
 #' @method vec_cast.character geo_wkt
@@ -109,5 +103,29 @@ vec_cast.character.geo_wkt <- function(x, to, ...) {
 #' @method vec_cast.geo_wkt geo_wkb
 #' @export
 vec_cast.geo_wkt.geo_wkb <- function(x, to, ...) {
-  cpp_convert(x, new_geo_wkt())
+  cpp_convert(x, geo_wkt())
+}
+
+#' @method vec_cast.geo_wkt geo_rect
+#' @export
+vec_cast.geo_wkt.geo_rect <- function(x, to, ...) {
+  cpp_convert(x, geo_wkt())
+}
+
+#' @method vec_cast.geo_wkt geo_segment
+#' @export
+vec_cast.geo_wkt.geo_segment <- function(x, to, ...) {
+  cpp_convert(x, geo_wkt())
+}
+
+#' @method vec_cast.geo_wkt geo_xy
+#' @export
+vec_cast.geo_wkt.geo_xy <- function(x, to, ...) {
+  cpp_convert(x, geo_wkt())
+}
+
+#' @method vec_cast.geo_wkt geo_collection
+#' @export
+vec_cast.geo_wkt.geo_collection <- function(x, to, ...) {
+  cpp_convert(x, geo_wkt())
 }

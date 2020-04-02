@@ -26,7 +26,7 @@ geo_rect <- function(xmin = double(), ymin = double(), xmax = double(), ymax = d
 #' S3 details for geo_rect
 #'
 #' @param x A (possibly) [geo_rect()]
-#' @param ... Unused
+#' @inheritParams new_geo_xy
 #'
 #' @export
 #'
@@ -35,7 +35,7 @@ new_geo_rect <- function(x = list(xmin = double(), ymin = double(), xmax = doubl
   vec_assert(x$ymin, double())
   vec_assert(x$xmax, double())
   vec_assert(x$ymax, double())
-  new_rcrd(x, class = c("geo_rect", "geo_coord"))
+  new_rcrd(x, class = "geo_rect")
 }
 
 #' @export
@@ -67,6 +67,18 @@ format.geo_rect <- function(x, ...) {
 }
 
 #' @export
+#' @importFrom tibble as_tibble
+as_tibble.geo_rect <- function(x, ...) {
+  as_tibble(vec_data(x), ...)
+}
+
+#' @export
+#' @importFrom tibble as_tibble
+as.data.frame.geo_rect <- function(x, ...) {
+  as.data.frame(as_tibble.geo_rect(x, ...))
+}
+
+#' @export
 #' @rdname new_geo_rect
 as_geo_rect <- function(x, ...) {
   UseMethod("as_geo_rect")
@@ -78,32 +90,62 @@ as_geo_rect.default <- function(x, ...) {
   vec_cast(x, geo_rect())
 }
 
+#' @method vec_cast geo_rect
 #' @export
+#' @export vec_cast.geo_rect
 #' @rdname new_geo_rect
-as_geo_rect.matrix <- function(x, ...) {
-  names <- colnames(x)
-  if (all(c("xmin", "ymin", "xmax", "ymax") %in% names)) {
-    xmin_col <- match("xmin", names)
-    ymin_col <- match("ymin", names)
-    xmax_col <- match("xmax", names)
-    ymax_col <- match("ymax", names)
-  } else {
-    xmin_col <- 1
-    ymin_col <- 2
-    xmax_col <- 3
-    ymax_col <- 4
-  }
-
-  geo_rect(
-    xmin = x[, xmin_col, drop = TRUE],
-    ymin = x[, ymin_col, drop = TRUE],
-    xmax = x[, xmax_col, drop = TRUE],
-    ymax = x[, ymax_col, drop = TRUE]
-  )
+vec_cast.geo_rect <- function(x, to, ...) {
+  UseMethod("vec_cast.geo_rect")
 }
 
+#' @method vec_cast.geo_rect default
 #' @export
+vec_cast.geo_rect.default <- function(x, to, ...) {
+  vec_default_cast(x, to)
+}
+
+#' @method vec_cast.geo_rect geo_rect
+#' @export
+vec_cast.geo_rect.geo_rect <- function(x, to, ...) {
+  x
+}
+
+# ------------- prototypes ------------
+
+#' @method vec_ptype2 geo_rect
+#' @export
+#' @export vec_ptype2.geo_rect
 #' @rdname new_geo_rect
-as.matrix.geo_rect <- function(x, ...) {
-  as.matrix(as.data.frame(x))
+vec_ptype2.geo_rect <- function(x, y, ...) {
+  UseMethod("vec_ptype2.geo_rect", y)
+}
+
+#' @method vec_ptype2.geo_rect default
+#' @export
+vec_ptype2.geo_rect.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg)
+}
+
+#' @method vec_ptype2.geo_rect geo_rect
+#' @export
+vec_ptype2.geo_rect.geo_rect <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  geo_rect()
+}
+
+#' @method vec_ptype2.geo_rect geo_wkt
+#' @export
+vec_ptype2.geo_rect.geo_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  geo_wkt()
+}
+
+#' @method vec_ptype2.geo_rect geo_wkb
+#' @export
+vec_ptype2.geo_rect.geo_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  geo_wkb()
+}
+
+#' @method vec_ptype2.geo_rect geo_collection
+#' @export
+vec_ptype2.geo_rect.geo_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  geo_collection()
 }

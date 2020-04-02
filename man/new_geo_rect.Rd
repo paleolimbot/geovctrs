@@ -6,8 +6,8 @@
 \alias{validate_geo_rect}
 \alias{as_geo_rect}
 \alias{as_geo_rect.default}
-\alias{as_geo_rect.matrix}
-\alias{as.matrix.geo_rect}
+\alias{vec_cast.geo_rect}
+\alias{vec_ptype2.geo_rect}
 \title{S3 details for geo_rect}
 \usage{
 new_geo_rect(
@@ -22,14 +22,18 @@ as_geo_rect(x, ...)
 
 \method{as_geo_rect}{default}(x, ...)
 
-\method{as_geo_rect}{matrix}(x, ...)
+\method{vec_cast}{geo_rect}(x, to, ...)
 
-\method{as.matrix}{geo_rect}(x, ...)
+\method{vec_ptype2}{geo_rect}(x, y, ...)
 }
 \arguments{
 \item{x}{A (possibly) \code{\link[=geo_rect]{geo_rect()}}}
 
 \item{...}{Unused}
+
+\item{to}{Arguments to \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} and \code{\link[vctrs:vec_ptype2]{vctrs::vec_ptype2()}}}
+
+\item{y}{Arguments to \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} and \code{\link[vctrs:vec_ptype2]{vctrs::vec_ptype2()}}}
 }
 \description{
 S3 details for geo_rect

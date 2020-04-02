@@ -108,8 +108,14 @@ vec_cast.geo_coord.geo_coord <- function(x, to, ...) {
   if(identical(class(x), class(to))) {
     x
   } else {
-    vec_cast.geo_coord.default(x, to)
+    cpp_convert(x, to)
   }
+}
+
+#' @method vec_cast.geo_coord geo
+#' @export
+vec_cast.geo_coord.geo <- function(x, to, ...) {
+  cpp_convert(x, to)
 }
 
 #' @method vec_cast.geo_coord data.frame

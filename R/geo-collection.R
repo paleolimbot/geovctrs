@@ -102,6 +102,18 @@ vec_cast.geo_collection.geo_xy <- function(x, to, ...) {
   cpp_convert(x, to)
 }
 
+#' @method vec_cast.geo_collection geo_rect
+#' @export
+vec_cast.geo_collection.geo_rect <- function(x, to, ...) {
+  cpp_convert(x, to)
+}
+
+#' @method vec_cast.geo_collection geo_segment
+#' @export
+vec_cast.geo_collection.geo_segment <- function(x, to, ...) {
+  cpp_convert(x, to)
+}
+
 #' @method vec_cast.geo_collection geo_wkt
 #' @export
 vec_cast.geo_collection.geo_wkt <- function(x, to, ...) {

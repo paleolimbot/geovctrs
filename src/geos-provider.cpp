@@ -327,7 +327,7 @@ SEXP XYExporter::finish() {
     _["x"] = this->x,
     _["y"] = this->y
   );
-  result.attr("class") = CharacterVector::create("geo_xy", "geo_coord", "vctrs_rcrd", "vctrs_vctr");
+  result.attr("class") = CharacterVector::create("geo_xy", "vctrs_rcrd", "vctrs_vctr");
   return result;
 }
 
@@ -420,16 +420,16 @@ SEXP SegmentExporter::finish() {
     _["x"] = this->x0,
     _["y"] = this->y0
   );
-  p1.attr("class") = CharacterVector::create("geo_xy", "geo_coord", "vctrs_rcrd", "vctrs_vctr");
+  p1.attr("class") = CharacterVector::create("geo_xy", "vctrs_rcrd", "vctrs_vctr");
 
   List p2 = List::create(
     _["x"] = this->x1,
     _["y"] = this->y1
   );
-  p2.attr("class") = CharacterVector::create("geo_xy", "geo_coord", "vctrs_rcrd", "vctrs_vctr");
+  p2.attr("class") = CharacterVector::create("geo_xy", "vctrs_rcrd", "vctrs_vctr");
 
   List result = List::create(_["start"] = p1, _["end"] = p2);
-  result.attr("class") = CharacterVector::create("geo_segment", "geo_coord", "vctrs_rcrd", "vctrs_vctr");
+  result.attr("class") = CharacterVector::create("geo_segment", "vctrs_rcrd", "vctrs_vctr");
 
   return result;
 }
@@ -537,7 +537,7 @@ SEXP GeoRectExporter::finish() {
     _["xmax"] = this->xmax,
     _["ymax"] = this->ymax
   );
-  result.attr("class") = CharacterVector::create("geo_rect", "geo_coord", "vctrs_rcrd", "vctrs_vctr");
+  result.attr("class") = CharacterVector::create("geo_rect", "vctrs_rcrd", "vctrs_vctr");
   return result;
 }
 

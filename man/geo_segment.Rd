@@ -17,6 +17,6 @@ A \code{\link[=new_geo_segment]{new_geo_segment()}}
 Line segments
 }
 \examples{
-geo_segment(start = geo_xy(), end = geo_xy())
+geo_plot(geo_segment(geo_xy(0, 0), geo_xy(10, -10:10)))
 
 }

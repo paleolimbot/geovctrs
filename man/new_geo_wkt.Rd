@@ -6,7 +6,6 @@
 \alias{validate_geo_wkt}
 \alias{as_geo_wkt}
 \alias{as_geo_wkt.default}
-\alias{as_geo_wkt.character}
 \alias{vec_cast.geo_wkt}
 \title{S3 details for geo_wkt}
 \usage{
@@ -19,8 +18,6 @@ validate_geo_wkt(x)
 as_geo_wkt(x, ...)
 
 \method{as_geo_wkt}{default}(x, ...)
-
-\method{as_geo_wkt}{character}(x, ...)
 
 \method{vec_cast}{geo_wkt}(x, to, ...)
 }

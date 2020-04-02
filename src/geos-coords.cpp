@@ -7,7 +7,7 @@ using namespace Rcpp;
 // ----- this is needed for some vector functions ------
 
 List geo_coord_reclass(List input, const char* cls) {
-  input.attr("class") = CharacterVector::create(cls, "geo_coord", "vctrs_rcrd", "vctrs_vctr");
+  input.attr("class") = CharacterVector::create(cls, "vctrs_rcrd", "vctrs_vctr");
   return input;
 }
 

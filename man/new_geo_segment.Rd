@@ -6,6 +6,8 @@
 \alias{validate_geo_segment}
 \alias{as_geo_segment}
 \alias{as_geo_segment.default}
+\alias{vec_cast.geo_segment}
+\alias{vec_ptype2.geo_segment}
 \title{S3 details for geo_segment}
 \usage{
 new_geo_segment(x = list(start = geo_xy(), end = geo_xy()))
@@ -17,11 +19,19 @@ validate_geo_segment(x)
 as_geo_segment(x, ...)
 
 \method{as_geo_segment}{default}(x, ...)
+
+\method{vec_cast}{geo_segment}(x, to, ...)
+
+\method{vec_ptype2}{geo_segment}(x, y, ...)
 }
 \arguments{
 \item{x}{A (possibly) \code{\link[=geo_segment]{geo_segment()}}}
 
 \item{...}{Unused}
+
+\item{to}{Arguments to \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} and \code{\link[vctrs:vec_ptype2]{vctrs::vec_ptype2()}}}
+
+\item{y}{Arguments to \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} and \code{\link[vctrs:vec_ptype2]{vctrs::vec_ptype2()}}}
 }
 \description{
 S3 details for geo_segment

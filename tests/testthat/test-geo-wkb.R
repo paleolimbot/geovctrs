@@ -63,6 +63,7 @@ test_that("wkb casting and coersion works", {
 
   expect_identical(vec_cast(wkb, geo_wkb()), wkb)
   expect_identical(vec_cast(list(wkb_raw), geo_wkb()), wkb)
+
   expect_identical(vec_cast(list(wkb_raw), geo_wkb()), as_geo_wkb(wkb))
   expect_identical(vec_cast(wkb, list()), list(wkb_raw))
   expect_identical(as_geo_wkb(list(wkb_raw)), wkb)
@@ -75,4 +76,19 @@ test_that("wkb casting and coersion works", {
   expect_identical(wkb, wkb_roundtrip)
   expect_identical(as_geo_wkt(wkb), wkt)
   expect_identical(as_geo_wkb(wkt), wkb)
+
+  expect_identical(
+    vec_cast(geo_segment(geo_xy(0, 1), geo_xy(10, 11)), geo_wkb()),
+    as_geo_wkb(geo_segment(geo_xy(0, 1), geo_xy(10, 11)), geo_wkb())
+  )
+
+  expect_identical(
+    vec_cast(geo_rect(0, 1, 10, 11), geo_wkb()),
+    as_geo_wkb(geo_rect(0, 1, 10, 11), geo_wkb())
+  )
+
+  expect_identical(
+    vec_cast(geo_point(geo_xy(1, 2)), geo_wkb()),
+    as_geo_wkb(geo_point(geo_xy(1, 2)), geo_wkb())
+  )
 })
