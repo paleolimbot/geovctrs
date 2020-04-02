@@ -5,6 +5,18 @@ cpp_convert <- function(data, ptype) {
     .Call(`_geovctrs_cpp_convert`, data, ptype)
 }
 
+pmin2 <- function(x1, x2) {
+    .Call(`_geovctrs_pmin2`, x1, x2)
+}
+
+pmax2 <- function(x1, x2) {
+    .Call(`_geovctrs_pmax2`, x1, x2)
+}
+
+cpp_envelope <- function(data, naRm) {
+    .Call(`_geovctrs_cpp_envelope`, data, naRm)
+}
+
 cpp_version_impl <- function() {
     .Call(`_geovctrs_cpp_version_impl`)
 }

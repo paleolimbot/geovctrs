@@ -2,15 +2,12 @@
 % Please edit documentation in R/geo-bbox.R
 \name{geo_bbox}
 \alias{geo_bbox}
-\alias{geo_bbox.default}
-\alias{geo_bbox.geo_collection}
+\alias{geo_envelope}
 \title{Bounding boxes}
 \usage{
 geo_bbox(x, ..., na.rm = FALSE)
 
-\method{geo_bbox}{default}(x, ..., na.rm = FALSE)
-
-\method{geo_bbox}{geo_collection}(x, ..., na.rm = FALSE)
+geo_envelope(x, ..., na.rm = FALSE)
 }
 \arguments{
 \item{x}{A geometry-like object}

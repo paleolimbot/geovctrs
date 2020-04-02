@@ -93,3 +93,67 @@ SEXP UnaryGeometryOperator::finishBase() {
   geos_finish(this->context);
   return value;
 }
+
+// -------- Unary regular operator
+
+void UnaryOperator::initProvider(SEXP provider) {
+  this->provider = resolve_provider(provider);
+}
+
+void UnaryOperator::initBase() {
+  this->context = geos_init();
+  this->provider->init(this->context);
+
+  IntegerVector allSizes = IntegerVector::create(
+    this->maxParameterLength(),
+    this->provider->size()
+  );
+
+  IntegerVector nonConstantSizes = allSizes[allSizes != 1];
+  if (nonConstantSizes.size() == 0) {
+    this->commonSize = 1;
+  } else {
+    this->commonSize = nonConstantSizes[0];
+  }
+
+  for (size_t i=0; i<nonConstantSizes.size(); i++) {
+    if (nonConstantSizes[i] != this->commonSize) {
+      stop("Providers with incompatible lengths passed to BinaryGeometryOperator");
+    }
+  }
+}
+
+SEXP UnaryOperator::operate() {
+  this->initBase();
+  this->init();
+
+  // TODO: there is probably a memory leak here, but
+  // GEOSGeom_destroy_r(this->context, geometry) gives
+  // an error
+  GEOSGeometry* geometry;
+
+  try {
+    for (size_t i=0; i < this->size(); i++) {
+      checkUserInterrupt();
+      this->counter = i;
+      geometry = this->provider->getNext();
+      this->operateNext(geometry);
+    }
+  } catch(std::exception e) {
+    this->finish();
+    throw e;
+  }
+
+  this->finish();
+  return this->finishBase();
+}
+
+SEXP UnaryOperator::assemble() {
+  return R_NilValue;
+}
+
+SEXP UnaryOperator::finishBase() {
+  this->provider->finish();
+  geos_finish(this->context);
+  return this->assemble();
+}

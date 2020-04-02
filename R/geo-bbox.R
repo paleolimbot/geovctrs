@@ -17,26 +17,93 @@ geo_bbox <- function(x, ..., na.rm = FALSE) {
 
 #' @rdname geo_bbox
 #' @export
-geo_bbox.default <- function(x, ..., na.rm = FALSE) {
-  rects <- cpp_convert(x, geo_rect())
-  xs <- c(field(rects, "xmin"), field(rects, "xmax"))
-  ys <- c(field(rects, "ymin"), field(rects, "ymax"))
-  xlim <- range(xs[is.finite(xs)], na.rm = na.rm)
-  ylim <- range(ys[is.finite(ys)], na.rm = na.rm)
-  geo_rect(xlim[1], ylim[1], xlim[2], ylim[2])
+geo_envelope <- function(x, ..., na.rm = FALSE) {
+  UseMethod("geo_envelope")
 }
 
-#' @rdname geo_bbox
 #' @export
-geo_bbox.geo_collection <- function(x, ..., na.rm = FALSE) {
-  rects <- vapply(field(x, "feature"), function(f) {
-    xy <- field(f, "xy")
-    xlim <- range(field(xy, "x"), na.rm = na.rm)
-    ylim <- range(field(xy, "y"), na.rm = na.rm)
-    c(xlim[1], ylim[1], xlim[2], ylim[2])
-  }, numeric(4))
+geo_envelope.default <- function(x, ..., na.rm = FALSE) {
+  cpp_envelope(as_geovctr(x), na.rm)
+}
 
-  xlim <- range(c(rects[1, ], rects[3, ]), na.rm = na.rm)
-  ylim <- range(c(rects[2, ], rects[4, ]), na.rm = na.rm)
-  geo_rect(xlim[1], ylim[1], xlim[2], ylim[2])
+#' @export
+geo_envelope.geo_xy <- function(x, ..., na.rm = FALSE) {
+  xs <- field(x, "x")
+  ys <- field(x, "y")
+  xmin <- xs
+  ymin <- ys
+  xmax <- xs
+  ymax <- ys
+
+  if (na.rm) {
+    xmin[is.na(xs)] <- Inf
+    ymin[is.na(ys)] <- Inf
+    xmax[is.na(xs)] <- -Inf
+    ymax[is.na(ys)] <- -Inf
+  }
+
+  geo_rect(xmin, ymin, xmax, ymax)
+}
+
+#' @export
+geo_envelope.geo_segment <- function(x, ..., na.rm = FALSE) {
+  # *almost* the same, except a geo_rect might not have been constructed
+  # with bounds in the correct order
+  start <- field(x, "start")
+  end <- field(x, "end")
+  x1 <- field(start, "x")
+  y1 <- field(start, "y")
+  x2 <- field(end, "x")
+  y2 <- field(end, "y")
+
+  if (na.rm) {
+    xmin <- pmin2(x1, x2)
+    ymin <- pmin2(y1, y2)
+    xmax <- pmax2(x1, x2)
+    ymax <- pmax2(y1, y2)
+  } else {
+    xmin <- pmin(x1, x2, na.rm = FALSE)
+    ymin <- pmin(y1, y2, na.rm = FALSE)
+    xmax <- pmax(x1, x2, na.rm = FALSE)
+    ymax <- pmax(y1, y2, na.rm = FALSE)
+  }
+
+  geo_rect(xmin, ymin, xmax, ymax, srid = field(x, "srid"));
+}
+
+#' @export
+geo_envelope.geo_rect <- function(x, ..., na.rm = FALSE) {
+  # *almost* the same, except a geo_rect might not have been constructed
+  # with bounds in the correct order
+  xmin <- field(x, "xmin")
+  ymin <- field(x, "ymin")
+  xmax <- field(x, "xmax")
+  ymax <- field(x, "ymax")
+
+  if (na.rm) {
+    xmin2 <- pmin2(xmin, xmax)
+    ymin2 <- pmin2(ymin, ymax)
+    xmax2 <- pmax2(xmin, xmax)
+    ymax2 <- pmax2(ymin, ymax)
+  } else {
+    xmin2 <- pmin(xmin, xmax, na.rm = FALSE)
+    ymin2 <- pmin(ymin, ymax, na.rm = FALSE)
+    xmax2 <- pmax(xmin, xmax, na.rm = FALSE)
+    ymax2 <- pmax(ymin, ymax, na.rm = FALSE)
+  }
+
+  geo_rect(xmin2, ymin2, xmax2, ymax2, srid = field(x, "srid"));
+}
+
+#' @export
+geo_bbox.default <- function(x, ..., na.rm = FALSE) {
+  rects <- geo_envelope(x, ..., na.rm = na.rm)
+  srid <- unique(geo_srid(rects))[1]
+
+  xmin <- suppressWarnings(min(field(rects, "xmin"), na.rm = na.rm))
+  ymin <- suppressWarnings(min(field(rects, "ymin"), na.rm = na.rm))
+  xmax <- suppressWarnings(max(field(rects, "xmax"), na.rm = na.rm))
+  ymax <- suppressWarnings(max(field(rects, "ymax"), na.rm = na.rm))
+
+  geo_rect(xmin, ymin, xmax, ymax, srid = srid)
 }

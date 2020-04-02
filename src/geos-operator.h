@@ -41,6 +41,19 @@ private:
 
 // ----- unary vector operators -----
 
+class UnaryOperator: public Operator {
+public:
+  std::unique_ptr<GeometryProvider> provider;
+
+  virtual void initProvider(SEXP provider);
+  virtual SEXP operate();
+  virtual void operateNext(GEOSGeometry* geometry) = 0;
+  virtual SEXP assemble();
+
+  void initBase();
+  SEXP finishBase();
+};
+
 template <class VectorType, class ScalarType>
 class UnaryVectorOperator: public Operator {
 public:
@@ -50,6 +63,7 @@ public:
   virtual void initProvider(SEXP provider);
   virtual SEXP operate();
   virtual ScalarType operateNext(GEOSGeometry* geometry) = 0;
+  virtual SEXP assemble();
 
 private:
   void initBase();
@@ -121,10 +135,15 @@ SEXP UnaryVectorOperator<VectorType, ScalarType>::operate() {
 }
 
 template <class VectorType, class ScalarType>
+SEXP UnaryVectorOperator<VectorType, ScalarType>::assemble() {
+  return this->data;
+}
+
+template <class VectorType, class ScalarType>
 VectorType UnaryVectorOperator<VectorType, ScalarType>::finishBase() {
   this->provider->finish();
   geos_finish(this->context);
-  return this->data;
+  return this->assemble();
 }
 
 # endif

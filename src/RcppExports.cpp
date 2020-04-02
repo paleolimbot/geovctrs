@@ -17,6 +17,42 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// pmin2
+NumericVector pmin2(NumericVector x1, NumericVector x2);
+RcppExport SEXP _geovctrs_pmin2(SEXP x1SEXP, SEXP x2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x1(x1SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type x2(x2SEXP);
+    rcpp_result_gen = Rcpp::wrap(pmin2(x1, x2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pmax2
+NumericVector pmax2(NumericVector x1, NumericVector x2);
+RcppExport SEXP _geovctrs_pmax2(SEXP x1SEXP, SEXP x2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x1(x1SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type x2(x2SEXP);
+    rcpp_result_gen = Rcpp::wrap(pmax2(x1, x2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_envelope
+SEXP cpp_envelope(SEXP data, bool naRm);
+RcppExport SEXP _geovctrs_cpp_envelope(SEXP dataSEXP, SEXP naRmSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< bool >::type naRm(naRmSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_envelope(data, naRm));
+    return rcpp_result_gen;
+END_RCPP
+}
 // cpp_version_impl
 std::string cpp_version_impl();
 RcppExport SEXP _geovctrs_cpp_version_impl() {
@@ -119,6 +155,9 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_convert", (DL_FUNC) &_geovctrs_cpp_convert, 2},
+    {"_geovctrs_pmin2", (DL_FUNC) &_geovctrs_pmin2, 2},
+    {"_geovctrs_pmax2", (DL_FUNC) &_geovctrs_pmax2, 2},
+    {"_geovctrs_cpp_envelope", (DL_FUNC) &_geovctrs_cpp_envelope, 2},
     {"_geovctrs_cpp_version_impl", (DL_FUNC) &_geovctrs_cpp_version_impl, 0},
     {"_geovctrs_cpp_is_empty", (DL_FUNC) &_geovctrs_cpp_is_empty, 1},
     {"_geovctrs_cpp_has_z", (DL_FUNC) &_geovctrs_cpp_has_z, 1},
