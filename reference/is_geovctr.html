@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>S3 details for geo_wkb — new_geo_wkb • geovctrs</title>
+<title>Test for geovctrs — is_geovctr • geovctrs</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,16 @@
 
 
 
-<meta property="og:title" content="S3 details for geo_wkb — new_geo_wkb" />
-<meta property="og:description" content="S3 details for geo_wkb" />
+<meta property="og:title" content="Test for geovctrs — is_geovctr" />
+<meta property="og:description" content="A geovctr is a geometry-like object that can be converted to
+the standard for geometry, well-known binary. In the geovctrs
+package, geo_wkt(), geo_wkb(), geo_collection(),
+geo_xy(), geo_rect(), and geo_segment() are all geovctrs.
+Extension packages can implement the as_geovctr() generic
+to take advantage of the functions in this package, including
+coercion, plotting, and summary information. An example of this
+is as_geovctr.character(), which allow geo_plot() to be called
+on a character vector of well-known text." />
 
 
 
@@ -108,67 +116,54 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>S3 details for geo_wkb</h1>
-    <small class="dont-index">Source: <a href='https://github.com/paleolimbot/geovctrs/blob/master/R/geo-wkb.R'><code>R/geo-wkb.R</code></a></small>
-    <div class="hidden name"><code>new_geo_wkb.Rd</code></div>
+    <h1>Test for geovctrs</h1>
+    <small class="dont-index">Source: <a href='https://github.com/paleolimbot/geovctrs/blob/master/R/geovctr.R'><code>R/geovctr.R</code></a></small>
+    <div class="hidden name"><code>is_geovctr.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>S3 details for geo_wkb</p>
+    <p>A geovctr is a geometry-like object that can be converted to
+the standard for geometry, well-known binary. In the geovctrs
+package, <code><a href='geo_wkt.html'>geo_wkt()</a></code>, <code><a href='geo_wkb.html'>geo_wkb()</a></code>, <code><a href='geo_collection.html'>geo_collection()</a></code>,
+<code><a href='geo_xy.html'>geo_xy()</a></code>, <code><a href='geo_rect.html'>geo_rect()</a></code>, and <code><a href='geo_segment.html'>geo_segment()</a></code> are all geovctrs.
+Extension packages can implement the <code>as_geovctr()</code> generic
+to take advantage of the functions in this package, including
+coercion, plotting, and summary information. An example of this
+is <code>as_geovctr.character()</code>, which allow <code><a href='geo_plot.html'>geo_plot()</a></code> to be called
+on a character vector of well-known text.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>new_geo_wkb</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='kw pkg'>vctrs</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/vctrs/man/list_of.html'>list_of</a></span>(<span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/raw.html'>raw</a></span>()))
+    <pre class="usage"><span class='fu'>is_geovctr</span>(<span class='no'>x</span>)
 
-<span class='fu'>is_geo_wkb</span>(<span class='no'>x</span>)
+<span class='fu'>as_geovctr</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='fu'>validate_geo_wkb</span>(<span class='no'>x</span>)
+<span class='co'># S3 method for geovctr</span>
+<span class='fu'>as_geovctr</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='fu'>as_geo_wkb</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='co'># S3 method for character</span>
+<span class='fu'>as_geovctr</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='co'># S3 method for default</span>
-<span class='fu'>as_geo_wkb</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for geo_wkb</span>
-<span class='fu'>vec_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for geo_wkb</span>
-<span class='fu'>vec_ptype2</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>expect_geovctr</span>(<span class='no'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code> of <code><a href='https://rdrr.io/r/base/raw.html'>raw()</a></code> objects, each of which
-represent well-known binary</p></td>
+      <td><p>A (possibly) geovctr</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Unused</p></td>
-    </tr>
-    <tr>
-      <th>to</th>
-      <td><p>A prototype to cast to. See <code><a href='https://rdrr.io/pkg/vctrs/man/vec_cast.html'>vctrs::vec_cast()</a></code> and
-<code><a href='https://rdrr.io/pkg/vctrs/man/vec_ptype2.html'>vctrs::vec_ptype2()</a></code></p></td>
-    </tr>
-    <tr>
-      <th>y</th>
-      <td><p>A prototype to cast to. See <code><a href='https://rdrr.io/pkg/vctrs/man/vec_cast.html'>vctrs::vec_cast()</a></code> and
-<code><a href='https://rdrr.io/pkg/vctrs/man/vec_ptype2.html'>vctrs::vec_ptype2()</a></code></p></td>
+      <td><p>Passed to the constructor</p></td>
     </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>wkb_raw</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/raw.html'>as.raw</a></span>(
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
-    <span class='fl'>0x01</span>, <span class='fl'>0x01</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>,
-    <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x3e</span>, <span class='fl'>0x40</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>,
-    <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x24</span>, <span class='fl'>0x40</span>
-  )
-)
-<span class='no'>wkb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='geo_wkb.html'>geo_wkb</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>wkb_raw</span>))
-<span class='fu'>is_geo_wkb</span>(<span class='no'>wkb</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'>is_geovctr</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>())</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>is_geovctr</span>(<span class='kw'>NULL</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
+<span class='fu'>as_geovctr</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"POINT (30 10)"</span>))</div><div class='output co'>#&gt; &lt;geo_wkt[1]&gt;
+#&gt; [1] POINT (30 10)</div><div class='input'><span class='fu'>as_geovctr</span>(<span class='st'>"POINT (30 10)"</span>)</div><div class='output co'>#&gt; &lt;geo_wkt[1]&gt;
+#&gt; [1] POINT (30 10)</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
