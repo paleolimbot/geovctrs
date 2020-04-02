@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Collections of coordinate vectors — geo_collection • geovctrs</title>
+<title>Geometry constructors — geo_collection • geovctrs</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,14 @@
 
 
 
-<meta property="og:title" content="Collections of coordinate vectors — geo_collection" />
-<meta property="og:description" content="Collections of coordinate vectors" />
+<meta property="og:title" content="Geometry constructors — geo_collection" />
+<meta property="og:description" content="A geo_collection() is an in-memory R-native format that can store most
+geometries. It is used to power geo_plot() in addition to providing
+constructors for geometries from data frames (possibly using
+dplyr::group_by() and dplyr::summarise()). Collections contain zero
+or more objects of type geo_point(), geo_linestring(), geo_polygon(),
+geo_multipoint(), geo_multilinestring(), and/or
+geo_multipolygon()." />
 
 
 
@@ -108,13 +114,19 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Collections of coordinate vectors</h1>
+    <h1>Geometry constructors</h1>
     <small class="dont-index">Source: <a href='https://github.com/paleolimbot/geovctrs/blob/master/R/geo-collection.R'><code>R/geo-collection.R</code></a></small>
     <div class="hidden name"><code>geo_collection.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Collections of coordinate vectors</p>
+    <p>A <code>geo_collection()</code> is an in-memory R-native format that can store most
+geometries. It is used to power <code><a href='geo_plot.html'>geo_plot()</a></code> in addition to providing
+constructors for geometries from data frames (possibly using
+<code>dplyr::group_by()</code> and <code>dplyr::summarise()</code>). Collections contain zero
+or more objects of type <code><a href='geo_point.html'>geo_point()</a></code>, <code><a href='geo_linestring.html'>geo_linestring()</a></code>, <code><a href='geo_polygon.html'>geo_polygon()</a></code>,
+<code><a href='geo_multipoint.html'>geo_multipoint()</a></code>, <code><a href='geo_multilinestring.html'>geo_multilinestring()</a></code>, and/or
+<code><a href='geo_multipolygon.html'>geo_multipolygon()</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>geo_collection</span>(<span class='kw'>feature</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
@@ -128,7 +140,10 @@
     </tr>
     <tr>
       <th>srid</th>
-      <td><p>A spatial reference identifier</p></td>
+      <td><p>A spatial reference identifier, coerced to
+an integer by <code><a href='geo_srid.html'>as_geo_srid()</a></code>. These identifiers can
+and should be managed outside of geovctrs except for
+0, which is interpreted as "not set".</p></td>
     </tr>
     </table>
 
