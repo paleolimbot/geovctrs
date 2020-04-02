@@ -7,6 +7,7 @@
 \alias{as_geo_wkb}
 \alias{as_geo_wkb.default}
 \alias{vec_cast.geo_wkb}
+\alias{vec_ptype2.geo_wkb}
 \title{S3 details for geo_wkb}
 \usage{
 new_geo_wkb(x = vctrs::list_of(.ptype = raw()))
@@ -20,6 +21,8 @@ as_geo_wkb(x, ...)
 \method{as_geo_wkb}{default}(x, ...)
 
 \method{vec_cast}{geo_wkb}(x, to, ...)
+
+\method{vec_ptype2}{geo_wkb}(x, y, ...)
 }
 \arguments{
 \item{x}{A \code{\link[=list]{list()}} of \code{\link[=raw]{raw()}} objects, each of which
@@ -27,7 +30,11 @@ represent well-known binary}
 
 \item{...}{Unused}
 
-\item{to}{A prototype to cast to. See \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}}
+\item{to}{A prototype to cast to. See \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} and
+\code{\link[vctrs:vec_ptype2]{vctrs::vec_ptype2()}}}
+
+\item{y}{A prototype to cast to. See \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} and
+\code{\link[vctrs:vec_ptype2]{vctrs::vec_ptype2()}}}
 }
 \description{
 S3 details for geo_wkb

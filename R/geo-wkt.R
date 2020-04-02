@@ -24,7 +24,8 @@ geo_wkt <- function(x = character()) {
 #'
 #' @inheritParams geo_wkt
 #' @param ... Unused
-#' @param to A prototype to cast to. See [vctrs::vec_cast()]
+#' @param y,to A prototype to cast to. See [vctrs::vec_cast()] and
+#'   [vctrs::vec_ptype2()]
 #'
 #' @export
 #'
@@ -128,4 +129,54 @@ vec_cast.geo_wkt.geo_xy <- function(x, to, ...) {
 #' @export
 vec_cast.geo_wkt.geo_collection <- function(x, to, ...) {
   cpp_convert(x, to)
+}
+
+#' @method vec_ptype2 geo_wkt
+#' @export
+#' @export vec_ptype2.geo_wkt
+#' @rdname new_geo_wkt
+vec_ptype2.geo_wkt <- function(x, y, ...) {
+  UseMethod("vec_ptype2.geo_wkt", y)
+}
+
+#' @method vec_ptype2.geo_wkt default
+#' @export
+vec_ptype2.geo_wkt.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg)
+}
+
+#' @method vec_ptype2.geo_wkt geo_wkt
+#' @export
+vec_ptype2.geo_wkt.geo_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  geo_wkt()
+}
+
+#' @method vec_ptype2.geo_wkt geo_wkb
+#' @export
+vec_ptype2.geo_wkt.geo_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  geo_wkt()
+}
+
+#' @method vec_ptype2.geo_wkt geo_collection
+#' @export
+vec_ptype2.geo_wkt.geo_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  geo_wkt()
+}
+
+#' @method vec_ptype2.geo_wkt geo_xy
+#' @export
+vec_ptype2.geo_wkt.geo_xy <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  geo_wkt()
+}
+
+#' @method vec_ptype2.geo_wkt geo_segment
+#' @export
+vec_ptype2.geo_wkt.geo_segment <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  geo_wkt()
+}
+
+#' @method vec_ptype2.geo_wkt geo_rect
+#' @export
+vec_ptype2.geo_wkt.geo_rect <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  geo_wkt()
 }

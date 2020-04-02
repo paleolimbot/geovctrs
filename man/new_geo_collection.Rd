@@ -7,6 +7,7 @@
 \alias{as_geo_collection}
 \alias{as_geo_collection.default}
 \alias{vec_cast.geo_collection}
+\alias{vec_ptype2.geo_collection}
 \title{S3 Details for coordinate vector collections}
 \usage{
 new_geo_collection(x = list(feature = list(), srid = integer()))
@@ -20,13 +21,19 @@ as_geo_collection(x, ...)
 \method{as_geo_collection}{default}(x, ...)
 
 \method{vec_cast}{geo_collection}(x, to, ...)
+
+\method{vec_ptype2}{geo_collection}(x, y, ...)
 }
 \arguments{
 \item{x}{A (possibly) \code{\link[=geo_collection]{geo_collection()}}}
 
 \item{...}{Unused}
 
-\item{to}{A prototype to cast to. See \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}}
+\item{to}{A prototype to cast to. See \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} and
+\code{\link[vctrs:vec_ptype2]{vctrs::vec_ptype2()}}}
+
+\item{y}{A prototype to cast to. See \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} and
+\code{\link[vctrs:vec_ptype2]{vctrs::vec_ptype2()}}}
 }
 \description{
 S3 Details for coordinate vector collections

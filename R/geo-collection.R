@@ -125,3 +125,53 @@ vec_cast.geo_collection.geo_wkt <- function(x, to, ...) {
 vec_cast.geo_collection.geo_wkb <- function(x, to, ...) {
   cpp_convert(x, to)
 }
+
+#' @method vec_ptype2 geo_collection
+#' @export
+#' @export vec_ptype2.geo_collection
+#' @rdname new_geo_collection
+vec_ptype2.geo_collection <- function(x, y, ...) {
+  UseMethod("vec_ptype2.geo_collection", y)
+}
+
+#' @method vec_ptype2.geo_collection default
+#' @export
+vec_ptype2.geo_collection.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg)
+}
+
+#' @method vec_ptype2.geo_collection geo_wkb
+#' @export
+vec_ptype2.geo_collection.geo_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  geo_collection()
+}
+
+#' @method vec_ptype2.geo_collection geo_wkt
+#' @export
+vec_ptype2.geo_collection.geo_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  geo_collection()
+}
+
+#' @method vec_ptype2.geo_collection geo_collection
+#' @export
+vec_ptype2.geo_collection.geo_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  geo_collection()
+}
+
+#' @method vec_ptype2.geo_collection geo_xy
+#' @export
+vec_ptype2.geo_collection.geo_xy <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  geo_collection()
+}
+
+#' @method vec_ptype2.geo_collection geo_segment
+#' @export
+vec_ptype2.geo_collection.geo_segment <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  geo_collection()
+}
+
+#' @method vec_ptype2.geo_collection geo_rect
+#' @export
+vec_ptype2.geo_collection.geo_rect <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  geo_collection()
+}

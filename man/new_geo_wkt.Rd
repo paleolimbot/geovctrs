@@ -7,6 +7,7 @@
 \alias{as_geo_wkt}
 \alias{as_geo_wkt.default}
 \alias{vec_cast.geo_wkt}
+\alias{vec_ptype2.geo_wkt}
 \title{S3 details for geo_wkt}
 \usage{
 new_geo_wkt(x = character())
@@ -20,13 +21,16 @@ as_geo_wkt(x, ...)
 \method{as_geo_wkt}{default}(x, ...)
 
 \method{vec_cast}{geo_wkt}(x, to, ...)
+
+\method{vec_ptype2}{geo_wkt}(x, y, ...)
 }
 \arguments{
 \item{x}{A character vector containing well-known text}
 
 \item{...}{Unused}
 
-\item{to}{A prototype to cast to. See \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}}
+\item{y, to}{A prototype to cast to. See \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} and
+\code{\link[vctrs:vec_ptype2]{vctrs::vec_ptype2()}}}
 }
 \description{
 S3 details for geo_wkt
