@@ -1,8 +1,16 @@
 
-#' Collections of coordinate vectors
+#' Geometry constructors
+#'
+#' A [geo_collection()] is an in-memory R-native format that can store most
+#' geometries. It is used to power [geo_plot()] in addition to providing
+#' constructors for geometries from data frames (possibly using
+#' [dplyr::group_by()] and [dplyr::summarise()]). Collections contain zero
+#' or more objects of type [geo_point()], [geo_linestring()], [geo_polygon()],
+#' [geo_multipoint()], [geo_multilinestring()], and/or
+#' [geo_multipolygon()].
 #'
 #' @param feature A list of one or more features.
-#' @param srid A spatial reference identifier
+#' @inheritParams geo_srid
 #'
 #' @return A [new_geo_collection()]
 #' @export

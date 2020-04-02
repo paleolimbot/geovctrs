@@ -2,18 +2,27 @@
 % Please edit documentation in R/geo-collection.R
 \name{geo_collection}
 \alias{geo_collection}
-\title{Collections of coordinate vectors}
+\title{Geometry constructors}
 \usage{
 geo_collection(feature = list(), srid = 0)
 }
 \arguments{
 \item{feature}{A list of one or more features.}
 
-\item{srid}{A spatial reference identifier}
+\item{srid}{A spatial reference identifier, coerced to
+an integer by \code{\link[=as_geo_srid]{as_geo_srid()}}. These identifiers can
+and should be managed outside of geovctrs except for
+0, which is interpreted as "not set".}
 }
 \value{
 A \code{\link[=new_geo_collection]{new_geo_collection()}}
 }
 \description{
-Collections of coordinate vectors
+A \code{\link[=geo_collection]{geo_collection()}} is an in-memory R-native format that can store most
+geometries. It is used to power \code{\link[=geo_plot]{geo_plot()}} in addition to providing
+constructors for geometries from data frames (possibly using
+\code{\link[dplyr:group_by]{dplyr::group_by()}} and \code{\link[dplyr:summarise]{dplyr::summarise()}}). Collections contain zero
+or more objects of type \code{\link[=geo_point]{geo_point()}}, \code{\link[=geo_linestring]{geo_linestring()}}, \code{\link[=geo_polygon]{geo_polygon()}},
+\code{\link[=geo_multipoint]{geo_multipoint()}}, \code{\link[=geo_multilinestring]{geo_multilinestring()}}, and/or
+\code{\link[=geo_multipolygon]{geo_multipolygon()}}.
 }
