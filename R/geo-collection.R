@@ -11,7 +11,7 @@ geo_collection <- function(feature = list(), srid = 0) {
   new_geo_collection(
     vec_recycle_common(
       feature = feature,
-      srid = vec_cast(srid, integer())
+      srid = as_geo_srid(srid)
     )
   )
 }

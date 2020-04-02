@@ -15,7 +15,7 @@ geo_linestring <- function(xy, srid = 0)  {
 
   feat <- new_geo_linestring(list(xy = xy))
   validate_geo_linestring(feat)
-  new_geo_collection(list(feature = list(feat), srid = vec_cast(srid, integer())))
+  new_geo_collection(list(feature = list(feat), srid = as_geo_srid(srid)))
 }
 
 new_geo_linestring <- function(x) {

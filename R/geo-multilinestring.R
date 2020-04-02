@@ -31,7 +31,7 @@ geo_multilinestring <- function(feature, srid = 0) {
     )
   )
 
-  new_geo_collection(list(feature = list(feat), srid = vec_cast(srid, integer())))
+  new_geo_collection(list(feature = list(feat), srid = as_geo_srid(srid)))
 }
 
 new_geo_multilinestring <- function(x) {

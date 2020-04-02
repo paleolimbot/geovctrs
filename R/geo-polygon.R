@@ -28,7 +28,7 @@ geo_polygon <- function(xy, ring = 1L, srid = 0)  {
 
   feat <- new_geo_polygon(as_part_identifier(xy, ring = ring))
   validate_geo_polygon(feat)
-  new_geo_collection(list(feature = list(feat), srid = vec_cast(srid, integer())))
+  new_geo_collection(list(feature = list(feat), srid = as_geo_srid(srid)))
 }
 
 new_geo_polygon <- function(x) {

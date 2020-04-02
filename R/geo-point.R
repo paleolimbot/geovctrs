@@ -16,7 +16,7 @@ geo_point <- function(xy, srid = 0)  {
 
   point <- new_geo_point(list(xy = xy))
   validate_geo_point(point)
-  new_geo_collection(list(feature = list(point), srid = vec_cast(srid, integer())))
+  new_geo_collection(list(feature = list(point), srid = as_geo_srid(srid)))
 }
 
 new_geo_point <- function(x) {
