@@ -9,7 +9,10 @@ geo_point(xy, srid = 0)
 \arguments{
 \item{xy}{A \code{\link[=geo_xy]{geo_xy()}}}
 
-\item{srid}{A spatial reference identifier.}
+\item{srid}{A spatial reference identifier, coerced to
+an integer by \code{\link[=as_geo_srid]{as_geo_srid()}}. These identifiers can
+and should be managed outside of geovctrs except for
+0, which is interpreted as "not set".}
 }
 \value{
 A \code{\link[=geo_collection]{geo_collection()}} of length 1.

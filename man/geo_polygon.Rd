@@ -13,7 +13,10 @@ geo_polygon(xy, ring = 1L, srid = 0)
 These values are considered in order, and the resulting coordinates
 are reordered such that rings are grouped together.}
 
-\item{srid}{A spatial reference identifier.}
+\item{srid}{A spatial reference identifier, coerced to
+an integer by \code{\link[=as_geo_srid]{as_geo_srid()}}. These identifiers can
+and should be managed outside of geovctrs except for
+0, which is interpreted as "not set".}
 }
 \value{
 A \code{\link[=geo_collection]{geo_collection()}} of length 1.

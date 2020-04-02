@@ -2,7 +2,7 @@
 #' Create a point
 #'
 #' @param xy A [geo_xy()]
-#' @param srid A spatial reference identifier.
+#' @inheritParams geo_srid
 #'
 #' @return A [geo_collection()] of length 1.
 #' @export

@@ -3,6 +3,7 @@
 #'
 #' @param xmin,ymin,xmax,ymax Border values, recycled to a common
 #'   length using [vctrs::vec_recycle_common()].
+#' @inheritParams geo_srid
 #'
 #' @return A [new_geo_rect()]
 #' @export
