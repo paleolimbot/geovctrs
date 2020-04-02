@@ -25,7 +25,7 @@ geo_collection <- function(feature = list(), srid = 0) {
 #'
 new_geo_collection <- function(x = list(feature = list(), srid = integer())) {
   vec_assert(x$feature, list())
-  new_rcrd(x, class = "geo_collection")
+  new_rcrd(x, class = c("geo_collection", "geovctr"))
 }
 
 #' @rdname new_geo_collection

@@ -6,11 +6,6 @@ using namespace Rcpp;
 
 // ----- this is needed for some vector functions ------
 
-List geo_coord_reclass(List input, const char* cls) {
-  input.attr("class") = CharacterVector::create(cls, "vctrs_rcrd", "vctrs_vctr");
-  return input;
-}
-
 List geo_reclass(List input, const char* cls) {
   input.attr("class") = CharacterVector::create(cls);
   return input;
@@ -20,11 +15,9 @@ List geo_reclass(List input, const char* cls) {
 
 List new_geo_coord(NumericVector x, NumericVector y) {
   List xy = List::create(_["x"] = x, _["y"] = y);
+  xy.attr("class") = CharacterVector::create("geo_xy", "geovctr", "vctrs_rcrd", "vctrs_vctr");
 
-  List output = List::create(
-    _["xy"] = geo_coord_reclass(xy, "geo_xy")
-  );
-
+  List output = List::create(_["xy"] = xy);
   return output;
 }
 
@@ -244,6 +237,6 @@ List geometrycollection_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* 
   }
 
   List out = List::create(_["feature"] = features, _["srid"] = srid);
-  out.attr("class") = CharacterVector::create("geo_collection", "vctrs_rcrd", "vctrs_vctr");
+  out.attr("class") = CharacterVector::create("geo_collection", "geovctr", "vctrs_rcrd", "vctrs_vctr");
   return out;
 }

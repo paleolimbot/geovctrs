@@ -6,8 +6,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-List geo_coord_reclass(List input, const char* cls);
-
 List geometry_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry);
 
 List point_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry);

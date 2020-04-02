@@ -51,7 +51,7 @@ geo_wkb <- function(x = list()) {
 #'
 new_geo_wkb <- function(x = vctrs::list_of(.ptype = raw())) {
   vec_assert(x, list_of(.ptype = raw()))
-  new_list_of(x, raw(), class = c("geo_wkb", "geo"))
+  new_list_of(x, raw(), class = c("geo_wkb", "geovctr"))
 }
 
 #' @rdname new_geo_wkb

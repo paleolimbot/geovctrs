@@ -34,7 +34,7 @@ geo_wkt <- function(x = character()) {
 #'
 new_geo_wkt <- function(x = character()) {
   vec_assert(x, character())
-  new_vctr(x, class = c("geo_wkt", "geo"))
+  new_vctr(x, class = c("geo_wkt", "geovctr"))
 }
 
 #' @rdname new_geo_wkt

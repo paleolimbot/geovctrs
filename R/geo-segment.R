@@ -33,7 +33,7 @@ geo_segment <- function(start = geo_xy(), end = geo_xy(), srid = 0) {
 new_geo_segment <- function(x = list(start = geo_xy(), end = geo_xy(), srid = integer())) {
   vec_assert(x$start, geo_xy())
   vec_assert(x$end, geo_xy())
-  new_rcrd(x, class = "geo_segment")
+  new_rcrd(x, class = c("geo_segment", "geovctr"))
 }
 
 #' @export
