@@ -11,7 +11,8 @@
 \title{S3 details for geo_rect}
 \usage{
 new_geo_rect(
-  x = list(xmin = double(), ymin = double(), xmax = double(), ymax = double())
+  x = list(xmin = double(), ymin = double(), xmax = double(), ymax = double(), srid =
+    integer())
 )
 
 is_geo_rect(x)

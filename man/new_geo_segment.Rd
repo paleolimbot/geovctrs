@@ -10,7 +10,7 @@
 \alias{vec_ptype2.geo_segment}
 \title{S3 details for geo_segment}
 \usage{
-new_geo_segment(x = list(start = geo_xy(), end = geo_xy()))
+new_geo_segment(x = list(start = geo_xy(), end = geo_xy(), srid = integer()))
 
 is_geo_segment(x)
 

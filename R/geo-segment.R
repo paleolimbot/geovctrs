@@ -3,6 +3,7 @@
 #'
 #' @param start,end [geo_xy()]s for the start and end
 #'   of the segment, respectively.
+#' @inheritParams geo_srid
 #'
 #' @return A [new_geo_segment()]
 #' @export

@@ -4,11 +4,16 @@
 \alias{geo_segment}
 \title{Line segments}
 \usage{
-geo_segment(start = geo_xy(), end = geo_xy())
+geo_segment(start = geo_xy(), end = geo_xy(), srid = 0)
 }
 \arguments{
 \item{start, end}{\code{\link[=geo_xy]{geo_xy()}}s for the start and end
 of the segment, respectively.}
+
+\item{srid}{A spatial reference identifier, coerced to
+an integer by \code{\link[=as_geo_srid]{as_geo_srid()}}. These identifiers can
+and should be managed outside of geovctrs except for
+0, which is interpreted as "not set".}
 }
 \value{
 A \code{\link[=new_geo_segment]{new_geo_segment()}}
