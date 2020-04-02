@@ -4,7 +4,7 @@
 \alias{geo_polygon}
 \title{Create a polygon}
 \usage{
-geo_polygon(xy, ring = 1L, srid = NA)
+geo_polygon(xy, ring = 1L, srid = 0)
 }
 \arguments{
 \item{xy}{A \code{\link[=geo_xy]{geo_xy()}}}

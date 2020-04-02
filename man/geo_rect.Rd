@@ -4,7 +4,13 @@
 \alias{geo_rect}
 \title{Rectangles}
 \usage{
-geo_rect(xmin = double(), ymin = double(), xmax = double(), ymax = double())
+geo_rect(
+  xmin = double(),
+  ymin = double(),
+  xmax = double(),
+  ymax = double(),
+  srid = 0
+)
 }
 \arguments{
 \item{xmin, ymin, xmax, ymax}{Border values, recycled to a common

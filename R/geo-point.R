@@ -10,7 +10,7 @@
 #' @examples
 #' geo_point(geo_xy(0, 0))
 #'
-geo_point <- function(xy, srid = NA)  {
+geo_point <- function(xy, srid = 0)  {
   xy <- vec_cast(xy, geo_xy())
   stopifnot(vec_size(srid) == 1)
 

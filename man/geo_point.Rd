@@ -4,7 +4,7 @@
 \alias{geo_point}
 \title{Create a point}
 \usage{
-geo_point(xy, srid = NA)
+geo_point(xy, srid = 0)
 }
 \arguments{
 \item{xy}{A \code{\link[=geo_xy]{geo_xy()}}}

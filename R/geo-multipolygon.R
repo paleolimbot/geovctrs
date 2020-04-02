@@ -12,7 +12,7 @@
 #'   geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10)))
 #' )
 #'
-geo_multipolygon <- function(feature, srid = NA) {
+geo_multipolygon <- function(feature, srid = 0) {
   feature <- vec_cast(feature, geo_collection())
   values <- field(feature, "feature")
   is_polygon <- vapply(values, inherits, "geo_polygon", FUN.VALUE = logical(1))

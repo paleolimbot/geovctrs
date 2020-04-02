@@ -17,7 +17,8 @@ as_geo_srid(x)
 
 \item{srid}{A spatial reference identifier, coerced to
 an integer by \code{\link[=as_geo_srid]{as_geo_srid()}}. These identifiers can
-and should be managed outside of geovctrs.}
+and should be managed outside of geovctrs except for
+0, which is interpreted as "not set".}
 }
 \value{
 An integer vector (one SRID per feature).
@@ -28,8 +29,8 @@ instead of actual CRS objects so that the heavy lifting can
 be implemented in other packages. However, most geometry
 formats store an integer spatial reference identifier (SRID)
 with each feature to propogate this information through
-calculations. Note that an SRID of 0 is ambiguous and is
-not allowed (use \code{NA} to represent an undefined SRID).
+calculations. Note that an SRID of 0 is interpreted as
+"not set".
 }
 \examples{
 # two points with an SRID

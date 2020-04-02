@@ -9,7 +9,7 @@
 #' @examples
 #' geo_linestring(geo_xy(1:5, 2:6))
 #'
-geo_linestring <- function(xy, srid = NA)  {
+geo_linestring <- function(xy, srid = 0)  {
   xy <- vec_cast(xy, geo_xy())
   stopifnot(vec_size(srid) == 1)
 

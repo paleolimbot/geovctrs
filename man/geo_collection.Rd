@@ -4,7 +4,7 @@
 \alias{geo_collection}
 \title{Collections of coordinate vectors}
 \usage{
-geo_collection(feature = list(), srid = NA)
+geo_collection(feature = list(), srid = 0)
 }
 \arguments{
 \item{feature}{A list of one or more features.}

@@ -207,12 +207,7 @@ void GeoCollectionProvider::init(GEOSContextHandle_t context) {
 
 GEOSGeometry* GeoCollectionProvider::getNext() {
   GEOSGeometry* geometry = feature_from_geo_coord(this->context, this->features[this->counter]);
-
-  if (IntegerVector::is_na(this->srid[this->counter])) {
-    GEOSSetSRID_r(context, geometry, 0);
-  } else {
-    GEOSSetSRID_r(context, geometry, this->srid[this->counter]);
-  }
+  GEOSSetSRID_r(context, geometry, this->srid[this->counter]);
 
   this->counter = this->counter + 1;
   return geometry;
@@ -239,13 +234,7 @@ void GeoCollectionExporter::init(GEOSContextHandle_t context, size_t size) {
 
 void GeoCollectionExporter::putNext(GEOSGeometry* geometry) {
   this->data[this->counter] = geometry_to_geo_coord(this->context, geometry);
-
-  int geomSRID = GEOSGetSRID_r(this->context, geometry);
-  if (geomSRID == 0) {
-    this->srid[this->counter] = NA_INTEGER;
-  } else {
-    this->srid[this->counter] = geomSRID;
-  }
+  this->srid[this->counter] = GEOSGetSRID_r(this->context, geometry);
 
   this->counter = this->counter + 1;
 }
@@ -536,13 +525,7 @@ void GeoRectExporter::putNext(GEOSGeometry* geometry) {
   this->ymin[this->counter] = ymin1;
   this->xmax[this->counter] = xmax1;
   this->ymax[this->counter] = ymax1;
-
-  int srid = GEOSGetSRID_r(this->context, geometry);
-  if (srid == 0) {
-    this->srid[this->counter] = NA_INTEGER;
-  } else {
-    this->srid[this->counter] = srid;
-  }
+  this->srid[this->counter] = GEOSGetSRID_r(this->context, geometry);
 
   this->counter = this->counter + 1;
 }

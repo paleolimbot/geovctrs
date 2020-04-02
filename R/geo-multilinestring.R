@@ -12,7 +12,7 @@
 #'   geo_linestring(geo_xy(0:1, 0:1))
 #' )
 #'
-geo_multilinestring <- function(feature, srid = NA) {
+geo_multilinestring <- function(feature, srid = 0) {
   feature <- vec_cast(feature, geo_collection())
   values <- field(feature, "feature")
   is_linestring <- vapply(values, inherits, "geo_linestring", FUN.VALUE = logical(1))

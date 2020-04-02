@@ -236,9 +236,6 @@ List geometrycollection_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* 
   // parent collection (behaviour changed in GEOS 3.8, but we enforce
   // this here for all GEOS versions)
   int geomSRID = GEOSGetSRID_r(context, geometry);
-  if (geomSRID == 0) {
-    geomSRID = NA_INTEGER;
-  }
 
   for (int i=0; i < nGeometries; i++) {
     const GEOSGeometry* feature = GEOSGetGeometryN_r(context, geometry, i);

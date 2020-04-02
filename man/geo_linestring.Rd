@@ -4,7 +4,7 @@
 \alias{geo_linestring}
 \title{Create a linestring}
 \usage{
-geo_linestring(xy, srid = NA)
+geo_linestring(xy, srid = 0)
 }
 \arguments{
 \item{xy}{A \code{\link[=geo_xy]{geo_xy()}}}

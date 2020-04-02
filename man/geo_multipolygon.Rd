@@ -4,7 +4,7 @@
 \alias{geo_multipolygon}
 \title{Create a multipolygon}
 \usage{
-geo_multipolygon(feature, srid = NA)
+geo_multipolygon(feature, srid = 0)
 }
 \arguments{
 \item{feature}{A \code{\link[=geo_collection]{geo_collection()}} of \code{\link[=geo_polygon]{geo_polygon()}}s.}

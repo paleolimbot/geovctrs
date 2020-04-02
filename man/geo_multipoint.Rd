@@ -4,7 +4,7 @@
 \alias{geo_multipoint}
 \title{Create a multipoint}
 \usage{
-geo_multipoint(feature, srid = NA)
+geo_multipoint(feature, srid = 0)
 }
 \arguments{
 \item{feature}{A \code{\link[=geo_collection]{geo_collection()}} of \code{\link[=geo_point]{geo_point()}}s.}

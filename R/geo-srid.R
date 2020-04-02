@@ -6,13 +6,14 @@
 #' be implemented in other packages. However, most geometry
 #' formats store an integer spatial reference identifier (SRID)
 #' with each feature to propogate this information through
-#' calculations. Note that an SRID of 0 is ambiguous and is
-#' not allowed (use `NA` to represent an undefined SRID).
+#' calculations. Note that an SRID of 0 is interpreted as
+#' "not set".
 #'
 #' @param x A geometry-like object.
 #' @param srid A spatial reference identifier, coerced to
 #'   an integer by [as_geo_srid()]. These identifiers can
-#'   and should be managed outside of geovctrs.
+#'   and should be managed outside of geovctrs except for
+#'   0, which is interpreted as "not set".
 #'
 #' @return An integer vector (one SRID per feature).
 #' @export
@@ -56,12 +57,12 @@ set_geo_srid.vctrs_rcrd <- function(x, srid) {
 
 #' @export
 geo_srid.geo_wkt <- function(x) {
-  rep_len(NA_integer_, vec_size(x))
+  rep_len(0L, vec_size(x))
 }
 
 #' @export
 set_geo_srid.geo_wkt <- function(x, srid) {
-  if (any(!is.na(srid))) {
+  if (any(srid != 0)) {
     abort("Can't store SRID with a geo_wkt()")
   }
   x
@@ -69,12 +70,12 @@ set_geo_srid.geo_wkt <- function(x, srid) {
 
 #' @export
 geo_srid.geo_xy <- function(x) {
-  rep_len(NA_integer_, vec_size(x))
+  rep_len(0L, vec_size(x))
 }
 
 #' @export
 set_geo_srid.geo_xy <- function(x, srid) {
-  if (any(!is.na(srid))) {
+  if (any(srid != 0)) {
     abort("Can't store SRID with a geo_xy()")
   }
   x
@@ -99,9 +100,5 @@ as_geo_srid <- function(x) {
 
 #' @export
 as_geo_srid.default <- function(x) {
-  x <- vec_cast(x, integer())
-  if (any(x == 0, na.rm = TRUE)) {
-    abort("SRID of 0 is ambiguous: use NA instead")
-  }
-  x
+  vec_cast(x, integer())
 }

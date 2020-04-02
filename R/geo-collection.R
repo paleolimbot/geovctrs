@@ -7,7 +7,7 @@
 #' @return A [new_geo_collection()]
 #' @export
 #'
-geo_collection <- function(feature = list(), srid = NA) {
+geo_collection <- function(feature = list(), srid = 0) {
   new_geo_collection(
     vec_recycle_common(
       feature = feature,

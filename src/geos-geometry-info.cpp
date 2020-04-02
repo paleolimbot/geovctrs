@@ -62,12 +62,7 @@ IntegerVector cpp_geom_type_id(SEXP x) {
 
 class GetSRIDOperator: public UnaryVectorOperator<IntegerVector, int> {
   int operateNext(GEOSGeometry* geometry) {
-    int srid = GEOSGetSRID_r(this->context, geometry);
-    if (srid == 0) {
-      return NA_INTEGER;
-    } else {
-      return srid;
-    }
+    return GEOSGetSRID_r(this->context, geometry);
   }
 };
 
@@ -91,13 +86,7 @@ public:
   }
 
   GEOSGeometry* operateNext(GEOSGeometry* geometry) {
-    int srid = this->srid[this->counter];
-    if (IntegerVector::is_na(srid)) {
-      GEOSSetSRID_r(this->context, geometry, 0);
-    } else {
-      GEOSSetSRID_r(this->context, geometry, srid);
-    }
-
+    GEOSSetSRID_r(this->context, geometry, this->srid[this->counter]);
     return geometry;
   }
 };

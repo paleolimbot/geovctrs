@@ -4,7 +4,7 @@
 \alias{geo_multilinestring}
 \title{Create a multilinestring}
 \usage{
-geo_multilinestring(feature, srid = NA)
+geo_multilinestring(feature, srid = 0)
 }
 \arguments{
 \item{feature}{A \code{\link[=geo_collection]{geo_collection()}} of \code{\link[=geo_linestring]{geo_linestring()}}s.}

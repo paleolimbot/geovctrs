@@ -12,7 +12,7 @@
 #'   geo_point(geo_xy(10, 30))
 #' )
 #'
-geo_multipoint <- function(feature, srid = NA) {
+geo_multipoint <- function(feature, srid = 0) {
   feature <- vec_cast(feature, geo_collection())
   values <- field(feature, "feature")
   is_point <- vapply(values, inherits, "geo_point", FUN.VALUE = logical(1))

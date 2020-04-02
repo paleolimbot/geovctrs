@@ -22,7 +22,7 @@
 #'   ring = c(1, 1, 1, 1, 1, 2, 2, 2, 2)
 #' )
 #'
-geo_polygon <- function(xy, ring = 1L, srid = NA)  {
+geo_polygon <- function(xy, ring = 1L, srid = 0)  {
   xy <- vec_cast(xy, geo_xy())
   stopifnot(vec_size(srid) == 1)
 
