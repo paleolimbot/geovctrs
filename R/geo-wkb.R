@@ -132,29 +132,29 @@ vec_cast.geo_wkb.list <- function(x, to, ...) {
 #' @method vec_cast.geo_wkb geo_wkt
 #' @export
 vec_cast.geo_wkb.geo_wkt <- function(x, to, ...) {
-  cpp_convert(x, geo_wkb())
+  cpp_convert(x, to)
 }
 
 #' @method vec_cast.geo_wkb geo_rect
 #' @export
 vec_cast.geo_wkb.geo_rect <- function(x, to, ...) {
-  cpp_convert(x, geo_wkb())
+  cpp_convert(x, to)
 }
 
 #' @method vec_cast.geo_wkb geo_segment
 #' @export
 vec_cast.geo_wkb.geo_segment <- function(x, to, ...) {
-  cpp_convert(x, geo_wkb())
+  cpp_convert(x, to)
 }
 
 #' @method vec_cast.geo_wkb geo_xy
 #' @export
 vec_cast.geo_wkb.geo_xy <- function(x, to, ...) {
-  cpp_convert(x, geo_wkb())
+  cpp_convert(x, to)
 }
 
 #' @method vec_cast.geo_wkb geo_collection
 #' @export
 vec_cast.geo_wkb.geo_collection <- function(x, to, ...) {
-  cpp_convert(x, geo_wkb())
+  cpp_convert(x, to)
 }
