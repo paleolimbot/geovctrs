@@ -267,7 +267,7 @@ test_that("xy conversion works", {
 
   # errors: linestring as XY, point with SRID
   expect_error(cpp_convert(geo_wkt("LINESTRING EMPTY"), geo_xy()), "Can't represent")
-  expect_error(cpp_convert(geo_point(geo_xy(), srid = 1), geo_xy()), "point with an SRID")
+  expect_warning(cpp_convert(geo_point(geo_xy(), srid = 1), geo_xy()), "Dropping SRID")
 })
 
 test_that("segment conversion works", {

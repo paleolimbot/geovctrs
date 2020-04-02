@@ -303,7 +303,8 @@ void XYExporter::putNext(GEOSGeometry* geometry) {
   }
 
   if (GEOSGetSRID_r(context, geometry) != 0) {
-    stop("Can't represent a point with an SRID as a geo_xy()");
+    Function warning("warning");
+    warning("Dropping SRID in cast to geo_xy()");
   }
 
   // geos doesn't differentiate between POINT (nan, nan) and POINT EMPTY

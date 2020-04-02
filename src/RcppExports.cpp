@@ -27,6 +27,84 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cpp_is_empty
+LogicalVector cpp_is_empty(SEXP data);
+RcppExport SEXP _geovctrs_cpp_is_empty(SEXP dataSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type data(dataSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_is_empty(data));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_has_z
+LogicalVector cpp_has_z(SEXP data);
+RcppExport SEXP _geovctrs_cpp_has_z(SEXP dataSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type data(dataSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_has_z(data));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_geom_type_id
+IntegerVector cpp_geom_type_id(SEXP x);
+RcppExport SEXP _geovctrs_cpp_geom_type_id(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_geom_type_id(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_get_srid
+IntegerVector cpp_get_srid(SEXP x);
+RcppExport SEXP _geovctrs_cpp_get_srid(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_get_srid(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_set_srid
+SEXP cpp_set_srid(SEXP x, IntegerVector srid);
+RcppExport SEXP _geovctrs_cpp_set_srid(SEXP xSEXP, SEXP sridSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type srid(sridSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_set_srid(x, srid));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_n_geometries
+IntegerVector cpp_n_geometries(SEXP x);
+RcppExport SEXP _geovctrs_cpp_n_geometries(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_n_geometries(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_n_coordinates
+IntegerVector cpp_n_coordinates(SEXP x);
+RcppExport SEXP _geovctrs_cpp_n_coordinates(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_n_coordinates(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // cpp_validate_provider
 LogicalVector cpp_validate_provider(SEXP data);
 RcppExport SEXP _geovctrs_cpp_validate_provider(SEXP dataSEXP) {
@@ -42,6 +120,13 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_convert", (DL_FUNC) &_geovctrs_cpp_convert, 2},
     {"_geovctrs_cpp_version_impl", (DL_FUNC) &_geovctrs_cpp_version_impl, 0},
+    {"_geovctrs_cpp_is_empty", (DL_FUNC) &_geovctrs_cpp_is_empty, 1},
+    {"_geovctrs_cpp_has_z", (DL_FUNC) &_geovctrs_cpp_has_z, 1},
+    {"_geovctrs_cpp_geom_type_id", (DL_FUNC) &_geovctrs_cpp_geom_type_id, 1},
+    {"_geovctrs_cpp_get_srid", (DL_FUNC) &_geovctrs_cpp_get_srid, 1},
+    {"_geovctrs_cpp_set_srid", (DL_FUNC) &_geovctrs_cpp_set_srid, 2},
+    {"_geovctrs_cpp_n_geometries", (DL_FUNC) &_geovctrs_cpp_n_geometries, 1},
+    {"_geovctrs_cpp_n_coordinates", (DL_FUNC) &_geovctrs_cpp_n_coordinates, 1},
     {"_geovctrs_cpp_validate_provider", (DL_FUNC) &_geovctrs_cpp_validate_provider, 1},
     {NULL, NULL, 0}
 };
