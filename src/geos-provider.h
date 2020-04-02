@@ -190,9 +190,11 @@ public:
   NumericVector ymin;
   NumericVector xmax;
   NumericVector ymax;
+  IntegerVector srid;
   size_t counter;
 
-  GeoRectProvider(NumericVector xmin, NumericVector ymin, NumericVector xmax, NumericVector ymax);
+  GeoRectProvider(NumericVector xmin, NumericVector ymin,
+                  NumericVector xmax, NumericVector ymax, IntegerVector srid);
   void init(GEOSContextHandle_t context);
   GEOSGeometry* getNext();
   size_t size();
@@ -204,6 +206,7 @@ public:
   NumericVector ymin;
   NumericVector xmax;
   NumericVector ymax;
+  IntegerVector srid;
   size_t counter;
 
   void init(GEOSContextHandle_t context, size_t size);

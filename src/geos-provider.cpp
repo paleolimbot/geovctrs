@@ -438,11 +438,12 @@ SEXP SegmentExporter::finish() {
 // ---- GeoRect provider
 
 GeoRectProvider::GeoRectProvider(NumericVector xmin, NumericVector ymin,
-                                 NumericVector xmax, NumericVector ymax) {
+                                 NumericVector xmax, NumericVector ymax, IntegerVector srid) {
   this->xmin = xmin;
   this->ymin = ymin;
   this->xmax = xmax;
   this->ymax = ymax;
+  this->srid = srid;
 }
 
 void GeoRectProvider::init(GEOSContextHandle_t context) {
@@ -469,6 +470,13 @@ GEOSGeometry* GeoRectProvider::getNext() {
   GEOSGeometry* holes[0];
   GEOSGeometry* geometry = GEOSGeom_createPolygon_r(context, shell, holes, 0);
 
+  int srid = this->srid[this->counter];
+  if (IntegerVector::is_na(srid)) {
+    GEOSSetSRID_r(this->context, geometry, 0);
+  } else {
+    GEOSSetSRID_r(this->context, geometry, srid);
+  }
+
   this->counter = this->counter + 1;
   return geometry;
 }
@@ -484,10 +492,12 @@ void GeoRectExporter::init(GEOSContextHandle_t context, size_t size) {
   NumericVector ymin(size);
   NumericVector xmax(size);
   NumericVector ymax(size);
+  IntegerVector srid(size);
   this->xmin = xmin;
   this->ymin = ymin;
   this->xmax = xmax;
   this->ymax = ymax;
+  this->srid = srid;
 
   this->context = context;
   this->counter = 0;
@@ -520,13 +530,19 @@ void GeoRectExporter::putNext(GEOSGeometry* geometry) {
   xmax1 = max(x);
   ymax1 = max(y);
 #endif
-
   }
 
   this->xmin[this->counter] = xmin1;
   this->ymin[this->counter] = ymin1;
   this->xmax[this->counter] = xmax1;
   this->ymax[this->counter] = ymax1;
+
+  int srid = GEOSGetSRID_r(this->context, geometry);
+  if (srid == 0) {
+    this->srid[this->counter] = NA_INTEGER;
+  } else {
+    this->srid[this->counter] = srid;
+  }
 
   this->counter = this->counter + 1;
 }
@@ -536,7 +552,8 @@ SEXP GeoRectExporter::finish() {
     _["xmin"] = this->xmin,
     _["ymin"] = this->ymin,
     _["xmax"] = this->xmax,
-    _["ymax"] = this->ymax
+    _["ymax"] = this->ymax,
+    _["srid"] = this->srid
   );
   result.attr("class") = CharacterVector::create("geo_rect", "vctrs_rcrd", "vctrs_vctr");
   return result;
@@ -597,14 +614,15 @@ std::unique_ptr<GeometryProvider> resolve_provider(SEXP data) {
     NumericVector ymin = rect["ymin"];
     NumericVector xmax = rect["xmax"];
     NumericVector ymax = rect["ymax"];
+    IntegerVector srid = rect["srid"];
 
     if (xmin.size() ==  1) {
       return std::unique_ptr<GeometryProvider> {
-        new ConstantGeometryProvider(new GeoRectProvider(xmin, ymin, xmax, ymax))
+        new ConstantGeometryProvider(new GeoRectProvider(xmin, ymin, xmax, ymax, srid))
       };
     } else {
       return std::unique_ptr<GeometryProvider> {
-        new GeoRectProvider(xmin, ymin, xmax, ymax)
+        new GeoRectProvider(xmin, ymin, xmax, ymax, srid)
       };
     }
   } else if(Rf_inherits(data, "geo_collection")) {

@@ -10,13 +10,14 @@
 #' @examples
 #' geo_rect(xmin = 0:5, ymin = 0:5, xmax = 2:7, ymax = 2:7)
 #'
-geo_rect <- function(xmin = double(), ymin = double(), xmax = double(), ymax = double()) {
+geo_rect <- function(xmin = double(), ymin = double(), xmax = double(), ymax = double(), srid = NA) {
   result <- new_geo_rect(
     vec_recycle_common(
       xmin = vec_cast(xmin, double()),
       ymin = vec_cast(ymin, double()),
       xmax = vec_cast(xmax, double()),
-      ymax = vec_cast(ymax, double())
+      ymax = vec_cast(ymax, double()),
+      srid = as_geo_srid(srid)
     )
   )
 
@@ -35,6 +36,7 @@ new_geo_rect <- function(x = list(xmin = double(), ymin = double(), xmax = doubl
   vec_assert(x$ymin, double())
   vec_assert(x$xmax, double())
   vec_assert(x$ymax, double())
+  vec_assert(x$srid, integer())
   new_rcrd(x, class = "geo_rect")
 }
 
