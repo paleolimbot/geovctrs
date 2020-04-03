@@ -40,9 +40,6 @@ and multilinestring geometries, and \code{\link[graphics:polypath]{graphics::pol
 and multipolygon geometries.}
 
 \item{asp, xlim, ylim, xlab, ylab}{Passed to \code{\link[graphics:plot]{graphics::plot()}}}
-
-\item{rule}{One of "evenodd" or "winding": controls the appearance of
-holes in polygons. See \code{\link[graphics:polypath]{graphics::polypath()}}.}
 }
 \value{
 \code{x}, invisibly.

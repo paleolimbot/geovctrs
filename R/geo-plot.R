@@ -10,8 +10,6 @@
 #'   and multilinestring geometries, and [graphics::polypath()] for polygon
 #'   and multipolygon geometries.
 #' @param asp,xlim,ylim,xlab,ylab Passed to [graphics::plot()]
-#' @param rule One of "evenodd" or "winding": controls the appearance of
-#'   holes in polygons. See [graphics::polypath()].
 #'
 #' @return `x`, invisibly.
 #' @export
