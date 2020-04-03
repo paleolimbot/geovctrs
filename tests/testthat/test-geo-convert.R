@@ -258,7 +258,7 @@ test_that("missings are propogated through conversions between wkt, wkb, and col
   na_col <- geo_collection()[NA_integer_]
   na_xy <- geo_xy()[NA_integer_]
   na_seg <- geo_segment()[NA_integer_]
-  na_rect <- geo_segment()[NA_integer_]
+  na_rect <- geo_rect()[NA_integer_]
 
   expect_identical(cpp_convert(na_wkt, geo_wkb()), na_wkb)
   expect_identical(cpp_convert(na_wkt, geo_collection()), na_col)

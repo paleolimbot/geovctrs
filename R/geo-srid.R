@@ -63,7 +63,9 @@ set_geo_srid.vctrs_rcrd <- function(x, srid) {
 
 #' @export
 geo_srid.geo_wkt <- function(x) {
-  rep_len(0L, vec_size(x))
+  srid <- rep_len(0L, vec_size(x))
+  srid[is.na(x)] <- NA_integer_
+  srid
 }
 
 #' @export
@@ -76,7 +78,9 @@ set_geo_srid.geo_wkt <- function(x, srid) {
 
 #' @export
 geo_srid.geo_xy <- function(x) {
-  rep_len(0L, vec_size(x))
+  srid <- rep_len(0L, vec_size(x))
+  srid[is.na(x)] <- NA_integer_
+  srid
 }
 
 #' @export

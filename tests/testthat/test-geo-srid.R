@@ -24,3 +24,12 @@ test_that("SRID extraction works", {
   # via as_geovctr()
   expect_identical(geo_srid("POINT EMPTY"), 0L)
 })
+
+test_that("misssing values have missing SRIDs", {
+  expect_identical(geo_srid(geo_wkt()[NA_integer_]), NA_integer_)
+  expect_identical(geo_srid(geo_wkb()[NA_integer_]), NA_integer_)
+  expect_identical(geo_srid(geo_collection()[NA_integer_]), NA_integer_)
+  expect_identical(geo_srid(geo_xy()[NA_integer_]), NA_integer_)
+  expect_identical(geo_srid(geo_segment()[NA_integer_]), NA_integer_)
+  expect_identical(geo_srid(geo_rect()[NA_integer_]), NA_integer_)
+})
