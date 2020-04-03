@@ -11,3 +11,9 @@ test_that("all geovctrs pass expect_geovctr", {
 test_that("character works with as_geovctr()", {
   expect_geovctr(as_geovctr("POINT (0 0)"))
 })
+
+test_that("data.frame works with as_geovctr()", {
+  expect_geovctr(as_geovctr(geo_nc))
+  expect_error(as_geovctr(tibble()), "Can't find a geovctr")
+  expect_error(as_geovctr(tibble(x = geo_wkt(), y = geo_wkt())), "More than one")
+})

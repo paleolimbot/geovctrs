@@ -47,6 +47,27 @@ as_geovctr.character <- function(x, ...) {
 
 #' @rdname is_geovctr
 #' @export
+as_geovctr.data.frame <- function(x, ...) {
+  x[[find_geovctr_column({{ x }})]]
+}
+
+find_geovctr_column <- function(x) {
+  x_label <- rlang::as_label(rlang::enquo(x))
+  col_is_geovctr <- vapply(x, is_geovctr, logical(1))
+  cols <- names(x)[col_is_geovctr]
+
+  if (sum(col_is_geovctr) == 0) {
+    abort(sprintf("Can't find a geovctr column in `%s`", x_label))
+  } else if (sum(col_is_geovctr) > 1) {
+    col_labs <- paste0('"', cols, '"', collapse = ", ")
+    abort(sprintf("More than one geovctr column in `%s`:\n`%s`", x_label, col_labs))
+  }
+
+  cols
+}
+
+#' @rdname is_geovctr
+#' @export
 expect_geovctr <- function(x) {
   # must be a vctr and a geovctr
   testthat::expect_true(vec_is(x))
