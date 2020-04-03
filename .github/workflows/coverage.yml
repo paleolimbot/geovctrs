@@ -29,9 +29,9 @@ jobs:
           restore-keys: macOS-r-3.6-
 
       - name: Install system dependencies (MacOS)
-        if: runner.os == 'MacOS'
         run: |
           brew install geos
+          brew install cairo
           brew cask install xquartz
 
       - name: Install dependencies

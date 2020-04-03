@@ -15,6 +15,7 @@ jobs:
         if: runner.os == 'MacOS'
         run: |
           brew install geos
+          brew install cairo
       - name: Install dependencies
         run: |
           install.packages("remotes")
