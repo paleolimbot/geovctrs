@@ -1,9 +1,16 @@
 
-#' Bounding boxes
+#' Bounding boxes and envelopes
+#'
+#' Whereas a [geo_bbox()] of a [geovctr][is_geovctr] is always
+#' of length 1, a [geo_envelope()] shares the same length as
+#' the vector. Both return a [geo_rect()]. Empty vectors
+#' (and empty geometries) return `geo_rect(Inf, Inf, -Inf, -Inf)`,
+#' and `NA/NaN` values are removed if `na.rm = TRUE` (which might
+#' mean more `Inf` values than you expected).
 #'
 #' @param x A geometry-like object
 #' @param ... Unused
-#' @param na.rm Should NAs be considered?
+#' @param na.rm Should NAs be removed?
 #'
 #' @return A [geo_rect()] of length 1.
 #' @export

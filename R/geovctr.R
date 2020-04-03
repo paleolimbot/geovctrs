@@ -8,13 +8,55 @@
 #' Extension packages can either use these types or
 #' implement the [as_geovctr()] generic
 #' to take advantage of a wide range of processing functions, including
-#' coercion, plotting, and summary information. An example of this
-#' is `as_geovctr.character()`, which allow [geo_plot()] to be called
-#' on a character vector of well-known text. Similarly, a `data.frame`
-#' or  [tibble::tibble()] with exactly one geovctr column (a column
-#' for which [is_geovctr()] returns `TRUE`) can be interpreted
-#' unambiguously as a geometry vector, so these are also supported
-#' out of the box.
+#' coercion, plotting, and summary information.
+#'
+#' This package is intended to allow for a variety of in-memory
+#' representations of geometry, as there are many examples where
+#' simple geometries can be efficiently parameterized without
+#' resorting to storing every coordinate of every vertex
+#' (built-in examples include [geo_xy()], [geo_segment()], and
+#' [geo_rect()]). These types do, however, have unambiguous
+#' representations as geometries, and thus should be able to be
+#' used wherever a geometry is appropriate.
+#'
+#' For an object to be a "geovctr", it must:
+#'
+#' - Be a vctr ([vctrs::vec_is()] must be `TRUE`). This ensures that it will
+#'   work with [tibble::tibble()] and other tidyverse functions such as
+#'   [tidyr::unnest()] and [dplyr::group_by()] / [dplyr::mutate()] /
+#'   [dplyr::summarise()].
+#'
+#' - It inherits from `"geovctr"`. This makes it work automatically with
+#'   functions like [geo_plot()] and [geo_bbox()] that have a default
+#'   implementation for something that can be coerced to [geo_wkt()],
+#'   [geo_wkb()], or [geo_collection()].
+#'
+#' - It can be casted to [geo_wkt()], [geo_wkb()], and [geo_collection()]
+#'   using [vec_cast()]. These casts power the default implementations of
+#'   functions like [geo_plot()] and [geo_bbox()], and allow geometries to
+#'   be combined using [vctrs::vec_c()] (which powers row-binding in
+#'   tidyverse functions). This means implementing the appropriate
+#'   [vctrs::vec_cast()] methods for a class.
+#'
+#' - It can be combined with [geo_wkt()], [geo_wkb()], and [geo_collection()]
+#'   using [vec_c()] in both directions. This helps support processing functions
+#'   that return a class to be combined with the output of other functions.
+#'   This might require a [vctrs::vec_ptype()] implementation for
+#'   a class.
+#'
+#' You can test these expectations for a given object using [expect_geovctr()].
+#'
+#' A secondary class of object is one that *could*  be interpreted as a geovctr,
+#' but in most cases can't be. One example of this is a character vector,
+#' which *could* be well-known text, but probably isn't. However, when the
+#' user passes it to a function like [geo_plot()] or [geo_bbox()], it
+#' probably *is* well-known text. Similarly, a `data.frame` or
+#' [tibble::tibble()] probably doesn't contain a geometry column,
+#' but when passed to a function that operates on geometries,
+#' it's likely that it does. The geovctrs package supports these
+#' objects with the [as_geovctr()] generic, which means you can
+#' pass these objects anywhere you would pass a first-class
+#' geometry vector.
 #'
 #' @param x A (possibly) geovctr
 #' @param ... Passed to the constructor
@@ -27,6 +69,7 @@
 #'
 #' as_geovctr(geo_wkt("POINT (30 10)"))
 #' as_geovctr("POINT (30 10)")
+#' as_geovctr(tibble::tibble(geometry = geo_wkt("POINT (30 10)")))
 #'
 is_geovctr <- function(x) {
   inherits(x, "geovctr")

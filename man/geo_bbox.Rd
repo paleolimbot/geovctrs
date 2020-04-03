@@ -3,7 +3,7 @@
 \name{geo_bbox}
 \alias{geo_bbox}
 \alias{geo_envelope}
-\title{Bounding boxes}
+\title{Bounding boxes and envelopes}
 \usage{
 geo_bbox(x, ..., na.rm = FALSE)
 
@@ -14,13 +14,18 @@ geo_envelope(x, ..., na.rm = FALSE)
 
 \item{...}{Unused}
 
-\item{na.rm}{Should NAs be considered?}
+\item{na.rm}{Should NAs be removed?}
 }
 \value{
 A \code{\link[=geo_rect]{geo_rect()}} of length 1.
 }
 \description{
-Bounding boxes
+Whereas a \code{\link[=geo_bbox]{geo_bbox()}} of a \link[=is_geovctr]{geovctr} is always
+of length 1, a \code{\link[=geo_envelope]{geo_envelope()}} shares the same length as
+the vector. Both return a \code{\link[=geo_rect]{geo_rect()}}. Empty vectors
+(and empty geometries) return \code{geo_rect(Inf, Inf, -Inf, -Inf)},
+and \code{NA/NaN} values are removed if \code{na.rm = TRUE} (which might
+mean more \code{Inf} values than you expected).
 }
 \examples{
 geo_bbox(geo_wkt(c("POINT (30 10)", "POINT EMPTY")))
