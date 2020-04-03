@@ -87,7 +87,7 @@ geo_plot(
 
 # can also plot data frames that have exactly one geovctr column
 prev_pal <- palette(grey.colors(10))
-geo_plot(geo_nc, col = BIR79)
+geo_plot(geo_nc, col = cut(BIR79, 10))
 
 # restore initial palette
 palette(prev_pal)
