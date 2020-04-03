@@ -1,15 +1,18 @@
 
 test_that("geo_is_missing works", {
+  expect_true(geo_is_missing(geo_xy()[NA_integer_]))
   expect_true(geo_is_missing(geo_xy(NA, NA)))
   expect_false(geo_is_missing(geo_xy(NA, 1)))
 
-  expect_true(geo_is_missing(geo_segment(geo_xy(NA, NA), geo_xy(NA, NA))))
+  expect_true(geo_is_missing(geo_segment()[NA_integer_]))
+  expect_false(geo_is_missing(geo_segment(geo_xy(NA, NA), geo_xy(NA, NA), srid = 1)))
   expect_false(geo_is_missing(geo_segment(geo_xy(1, NA), geo_xy(NA, NA))))
   expect_false(geo_is_missing(geo_segment(geo_xy(NA, 1), geo_xy(NA, NA))))
   expect_false(geo_is_missing(geo_segment(geo_xy(NA, NA), geo_xy(1, NA))))
   expect_false(geo_is_missing(geo_segment(geo_xy(NA, NA), geo_xy(NA, 1))))
 
-  expect_true(geo_is_missing(geo_rect(NA, NA, NA, NA)))
+  expect_true(geo_is_missing(geo_rect()[NA_integer_]))
+  expect_false(geo_is_missing(geo_rect(NA, NA, NA, NA, srid = 1)))
   expect_false(geo_is_missing(geo_rect(1, NA, NA, NA)))
   expect_false(geo_is_missing(geo_rect(NA, 1, NA, NA)))
   expect_false(geo_is_missing(geo_rect(NA, NA, 1, NA)))

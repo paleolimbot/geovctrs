@@ -33,8 +33,8 @@ instead of actual CRS objects so that the heavy lifting can
 be implemented in other packages. However, most geometry
 formats store an integer spatial reference identifier (SRID)
 with each feature to propogate this information through
-calculations. Note that an SRID of 0 is interpreted as
-"not set".
+calculations. The difference between 0 and \code{NA} is
+murky at the moment.
 }
 \examples{
 # two points with an SRID

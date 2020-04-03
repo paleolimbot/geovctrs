@@ -12,35 +12,7 @@ geo_is_missing <- function(x) {
 
 #' @export
 geo_is_missing.default <- function(x) {
-  geo_is_missing(as_geovctr(x))
-}
-
-#' @export
-geo_is_missing.geovctr <- function(x) {
-  cpp_is_missing(x)
-}
-
-#' @export
-geo_is_missing.geo_xy <- function(x) {
-  is.na(x)
-}
-
-#' @export
-geo_is_missing.geo_segment <- function(x) {
-  start <- field(x, "start")
-  end <- field(x, "end")
-  is.na(field(start, "x")) &
-    is.na(field(start, "y")) &
-    is.na(field(end, "x")) &
-    is.na(field(end, "y"))
-}
-
-#' @export
-geo_is_missing.geo_rect <- function(x) {
-  is.na(field(x, "xmin")) &
-    is.na(field(x, "ymin")) &
-    is.na(field(x, "xmax")) &
-    is.na(field(x, "ymax"))
+  is.na(as_geovctr(x))
 }
 
 #' @rdname geo_is_missing
