@@ -292,11 +292,15 @@ void XYProvider::init(GEOSContextHandle_t context) {
 GEOSGeometry* XYProvider::getNext() {
   GEOSGeometry* geometry;
 
-  GEOSCoordSequence* seq = GEOSCoordSeq_create_r(this->context, 1, 2);
-  GEOSCoordSeq_setX_r(this->context, seq, 0, x[this->counter]);
-  GEOSCoordSeq_setY_r(this->context, seq, 0, y[this->counter]);
+  if (NumericVector::is_na(x[this->counter]) && NumericVector::is_na(x[this->counter])) {
+    geometry = NULL;
+  } else {
+    GEOSCoordSequence* seq = GEOSCoordSeq_create_r(this->context, 1, 2);
+    GEOSCoordSeq_setX_r(this->context, seq, 0, x[this->counter]);
+    GEOSCoordSeq_setY_r(this->context, seq, 0, y[this->counter]);
 
-  geometry = GEOSGeom_createPoint_r(this->context, seq);
+    geometry = GEOSGeom_createPoint_r(this->context, seq);
+  }
 
   this->counter = this->counter + 1;
   return geometry;
@@ -319,23 +323,28 @@ void XYExporter::init(GEOSContextHandle_t context, size_t size) {
 }
 
 void XYExporter::putNext(GEOSGeometry* geometry) {
-  if (GEOSGeomTypeId_r(this->context, geometry) != GEOSGeomTypes::GEOS_POINT) {
-    stop("Can't represent a non-point as a geo_xy()");
-  }
-
-  if (GEOSGetSRID_r(context, geometry) != 0) {
-    Function warning("warning");
-    warning("Dropping SRID in cast to geo_xy()");
-  }
-
-  // geos doesn't differentiate between POINT (nan, nan) and POINT EMPTY
   double x, y;
-  if (GEOSisEmpty_r(this->context, geometry)) {
+  if (geometry == NULL) {
     x = NA_REAL;
     y = NA_REAL;
   } else {
-    GEOSGeomGetX_r(this->context, geometry, &x);
-    GEOSGeomGetY_r(this->context, geometry, &y);
+    if (GEOSGeomTypeId_r(this->context, geometry) != GEOSGeomTypes::GEOS_POINT) {
+      stop("Can't represent a non-point as a geo_xy()");
+    }
+
+    if (GEOSGetSRID_r(context, geometry) != 0) {
+      Function warning("warning");
+      warning("Dropping SRID in cast to geo_xy()");
+    }
+
+    // geos doesn't differentiate between POINT (nan, nan) and POINT EMPTY
+    if (GEOSisEmpty_r(this->context, geometry)) {
+      x = NA_REAL;
+      y = NA_REAL;
+    } else {
+      GEOSGeomGetX_r(this->context, geometry, &x);
+      GEOSGeomGetY_r(this->context, geometry, &y);
+    }
   }
 
   this->x[this->counter] = x;

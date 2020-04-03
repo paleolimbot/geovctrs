@@ -215,8 +215,8 @@ test_that("xy conversion works", {
 
   # handling of NA, NaN, inf
   # GEOS doesn't differentiate between POINT (nan nan) and POINT EMPTY,
-  # so neither do we (yet)
-  expect_equal(cpp_convert(geo_xy(NA, NA), geo_wkt()), geo_wkt("POINT (nan nan)"))
+  # we handle this through missing values for XY
+  expect_equal(cpp_convert(geo_xy(NA, NA), geo_wkt()), geo_wkt(NA))
   expect_equal(cpp_convert(geo_xy(-Inf, Inf), geo_wkt()), geo_wkt("POINT (-inf inf)"))
 
   expect_equal(cpp_convert(geo_wkt("POINT (nan nan)"), geo_xy()),  geo_xy(NA, NA))
@@ -255,10 +255,19 @@ test_that("segment conversion works", {
 test_that("missings are propogated through conversions between wkt, wkb, and collection", {
   expect_identical(cpp_convert(geo_wkt(NA), geo_wkb()), geo_wkb(list(NULL)))
   expect_identical(cpp_convert(geo_wkt(NA), geo_collection()), geo_collection(list(NULL), srid = NA))
+  expect_identical(cpp_convert(geo_wkt(NA), geo_xy()), geo_xy(NA, NA))
+
   expect_identical(cpp_convert(geo_wkb(list(NULL)), geo_wkt()), geo_wkt(NA))
   expect_identical(cpp_convert(geo_wkb(list(NULL)), geo_collection()), geo_collection(list(NULL), srid = NA))
+  expect_identical(cpp_convert(geo_wkb(list(NULL)), geo_xy()), geo_xy(NA, NA))
+
   expect_identical(cpp_convert(geo_collection(list(NULL)), geo_wkt()), geo_wkt(NA))
   expect_identical(cpp_convert(geo_collection(list(NULL)), geo_wkb()), geo_wkb(list(NULL)))
+  expect_identical(cpp_convert(geo_collection(list(NULL)), geo_xy()), geo_xy(NA, NA))
+
+  expect_identical(cpp_convert(geo_xy(NA, NA), geo_wkt()), geo_wkt(NA))
+  expect_identical(cpp_convert(geo_xy(NA, NA), geo_wkb()), geo_wkb(list(NULL)))
+  expect_identical(cpp_convert(geo_xy(NA, NA), geo_collection()), geo_collection(list(NULL), srid = NA))
 })
 
 test_that("error occurs with unknown object in conversions", {
