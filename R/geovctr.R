@@ -5,11 +5,16 @@
 #' the standard for geometry, well-known binary. In the geovctrs
 #' package, [geo_wkt()], [geo_wkb()], [geo_collection()],
 #' [geo_xy()], [geo_rect()], and [geo_segment()] are all geovctrs.
-#' Extension packages can implement the [as_geovctr()] generic
-#' to take advantage of the functions in this package, including
+#' Extension packages can either use these types or
+#' implement the [as_geovctr()] generic
+#' to take advantage of a wide range of processing functions, including
 #' coercion, plotting, and summary information. An example of this
 #' is `as_geovctr.character()`, which allow [geo_plot()] to be called
-#' on a character vector of well-known text.
+#' on a character vector of well-known text. Similarly, a `data.frame`
+#' or  [tibble::tibble()] with exactly one geovctr column (a column
+#' for which [is_geovctr()] returns `TRUE`) can be interpreted
+#' unambiguously as a geometry vector, so these are also supported
+#' out of the box.
 #'
 #' @param x A (possibly) geovctr
 #' @param ... Passed to the constructor

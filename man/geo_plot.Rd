@@ -26,7 +26,7 @@ geo_plot_add(x, ...)
 
 \method{geo_plot_add}{geovctr}(x, ...)
 
-\method{geo_plot_add}{data.frame}(x, ..., more_args = list())
+\method{geo_plot_add}{data.frame}(x, ...)
 
 \method{geo_plot_add}{geo_xy}(x, ...)
 
@@ -57,9 +57,6 @@ and multilinestring geometries, and \code{\link[graphics:polypath]{graphics::pol
 and multipolygon geometries.}
 
 \item{asp, xlim, ylim, xlab, ylab}{Passed to \code{\link[graphics:plot]{graphics::plot()}}}
-
-\item{more_args}{For data frames, arguments that should not be evaluated
-inside the data frame that are passed to the various methods.}
 
 \item{rule}{One of "evenodd" or "winding": controls the appearance of
 holes in polygons. See \code{\link[graphics:polypath]{graphics::polypath()}}.}

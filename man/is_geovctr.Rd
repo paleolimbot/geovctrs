@@ -31,11 +31,16 @@ A geovctr is a geometry-like object that can be converted to
 the standard for geometry, well-known binary. In the geovctrs
 package, \code{\link[=geo_wkt]{geo_wkt()}}, \code{\link[=geo_wkb]{geo_wkb()}}, \code{\link[=geo_collection]{geo_collection()}},
 \code{\link[=geo_xy]{geo_xy()}}, \code{\link[=geo_rect]{geo_rect()}}, and \code{\link[=geo_segment]{geo_segment()}} are all geovctrs.
-Extension packages can implement the \code{\link[=as_geovctr]{as_geovctr()}} generic
-to take advantage of the functions in this package, including
+Extension packages can either use these types or
+implement the \code{\link[=as_geovctr]{as_geovctr()}} generic
+to take advantage of a wide range of processing functions, including
 coercion, plotting, and summary information. An example of this
 is \code{as_geovctr.character()}, which allow \code{\link[=geo_plot]{geo_plot()}} to be called
-on a character vector of well-known text.
+on a character vector of well-known text. Similarly, a \code{data.frame}
+or  \code{\link[tibble:tibble]{tibble::tibble()}} with exactly one geovctr column (a column
+for which \code{\link[=is_geovctr]{is_geovctr()}} returns \code{TRUE}) can be interpreted
+unambiguously as a geometry vector, so these are also supported
+out of the box.
 }
 \examples{
 is_geovctr(geo_wkt())
