@@ -10,12 +10,6 @@
 \alias{geo_plot_add.geo_segment}
 \alias{geo_plot_add.geo_rect}
 \alias{geo_plot_add.geo_collection}
-\alias{geo_plot_add.geo_point}
-\alias{geo_plot_add.geo_linestring}
-\alias{geo_plot_add.geo_polygon}
-\alias{geo_plot_add.geo_multipoint}
-\alias{geo_plot_add.geo_multilinestring}
-\alias{geo_plot_add.geo_multipolygon}
 \title{Plot geometry vectors}
 \usage{
 geo_plot(x, ..., asp = 1, xlim = NULL, ylim = NULL, xlab = "", ylab = "")
@@ -35,21 +29,10 @@ geo_plot_add(x, ...)
 \method{geo_plot_add}{geo_rect}(x, ...)
 
 \method{geo_plot_add}{geo_collection}(x, ...)
-
-\method{geo_plot_add}{geo_point}(x, ...)
-
-\method{geo_plot_add}{geo_linestring}(x, ...)
-
-\method{geo_plot_add}{geo_polygon}(x, ..., rule = "evenodd")
-
-\method{geo_plot_add}{geo_multipoint}(x, ...)
-
-\method{geo_plot_add}{geo_multilinestring}(x, ...)
-
-\method{geo_plot_add}{geo_multipolygon}(x, ..., rule = "evenodd")
 }
 \arguments{
-\item{x}{A geometry-like object}
+\item{x}{A geometry-like object, or one that can be
+coerced to a geometry-like object using \code{\link[=as_geovctr]{as_geovctr()}}.}
 
 \item{...}{Passed to plotting functions for features: \code{\link[graphics:points]{graphics::points()}}
 for point and multipoint geometries, \code{\link[graphics:lines]{graphics::lines()}} for linestring

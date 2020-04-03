@@ -10,7 +10,8 @@ geo_bbox(x, ..., na.rm = FALSE)
 geo_envelope(x, ..., na.rm = FALSE)
 }
 \arguments{
-\item{x}{A geometry-like object}
+\item{x}{A geometry-like object, or one that can be
+coerced to a geometry-like object using \code{\link[=as_geovctr]{as_geovctr()}}.}
 
 \item{...}{Unused}
 

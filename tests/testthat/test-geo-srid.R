@@ -20,4 +20,7 @@ test_that("SRID extraction works", {
   # wkb
   expect_identical(geo_srid(geometries_wkb), c(26920L, 0L))
   expect_identical(geo_srid(set_geo_srid(geometries_wkb, 0)), c(0L, 0L))
+
+  # via as_geovctr()
+  expect_identical(geo_srid("POINT EMPTY"), 0L)
 })

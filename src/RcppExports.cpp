@@ -53,6 +53,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cpp_has_missing
+LogicalVector cpp_has_missing(SEXP x);
+RcppExport SEXP _geovctrs_cpp_has_missing(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_has_missing(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_is_finite
+LogicalVector cpp_is_finite(SEXP x);
+RcppExport SEXP _geovctrs_cpp_is_finite(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_is_finite(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // cpp_version_impl
 std::string cpp_version_impl();
 RcppExport SEXP _geovctrs_cpp_version_impl() {
@@ -158,6 +180,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_pmin2", (DL_FUNC) &_geovctrs_pmin2, 2},
     {"_geovctrs_pmax2", (DL_FUNC) &_geovctrs_pmax2, 2},
     {"_geovctrs_cpp_envelope", (DL_FUNC) &_geovctrs_cpp_envelope, 2},
+    {"_geovctrs_cpp_has_missing", (DL_FUNC) &_geovctrs_cpp_has_missing, 1},
+    {"_geovctrs_cpp_is_finite", (DL_FUNC) &_geovctrs_cpp_is_finite, 1},
     {"_geovctrs_cpp_version_impl", (DL_FUNC) &_geovctrs_cpp_version_impl, 0},
     {"_geovctrs_cpp_is_empty", (DL_FUNC) &_geovctrs_cpp_is_empty, 1},
     {"_geovctrs_cpp_has_z", (DL_FUNC) &_geovctrs_cpp_has_z, 1},

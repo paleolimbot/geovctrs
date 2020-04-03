@@ -4,7 +4,7 @@
 #' Currently, only geometries of the same type can be plotted in the same
 #' plot call (geometries are promoted to mutli-geometries if needed).
 #'
-#' @param x A geometry-like object
+#' @inheritParams geo_bbox
 #' @param ... Passed to plotting functions for features: [graphics::points()]
 #'   for point and multipoint geometries, [graphics::lines()] for linestring
 #'   and multilinestring geometries, and [graphics::polypath()] for polygon
@@ -146,7 +146,6 @@ geo_plot_add.geo_collection <- function(x, ...) {
   invisible(x)
 }
 
-#' @rdname geo_plot
 #' @export
 geo_plot_add.geo_point <- function(x, ...) {
   xy <- field(x, "xy")
@@ -154,7 +153,6 @@ geo_plot_add.geo_point <- function(x, ...) {
   invisible(x)
 }
 
-#' @rdname geo_plot
 #' @export
 geo_plot_add.geo_linestring <- function(x, ...) {
   xy <- field(x, "xy")
@@ -162,7 +160,6 @@ geo_plot_add.geo_linestring <- function(x, ...) {
   invisible(x)
 }
 
-#' @rdname geo_plot
 #' @export
 geo_plot_add.geo_polygon <- function(x, ..., rule = "evenodd") {
   # have to do one feature at a time because the "holes in polygons" problem
@@ -172,7 +169,6 @@ geo_plot_add.geo_polygon <- function(x, ..., rule = "evenodd") {
   invisible(x)
 }
 
-#' @rdname geo_plot
 #' @export
 geo_plot_add.geo_multipoint <- function(x, ...) {
   xy <- field(x, "xy")
@@ -180,7 +176,6 @@ geo_plot_add.geo_multipoint <- function(x, ...) {
   invisible(x)
 }
 
-#' @rdname geo_plot
 #' @export
 geo_plot_add.geo_multilinestring <- function(x, ...) {
   xy <- separate_groups_with_na(
@@ -191,7 +186,6 @@ geo_plot_add.geo_multilinestring <- function(x, ...) {
   invisible(x)
 }
 
-#' @rdname geo_plot
 #' @export
 geo_plot_add.geo_multipolygon <- function(x, ..., rule = "evenodd") {
   # have to do one part at a time because the "holes in polygons" problem

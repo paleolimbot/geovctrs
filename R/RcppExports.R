@@ -17,6 +17,14 @@ cpp_envelope <- function(data, naRm) {
     .Call(`_geovctrs_cpp_envelope`, data, naRm)
 }
 
+cpp_has_missing <- function(x) {
+    .Call(`_geovctrs_cpp_has_missing`, x)
+}
+
+cpp_is_finite <- function(x) {
+    .Call(`_geovctrs_cpp_is_finite`, x)
+}
+
 cpp_version_impl <- function() {
     .Call(`_geovctrs_cpp_version_impl`)
 }

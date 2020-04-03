@@ -16,6 +16,8 @@ reference:
   contents:
   - geo_bbox
   - geo_plot
+  - geo_srid
+  - geo_is_missing
 
 - title: Create geometry features
   contents:

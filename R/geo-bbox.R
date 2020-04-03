@@ -8,7 +8,8 @@
 #' and `NA/NaN` values are removed if `na.rm = TRUE` (which might
 #' mean more `Inf` values than you expected).
 #'
-#' @param x A geometry-like object
+#' @param x A geometry-like object, or one that can be
+#'   coerced to a geometry-like object using [as_geovctr()].
 #' @param ... Unused
 #' @param na.rm Should NAs be removed?
 #'

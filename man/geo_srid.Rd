@@ -2,18 +2,22 @@
 % Please edit documentation in R/geo-srid.R
 \name{geo_srid}
 \alias{geo_srid}
+\alias{geo_srid.default}
 \alias{set_geo_srid}
 \alias{as_geo_srid}
 \title{Extract a spatial reference identifier}
 \usage{
 geo_srid(x)
 
+\method{geo_srid}{default}(x)
+
 set_geo_srid(x, srid)
 
 as_geo_srid(x)
 }
 \arguments{
-\item{x}{A geometry-like object.}
+\item{x}{A geometry-like object, or one that can be
+coerced to a geometry-like object using \code{\link[=as_geovctr]{as_geovctr()}}.}
 
 \item{srid}{A spatial reference identifier, coerced to
 an integer by \code{\link[=as_geo_srid]{as_geo_srid()}}. These identifiers can

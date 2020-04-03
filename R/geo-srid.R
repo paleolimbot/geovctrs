@@ -9,7 +9,7 @@
 #' calculations. Note that an SRID of 0 is interpreted as
 #' "not set".
 #'
-#' @param x A geometry-like object.
+#' @inheritParams geo_bbox
 #' @param srid A spatial reference identifier, coerced to
 #'   an integer by [as_geo_srid()]. These identifiers can
 #'   and should be managed outside of geovctrs except for
@@ -35,6 +35,12 @@
 #'
 geo_srid <- function(x) {
   UseMethod("geo_srid")
+}
+
+#' @export
+#' @rdname geo_srid
+geo_srid.default <- function(x) {
+  geo_srid(as_geovctr(x))
 }
 
 #' @export
