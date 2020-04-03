@@ -126,6 +126,12 @@ plot call (geometries are promoted to mutli-geometries if needed).</p>
 <span class='co'># S3 method for default</span>
 <span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
+<span class='co'># S3 method for geovctr</span>
+<span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for data.frame</span>
+<span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>more_args</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+
 <span class='co'># S3 method for geo_xy</span>
 <span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
@@ -175,6 +181,11 @@ and multipolygon geometries.</p></td>
       <td><p>Passed to <code><a href='https://rdrr.io/r/graphics/plot.html'>graphics::plot()</a></code></p></td>
     </tr>
     <tr>
+      <th>more_args</th>
+      <td><p>For data frames, arguments that should not be evaluated
+inside the data frame that are passed to the various methods.</p></td>
+    </tr>
+    <tr>
       <th>rule</th>
       <td><p>One of "evenodd" or "winding": controls the appearance of
 holes in polygons. See <code><a href='https://rdrr.io/r/graphics/polypath.html'>graphics::polypath()</a></code>.</p></td>
@@ -193,7 +204,11 @@ holes in polygons. See <code><a href='https://rdrr.io/r/graphics/polypath.html'>
   ),
   <span class='kw'>col</span> <span class='kw'>=</span> <span class='st'>"grey90"</span>
 )</div><div class='img'><img src='geo_plot-6.png' alt='' width='700' height='433' /></div><div class='input'>
-</div></pre>
+<span class='co'># can also plot data frames that have exactly one geovctr column</span>
+<span class='no'>prev_pal</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/palette.html'>palette</a></span>(<span class='fu'><a href='https://rdrr.io/r/grDevices/gray.colors.html'>grey.colors</a></span>(<span class='fl'>10</span>))
+<span class='fu'>geo_plot</span>(<span class='no'>geo_nc</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>BIR79</span>)</div><div class='img'><img src='geo_plot-7.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># restore initial palette</span>
+<span class='fu'><a href='https://rdrr.io/r/grDevices/palette.html'>palette</a></span>(<span class='no'>prev_pal</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
