@@ -130,7 +130,7 @@ plot call (geometries are promoted to mutli-geometries if needed).</p>
 <span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>more_args</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+<span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for geo_xy</span>
 <span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
@@ -142,32 +142,15 @@ plot call (geometries are promoted to mutli-geometries if needed).</p>
 <span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for geo_collection</span>
-<span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for geo_point</span>
-<span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for geo_linestring</span>
-<span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for geo_polygon</span>
-<span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>rule</span> <span class='kw'>=</span> <span class='st'>"evenodd"</span>)
-
-<span class='co'># S3 method for geo_multipoint</span>
-<span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for geo_multilinestring</span>
-<span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for geo_multipolygon</span>
-<span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>rule</span> <span class='kw'>=</span> <span class='st'>"evenodd"</span>)</pre>
+<span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A geometry-like object</p></td>
+      <td><p>A geometry-like object, or one that can be
+coerced to a geometry-like object using <code><a href='is_geovctr.html'>as_geovctr()</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -179,16 +162,6 @@ and multipolygon geometries.</p></td>
     <tr>
       <th>asp, xlim, ylim, xlab, ylab</th>
       <td><p>Passed to <code><a href='https://rdrr.io/r/graphics/plot.html'>graphics::plot()</a></code></p></td>
-    </tr>
-    <tr>
-      <th>more_args</th>
-      <td><p>For data frames, arguments that should not be evaluated
-inside the data frame that are passed to the various methods.</p></td>
-    </tr>
-    <tr>
-      <th>rule</th>
-      <td><p>One of "evenodd" or "winding": controls the appearance of
-holes in polygons. See <code><a href='https://rdrr.io/r/graphics/polypath.html'>graphics::polypath()</a></code>.</p></td>
     </tr>
     </table>
 
