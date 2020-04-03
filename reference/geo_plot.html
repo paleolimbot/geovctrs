@@ -206,7 +206,7 @@ holes in polygons. See <code><a href='https://rdrr.io/r/graphics/polypath.html'>
 )</div><div class='img'><img src='geo_plot-6.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># can also plot data frames that have exactly one geovctr column</span>
 <span class='no'>prev_pal</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/palette.html'>palette</a></span>(<span class='fu'><a href='https://rdrr.io/r/grDevices/gray.colors.html'>grey.colors</a></span>(<span class='fl'>10</span>))
-<span class='fu'>geo_plot</span>(<span class='no'>geo_nc</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>BIR79</span>)</div><div class='img'><img src='geo_plot-7.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>geo_plot</span>(<span class='no'>geo_nc</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cut.html'>cut</a></span>(<span class='no'>BIR79</span>, <span class='fl'>10</span>))</div><div class='img'><img src='geo_plot-7.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># restore initial palette</span>
 <span class='fu'><a href='https://rdrr.io/r/grDevices/palette.html'>palette</a></span>(<span class='no'>prev_pal</span>)</div></pre>
   </div>
