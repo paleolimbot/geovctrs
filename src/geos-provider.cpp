@@ -26,7 +26,7 @@ GeometryProvider::~GeometryProvider() {
 
 ConstantGeometryProvider::ConstantGeometryProvider(GeometryProvider* baseProvider) {
   this->baseProvider = std::unique_ptr<GeometryProvider> { baseProvider };
-  this->geometry = nullptr;
+  this->hasFirst = false;
 }
 
 void ConstantGeometryProvider::init(GEOSContextHandle_t context) {
@@ -35,7 +35,7 @@ void ConstantGeometryProvider::init(GEOSContextHandle_t context) {
 }
 
 GEOSGeometry* ConstantGeometryProvider::getNext() {
-  if (this->geometry == nullptr) {
+  if (!this->hasFirst) {
     this->geometry = this->baseProvider->getNext();
   }
   return this->geometry;
@@ -76,11 +76,17 @@ void WKTGeometryProvider::init(GEOSContextHandle_t context) {
 }
 
 GEOSGeometry* WKTGeometryProvider::getNext() {
-  GEOSGeometry* geometry = GEOSWKTReader_read_r(
-    this->context,
-    this->wkt_reader,
-    this->data[this->counter]
-  );
+  GEOSGeometry* geometry;
+  if (CharacterVector::is_na(this->data[this->counter])) {
+    geometry = NULL;
+  } else {
+    geometry = GEOSWKTReader_read_r(
+      this->context,
+      this->wkt_reader,
+      this->data[this->counter]
+    );
+  }
+
   this->counter = this->counter + 1;
   return geometry;
 }
@@ -108,9 +114,14 @@ void WKTGeometryExporter::init(GEOSContextHandle_t context, size_t size) {
 }
 
 void WKTGeometryExporter::putNext(GEOSGeometry* geometry) {
-  std::string wkt_single;
-  wkt_single = GEOSWKTWriter_write_r(this->context, wkt_writer, geometry);
-  this->data[this->counter] = wkt_single;
+  if (geometry == NULL) {
+    this->data[this->counter] = NA_STRING;
+  } else {
+    std::string wkt_single;
+    wkt_single = GEOSWKTWriter_write_r(this->context, wkt_writer, geometry);
+    this->data[this->counter] = wkt_single;
+  }
+
   this->counter = this->counter + 1;
 }
 
@@ -132,8 +143,14 @@ void WKBGeometryProvider::init(GEOSContextHandle_t context) {
 }
 
 GEOSGeometry* WKBGeometryProvider::getNext() {
-  RawVector r = this->data[this->counter];
-  GEOSGeometry* geometry = GEOSWKBReader_read_r(context, this->wkb_reader, &(r[0]), r.size());
+  GEOSGeometry* geometry;
+  if (this->data[this->counter] == R_NilValue) {
+    geometry = NULL;
+  } else {
+    RawVector r = this->data[this->counter];
+    geometry = GEOSWKBReader_read_r(context, this->wkb_reader, &(r[0]), r.size());
+  }
+
   this->counter = this->counter + 1;
   return geometry;
 }
@@ -168,23 +185,28 @@ void WKBGeometryExporter::init(GEOSContextHandle_t context, size_t size) {
 }
 
 void WKBGeometryExporter::putNext(GEOSGeometry* geometry) {
-  if (this->useEWKB == -1) {
-    int sridFirst = GEOSGetSRID_r(this->context, geometry);
-    if (sridFirst != 0) {
-      GEOSWKBWriter_setIncludeSRID_r(this->context, this->wkb_writer, 1);
-      this->useEWKB = 1;
-    }  else {
-      this->useEWKB = 0;
+  if (geometry == NULL) {
+    this->data[this->counter] = R_NilValue;
+  } else {
+    if (this->useEWKB == -1) {
+      int sridFirst = GEOSGetSRID_r(this->context, geometry);
+      if (sridFirst != 0) {
+        GEOSWKBWriter_setIncludeSRID_r(this->context, this->wkb_writer, 1);
+        this->useEWKB = 1;
+      }  else {
+        this->useEWKB = 0;
+      }
     }
+
+    size_t size;
+    unsigned char *buf = GEOSWKBWriter_write_r(this->context, this->wkb_writer, geometry, &size);
+    RawVector raw(size);
+    memcpy(&(raw[0]), buf, size);
+    GEOSFree_r(this->context, buf);
+
+    this->data[this->counter] = raw;
   }
 
-  size_t size;
-  unsigned char *buf = GEOSWKBWriter_write_r(this->context, this->wkb_writer, geometry, &size);
-  RawVector raw(size);
-  memcpy(&(raw[0]), buf, size);
-  GEOSFree_r(this->context, buf);
-
-  this->data[this->counter] = raw;
   this->counter = this->counter + 1;
 }
 
@@ -206,8 +228,13 @@ void GeoCollectionProvider::init(GEOSContextHandle_t context) {
 }
 
 GEOSGeometry* GeoCollectionProvider::getNext() {
-  GEOSGeometry* geometry = feature_from_geo_coord(this->context, this->features[this->counter]);
-  GEOSSetSRID_r(context, geometry, this->srid[this->counter]);
+  GEOSGeometry* geometry;
+  if (this->features[this->counter] == R_NilValue) {
+    geometry = NULL;
+  } else {
+    geometry = feature_from_geo_coord(this->context, this->features[this->counter]);
+    GEOSSetSRID_r(context, geometry, this->srid[this->counter]);
+  }
 
   this->counter = this->counter + 1;
   return geometry;
@@ -233,8 +260,13 @@ void GeoCollectionExporter::init(GEOSContextHandle_t context, size_t size) {
 }
 
 void GeoCollectionExporter::putNext(GEOSGeometry* geometry) {
-  this->data[this->counter] = geometry_to_geo_coord(this->context, geometry);
-  this->srid[this->counter] = GEOSGetSRID_r(this->context, geometry);
+  if (geometry == NULL) {
+    this->data[this->counter] = R_NilValue;
+    this->srid[this->counter] = NA_INTEGER;
+  } else {
+    this->data[this->counter] = geometry_to_geo_coord(this->context, geometry);
+    this->srid[this->counter] = GEOSGetSRID_r(this->context, geometry);
+  }
 
   this->counter = this->counter + 1;
 }

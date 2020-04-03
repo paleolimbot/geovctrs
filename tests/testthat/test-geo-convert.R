@@ -252,6 +252,15 @@ test_that("segment conversion works", {
 
 })
 
+test_that("missings are propogated through conversions between wkt, wkb, and collection", {
+  expect_identical(cpp_convert(geo_wkt(NA), geo_wkb()), geo_wkb(list(NULL)))
+  expect_identical(cpp_convert(geo_wkt(NA), geo_collection()), geo_collection(list(NULL), srid = NA))
+  expect_identical(cpp_convert(geo_wkb(list(NULL)), geo_wkt()), geo_wkt(NA))
+  expect_identical(cpp_convert(geo_wkb(list(NULL)), geo_collection()), geo_collection(list(NULL), srid = NA))
+  expect_identical(cpp_convert(geo_collection(list(NULL)), geo_wkt()), geo_wkt(NA))
+  expect_identical(cpp_convert(geo_collection(list(NULL)), geo_wkb()), geo_wkb(list(NULL)))
+})
+
 test_that("error occurs with unknown object in conversions", {
   expect_error(cpp_convert(as.Date("2020-01-01"), new_geo_wkt()), "Can't resolve")
   expect_error(cpp_convert(geo_wkt("POINT EMPTY"), as.Date("2020-01-01")), "Can't resolve")

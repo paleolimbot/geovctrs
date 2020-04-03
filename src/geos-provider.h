@@ -37,6 +37,7 @@ class ConstantGeometryProvider: public GeometryProvider {
 public:
   std::unique_ptr<GeometryProvider> baseProvider;
   GEOSGeometry* geometry;
+  bool hasFirst;
 
   ConstantGeometryProvider(GeometryProvider* baseProvider);
   void init(GEOSContextHandle_t context);
