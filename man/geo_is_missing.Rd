@@ -4,7 +4,7 @@
 \alias{geo_is_missing}
 \alias{geo_has_missing}
 \alias{geo_is_finite}
-\title{Missing and non-finite geometries}
+\title{Missing geometries, missing coordinates and non-finite geometries}
 \usage{
 geo_is_missing(x)
 
@@ -20,5 +20,42 @@ coerced to a geometry-like object using \code{\link[=as_geovctr]{as_geovctr()}}.
 A logical vector
 }
 \description{
-Missing and non-finite geometries
+Whereas EMPTY geometries are a concept at the geometry level,
+missing values are a concept of the in-memory vectors used to store
+them in R. The \code{\link[=geo_is_missing]{geo_is_missing()}} function can be used to identify
+these values, similar to \code{\link[=is.na]{is.na()}}. Missing coordinates (\code{NA} or \code{NaN})
+can be identified using \code{\link[=geo_has_missing]{geo_has_missing()}}, and \code{\link[=geo_is_finite]{geo_is_finite()}}
+can be used to ensure that all coordinates are finite.
+}
+\examples{
+geo_is_missing(geo_wkt()[NA_integer_])
+
+geo_is_missing(geo_wkt("LINESTRING (10 inf, nan 2)"))
+geo_has_missing(geo_wkt("LINESTRING (10 inf, nan 2)"))
+geo_is_finite(geo_wkt("LINESTRING (10 inf, nan 2)"))
+
+geo_is_missing(geo_wkt("LINESTRING (10 inf, 1 2)"))
+geo_has_missing(geo_wkt("LINESTRING (10 inf, 1 2)"))
+geo_is_finite(geo_wkt("LINESTRING (10 inf, 1 2)"))
+
+# EMPTY geometries are considered finite and non-missing
+geo_is_missing(geo_wkt("LINESTRING EMPTY"))
+geo_has_missing(geo_wkt("LINESTRING EMPTY"))
+geo_is_finite(geo_wkt("LINESTRING EMPTY"))
+
+# POINT EMPTY and POINT (nan nan) are tricky corner
+# cases that currently behave unpredictably depending on
+# the storage type
+geo_is_missing(geo_wkt("POINT EMPTY"))
+geo_has_missing(geo_wkt("POINT EMPTY"))
+geo_is_finite(geo_wkt("POINT EMPTY"))
+
+geo_is_missing(geo_wkt("POINT (nan nan)"))
+geo_has_missing(geo_wkt("POINT (nan nan)"))
+geo_is_finite(geo_wkt("POINT (nan nan)"))
+
+geo_is_missing(geo_xy(NA, NA))
+geo_has_missing(geo_xy(NA, NA))
+geo_is_finite(geo_xy(NA, NA))
+
 }
