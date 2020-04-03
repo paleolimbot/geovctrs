@@ -379,18 +379,36 @@ void SegmentProvider::init(GEOSContextHandle_t context) {
 }
 
 GEOSGeometry* SegmentProvider::getNext() {
-  GEOSCoordSequence* seq = GEOSCoordSeq_create_r(this->context, 2, 2);
+  double x0, y0, x1, y1;
+  int srid;
+  GEOSGeometry* geometry;
 
-  // start
-  GEOSCoordSeq_setX_r(this->context, seq, 0, this->x0[this->counter]);
-  GEOSCoordSeq_setY_r(this->context, seq, 0, this->y0[this->counter]);
+  x0 = this->x0[this->counter];
+  y0 = this->y0[this->counter];
+  x1 = this->x1[this->counter];
+  y1 = this->y1[this->counter];
+  srid = this->srid[this->counter];
 
-  // end
-  GEOSCoordSeq_setX_r(this->context, seq, 1, this->x1[this->counter]);
-  GEOSCoordSeq_setY_r(this->context, seq, 1, this->y1[this->counter]);
+  if (NumericVector::is_na(x0) &&
+        NumericVector::is_na(y0) &&
+        NumericVector::is_na(x1) &&
+        NumericVector::is_na(y1) &&
+        IntegerVector::is_na(srid)) {
+    geometry = NULL;
+  } else {
+    GEOSCoordSequence* seq = GEOSCoordSeq_create_r(this->context, 2, 2);
 
-  GEOSGeometry* geometry = GEOSGeom_createLineString_r(context, seq);
-  GEOSSetSRID_r(this->context, geometry, this->srid[this->counter]);
+    // start
+    GEOSCoordSeq_setX_r(this->context, seq, 0, this->x0[this->counter]);
+    GEOSCoordSeq_setY_r(this->context, seq, 0, this->y0[this->counter]);
+
+    // end
+    GEOSCoordSeq_setX_r(this->context, seq, 1, this->x1[this->counter]);
+    GEOSCoordSeq_setY_r(this->context, seq, 1, this->y1[this->counter]);
+
+    geometry = GEOSGeom_createLineString_r(context, seq);
+    GEOSSetSRID_r(this->context, geometry, this->srid[this->counter]);
+  }
 
   this->counter = this->counter + 1;
   return geometry;
@@ -419,34 +437,47 @@ void SegmentExporter::init(GEOSContextHandle_t context, size_t size) {
 }
 
 void SegmentExporter::putNext(GEOSGeometry* geometry) {
-  if (GEOSGeomTypeId_r(this->context, geometry) != GEOSGeomTypes::GEOS_LINESTRING) {
-    stop("Can't represent a non-linestring as a geo_segment()");
-  }
-
-  if (!GEOSisEmpty_r(context, geometry) && GEOSGeomGetNumPoints_r(context, geometry) != 2) {
-    stop("linestrings must have exactly two points to be represented as a geo_segment()");
-  }
-
   double x0, y0, x1, y1;
+  int srid;
 
-  if (GEOSisEmpty_r(context, geometry)) {
+  if (geometry == NULL) {
     x0 = NA_REAL;
     y0 = NA_REAL;
     x1 = NA_REAL;
     y1 = NA_REAL;
+    srid = NA_INTEGER;
   } else {
-    const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq_r(this->context, geometry);
-    GEOSCoordSeq_getX_r(this->context, seq, 0, &x0);
-    GEOSCoordSeq_getY_r(this->context, seq, 0, &y0);
-    GEOSCoordSeq_getX_r(this->context, seq, 1, &x1);
-    GEOSCoordSeq_getY_r(this->context, seq, 1, &y1);
+    if (GEOSGeomTypeId_r(this->context, geometry) != GEOSGeomTypes::GEOS_LINESTRING) {
+      stop("Can't represent a non-linestring as a geo_segment()");
+    }
+
+    if (!GEOSisEmpty_r(context, geometry) && GEOSGeomGetNumPoints_r(context, geometry) != 2) {
+      stop("linestrings must have exactly two points to be represented as a geo_segment()");
+    }
+
+
+
+    if (GEOSisEmpty_r(context, geometry)) {
+      x0 = NA_REAL;
+      y0 = NA_REAL;
+      x1 = NA_REAL;
+      y1 = NA_REAL;
+    } else {
+      const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq_r(this->context, geometry);
+      GEOSCoordSeq_getX_r(this->context, seq, 0, &x0);
+      GEOSCoordSeq_getY_r(this->context, seq, 0, &y0);
+      GEOSCoordSeq_getX_r(this->context, seq, 1, &x1);
+      GEOSCoordSeq_getY_r(this->context, seq, 1, &y1);
+    }
+
+    srid = GEOSGetSRID_r(this->context, geometry);
   }
 
   this->x0[this->counter] = x0;
   this->y0[this->counter] = y0;
   this->x1[this->counter] = x1;
   this->y1[this->counter] = y1;
-  this->srid[this->counter] = GEOSGetSRID_r(this->context, geometry);
+  this->srid[this->counter] = srid;
 
   this->counter = this->counter + 1;
 }
@@ -488,27 +519,33 @@ void GeoRectProvider::init(GEOSContextHandle_t context) {
 
 GEOSGeometry* GeoRectProvider::getNext() {
   double xmin1, ymin1, xmax1, ymax1;
+  int srid;
+  GEOSGeometry* geometry;
+
   xmin1 = this->xmin[this->counter];
   ymin1 = this->ymin[this->counter];
   xmax1 = this->xmax[this->counter];
   ymax1 = this->ymax[this->counter];
+  srid = this->srid[this->counter];
 
-  // counter clockwise!
-  GEOSCoordSequence* seq = GEOSCoordSeq_create_r(this->context, 5, 2);
-  GEOSCoordSeq_setX_r(this->context, seq, 0, xmin1); GEOSCoordSeq_setY_r(this->context, seq, 0, ymin1);
-  GEOSCoordSeq_setX_r(this->context, seq, 1, xmax1); GEOSCoordSeq_setY_r(this->context, seq, 1, ymin1);
-  GEOSCoordSeq_setX_r(this->context, seq, 2, xmax1); GEOSCoordSeq_setY_r(this->context, seq, 2, ymax1);
-  GEOSCoordSeq_setX_r(this->context, seq, 3, xmin1); GEOSCoordSeq_setY_r(this->context, seq, 3, ymax1);
-  GEOSCoordSeq_setX_r(this->context, seq, 4, xmin1); GEOSCoordSeq_setY_r(this->context, seq, 4, ymin1);
-
-  GEOSGeometry* shell = GEOSGeom_createLinearRing_r(context, seq);
-  GEOSGeometry* holes[0];
-  GEOSGeometry* geometry = GEOSGeom_createPolygon_r(context, shell, holes, 0);
-
-  int srid = this->srid[this->counter];
-  if (IntegerVector::is_na(srid)) {
-    GEOSSetSRID_r(this->context, geometry, 0);
+  if (NumericVector::is_na(xmin1) &&
+      NumericVector::is_na(ymin1) &&
+      NumericVector::is_na(xmax1) &&
+      NumericVector::is_na(ymax1) &&
+      IntegerVector::is_na(srid)) {
+    geometry = NULL;
   } else {
+    // counter clockwise!
+    GEOSCoordSequence* seq = GEOSCoordSeq_create_r(this->context, 5, 2);
+    GEOSCoordSeq_setX_r(this->context, seq, 0, xmin1); GEOSCoordSeq_setY_r(this->context, seq, 0, ymin1);
+    GEOSCoordSeq_setX_r(this->context, seq, 1, xmax1); GEOSCoordSeq_setY_r(this->context, seq, 1, ymin1);
+    GEOSCoordSeq_setX_r(this->context, seq, 2, xmax1); GEOSCoordSeq_setY_r(this->context, seq, 2, ymax1);
+    GEOSCoordSeq_setX_r(this->context, seq, 3, xmin1); GEOSCoordSeq_setY_r(this->context, seq, 3, ymax1);
+    GEOSCoordSeq_setX_r(this->context, seq, 4, xmin1); GEOSCoordSeq_setY_r(this->context, seq, 4, ymin1);
+
+    GEOSGeometry* shell = GEOSGeom_createLinearRing_r(context, seq);
+    GEOSGeometry* holes[0];
+    geometry = GEOSGeom_createPolygon_r(context, shell, holes, 0);
     GEOSSetSRID_r(this->context, geometry, srid);
   }
 

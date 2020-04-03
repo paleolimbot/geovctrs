@@ -253,21 +253,42 @@ test_that("segment conversion works", {
 })
 
 test_that("missings are propogated through conversions between wkt, wkb, and collection", {
-  expect_identical(cpp_convert(geo_wkt(NA), geo_wkb()), geo_wkb(list(NULL)))
-  expect_identical(cpp_convert(geo_wkt(NA), geo_collection()), geo_collection(list(NULL), srid = NA))
-  expect_identical(cpp_convert(geo_wkt(NA), geo_xy()), geo_xy(NA, NA))
+  na_wkt <- geo_wkt()[NA_integer_]
+  na_wkb <- geo_wkb()[NA_integer_]
+  na_col <- geo_collection()[NA_integer_]
+  na_xy <- geo_xy()[NA_integer_]
+  na_seg <- geo_segment()[NA_integer_]
+  na_rect <- geo_segment()[NA_integer_]
 
-  expect_identical(cpp_convert(geo_wkb(list(NULL)), geo_wkt()), geo_wkt(NA))
-  expect_identical(cpp_convert(geo_wkb(list(NULL)), geo_collection()), geo_collection(list(NULL), srid = NA))
-  expect_identical(cpp_convert(geo_wkb(list(NULL)), geo_xy()), geo_xy(NA, NA))
+  expect_identical(cpp_convert(na_wkt, geo_wkb()), na_wkb)
+  expect_identical(cpp_convert(na_wkt, geo_collection()), na_col)
+  expect_identical(cpp_convert(na_wkt, geo_xy()), na_xy)
+  expect_identical(cpp_convert(na_wkt, geo_segment()), na_seg)
 
-  expect_identical(cpp_convert(geo_collection(list(NULL)), geo_wkt()), geo_wkt(NA))
-  expect_identical(cpp_convert(geo_collection(list(NULL)), geo_wkb()), geo_wkb(list(NULL)))
-  expect_identical(cpp_convert(geo_collection(list(NULL)), geo_xy()), geo_xy(NA, NA))
+  expect_identical(cpp_convert(na_wkb, geo_wkt()), na_wkt)
+  expect_identical(cpp_convert(na_wkb, geo_collection()), na_col)
+  expect_identical(cpp_convert(na_wkb, geo_xy()), na_xy)
+  expect_identical(cpp_convert(na_wkb, geo_segment()), na_seg)
 
-  expect_identical(cpp_convert(geo_xy(NA, NA), geo_wkt()), geo_wkt(NA))
-  expect_identical(cpp_convert(geo_xy(NA, NA), geo_wkb()), geo_wkb(list(NULL)))
-  expect_identical(cpp_convert(geo_xy(NA, NA), geo_collection()), geo_collection(list(NULL), srid = NA))
+  expect_identical(cpp_convert(na_col, geo_wkt()), na_wkt)
+  expect_identical(cpp_convert(na_col, geo_wkb()), na_wkb)
+  expect_identical(cpp_convert(na_col, geo_xy()), na_xy)
+  expect_identical(cpp_convert(na_col, geo_segment()), na_seg)
+
+  expect_identical(cpp_convert(na_xy, geo_wkt()), na_wkt)
+  expect_identical(cpp_convert(na_xy, geo_wkb()), na_wkb)
+  expect_identical(cpp_convert(na_xy, geo_collection()), na_col)
+  expect_identical(cpp_convert(na_xy, geo_segment()), na_seg)
+
+  expect_identical(cpp_convert(na_seg, geo_wkt()), na_wkt)
+  expect_identical(cpp_convert(na_seg, geo_wkb()), na_wkb)
+  expect_identical(cpp_convert(na_seg, geo_collection()), na_col)
+  expect_identical(cpp_convert(na_seg, geo_xy()), na_xy)
+
+  expect_identical(cpp_convert(na_rect, geo_wkt()), na_wkt)
+  expect_identical(cpp_convert(na_rect, geo_wkb()), na_wkb)
+  expect_identical(cpp_convert(na_rect, geo_collection()), na_col)
+  expect_identical(cpp_convert(na_rect, geo_xy()), na_xy)
 })
 
 test_that("error occurs with unknown object in conversions", {
