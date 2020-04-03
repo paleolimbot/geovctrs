@@ -12,8 +12,6 @@
 #' @param asp,xlim,ylim,xlab,ylab Passed to [graphics::plot()]
 #' @param rule One of "evenodd" or "winding": controls the appearance of
 #'   holes in polygons. See [graphics::polypath()].
-#' @param more_args For data frames, arguments that should not be evaluated
-#'   inside the data frame that are passed to the various methods.
 #'
 #' @return `x`, invisibly.
 #' @export
@@ -83,21 +81,14 @@ geo_plot_add.geovctr <- function(x, ...) {
 
 #' @rdname geo_plot
 #' @export
-geo_plot_add.data.frame <- function(x, ..., more_args = list()) {
-  # get features
-  geo <- as_geo_collection(as_geovctr(x))
-  features <- field(geo, "feature")
-
+geo_plot_add.data.frame <- function(x, ...) {
   # evaluate the dots
   dots <- rlang::quos(...)
   dots_eval <- lapply(dots, rlang::eval_tidy, data = x)
-  dots_tbl <- vec_recycle_common(!!!dots_eval, .size = length(features))
+  dots_tbl <- vec_recycle_common(!!!dots_eval, .size = nrow(x))
 
   # plot the features
-  for (i in seq_len(vec_size(geo))) {
-    dots_item <- lapply(dots_tbl, "[[", i)
-    rlang::exec(geo_plot_add, features[[i]], !!!dots_item, !!!more_args)
-  }
+  rlang::exec(geo_plot_add, as_geovctr(x), !!!dots_tbl)
 
   # return the input
   invisible(x)
@@ -139,9 +130,18 @@ geo_plot_add.geo_rect <- function(x, ...) {
 #' @rdname geo_plot
 #' @export
 geo_plot_add.geo_collection <- function(x, ...) {
+  features <- field(x, "feature")
+
+  # evaluate dots, wrap scalar types in a list(), and vectorize
+  dots <- rlang::list2(...)
+  is_scalar <- !vapply(dots, vec_is, logical(1))
+  dots[is_scalar] <- lapply(dots[is_scalar], list)
+  dots_tbl <- vec_recycle_common(!!!dots, .size = length(features))
+
   # using for() because the user interupt is respected
-  for (item in field(x, "feature")) {
-    geo_plot_add(item, ...)
+  for (i in seq_along(features)) {
+    dots_item <- lapply(dots_tbl, "[[", i)
+    rlang::exec(geo_plot_add, features[[i]], !!!dots_item)
   }
   invisible(x)
 }
