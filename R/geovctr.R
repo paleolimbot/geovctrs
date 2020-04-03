@@ -1,8 +1,7 @@
 
 #' Test for geovctrs
 #'
-#' A geovctr is a geometry-like object that can be converted to
-#' the standard for geometry, well-known binary. In the geovctrs
+#' A geovctr is a geometry-like collection of objects. In the geovctrs
 #' package, [geo_wkt()], [geo_wkb()], [geo_collection()],
 #' [geo_xy()], [geo_rect()], and [geo_segment()] are all geovctrs.
 #' Extension packages can either use these types or
@@ -26,19 +25,19 @@
 #'   [tidyr::unnest()] and [dplyr::group_by()] / [dplyr::mutate()] /
 #'   [dplyr::summarise()].
 #'
-#' - It inherits from `"geovctr"`. This makes it work automatically with
+#' - Inherit from `"geovctr"`. This makes it work automatically with
 #'   functions like [geo_plot()] and [geo_bbox()] that have a default
 #'   implementation for something that can be coerced to [geo_wkt()],
 #'   [geo_wkb()], or [geo_collection()].
 #'
-#' - It can be casted to [geo_wkt()], [geo_wkb()], and [geo_collection()]
+#' - Have the ability to be casted to [geo_wkt()], [geo_wkb()], and [geo_collection()]
 #'   using [vec_cast()]. These casts power the default implementations of
 #'   functions like [geo_plot()] and [geo_bbox()], and allow geometries to
 #'   be combined using [vctrs::vec_c()] (which powers row-binding in
 #'   tidyverse functions). This means implementing the appropriate
 #'   [vctrs::vec_cast()] methods for a class.
 #'
-#' - It can be combined with [geo_wkt()], [geo_wkb()], and [geo_collection()]
+#' - Have the ability to be combined with [geo_wkt()], [geo_wkb()], and [geo_collection()]
 #'   using [vec_c()] in both directions. This helps support processing functions
 #'   that return a class to be combined with the output of other functions.
 #'   This might require a [vctrs::vec_ptype()] implementation for
@@ -96,19 +95,18 @@ as_geovctr.character <- function(x, ...) {
 #' @rdname is_geovctr
 #' @export
 as_geovctr.data.frame <- function(x, ...) {
-  x[[find_geovctr_column({{ x }})]]
+  x[[find_geovctr_column(x)]]
 }
 
 find_geovctr_column <- function(x) {
-  x_label <- rlang::as_label(rlang::enquo(x))
   col_is_geovctr <- vapply(x, is_geovctr, logical(1))
   cols <- names(x)[col_is_geovctr]
 
   if (sum(col_is_geovctr) == 0) {
-    abort(sprintf("Can't find a geovctr column in `%s`", x_label))
+    abort("Can't find geovctr column in data.frame")
   } else if (sum(col_is_geovctr) > 1) {
     col_labs <- paste0('"', cols, '"', collapse = ", ")
-    abort(sprintf("More than one geovctr column in `%s`:\n`%s`", x_label, col_labs))
+    abort(sprintf("More than one geovctr column in data.frame:\n`%s`", col_labs))
   }
 
   cols
