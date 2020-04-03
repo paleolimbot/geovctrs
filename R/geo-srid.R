@@ -6,8 +6,8 @@
 #' be implemented in other packages. However, most geometry
 #' formats store an integer spatial reference identifier (SRID)
 #' with each feature to propogate this information through
-#' calculations. Note that an SRID of 0 is interpreted as
-#' "not set".
+#' calculations. The difference between 0 and `NA` is
+#' murky at the moment.
 #'
 #' @inheritParams geo_bbox
 #' @param srid A spatial reference identifier, coerced to
@@ -85,7 +85,7 @@ geo_srid.geo_xy <- function(x) {
 
 #' @export
 set_geo_srid.geo_xy <- function(x, srid) {
-  if (any(srid != 0)) {
+  if (any(srid != 0, na.rm = TRUE)) {
     abort("Can't store SRID with a geo_xy()")
   }
   x

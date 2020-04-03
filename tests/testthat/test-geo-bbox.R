@@ -165,3 +165,43 @@ test_that("bbox works with corner cases", {
     geo_rect(Inf, Inf, -Inf, -Inf)
   )
 })
+
+test_that("misssing values have missing envelopes", {
+  expect_identical(geo_envelope(geo_wkt()[NA_integer_]), geo_rect()[NA_integer_])
+  expect_identical(geo_envelope(geo_wkb()[NA_integer_]), geo_rect()[NA_integer_])
+  expect_identical(geo_envelope(geo_collection()[NA_integer_]), geo_rect()[NA_integer_])
+  # tricky corner case...POINT EMPTY is the same in GEOS as POINT (nan nan)
+  # for safety, don't drop SRID
+  expect_identical(geo_envelope(geo_xy()[NA_integer_]), geo_rect(NA, NA, NA, NA, srid = 0))
+  expect_identical(geo_envelope(geo_segment()[NA_integer_]), geo_rect()[NA_integer_])
+  expect_identical(geo_envelope(geo_rect()[NA_integer_]), geo_rect()[NA_integer_])
+
+  expect_identical(geo_envelope(geo_wkt()[NA_integer_], na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
+  expect_identical(geo_envelope(geo_wkb()[NA_integer_], na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
+  expect_identical(geo_envelope(geo_collection()[NA_integer_], na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
+  # tricky corner case...POINT EMPTY is the same in GEOS as POINT (nan nan)
+  # for safety, don't drop SRID
+  expect_identical(geo_envelope(geo_xy()[NA_integer_], na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
+  expect_identical(geo_envelope(geo_segment()[NA_integer_], na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
+  expect_identical(geo_envelope(geo_rect()[NA_integer_], na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
+})
+
+test_that("misssing values have the correct bounding boxes", {
+  expect_identical(geo_bbox(geo_wkt()[NA_integer_]), geo_rect()[NA_integer_])
+  expect_identical(geo_bbox(geo_wkb()[NA_integer_]), geo_rect()[NA_integer_])
+  expect_identical(geo_bbox(geo_collection()[NA_integer_]), geo_rect()[NA_integer_])
+  # tricky corner case...POINT EMPTY is the same in GEOS as POINT (nan nan)
+  # for safety, don't drop SRID
+  expect_identical(geo_bbox(geo_xy()[NA_integer_]), geo_rect(NA, NA, NA, NA, srid = 0))
+  expect_identical(geo_bbox(geo_segment()[NA_integer_]), geo_rect()[NA_integer_])
+  expect_identical(geo_bbox(geo_rect()[NA_integer_]), geo_rect()[NA_integer_])
+
+  expect_identical(geo_bbox(geo_wkt()[NA_integer_], na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
+  expect_identical(geo_bbox(geo_wkb()[NA_integer_], na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
+  expect_identical(geo_bbox(geo_collection()[NA_integer_], na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
+  # tricky corner case...POINT EMPTY is the same in GEOS as POINT (nan nan)
+  # for safety, don't drop SRID
+  expect_identical(geo_bbox(geo_xy()[NA_integer_], na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
+  expect_identical(geo_bbox(geo_segment()[NA_integer_], na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
+  expect_identical(geo_bbox(geo_rect()[NA_integer_], na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
+})

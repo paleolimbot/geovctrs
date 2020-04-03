@@ -78,12 +78,26 @@ public:
 
   void operateNext(GEOSGeometry* geometry) {
     double xmin1, ymin1, xmax1, ymax1;
+    int srid;
 
-    if (GEOSisEmpty_r(this->context, geometry)) {
+    if (geometry == NULL && this->naRm) {
       xmin1 = R_PosInf;
       ymin1 = R_PosInf;
       xmax1 = R_NegInf;
       ymax1 = R_NegInf;
+      srid = NA_INTEGER;
+    } else if(geometry == NULL) {
+      xmin1 = NA_REAL;
+      ymin1 = NA_REAL;
+      xmax1 = NA_REAL;
+      ymax1 = NA_REAL;
+      srid = NA_INTEGER;
+    } else if (GEOSisEmpty_r(this->context, geometry)) {
+      xmin1 = R_PosInf;
+      ymin1 = R_PosInf;
+      xmax1 = R_NegInf;
+      ymax1 = R_NegInf;
+      srid = GEOSGetSRID_r(this->context, geometry);
     } else {
       List coords = geometry_to_geo_coord(context, geometry);
       List xy = coords["xy"];
@@ -99,13 +113,14 @@ public:
       ymin1 = min(y);
       xmax1 = max(x);
       ymax1 = max(y);
+      srid = GEOSGetSRID_r(this->context, geometry);
     }
 
     this->xmin[this->counter] = xmin1;
     this->ymin[this->counter] = ymin1;
     this->xmax[this->counter] = xmax1;
     this->ymax[this->counter] = ymax1;
-    this->srid[this->counter] = GEOSGetSRID_r(this->context, geometry);
+    this->srid[this->counter] = srid;
   }
 
   SEXP assemble() {
