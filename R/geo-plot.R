@@ -12,6 +12,8 @@
 #' @param asp,xlim,ylim,xlab,ylab Passed to [graphics::plot()]
 #' @param rule One of "evenodd" or "winding": controls the appearance of
 #'   holes in polygons. See [graphics::polypath()].
+#' @param more_args For data frames, arguments that should not be evaluated
+#'   inside the data frame that are passed to the various methods.
 #'
 #' @return `x`, invisibly.
 #' @export
@@ -29,6 +31,13 @@
 #'   ),
 #'   col = "grey90"
 #' )
+#'
+#' # can also plot data frames that have exactly one geovctr column
+#' prev_pal <- palette(grey.colors(10))
+#' geo_plot(geo_nc, col = BIR79)
+#'
+#' # restore initial palette
+#' palette(prev_pal)
 #'
 geo_plot <- function(x, ..., asp = 1, xlim = NULL, ylim = NULL, xlab = "", ylab = "") {
   # until there is a geo_bbox() function
@@ -61,7 +70,36 @@ geo_plot_add <- function(x, ...) {
 #' @rdname geo_plot
 #' @export
 geo_plot_add.default <- function(x, ...) {
+  geo_plot_add(as_geovctr(x), ...)
+  invisible(x)
+}
+
+#' @rdname geo_plot
+#' @export
+geo_plot_add.geovctr <- function(x, ...) {
   geo_plot_add(as_geo_collection(x), ...)
+  invisible(x)
+}
+
+#' @rdname geo_plot
+#' @export
+geo_plot_add.data.frame <- function(x, ..., more_args = list()) {
+  # get features
+  geo <- as_geo_collection(as_geovctr(x))
+  features <- field(geo, "feature")
+
+  # evaluate the dots
+  dots <- rlang::quos(...)
+  dots_eval <- lapply(dots, rlang::eval_tidy, data = x)
+  dots_tbl <- vec_recycle_common(!!!dots_eval, .size = length(features))
+
+  # plot the features
+  for (i in seq_len(vec_size(geo))) {
+    dots_item <- lapply(dots_tbl, "[[", i)
+    rlang::exec(geo_plot_add, features[[i]], !!!dots_item, !!!more_args)
+  }
+
+  # return the input
   invisible(x)
 }
 

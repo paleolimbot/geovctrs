@@ -70,4 +70,29 @@ test_that("plot generics work", {
     "geo_rect generic",
     function() plot(geo_rect(0:5, 1:6, 10:15, 11:16))
   )
+
+  # should work with character via geo_plot_add.default
+  vdiffr::expect_doppelganger(
+    "geo_plot_add.default",
+    function() geo_plot("POINT (30 40)")
+  )
+
+  vdiffr::expect_doppelganger(
+    "geo_plot_add.data.frame",
+    function() geo_plot(tibble(geo_wkt("POINT (30 40)")))
+  )
+})
+
+test_that("geo_nc can be plotted", {
+  # simple grey transformer
+  make_col <- function(x, lim = range(x, na.rm = TRUE)) {
+    width <- diff(lim)
+    rescaled <- (x - lim[1]) / width
+    rgb(rescaled, rescaled, rescaled)
+  }
+
+  vdiffr::expect_doppelganger(
+    "basic plot of NC",
+    function() geo_plot(geo_nc, col = make_col(BIR79))
+  )
 })

@@ -4,6 +4,8 @@
 \alias{geo_plot}
 \alias{geo_plot_add}
 \alias{geo_plot_add.default}
+\alias{geo_plot_add.geovctr}
+\alias{geo_plot_add.data.frame}
 \alias{geo_plot_add.geo_xy}
 \alias{geo_plot_add.geo_segment}
 \alias{geo_plot_add.geo_rect}
@@ -21,6 +23,10 @@ geo_plot(x, ..., asp = 1, xlim = NULL, ylim = NULL, xlab = "", ylab = "")
 geo_plot_add(x, ...)
 
 \method{geo_plot_add}{default}(x, ...)
+
+\method{geo_plot_add}{geovctr}(x, ...)
+
+\method{geo_plot_add}{data.frame}(x, ..., more_args = list())
 
 \method{geo_plot_add}{geo_xy}(x, ...)
 
@@ -52,6 +58,9 @@ and multipolygon geometries.}
 
 \item{asp, xlim, ylim, xlab, ylab}{Passed to \code{\link[graphics:plot]{graphics::plot()}}}
 
+\item{more_args}{For data frames, arguments that should not be evaluated
+inside the data frame that are passed to the various methods.}
+
 \item{rule}{One of "evenodd" or "winding": controls the appearance of
 holes in polygons. See \code{\link[graphics:polypath]{graphics::polypath()}}.}
 }
@@ -75,5 +84,12 @@ geo_plot(
   ),
   col = "grey90"
 )
+
+# can also plot data frames that have exactly one geovctr column
+prev_pal <- palette(grey.colors(10))
+geo_plot(geo_nc, col = BIR79)
+
+# restore initial palette
+palette(prev_pal)
 
 }
