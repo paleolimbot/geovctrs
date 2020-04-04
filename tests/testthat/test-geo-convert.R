@@ -268,8 +268,7 @@ test_that("missings are propogated through conversions between wkt, wkb, and col
 
   # NA_xy_ is POINT EMPTY
   expect_identical(cpp_convert(NA_xy_, geo_wkt()), geo_wkt("POINT EMPTY"))
-  # hang tight for empty point handling in  WKB
-  # expect_identical(cpp_convert(NA_xy_, geo_wkb()), NA_wkb_)
+  expect_identical(cpp_convert(NA_xy_, geo_wkb()), as_geo_wkb(geo_wkt("POINT EMPTY")))
   expect_identical(cpp_convert(NA_xy_, geo_collection()), geo_point(geo_xy()))
 
   expect_identical(cpp_convert(NA_segment_, geo_wkt()), NA_wkt_)

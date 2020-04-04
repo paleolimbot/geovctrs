@@ -198,13 +198,30 @@ void WKBGeometryExporter::putNext(GEOSGeometry* geometry) {
       }
     }
 
-    size_t size;
-    unsigned char *buf = GEOSWKBWriter_write_r(this->context, this->wkb_writer, geometry, &size);
-    RawVector raw(size);
-    memcpy(&(raw[0]), buf, size);
-    GEOSFree_r(this->context, buf);
+    // GEOSWKBWriter won't deal with POINT EMPTY, but we handle in the same way
+    // as sf (GEOSWKBReader seems to have no problem with this solution)
+    // TODO: handle SRID...
+    if (GEOSisEmpty_r(this->context, geometry) &&
+        GEOSGeomTypeId_r(this->context, geometry) == GEOSGeomTypes::GEOS_POINT) {
+      size_t size = 21;
+      const unsigned char buf[] = {
+        0x01, 0x01, 0x00, 0x00, 0x00, 0xa2, 0x07, 0x00, 0x00,
+        0x00, 0x00, 0xf0, 0x7f, 0xa2, 0x07, 0x00, 0x00, 0x00, 0x00, 0xf0,
+        0x7f
+      };
+      RawVector raw(size);
+      memcpy(&(raw[0]), buf, size);
+      this->data[this->counter] = raw;
+    } else {
 
-    this->data[this->counter] = raw;
+      size_t size;
+      unsigned char *buf = GEOSWKBWriter_write_r(this->context, this->wkb_writer, geometry, &size);
+      RawVector raw(size);
+      memcpy(&(raw[0]), buf, size);
+      GEOSFree_r(this->context, buf);
+
+      this->data[this->counter] = raw;
+    }
   }
 
   this->counter = this->counter + 1;
