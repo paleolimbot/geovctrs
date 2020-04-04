@@ -120,7 +120,8 @@ geo_is_finite.geo_wkt <- function(x) {
 
 #' @export
 geo_is_finite.geo_xy <- function(x) {
-  is.finite(field(x, "x")) &
+  is.na(x) |
+    is.finite(field(x, "x")) &
     is.finite(field(x, "y"))
 }
 

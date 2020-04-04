@@ -68,7 +68,8 @@ test_that("geo_is_finite works", {
   expect_false(geo_is_finite(as_geo_wkb(geo_wkt("LINESTRING (nan nan, nan nan)"))))
   expect_false(geo_is_finite(as_geo_wkb(geo_wkt("POLYGON ((1 1, nan nan, nan nan, 1 1))"))))
 
-  expect_false(geo_is_finite(geo_xy(NA, NA)))
+  # geo_xy(NA, NA) is both missing and empty
+  expect_true(geo_is_finite(geo_xy(NA, NA)))
   expect_false(geo_is_finite(geo_xy(Inf, -Inf)))
   expect_false(geo_is_finite(geo_xy(NA, 1)))
   expect_false(geo_is_finite(geo_xy(1, NA)))
