@@ -25,9 +25,15 @@ and should be managed outside of geovctrs except for
 A \code{\link[=new_geo_rect]{new_geo_rect()}}
 }
 \description{
-Rectangles
+The \code{\link[=geo_rect]{geo_rect()}} type is useful as an efficient representation of
+rectangles stored using column vectors.
+Note that if any of \code{xmin}, \code{ymin}, \code{xmax}, or \code{ymax} are missing
+the rectangle is interpreted as an empty polygon, whereas
+\code{geo_rect(NA, NA, NA, NA, srid = NA)}
+is "missing" (see \code{\link[=geo_is_missing]{geo_is_missing()}} and \code{\link[=geo_is_empty]{geo_is_empty()}}). Infinite
+values (\code{Inf} and \code{-Inf}) can be used.
 }
 \examples{
-geo_rect(xmin = 0:5, ymin = 0:5, xmax = 2:7, ymax = 2:7)
+geo_plot(geo_rect(xmin = 0:5, ymin = 0:5, xmax = 2:7, ymax = 2:7))
 
 }

@@ -1,6 +1,12 @@
 
 #' Line segments
 #'
+#' The [geo_segment()] type is useful as an efficient representation of
+#' line segments stored using column vectors.
+#' Note that `geo_segment(geo_xy(NA, NA), geo_xy(NA, NA))` is considered
+#' an "empty" linestring, whereas `geo_segment(geo_xy(NA, NA), geo_xy(NA, NA), srid = NA)`
+#' is "missing" (see [geo_is_missing()] and [geo_is_empty()]).
+#'
 #' @param start,end [geo_xy()]s for the start and end
 #'   of the segment, respectively.
 #' @inheritParams geo_srid

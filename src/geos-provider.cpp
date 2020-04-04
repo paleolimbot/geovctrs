@@ -412,11 +412,17 @@ GEOSGeometry* SegmentProvider::getNext() {
   srid = this->srid[this->counter];
 
   if (NumericVector::is_na(x0) &&
-        NumericVector::is_na(y0) &&
-        NumericVector::is_na(x1) &&
-        NumericVector::is_na(y1) &&
-        IntegerVector::is_na(srid)) {
+      NumericVector::is_na(y0) &&
+      NumericVector::is_na(x1) &&
+      NumericVector::is_na(y1) &&
+      IntegerVector::is_na(srid)) {
     geometry = NULL;
+  } else if(NumericVector::is_na(x0) &&
+    NumericVector::is_na(y0) &&
+    NumericVector::is_na(x1) &&
+    NumericVector::is_na(y1)) {
+    geometry = GEOSGeom_createEmptyLineString_r(this->context);
+    GEOSSetSRID_r(this->context, geometry, srid);
   } else {
     GEOSCoordSequence* seq = GEOSCoordSeq_create_r(this->context, 2, 2);
 
@@ -556,6 +562,12 @@ GEOSGeometry* GeoRectProvider::getNext() {
       NumericVector::is_na(ymax1) &&
       IntegerVector::is_na(srid)) {
     geometry = NULL;
+  } else if(NumericVector::is_na(xmin1) ||
+    NumericVector::is_na(ymin1) ||
+    NumericVector::is_na(xmax1) ||
+    NumericVector::is_na(ymax1)) {
+    geometry = GEOSGeom_createEmptyPolygon_r(this->context);
+    GEOSSetSRID_r(this->context, geometry, srid);
   } else {
     // counter clockwise!
     GEOSCoordSequence* seq = GEOSCoordSeq_create_r(this->context, 5, 2);

@@ -1,6 +1,14 @@
 
 #' Rectangles
 #'
+#' The [geo_rect()] type is useful as an efficient representation of
+#' rectangles stored using column vectors.
+#' Note that if any of `xmin`, `ymin`, `xmax`, or `ymax` are missing
+#' the rectangle is interpreted as an empty polygon, whereas
+#' `geo_rect(NA, NA, NA, NA, srid = NA)`
+#' is "missing" (see [geo_is_missing()] and [geo_is_empty()]). Infinite
+#' values (`Inf` and `-Inf`) can be used.
+#'
 #' @param xmin,ymin,xmax,ymax Border values, recycled to a common
 #'   length using [vctrs::vec_recycle_common()].
 #' @inheritParams geo_srid
@@ -9,7 +17,7 @@
 #' @export
 #'
 #' @examples
-#' geo_rect(xmin = 0:5, ymin = 0:5, xmax = 2:7, ymax = 2:7)
+#' geo_plot(geo_rect(xmin = 0:5, ymin = 0:5, xmax = 2:7, ymax = 2:7))
 #'
 geo_rect <- function(xmin = double(), ymin = double(), xmax = double(), ymax = double(), srid = 0) {
   result <- new_geo_rect(

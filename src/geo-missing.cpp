@@ -49,10 +49,10 @@ LogicalVector cpp_is_finite(SEXP x) {
   return op.operate();
 }
 
-class IsEmptyOperator: public UnaryVectorOperator<LogicalVector, bool> {
+class IsEmptyOperator: public UnaryVectorOperator<LogicalVector, int> {
 public:
 
-  bool operateNext(GEOSGeometry* geometry)  {
+  int operateNext(GEOSGeometry* geometry)  {
     return GEOSisEmpty_r(this->context, geometry);
   }
 };

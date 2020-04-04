@@ -102,16 +102,33 @@ test_that("geo_is_empty works", {
   expect_true(geo_is_empty(geo_wkt("POINT (nan nan)")))
   expect_true(geo_is_empty(geo_wkt("POINT EMPTY")))
   expect_true(geo_is_empty(geo_wkt("MULTIPOINT (nan nan)")))
+  expect_false(geo_is_empty(geo_wkt("POINT (1 nan)")))
 
   expect_true(geo_is_empty(as_geo_wkb(geo_wkt("POINT (nan nan)"))))
   expect_true(geo_is_empty(as_geo_wkb(geo_wkt("POINT EMPTY"))))
   expect_true(geo_is_empty(as_geo_wkb(geo_wkt("MULTIPOINT EMPTY"))))
+  expect_false(geo_is_empty(as_geo_wkb(geo_wkt("MULTIPOINT (1 nan)"))))
   # "MULTIPOINT (nan nan)" currently cannot be written to WKB
   # expect_true(geo_is_empty(as_geo_wkb(geo_wkt("MULTIPOINT (nan nan)"))))
 
   expect_true(geo_is_empty(geo_xy(NA, NA)))
   expect_false(geo_is_empty(geo_xy(1, NA)))
   expect_false(geo_is_empty(geo_xy(NA, 1)))
+
+  expect_identical(geo_is_empty(NA_segment_), NA)
+  expect_true(geo_is_empty(geo_segment(geo_xy(NA, NA), geo_xy(NA, NA))))
+  expect_false(geo_is_empty(geo_segment(geo_xy(1, NA), geo_xy(NA, NA))))
+  expect_false(geo_is_empty(geo_segment(geo_xy(1, 1), geo_xy(NA, NA))))
+  expect_false(geo_is_empty(geo_segment(geo_xy(1, 1), geo_xy(1, NA))))
+  expect_false(geo_is_empty(geo_segment(geo_xy(1, 1), geo_xy(Inf, 1))))
+  expect_false(geo_is_empty(geo_segment(geo_xy(1, 1), geo_xy(1, 1))))
+
+  expect_identical(geo_is_empty(NA_rect_), NA)
+  expect_true(geo_is_empty(geo_rect(NA, NA, NA, NA)))
+  expect_true(geo_is_empty(geo_rect(1, NA, NA, NA)))
+  expect_true(geo_is_empty(geo_rect(1, 1, NA, NA)))
+  expect_true(geo_is_empty(geo_rect(1, 1, 1, NA)))
+  expect_false(geo_is_empty(geo_rect(1, 1, 1, 1)))
 })
 
 test_that("handling of empty points is consistent across geovctrs", {

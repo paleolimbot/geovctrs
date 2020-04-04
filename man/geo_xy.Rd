@@ -13,9 +13,12 @@ geo_xy(x = double(), y = double())
 A \code{\link[=new_geo_xy]{new_geo_xy()}}
 }
 \description{
-Create a coordinate vector
+The \code{\link[=geo_xy]{geo_xy()}} type is useful as an efficient representation of points
+stored using column vectors. Note that \code{geo_xy(NA, NA)} is considered
+an "empty" point rather than a "missing" point (see \code{\link[=geo_is_missing]{geo_is_missing()}}
+and \code{\link[=geo_is_empty]{geo_is_empty()}}).
 }
 \examples{
-geo_xy(0:5, 1:6)
+geo_plot(geo_xy(0:5, 1:6))
 
 }

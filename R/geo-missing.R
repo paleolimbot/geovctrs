@@ -11,44 +11,52 @@
 #' `geo_wkt("MULTIPOINT (nan nan)")` are all considered empty points,
 #' and are therefore non-misssing, contain no missing coordinates, and
 #' are finite (use `is.na()` and/or [stringr::str_detect()]) if you
-#' would like to detect these cases.
+#' would like to specifically detect these cases).
 #'
 #' @inheritParams geo_bbox
 #'
 #' @return A logical vector
+#' @format NULL
 #' @export
 #'
 #' @examples
 #' geo_is_missing(NA_wkt_)
 #' geo_has_missing(NA_wkt_)
 #' geo_is_finite(NA_wkt_)
+#' geo_is_empty(NA_wkt_)
 #'
 #' geo_is_missing(geo_wkt("LINESTRING (10 inf, nan 2)"))
 #' geo_has_missing(geo_wkt("LINESTRING (10 inf, nan 2)"))
 #' geo_is_finite(geo_wkt("LINESTRING (10 inf, nan 2)"))
+#' geo_is_empty(geo_wkt("LINESTRING (10 inf, nan 2)"))
 #'
 #' geo_is_missing(geo_wkt("LINESTRING (10 inf, 1 2)"))
 #' geo_has_missing(geo_wkt("LINESTRING (10 inf, 1 2)"))
 #' geo_is_finite(geo_wkt("LINESTRING (10 inf, 1 2)"))
+#' geo_is_empty(geo_wkt("LINESTRING (10 inf, 1 2)"))
 #'
 #' # EMPTY geometries are considered finite and non-missing
 #' geo_is_missing(geo_wkt("LINESTRING EMPTY"))
 #' geo_has_missing(geo_wkt("LINESTRING EMPTY"))
 #' geo_is_finite(geo_wkt("LINESTRING EMPTY"))
+#' geo_is_empty(geo_wkt("LINESTRING EMPTY"))
 #'
 #' # POINT EMPTY, POINT (nan nan), and geo_xy(NA, NA)
 #' # are all empty points
 #' geo_is_missing(geo_wkt("POINT EMPTY"))
 #' geo_has_missing(geo_wkt("POINT EMPTY"))
 #' geo_is_finite(geo_wkt("POINT EMPTY"))
+#' geo_is_empty(geo_wkt("POINT EMPTY"))
 #'
 #' geo_is_missing(geo_wkt("POINT (nan nan)"))
 #' geo_has_missing(geo_wkt("POINT (nan nan)"))
 #' geo_is_finite(geo_wkt("POINT (nan nan)"))
+#' geo_is_empty(geo_wkt("POINT (nan nan)"))
 #'
 #' geo_is_missing(geo_xy(NA, NA))
 #' geo_has_missing(geo_xy(NA, NA))
 #' geo_is_finite(geo_xy(NA, NA))
+#' geo_is_empty(geo_xy(NA, NA))
 #'
 geo_is_missing <- function(x) {
   UseMethod("geo_is_missing")
@@ -172,6 +180,23 @@ geo_is_empty.geovctr <- function(x) {
 #' @export
 geo_is_empty.geo_xy <- function(x) {
   is.na(field(x, "x")) &  is.na(field(x, "y"))
+}
+
+#' @export
+geo_is_empty.geo_segment <- function(x) {
+  start <- field(x, "start")
+  end <- field(x, "end")
+  result <- is.na(field(start, "x")) &
+    is.na(field(start, "y")) &
+    is.na(field(end, "x")) &
+    is.na(field(end, "y"))
+  result[is.na(x)] <- NA
+  result
+}
+
+#' @export
+geo_is_empty.geo_rect <- function(x) {
+  geo_has_missing.geo_rect(x)
 }
 
 # ----- missing values (assigned in .onLoad) --------

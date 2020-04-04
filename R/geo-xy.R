@@ -1,13 +1,18 @@
 
 #' Create a coordinate vector
 #'
+#' The [geo_xy()] type is useful as an efficient representation of points
+#' stored using column vectors. Note that `geo_xy(NA, NA)` is considered
+#' an "empty" point rather than a "missing" point (see [geo_is_missing()]
+#' and [geo_is_empty()]).
+#'
 #' @param x,y x and y coordinates
 #'
 #' @return A [new_geo_xy()]
 #' @export
 #'
 #' @examples
-#' geo_xy(0:5, 1:6)
+#' geo_plot(geo_xy(0:5, 1:6))
 #'
 geo_xy <- function(x = double(), y = double()) {
   new_geo_xy(vec_recycle_common(x = vec_cast(x, double()), y = vec_cast(y, double())))
