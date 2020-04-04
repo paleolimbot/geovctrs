@@ -3,8 +3,8 @@
 #include "geos-coords.h"
 using namespace Rcpp;
 
-class HasMissingOperator: public UnaryVectorOperator<LogicalVector, bool> {
-  bool operateNext(GEOSGeometry* geometry) {
+class HasMissingOperator: public UnaryVectorOperator<LogicalVector, int> {
+  int operateNext(GEOSGeometry* geometry) {
     if (GEOSisEmpty_r(this->context, geometry)) {
       return false;
     } else {
@@ -26,8 +26,8 @@ LogicalVector cpp_has_missing(SEXP x) {
   return op.operate();
 }
 
-class IsFiniteOperator: public UnaryVectorOperator<LogicalVector, bool> {
-  bool operateNext(GEOSGeometry* geometry) {
+class IsFiniteOperator: public UnaryVectorOperator<LogicalVector, int> {
+  int operateNext(GEOSGeometry* geometry) {
     if (GEOSisEmpty_r(this->context, geometry)) {
       return true;
     } else {

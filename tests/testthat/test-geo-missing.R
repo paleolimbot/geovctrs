@@ -1,17 +1,26 @@
 
+test_that("built-in missing values are missing", {
+  expect_true(is.na(NA_wkt_))
+  expect_true(is.na(NA_wkb_))
+  expect_true(is.na(NA_collection_))
+  expect_true(is.na(NA_xy_))
+  expect_true(is.na(NA_segment_))
+  expect_true(is.na(NA_rect_))
+})
+
 test_that("geo_is_missing works", {
-  expect_true(geo_is_missing(geo_xy()[NA_integer_]))
+  expect_true(geo_is_missing(NA_xy_))
   expect_true(geo_is_missing(geo_xy(NA, NA)))
   expect_false(geo_is_missing(geo_xy(NA, 1)))
 
-  expect_true(geo_is_missing(geo_segment()[NA_integer_]))
+  expect_true(geo_is_missing(NA_segment_))
   expect_false(geo_is_missing(geo_segment(geo_xy(NA, NA), geo_xy(NA, NA), srid = 1)))
   expect_false(geo_is_missing(geo_segment(geo_xy(1, NA), geo_xy(NA, NA))))
   expect_false(geo_is_missing(geo_segment(geo_xy(NA, 1), geo_xy(NA, NA))))
   expect_false(geo_is_missing(geo_segment(geo_xy(NA, NA), geo_xy(1, NA))))
   expect_false(geo_is_missing(geo_segment(geo_xy(NA, NA), geo_xy(NA, 1))))
 
-  expect_true(geo_is_missing(geo_rect()[NA_integer_]))
+  expect_true(geo_is_missing(NA_rect_))
   expect_false(geo_is_missing(geo_rect(NA, NA, NA, NA, srid = 1)))
   expect_false(geo_is_missing(geo_rect(1, NA, NA, NA)))
   expect_false(geo_is_missing(geo_rect(NA, 1, NA, NA)))
@@ -20,12 +29,14 @@ test_that("geo_is_missing works", {
 })
 
 test_that("geo_has_missing works", {
+  expect_identical(geo_has_missing(geo_wkt(NA)), NA)
   expect_false(geo_has_missing(geo_wkt("POINT (30 10)")))
   expect_true(geo_has_missing(geo_wkt("POINT (30 nan)")))
   expect_true(geo_has_missing(geo_wkt("POINT (nan 10)")))
   # tricky corner case...GEOS considers this empty
   expect_true(geo_has_missing(geo_wkt("POINT (nan nan)")))
 
+  expect_identical(geo_has_missing(NA_wkb_), NA)
   expect_true(geo_has_missing(as_geo_wkb(geo_wkt("LINESTRING (nan 1, 2 3)"))))
   expect_true(geo_has_missing(as_geo_wkb(geo_wkt("LINESTRING (1 1, 2 nan)"))))
   expect_false(geo_has_missing(as_geo_wkb(geo_wkt("LINESTRING (1 1, 2 3)"))))
@@ -51,6 +62,7 @@ test_that("geo_has_missing works", {
 })
 
 test_that("geo_is_finite works", {
+  expect_identical(geo_is_finite(geo_wkt(NA)), NA)
   expect_true(geo_is_finite(geo_wkt("POINT (30 10)")))
   expect_false(geo_is_finite(geo_wkt("POINT (30 nan)")))
   expect_false(geo_is_finite(geo_wkt("POINT (nan 10)")))
@@ -61,6 +73,8 @@ test_that("geo_is_finite works", {
   expect_false(geo_is_finite(geo_wkt("POINT (nan nan)")))
   expect_false(geo_is_finite(geo_wkt("MULTIPOINT (nan nan)")))
 
+  NA_wkb_ <- NA_wkb_
+  expect_identical(geo_is_finite(NA_wkb_), NA)
   expect_false(geo_is_finite(as_geo_wkb(geo_wkt("LINESTRING (nan 1, 2 3)"))))
   expect_false(geo_is_finite(as_geo_wkb(geo_wkt("LINESTRING (1 1, 2 nan)"))))
   expect_true(geo_is_finite(as_geo_wkb(geo_wkt("LINESTRING EMPTY"))))

@@ -71,7 +71,7 @@ geo_has_missing.geovctr <- function(x) {
 
 #' @export
 geo_has_missing.geo_wkt <- function(x) {
-  grepl("nan", vec_data(x))
+  grepl_na("nan", vec_data(x))
 }
 
 #' @export
@@ -115,7 +115,7 @@ geo_is_finite.geovctr <- function(x) {
 
 #' @export
 geo_is_finite.geo_wkt <- function(x) {
-  !grepl("inf|nan", vec_data(x))
+  !grepl_na("inf|nan", vec_data(x))
 }
 
 #' @export
@@ -142,3 +142,29 @@ geo_is_finite.geo_rect <- function(x) {
     is.finite(field(x, "xmax")) &
     is.finite(field(x, "ymax"))
 }
+
+# ----- missing values (assigned in .onLoad) --------
+
+#' @rdname geo_is_missing
+#' @export
+NA_wkt_ <- NULL
+
+#' @rdname geo_is_missing
+#' @export
+NA_wkb_ <- NULL
+
+#' @rdname geo_is_missing
+#' @export
+NA_collection_ <- NULL
+
+#' @rdname geo_is_missing
+#' @export
+NA_xy_ <- NULL
+
+#' @rdname geo_is_missing
+#' @export
+NA_segment_ <- NULL
+
+#' @rdname geo_is_missing
+#' @export
+NA_rect_ <- NULL

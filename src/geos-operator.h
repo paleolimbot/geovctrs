@@ -33,6 +33,7 @@ public:
   virtual void initProvider(SEXP provider, SEXP exporter);
   virtual SEXP operate();
   virtual GEOSGeometry* operateNext(GEOSGeometry* geometry) = 0;
+  virtual GEOSGeometry* operateNextNULL();
 
 private:
   void initBase();
@@ -63,6 +64,7 @@ public:
   virtual void initProvider(SEXP provider);
   virtual SEXP operate();
   virtual ScalarType operateNext(GEOSGeometry* geometry) = 0;
+  virtual ScalarType operateNextNULL();
   virtual SEXP assemble();
 
 private:
@@ -122,7 +124,13 @@ SEXP UnaryVectorOperator<VectorType, ScalarType>::operate() {
       checkUserInterrupt();
       this->counter = i;
       geometry = this->provider->getNext();
-      result = this->operateNext(geometry);
+
+      if (geometry == NULL) {
+        result = this->operateNextNULL();
+      } else {
+        result = this->operateNext(geometry);
+      }
+
       this->data[i] = result;
     }
   } catch(std::exception e) {
@@ -132,6 +140,11 @@ SEXP UnaryVectorOperator<VectorType, ScalarType>::operate() {
 
   this->finish();
   return this->finishBase();
+}
+
+template <class VectorType, class ScalarType>
+ScalarType UnaryVectorOperator<VectorType, ScalarType>::operateNextNULL() {
+  return VectorType::get_na();
 }
 
 template <class VectorType, class ScalarType>

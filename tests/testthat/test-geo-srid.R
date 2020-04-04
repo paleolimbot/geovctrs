@@ -26,10 +26,10 @@ test_that("SRID extraction works", {
 })
 
 test_that("misssing values have missing SRIDs", {
-  expect_identical(geo_srid(geo_wkt()[NA_integer_]), NA_integer_)
-  expect_identical(geo_srid(geo_wkb()[NA_integer_]), NA_integer_)
-  expect_identical(geo_srid(geo_collection()[NA_integer_]), NA_integer_)
-  expect_identical(geo_srid(geo_xy()[NA_integer_]), NA_integer_)
-  expect_identical(geo_srid(geo_segment()[NA_integer_]), NA_integer_)
-  expect_identical(geo_srid(geo_rect()[NA_integer_]), NA_integer_)
+  expect_identical(geo_srid(NA_wkt_), NA_integer_)
+  expect_identical(geo_srid(NA_wkb_), NA_integer_)
+  expect_identical(geo_srid(NA_collection_), NA_integer_)
+  expect_identical(geo_srid(NA_xy_), NA_integer_)
+  expect_identical(geo_srid(NA_segment_), NA_integer_)
+  expect_identical(geo_srid(NA_rect_), NA_integer_)
 })

@@ -108,3 +108,10 @@ summarise_srids <- function(srids) {
 
   final_srid
 }
+
+grepl_na <- function(pattern, x, ...) {
+  result <- grepl(pattern, x, ...)
+  result[is.na(x)] <- NA
+  result
+}
+

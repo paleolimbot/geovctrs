@@ -75,7 +75,13 @@ SEXP UnaryGeometryOperator::operate() {
       checkUserInterrupt();
       this->counter = i;
       geometry = this->provider->getNext();
-      result = this->operateNext(geometry);
+
+      if (geometry == NULL) {
+        result = this->operateNextNULL();
+      } else {
+        result = this->operateNext(geometry);
+      }
+
       this->exporter->putNext(result);
     }
   } catch(Rcpp::exception e) {
@@ -85,6 +91,10 @@ SEXP UnaryGeometryOperator::operate() {
 
   this->finish();
   return this->finishBase();
+}
+
+GEOSGeometry* UnaryGeometryOperator::operateNextNULL() {
+  return NULL;
 }
 
 SEXP UnaryGeometryOperator::finishBase() {

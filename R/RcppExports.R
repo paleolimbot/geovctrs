@@ -25,8 +25,12 @@ cpp_is_finite <- function(x) {
     .Call(`_geovctrs_cpp_is_finite`, x)
 }
 
-cpp_version_impl <- function() {
-    .Call(`_geovctrs_cpp_version_impl`)
+cpp_get_srid <- function(x) {
+    .Call(`_geovctrs_cpp_get_srid`, x)
+}
+
+cpp_set_srid <- function(x, srid) {
+    .Call(`_geovctrs_cpp_set_srid`, x, srid)
 }
 
 cpp_is_empty <- function(data) {
@@ -41,20 +45,16 @@ cpp_geom_type_id <- function(x) {
     .Call(`_geovctrs_cpp_geom_type_id`, x)
 }
 
-cpp_get_srid <- function(x) {
-    .Call(`_geovctrs_cpp_get_srid`, x)
-}
-
-cpp_set_srid <- function(x, srid) {
-    .Call(`_geovctrs_cpp_set_srid`, x, srid)
-}
-
 cpp_n_geometries <- function(x) {
     .Call(`_geovctrs_cpp_n_geometries`, x)
 }
 
 cpp_n_coordinates <- function(x) {
     .Call(`_geovctrs_cpp_n_coordinates`, x)
+}
+
+cpp_version_impl <- function() {
+    .Call(`_geovctrs_cpp_version_impl`)
 }
 
 cpp_validate_provider <- function(data) {
