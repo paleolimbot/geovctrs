@@ -6,7 +6,12 @@
 #' them in R. The [geo_is_missing()] function can be used to identify
 #' these values, similar to [is.na()]. Missing coordinates (`NA` or `NaN`)
 #' can be identified using [geo_has_missing()], and [geo_is_finite()]
-#' can be used to ensure that all coordinates are finite.
+#' can be used to ensure that all coordinates are finite. Note that
+#' `geo_xy(NA, NA)`, `geo_wkt("POINT (nan nan)")`, and
+#' `geo_wkt("MULTIPOINT (nan nan)")` are all considered empty points,
+#' and are therefore non-misssing, contain no missing coordinates, and
+#' are finite (use `is.na()` and/or [stringr::str_detect()]) if you
+#' would like to detect these cases.
 #'
 #' @inheritParams geo_bbox
 #'
@@ -53,6 +58,11 @@ geo_is_missing.default <- function(x) {
   is.na(as_geovctr(x))
 }
 
+#' @export
+geo_is_missing.geo_xy <- function(x) {
+  rep_len(FALSE, vec_size(x))
+}
+
 #' @rdname geo_is_missing
 #' @export
 geo_has_missing <- function(x) {
@@ -70,13 +80,9 @@ geo_has_missing.geovctr <- function(x) {
 }
 
 #' @export
-geo_has_missing.geo_wkt <- function(x) {
-  grepl_na("nan", vec_data(x))
-}
-
-#' @export
 geo_has_missing.geo_xy <- function(x) {
-  is.na(field(x, "x")) | is.na(field(x, "y"))
+  # treat NA, NA as an empty point
+  !is.na(x) & (is.na(field(x, "x")) | is.na(field(x, "y")))
 }
 
 #' @export
@@ -115,11 +121,6 @@ geo_is_finite.default <- function(x) {
 #' @export
 geo_is_finite.geovctr <- function(x) {
   cpp_is_finite(x)
-}
-
-#' @export
-geo_is_finite.geo_wkt <- function(x) {
-  !grepl_na("inf|nan", vec_data(x))
 }
 
 #' @export

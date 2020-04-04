@@ -293,7 +293,7 @@ GEOSGeometry* XYProvider::getNext() {
   GEOSGeometry* geometry;
 
   if (NumericVector::is_na(x[this->counter]) && NumericVector::is_na(x[this->counter])) {
-    geometry = NULL;
+    geometry = GEOSGeom_createEmptyPoint_r(this->context);
   } else {
     GEOSCoordSequence* seq = GEOSCoordSeq_create_r(this->context, 1, 2);
     GEOSCoordSeq_setX_r(this->context, seq, 0, x[this->counter]);

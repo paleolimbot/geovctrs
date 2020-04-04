@@ -213,10 +213,8 @@ test_that("xy conversion works", {
   expect_identical(cpp_convert(xy, geo_collection()), collection)
   expect_identical(cpp_convert(collection, geo_xy()), xy)
 
-  # handling of NA, NaN, inf
-  # GEOS doesn't differentiate between POINT (nan nan) and POINT EMPTY,
-  # we handle this through missing values for XY
-  expect_equal(cpp_convert(geo_xy(NA, NA), geo_wkt()), geo_wkt(NA))
+  # empty points are also NA points
+  expect_equal(cpp_convert(geo_xy(NA, NA), geo_wkt()), geo_wkt("POINT EMPTY"))
   expect_equal(cpp_convert(geo_xy(-Inf, Inf), geo_wkt()), geo_wkt("POINT (-inf inf)"))
 
   expect_equal(cpp_convert(geo_wkt("POINT (nan nan)"), geo_xy()),  geo_xy(NA, NA))
@@ -268,10 +266,11 @@ test_that("missings are propogated through conversions between wkt, wkb, and col
   expect_identical(cpp_convert(NA_collection_, geo_xy()), NA_xy_)
   expect_identical(cpp_convert(NA_collection_, geo_segment()), NA_segment_)
 
-  expect_identical(cpp_convert(NA_xy_, geo_wkt()), NA_wkt_)
-  expect_identical(cpp_convert(NA_xy_, geo_wkb()), NA_wkb_)
-  expect_identical(cpp_convert(NA_xy_, geo_collection()), NA_collection_)
-  expect_identical(cpp_convert(NA_xy_, geo_segment()), NA_segment_)
+  # NA_xy_ is POINT EMPTY
+  expect_identical(cpp_convert(NA_xy_, geo_wkt()), geo_wkt("POINT EMPTY"))
+  # hang tight for empty point handling in  WKB
+  # expect_identical(cpp_convert(NA_xy_, geo_wkb()), NA_wkb_)
+  expect_identical(cpp_convert(NA_xy_, geo_collection()), geo_point(geo_xy()))
 
   expect_identical(cpp_convert(NA_segment_, geo_wkt()), NA_wkt_)
   expect_identical(cpp_convert(NA_segment_, geo_wkb()), NA_wkb_)
