@@ -95,7 +95,10 @@ test_that("wkb casting and coersion works", {
 
 test_that("geo_wkb can handle empty (multi)points", {
   expect_identical(as_geo_wkt(as_geo_wkb(geo_wkt("POINT EMPTY"))), geo_wkt("POINT EMPTY"))
+  expect_identical(as_geo_wkt(as_geo_wkb(geo_wkt("POINT (nan nan)"))), geo_wkt("POINT EMPTY"))
   expect_identical(as_geo_wkt(as_geo_wkb(geo_wkt("MULTIPOINT EMPTY"))), geo_wkt("MULTIPOINT EMPTY"))
+  # "MULTIPOINT (nan nan)" currently cannot be written to WKB
+  # expect_identical(as_geo_wkt(as_geo_wkb(geo_wkt("MULTIPOINT (nan nan)"))), geo_wkt("MULTIPOINT EMPTY"))
   expect_identical(as_geo_xy(as_geo_wkb(geo_xy(NA, NA))), geo_xy(NA, NA))
   expect_identical(as_geo_collection(as_geo_wkb(geo_point(geo_xy()))), geo_point(geo_xy()))
 })

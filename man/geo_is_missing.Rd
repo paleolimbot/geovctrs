@@ -5,6 +5,7 @@
 \alias{geo_is_missing}
 \alias{geo_has_missing}
 \alias{geo_is_finite}
+\alias{geo_is_empty}
 \alias{NA_wkt_}
 \alias{NA_wkb_}
 \alias{NA_collection_}
@@ -19,6 +20,8 @@ geo_is_missing(x)
 geo_has_missing(x)
 
 geo_is_finite(x)
+
+geo_is_empty(x)
 
 NA_wkt_
 

@@ -153,6 +153,27 @@ geo_is_finite.geo_rect <- function(x) {
   result
 }
 
+#' @rdname geo_is_missing
+#' @export
+geo_is_empty <- function(x) {
+  UseMethod("geo_is_empty")
+}
+
+#' @export
+geo_is_empty.default <- function(x) {
+  geo_is_empty(as_geovctr(x))
+}
+
+#' @export
+geo_is_empty.geovctr <- function(x) {
+  cpp_is_empty(x)
+}
+
+#' @export
+geo_is_empty.geo_xy <- function(x) {
+  is.na(field(x, "x")) &  is.na(field(x, "y"))
+}
+
 # ----- missing values (assigned in .onLoad) --------
 
 #' @rdname geo_is_missing

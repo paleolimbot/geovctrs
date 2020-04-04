@@ -314,7 +314,7 @@ void XYProvider::init(GEOSContextHandle_t context) {
 GEOSGeometry* XYProvider::getNext() {
   GEOSGeometry* geometry;
 
-  if (NumericVector::is_na(x[this->counter]) && NumericVector::is_na(x[this->counter])) {
+  if (NumericVector::is_na(x[this->counter]) && NumericVector::is_na(y[this->counter])) {
     geometry = GEOSGeom_createEmptyPoint_r(this->context);
   } else {
     GEOSCoordSequence* seq = GEOSCoordSeq_create_r(this->context, 1, 2);

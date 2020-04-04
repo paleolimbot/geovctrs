@@ -21,19 +21,6 @@ public:
   virtual char operateNextGEOS(GEOSGeometry* geometry) = 0;
 };
 
-class IsEmptyOperator: public UnaryPredicateOperator {
-  char operateNextGEOS(GEOSGeometry* geometry) {
-    return GEOSisEmpty_r(this->context, geometry);
-  }
-};
-
-// [[Rcpp::export]]
-LogicalVector cpp_is_empty(SEXP data) {
-  IsEmptyOperator op;
-  op.initProvider(data);
-  return op.operate();
-}
-
 class HasZOperator: public UnaryPredicateOperator {
   char operateNextGEOS(GEOSGeometry* geometry) {
     return GEOSHasZ_r(this->context, geometry);

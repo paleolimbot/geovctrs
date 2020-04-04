@@ -75,6 +75,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cpp_is_empty
+LogicalVector cpp_is_empty(SEXP data);
+RcppExport SEXP _geovctrs_cpp_is_empty(SEXP dataSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type data(dataSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_is_empty(data));
+    return rcpp_result_gen;
+END_RCPP
+}
 // cpp_get_srid
 IntegerVector cpp_get_srid(SEXP x);
 RcppExport SEXP _geovctrs_cpp_get_srid(SEXP xSEXP) {
@@ -95,17 +106,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type srid(sridSEXP);
     rcpp_result_gen = Rcpp::wrap(cpp_set_srid(x, srid));
-    return rcpp_result_gen;
-END_RCPP
-}
-// cpp_is_empty
-LogicalVector cpp_is_empty(SEXP data);
-RcppExport SEXP _geovctrs_cpp_is_empty(SEXP dataSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type data(dataSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_is_empty(data));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -182,9 +182,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_envelope", (DL_FUNC) &_geovctrs_cpp_envelope, 2},
     {"_geovctrs_cpp_has_missing", (DL_FUNC) &_geovctrs_cpp_has_missing, 1},
     {"_geovctrs_cpp_is_finite", (DL_FUNC) &_geovctrs_cpp_is_finite, 1},
+    {"_geovctrs_cpp_is_empty", (DL_FUNC) &_geovctrs_cpp_is_empty, 1},
     {"_geovctrs_cpp_get_srid", (DL_FUNC) &_geovctrs_cpp_get_srid, 1},
     {"_geovctrs_cpp_set_srid", (DL_FUNC) &_geovctrs_cpp_set_srid, 2},
-    {"_geovctrs_cpp_is_empty", (DL_FUNC) &_geovctrs_cpp_is_empty, 1},
     {"_geovctrs_cpp_has_z", (DL_FUNC) &_geovctrs_cpp_has_z, 1},
     {"_geovctrs_cpp_geom_type_id", (DL_FUNC) &_geovctrs_cpp_geom_type_id, 1},
     {"_geovctrs_cpp_n_geometries", (DL_FUNC) &_geovctrs_cpp_n_geometries, 1},

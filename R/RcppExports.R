@@ -25,16 +25,16 @@ cpp_is_finite <- function(x) {
     .Call(`_geovctrs_cpp_is_finite`, x)
 }
 
+cpp_is_empty <- function(data) {
+    .Call(`_geovctrs_cpp_is_empty`, data)
+}
+
 cpp_get_srid <- function(x) {
     .Call(`_geovctrs_cpp_get_srid`, x)
 }
 
 cpp_set_srid <- function(x, srid) {
     .Call(`_geovctrs_cpp_set_srid`, x, srid)
-}
-
-cpp_is_empty <- function(data) {
-    .Call(`_geovctrs_cpp_is_empty`, data)
 }
 
 cpp_has_z <- function(data) {

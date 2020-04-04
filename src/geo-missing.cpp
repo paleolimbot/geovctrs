@@ -48,3 +48,18 @@ LogicalVector cpp_is_finite(SEXP x) {
   op.initProvider(x);
   return op.operate();
 }
+
+class IsEmptyOperator: public UnaryVectorOperator<LogicalVector, bool> {
+public:
+
+  bool operateNext(GEOSGeometry* geometry)  {
+    return GEOSisEmpty_r(this->context, geometry);
+  }
+};
+
+// [[Rcpp::export]]
+LogicalVector cpp_is_empty(SEXP data) {
+  IsEmptyOperator op;
+  op.initProvider(data);
+  return op.operate();
+}
