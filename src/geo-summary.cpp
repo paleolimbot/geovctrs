@@ -43,7 +43,13 @@ IntegerVector cpp_n_coordinates(SEXP x) {
 
 class CoordinateDimensionsOperator: public UnaryVectorOperator<IntegerVector, int> {
   int operateNext(GEOSGeometry* geometry) {
-    return GEOSGeom_getCoordinateDimension_r(this->context, geometry);
+    // the behaviour of this changed between GEOS 3.5 and 3.7, but
+    // currently empty geometries have 3 dimensions
+    if (GEOSisEmpty_r(this->context, geometry)) {
+      return 3;
+    } else {
+      return GEOSGeom_getCoordinateDimension_r(this->context, geometry);
+    }
   }
 };
 
