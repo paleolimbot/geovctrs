@@ -45,10 +45,17 @@ missing values are a concept of the in-memory vectors used to store
 them in R. The \code{\link[=geo_is_missing]{geo_is_missing()}} function can be used to identify
 these values, similar to \code{\link[=is.na]{is.na()}}. Missing coordinates (\code{NA} or \code{NaN})
 can be identified using \code{\link[=geo_has_missing]{geo_has_missing()}}, and \code{\link[=geo_is_finite]{geo_is_finite()}}
-can be used to ensure that all coordinates are finite.
+can be used to ensure that all coordinates are finite. Note that
+\code{geo_xy(NA, NA)}, \code{geo_wkt("POINT (nan nan)")}, and
+\code{geo_wkt("MULTIPOINT (nan nan)")} are all considered empty points,
+and are therefore non-misssing, contain no missing coordinates, and
+are finite (use \code{is.na()} and/or \code{\link[stringr:str_detect]{stringr::str_detect()}}) if you
+would like to detect these cases.
 }
 \examples{
 geo_is_missing(NA_wkt_)
+geo_has_missing(NA_wkt_)
+geo_is_finite(NA_wkt_)
 
 geo_is_missing(geo_wkt("LINESTRING (10 inf, nan 2)"))
 geo_has_missing(geo_wkt("LINESTRING (10 inf, nan 2)"))
@@ -63,9 +70,8 @@ geo_is_missing(geo_wkt("LINESTRING EMPTY"))
 geo_has_missing(geo_wkt("LINESTRING EMPTY"))
 geo_is_finite(geo_wkt("LINESTRING EMPTY"))
 
-# POINT EMPTY and POINT (nan nan) are tricky corner
-# cases that currently behave unpredictably depending on
-# the storage type
+# POINT EMPTY, POINT (nan nan), and geo_xy(NA, NA)
+# are all empty points
 geo_is_missing(geo_wkt("POINT EMPTY"))
 geo_has_missing(geo_wkt("POINT EMPTY"))
 geo_is_finite(geo_wkt("POINT EMPTY"))
