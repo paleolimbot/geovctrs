@@ -1,5 +1,5 @@
 
-#' Missing geometries, missing coordinates and non-finite geometries
+#' Missing, empty, and non-finite geometries
 #'
 #' Whereas EMPTY geometries are a concept at the geometry level,
 #' missing values are a concept of the in-memory vectors used to store

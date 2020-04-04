@@ -37,10 +37,6 @@ cpp_set_srid <- function(x, srid) {
     .Call(`_geovctrs_cpp_set_srid`, x, srid)
 }
 
-cpp_has_z <- function(data) {
-    .Call(`_geovctrs_cpp_has_z`, data)
-}
-
 cpp_geom_type_id <- function(x) {
     .Call(`_geovctrs_cpp_geom_type_id`, x)
 }
@@ -51,6 +47,10 @@ cpp_n_geometries <- function(x) {
 
 cpp_n_coordinates <- function(x) {
     .Call(`_geovctrs_cpp_n_coordinates`, x)
+}
+
+cpp_coordinate_dimensions <- function(x) {
+    .Call(`_geovctrs_cpp_coordinate_dimensions`, x)
 }
 
 cpp_version_impl <- function() {

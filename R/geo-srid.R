@@ -7,7 +7,9 @@
 #' formats store an integer spatial reference identifier (SRID)
 #' with each feature to propogate this information through
 #' calculations. The difference between 0 and `NA` is
-#' murky at the moment.
+#' murky at the moment, but it's likely that 0 will mean
+#' "not specified" and `NA` will mean "inherit the other
+#' guy's SRID!.
 #'
 #' @inheritParams geo_bbox
 #' @param srid A spatial reference identifier, coerced to

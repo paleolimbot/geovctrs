@@ -2,38 +2,6 @@
 #include "geos-operator.h"
 using namespace Rcpp;
 
-class UnaryPredicateOperator: public UnaryVectorOperator<LogicalVector, bool> {
-public:
-
-  bool operateNext(GEOSGeometry* geometry)  {
-    char result = this->operateNextGEOS(geometry);
-    if (result == 2) {
-      stop("Exception on binary predicate");
-    } else if (result == 1) {
-      return true;
-    } else if (result == 0) {
-      return  false;
-    } else {
-      stop("Unknown output from binary predicate");
-    }
-  }
-
-  virtual char operateNextGEOS(GEOSGeometry* geometry) = 0;
-};
-
-class HasZOperator: public UnaryPredicateOperator {
-  char operateNextGEOS(GEOSGeometry* geometry) {
-    return GEOSHasZ_r(this->context, geometry);
-  }
-};
-
-// [[Rcpp::export]]
-LogicalVector cpp_has_z(SEXP data) {
-  HasZOperator op;
-  op.initProvider(data);
-  return op.operate();
-}
-
 class GeomTypeIdOperator: public UnaryVectorOperator<IntegerVector, int> {
   int operateNext(GEOSGeometry* geometry) {
     return GEOSGeomTypeId_r(this->context, geometry);
@@ -69,6 +37,19 @@ class GetNumCoordinatesOperator: public UnaryVectorOperator<IntegerVector, int> 
 // [[Rcpp::export]]
 IntegerVector cpp_n_coordinates(SEXP x) {
   GetNumCoordinatesOperator op;
+  op.initProvider(x);
+  return op.operate();
+}
+
+class CoordinateDimensionsOperator: public UnaryVectorOperator<IntegerVector, int> {
+  int operateNext(GEOSGeometry* geometry) {
+    return GEOSGeom_getCoordinateDimension_r(this->context, geometry);
+  }
+};
+
+// [[Rcpp::export]]
+IntegerVector cpp_coordinate_dimensions(SEXP x) {
+  CoordinateDimensionsOperator op;
   op.initProvider(x);
   return op.operate();
 }

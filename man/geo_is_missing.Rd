@@ -12,7 +12,7 @@
 \alias{NA_xy_}
 \alias{NA_segment_}
 \alias{NA_rect_}
-\title{Missing geometries, missing coordinates and non-finite geometries}
+\title{Missing, empty, and non-finite geometries}
 \format{An object of class \code{geo_wkt} (inherits from \code{geovctr}, \code{vctrs_vctr}) of length 1.}
 \usage{
 geo_is_missing(x)

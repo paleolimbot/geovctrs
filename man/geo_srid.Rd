@@ -34,7 +34,9 @@ be implemented in other packages. However, most geometry
 formats store an integer spatial reference identifier (SRID)
 with each feature to propogate this information through
 calculations. The difference between 0 and \code{NA} is
-murky at the moment.
+murky at the moment, but it's likely that 0 will mean
+"not specified" and \code{NA} will mean "inherit the other
+guy's SRID!.
 }
 \examples{
 # two points with an SRID
