@@ -53,6 +53,7 @@ jobs:
         if: runner.os == 'MacOS'
         run: |
           brew install geos
+          brew install cairo
           brew cask install xquartz
 
       - name: Install system dependencies (Linux)
