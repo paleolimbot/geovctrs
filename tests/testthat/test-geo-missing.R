@@ -43,17 +43,20 @@ test_that("geo_has_missing works", {
   expect_true(geo_has_missing(as_geo_wkb(geo_wkt("LINESTRING (nan nan, nan nan)"))))
   expect_true(geo_has_missing(as_geo_wkb(geo_wkt("POLYGON ((1 1, nan nan, nan nan, 1 1))"))))
 
+  expect_identical(geo_has_missing(NA_xy_), NA)
   expect_true(geo_has_missing(geo_xy(NA, NA)))
   expect_true(geo_has_missing(geo_xy(NA, 1)))
   expect_true(geo_has_missing(geo_xy(1, NA)))
   expect_false(geo_has_missing(geo_xy(1, 1)))
 
+  expect_identical(geo_has_missing(NA_segment_), NA)
   expect_true(geo_has_missing(geo_segment(geo_xy(NA, NA), geo_xy(NA, NA))))
   expect_true(geo_has_missing(geo_segment(geo_xy(1, NA), geo_xy(NA, NA))))
   expect_true(geo_has_missing(geo_segment(geo_xy(1, 1), geo_xy(NA, NA))))
   expect_true(geo_has_missing(geo_segment(geo_xy(1, 1), geo_xy(1, NA))))
   expect_false(geo_has_missing(geo_segment(geo_xy(1, 1), geo_xy(1, 1))))
 
+  expect_identical(geo_has_missing(NA_rect_), NA)
   expect_true(geo_has_missing(geo_rect(NA, NA, NA, NA)))
   expect_true(geo_has_missing(geo_rect(1, NA, NA, NA)))
   expect_true(geo_has_missing(geo_rect(1, 1, NA, NA)))
@@ -90,6 +93,7 @@ test_that("geo_is_finite works", {
   expect_false(geo_is_finite(geo_xy(1, -Inf)))
   expect_true(geo_is_finite(geo_xy(1, 1)))
 
+  expect_identical(geo_is_finite(NA_segment_), NA)
   expect_false(geo_is_finite(geo_segment(geo_xy(NA, NA), geo_xy(NA, NA))))
   expect_false(geo_is_finite(geo_segment(geo_xy(1, NA), geo_xy(NA, NA))))
   expect_false(geo_is_finite(geo_segment(geo_xy(1, 1), geo_xy(NA, NA))))
@@ -97,6 +101,7 @@ test_that("geo_is_finite works", {
   expect_false(geo_is_finite(geo_segment(geo_xy(1, 1), geo_xy(Inf, 1))))
   expect_true(geo_is_finite(geo_segment(geo_xy(1, 1), geo_xy(1, 1))))
 
+  expect_identical(geo_is_finite(NA_rect_), NA)
   expect_false(geo_is_finite(geo_rect(NA, NA, NA, NA)))
   expect_false(geo_is_finite(geo_rect(1, NA, NA, NA)))
   expect_false(geo_is_finite(geo_rect(1, 1, NA, NA)))

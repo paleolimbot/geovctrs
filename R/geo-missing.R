@@ -14,7 +14,7 @@
 #' @export
 #'
 #' @examples
-#' geo_is_missing(geo_wkt()[NA_integer_])
+#' geo_is_missing(NA_wkt_)
 #'
 #' geo_is_missing(geo_wkt("LINESTRING (10 inf, nan 2)"))
 #' geo_has_missing(geo_wkt("LINESTRING (10 inf, nan 2)"))
@@ -83,18 +83,22 @@ geo_has_missing.geo_xy <- function(x) {
 geo_has_missing.geo_segment <- function(x) {
   start <- field(x, "start")
   end <- field(x, "end")
-  is.na(field(start, "x")) |
+  result <- is.na(field(start, "x")) |
     is.na(field(start, "y")) |
     is.na(field(end, "x")) |
     is.na(field(end, "y"))
+  result[is.na(x)] <- NA
+  result
 }
 
 #' @export
 geo_has_missing.geo_rect <- function(x) {
-  is.na(field(x, "xmin")) |
+  result <- is.na(field(x, "xmin")) |
     is.na(field(x, "ymin")) |
     is.na(field(x, "xmax")) |
     is.na(field(x, "ymax"))
+  result[is.na(x)] <- NA
+  result
 }
 
 #' @rdname geo_is_missing
@@ -129,18 +133,22 @@ geo_is_finite.geo_xy <- function(x) {
 geo_is_finite.geo_segment <- function(x) {
   start <- field(x, "start")
   end <- field(x, "end")
-  is.finite(field(start, "x")) &
+  result <- is.finite(field(start, "x")) &
     is.finite(field(start, "y")) &
     is.finite(field(end, "x")) &
     is.finite(field(end, "y"))
+  result[is.na(x)] <- NA
+  result
 }
 
 #' @export
 geo_is_finite.geo_rect <- function(x) {
-  is.finite(field(x, "xmin")) &
+  result <- is.finite(field(x, "xmin")) &
     is.finite(field(x, "ymin")) &
     is.finite(field(x, "xmax")) &
     is.finite(field(x, "ymax"))
+  result[is.na(x)] <- NA
+  result
 }
 
 # ----- missing values (assigned in .onLoad) --------
