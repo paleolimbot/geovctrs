@@ -40,7 +40,11 @@
 
 
 <meta property="og:title" content="Line segments — geo_segment" />
-<meta property="og:description" content="Line segments" />
+<meta property="og:description" content="The geo_segment() type is useful as an efficient representation of
+line segments stored using column vectors.
+Note that geo_segment(geo_xy(NA, NA), geo_xy(NA, NA)) is considered
+an &quot;empty&quot; linestring, whereas geo_segment(geo_xy(NA, NA), geo_xy(NA, NA), srid = NA)
+is &quot;missing&quot; (see geo_is_missing() and geo_is_empty())." />
 
 
 
@@ -114,7 +118,11 @@
     </div>
 
     <div class="ref-description">
-    <p>Line segments</p>
+    <p>The <code>geo_segment()</code> type is useful as an efficient representation of
+line segments stored using column vectors.
+Note that <code>geo_segment(geo_xy(NA, NA), geo_xy(NA, NA))</code> is considered
+an "empty" linestring, whereas <code>geo_segment(geo_xy(NA, NA), geo_xy(NA, NA), srid = NA)</code>
+is "missing" (see <code><a href='geo_is_missing.html'>geo_is_missing()</a></code> and <code><a href='geo_is_missing.html'>geo_is_empty()</a></code>).</p>
     </div>
 
     <pre class="usage"><span class='fu'>geo_segment</span>(<span class='kw'>start</span> <span class='kw'>=</span> <span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(), <span class='kw'>end</span> <span class='kw'>=</span> <span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(), <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>

@@ -40,7 +40,13 @@
 
 
 <meta property="og:title" content="Rectangles — geo_rect" />
-<meta property="og:description" content="Rectangles" />
+<meta property="og:description" content="The geo_rect() type is useful as an efficient representation of
+rectangles stored using column vectors.
+Note that if any of xmin, ymin, xmax, or ymax are missing
+the rectangle is interpreted as an empty polygon, whereas
+geo_rect(NA, NA, NA, NA, srid = NA)
+is &quot;missing&quot; (see geo_is_missing() and geo_is_empty()). Infinite
+values (Inf and -Inf) can be used." />
 
 
 
@@ -114,7 +120,13 @@
     </div>
 
     <div class="ref-description">
-    <p>Rectangles</p>
+    <p>The <code>geo_rect()</code> type is useful as an efficient representation of
+rectangles stored using column vectors.
+Note that if any of <code>xmin</code>, <code>ymin</code>, <code>xmax</code>, or <code>ymax</code> are missing
+the rectangle is interpreted as an empty polygon, whereas
+<code>geo_rect(NA, NA, NA, NA, srid = NA)</code>
+is "missing" (see <code><a href='geo_is_missing.html'>geo_is_missing()</a></code> and <code><a href='geo_is_missing.html'>geo_is_empty()</a></code>). Infinite
+values (<code>Inf</code> and <code>-Inf</code>) can be used.</p>
     </div>
 
     <pre class="usage"><span class='fu'>geo_rect</span>(
@@ -147,8 +159,7 @@ and should be managed outside of geovctrs except for
     <p>A <code><a href='new_geo_rect.html'>new_geo_rect()</a></code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>geo_rect</span>(<span class='kw'>xmin</span> <span class='kw'>=</span> <span class='fl'>0</span>:<span class='fl'>5</span>, <span class='kw'>ymin</span> <span class='kw'>=</span> <span class='fl'>0</span>:<span class='fl'>5</span>, <span class='kw'>xmax</span> <span class='kw'>=</span> <span class='fl'>2</span>:<span class='fl'>7</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='fl'>2</span>:<span class='fl'>7</span>)</div><div class='output co'>#&gt; &lt;geo_rect[6]&gt;
-#&gt; [1] (0 0)x(2 2) (1 1)x(3 3) (2 2)x(4 4) (3 3)x(5 5) (4 4)x(6 6) (5 5)x(7 7)</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'><a href='geo_plot.html'>geo_plot</a></span>(<span class='fu'>geo_rect</span>(<span class='kw'>xmin</span> <span class='kw'>=</span> <span class='fl'>0</span>:<span class='fl'>5</span>, <span class='kw'>ymin</span> <span class='kw'>=</span> <span class='fl'>0</span>:<span class='fl'>5</span>, <span class='kw'>xmax</span> <span class='kw'>=</span> <span class='fl'>2</span>:<span class='fl'>7</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='fl'>2</span>:<span class='fl'>7</span>))</div><div class='img'><img src='geo_rect-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
