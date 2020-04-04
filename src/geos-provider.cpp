@@ -200,14 +200,19 @@ void WKBGeometryExporter::putNext(GEOSGeometry* geometry) {
 
     // GEOSWKBWriter won't deal with POINT EMPTY, but we handle in the same way
     // as sf (GEOSWKBReader seems to have no problem with this solution)
-    // TODO: handle SRID...
+    // TODO: handle SRID, multiple dimensions
     if (GEOSisEmpty_r(this->context, geometry) &&
         GEOSGeomTypeId_r(this->context, geometry) == GEOSGeomTypes::GEOS_POINT) {
       size_t size = 21;
       const unsigned char buf[] = {
-        0x01, 0x01, 0x00, 0x00, 0x00, 0xa2, 0x07, 0x00, 0x00,
-        0x00, 0x00, 0xf0, 0x7f, 0xa2, 0x07, 0x00, 0x00, 0x00, 0x00, 0xf0,
-        0x7f
+        // little endian
+        0x01,
+        // geometry type: point 2D
+        0x01, 0x00, 0x00, 0x00,
+        // x coordinate
+        0xa2, 0x07, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x7f,
+        // y coordinate
+        0xa2, 0x07, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x7f
       };
       RawVector raw(size);
       memcpy(&(raw[0]), buf, size);
