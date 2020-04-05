@@ -21,15 +21,23 @@ geo_print <- function(x, ..., short = FALSE, col  = TRUE) {
 #' @export
 geo_print.default <- function(x, ..., short = FALSE, col  = TRUE) {
   geo_print(as_geovctr(x), ..., short = short, col = col)
+  invisible(x)
 }
 
 #' @export
 geo_print.geovctr <- function(x, ..., short = FALSE, col  = TRUE) {
   cat(paste0("<", class(x)[1], "[", vec_size(x), "]>\n"))
 
-  # using for() so the user can cancel
-  for (i in seq_len(vec_size(x))) {
-    cat(paste0("[", i, "] ", geo_format(x[i], short = short, col  = col), "\n"))
+  if (rlang::is_named(x) || !col) {
+    out <- stats::setNames(geo_format(x, ..., short = short, col = FALSE), names(x))
+    print(out, quote = FALSE)
+  } else {
+    summary <- geo_summary(x)
+    print_default_colour(
+      geo_format_summary(summary, class(x), short = short, col = FALSE),
+      geo_format_summary(summary, class(x), short = short, col = TRUE),
+      ...
+    )
   }
 
   invisible(x)
@@ -53,8 +61,11 @@ geo_format.geovctr <- function(x, ..., short = FALSE, col = FALSE) {
   }
 
   summary <- geo_summary(x)
+  geo_format_summary(summary, class(x), short = short, col = col)
+}
 
-  na <- format_na_type(x, col = col)
+geo_format_summary <- function(summary, class, short, col) {
+  na <- format_na_type(class, col = col)
   sym <- maybe_grey(
     geometry_type_symbol(
       summary$geometry_type,
@@ -84,7 +95,7 @@ geo_format.geovctr <- function(x, ..., short = FALSE, col = FALSE) {
   )
 
   ifelse(
-    geo_is_missing(x),
+    is.na(summary$is_empty),
     na,
     paste0(sym, n_sub_geom_str, " ", coord_str)
   )
@@ -93,6 +104,37 @@ geo_format.geovctr <- function(x, ..., short = FALSE, col = FALSE) {
 # dymamically exported...see zzz.R
 pillar_shaft.geovctr <- function(x, ...) {
   pillar::new_pillar_shaft_simple(geo_format(x, short = TRUE, col = TRUE))
+}
+
+
+print_default_colour <- function(x_no_col, x_col, width = getOption("width")) {
+  if (length(x_no_col) == 0) {
+    return()
+  }
+
+  # calulate widths
+  label_width <- nchar(length(x_no_col)) + 3
+  max_item_width <- max(nchar(x_no_col))
+  item_width <- max((width + 1 - label_width) %/% (max_item_width + 1), 1)
+  item_rows <- ((length(x_no_col) - 1) %/% item_width) + 1
+
+  # make everything max width
+  x_col <- str_pad_col_right(x_no_col, x_col, width = max_item_width)
+
+  for (row in seq_len(item_rows)) {
+    first_index <- ((row - 1) * item_width) + 1
+    last_index <- min(first_index + item_width - 1, length(x_no_col))
+    cat(
+      paste0(
+        str_pad_right(paste0("[", first_index, "]"), width = label_width),
+        paste0(
+          x_col[first_index:last_index],
+          collapse = " "
+        ),
+        "\n"
+      )
+    )
+  }
 }
 
 geometry_type_symbol <- function(type, use_z, short = FALSE) {
@@ -119,8 +161,8 @@ geometry_type_symbol <- function(type, use_z, short = FALSE) {
   )
 }
 
-format_na_type <- function(x, col = TRUE) {
-  maybe_red(paste0("NA_", gsub("geo_", "", class(x)[1]), "_"), col = col)
+format_na_type <- function(class, col = TRUE) {
+  maybe_red(paste0("NA_", gsub("geo_", "", class[1]), "_"), col = col)
 }
 
 is_multi_geometry_type <- function(type) {
@@ -149,4 +191,20 @@ maybe_grey <- function(..., col = TRUE) {
   } else {
     paste0(...)
   }
+}
+
+str_pad_col_right <- function(x_no_col, x_col, width, pad = " ") {
+  ifelse(
+    nchar(x_no_col) < width,
+    paste0(x_col, strrep(pad, width - nchar(x_no_col))),
+    x_col
+  )
+}
+
+str_pad_right <- function(x, width, pad = " ") {
+  ifelse(
+    nchar(x) < width,
+    paste0(x, strrep(pad, width - nchar(x))),
+    x
+  )
 }
