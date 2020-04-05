@@ -86,16 +86,39 @@
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
-<p>Convert between formats (notice how each format has a nice print method!):</p>
+<p>This package has reasonable <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code> and <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> methods for WKB and WKT types, and provides a <a href="https://vctrs.r-lib.org/">vctrs</a> implementation for these types so that they âjust workâ with <a href="https://tibble.tidyverse.org/">tibble</a>, <a href="https://tidyr.tidyverse.org/">tidyr</a>, and <a href="https://dplyr.tidyverse.org/">dplyr</a> (&gt;=1.0.0) (among others).</p>
 <div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="reference/geo_wkt.html">geo_wkt</a></span>(<span class="st">"LINESTRING (30 10, 10 30, 40 40)"</span>)
 <span class="co">#&gt; &lt;geo_wkt[1]&gt;</span>
 <span class="co">#&gt; [1] LINESTRING (30 10, 10 30, 40 40)</span>
 <span class="fu"><a href="reference/new_geo_wkb.html">as_geo_wkb</a></span>(<span class="fu"><a href="reference/geo_wkt.html">geo_wkt</a></span>(<span class="st">"LINESTRING (30 10, 10 30, 40 40)"</span>))
-<span class="co">#&gt; &lt;geo_wkb [1]&gt;</span>
-<span class="co">#&gt; &lt;raw [57]&gt;</span></pre></div>
-<p>Plot geometry vectors in any format!</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="reference/geo_plot.html">geo_plot</a></span>(<span class="fu"><a href="reference/geo_wkt.html">geo_wkt</a></span>(<span class="st">"LINESTRING (30 10, 10 30, 40 40)"</span>))</pre></div>
+<span class="co">#&gt; &lt;geo_wkb[1]&gt;</span>
+<span class="co">#&gt; [1] &lt;LINESTRING&gt;{3} (10 10...40 40)</span>
+<span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">wkt</span> <span class="kw">=</span> <span class="fu"><a href="reference/geo_wkt.html">geo_wkt</a></span>(<span class="st">"LINESTRING (30 10, 10 30, 40 40)"</span>))
+<span class="co">#&gt; # A tibble: 1 x 1</span>
+<span class="co">#&gt;   wkt                   </span>
+<span class="co">#&gt;   &lt;wkt&gt;                 </span>
+<span class="co">#&gt; 1 &lt;/&gt;{3} (10 10...40 40)</span></pre></div>
+<p>Most methods work on anything that can be interpreted as geometry, including character vectors and data.frames containing exactly one geometry column.</p>
+<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="reference/geo_plot.html">geo_plot</a></span>(<span class="st">"LINESTRING (30 10, 10 30, 40 40)"</span>)</pre></div>
 <p><img src="reference/figures/README-ex-plot-1.png" width="100%"></p>
+<p>Like any self-respecting geometry package, geovctrs contains a copy of the North Carolina dataset to play with:</p>
+<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span>(<span class="no">geo_nc</span>)
+<span class="co">#&gt; # A tibble: 100 x 12</span>
+<span class="co">#&gt;    geometry                                              NWBIR79 SID79</span>
+<span class="co">#&gt;    &lt;wkb&gt;                                                   &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 &lt;â³â½&gt;[1]{27} (-81.74107 36.23436...-81.23989 36.58965)      19     0</span>
+<span class="co">#&gt;  2 &lt;â³â½&gt;[1]{26} (-81.34754 36.36536...-80.90344 36.57286)      12     3</span>
+<span class="co">#&gt;  3 &lt;â³â½&gt;[1]{28} (-80.96577 36.23388...-80.43531 36.56521)     260     6</span>
+<span class="co">#&gt;  4 &lt;â³â½&gt;[3]{38} (-76.33025 36.07282...-75.77316 36.55716)     145     2</span>
+<span class="co">#&gt;  5 &lt;â³â½&gt;[1]{34} (-77.90121 36.16277...-77.07531 36.55629)    1197     3</span>
+<span class="co">#&gt;  6 &lt;â³â½&gt;[1]{22} (-77.21767 36.23024...-76.70750 36.55629)    1237     5</span>
+<span class="co">#&gt;  7 &lt;â³â½&gt;[1]{24} (-76.56358 36.16973...-75.95718 36.55606)     139     2</span>
+<span class="co">#&gt;  8 &lt;â³â½&gt;[1]{17} (-76.95367 36.29452...-76.46035 36.55525)     371     2</span>
+<span class="co">#&gt;  9 &lt;â³â½&gt;[1]{14} (-78.32125 36.19595...-77.89886 36.55294)     844     2</span>
+<span class="co">#&gt; 10 &lt;â³â½&gt;[1]{6} (-80.45301 36.25023...-80.02406 36.55104)      176     5</span>
+<span class="co">#&gt; # â¦ with 90 more rows, and 9 more variables: BIR79 &lt;dbl&gt;, NWBIR74 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   SID74 &lt;dbl&gt;, BIR74 &lt;dbl&gt;, CRESS_ID &lt;int&gt;, FIPSNO &lt;dbl&gt;, FIPS &lt;chr&gt;,</span>
+<span class="co">#&gt; #   NAME &lt;chr&gt;, CNTY_ID &lt;dbl&gt;</span></pre></div>
 </div>
 </div>
   </div>
