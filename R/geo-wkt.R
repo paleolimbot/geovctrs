@@ -77,7 +77,7 @@ format.geo_wkt <- function(x, ..., trunc_width = 40, col = FALSE) {
   formatted <- ifelse(
     geom_type_match != -1,
     paste0(
-      maybe_green(substr(abbreved, geom_type_start, geom_type_end), col = col),
+      maybe_grey(substr(abbreved, geom_type_start, geom_type_end), col = col),
       maybe_blue(substr(abbreved, geom_type_end + 1, trunc_width), col = col)
     ),
     maybe_blue(abbreved, col = col)
@@ -88,6 +88,18 @@ format.geo_wkt <- function(x, ..., trunc_width = 40, col = FALSE) {
     maybe_red("NA_wkt_", col = col),
     formatted
   )
+}
+
+#' @export
+obj_print_data.geo_wkt <- function(x, ...) {
+  if (length(x) == 0) {
+    return()
+  }
+
+  out <- paste0("[", seq_along(x), "] ", format(x, col = TRUE), collapse = "\n")
+  cat(out)
+  cat("\n")
+  invisible(x)
 }
 
 #' @rdname new_geo_wkt

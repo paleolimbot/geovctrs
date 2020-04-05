@@ -107,3 +107,19 @@ geo_coordinate_dimensions.default <- function(x) {
 geo_coordinate_dimensions.geovctr <- function(x) {
   cpp_coordinate_dimensions(x)
 }
+
+#' @rdname geo_summary
+#' @export
+geo_first_coordinate <- function(x) {
+  UseMethod("geo_first_coordinate")
+}
+
+#' @export
+geo_first_coordinate.default <- function(x) {
+  geo_first_coordinate(as_geovctr(x))
+}
+
+#' @export
+geo_first_coordinate.geovctr <- function(x) {
+  cpp_first_coordinate(x)
+}

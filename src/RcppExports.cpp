@@ -153,6 +153,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cpp_first_coordinate
+SEXP cpp_first_coordinate(SEXP x);
+RcppExport SEXP _geovctrs_cpp_first_coordinate(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_first_coordinate(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // cpp_version_impl
 std::string cpp_version_impl();
 RcppExport SEXP _geovctrs_cpp_version_impl() {
@@ -189,6 +200,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_n_geometries", (DL_FUNC) &_geovctrs_cpp_n_geometries, 1},
     {"_geovctrs_cpp_n_coordinates", (DL_FUNC) &_geovctrs_cpp_n_coordinates, 1},
     {"_geovctrs_cpp_coordinate_dimensions", (DL_FUNC) &_geovctrs_cpp_coordinate_dimensions, 1},
+    {"_geovctrs_cpp_first_coordinate", (DL_FUNC) &_geovctrs_cpp_first_coordinate, 1},
     {"_geovctrs_cpp_version_impl", (DL_FUNC) &_geovctrs_cpp_version_impl, 0},
     {"_geovctrs_cpp_validate_provider", (DL_FUNC) &_geovctrs_cpp_validate_provider, 1},
     {NULL, NULL, 0}

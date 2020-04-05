@@ -53,9 +53,10 @@ geo_format.geovctr <- function(x, ..., short = FALSE, col = FALSE) {
   }
 
   summary <- geo_summary(x)
+  summary$first_point <- geo_first_coordinate(x)
 
   na <- format_na_type(x, col = col)
-  sym <- maybe_green(
+  sym <- maybe_grey(
     geometry_type_symbol(
       summary$geometry_type,
       (summary$coordinate_dimensions == 3) & !summary$is_empty,
@@ -64,32 +65,29 @@ geo_format.geovctr <- function(x, ..., short = FALSE, col = FALSE) {
     col = col
   )
 
+  coord_str <- ifelse(
+    summary$is_empty,
+    maybe_grey("EMPTY", col = col),
+    ifelse(
+      summary$geometry_type == "point",
+      maybe_blue(format(geo_xy(field(summary$envelope, "xmin"), field(summary$envelope, "ymin"))), col = col),
+      paste0(
+        maybe_blue(format(summary$first_point), col = col),
+        maybe_grey("\U2026+", summary$n_coordinates - 1, col = col)
+      )
+    )
+  )
+
   n_sub_geom_str <- ifelse(
     is_multi_geometry_type(summary$geometry_type) & !summary$is_empty,
     maybe_grey(paste0("[", summary$n_geometries, "]"), col = col),
     ""
   )
 
-  n_coord_str <- ifelse(
-    summary$is_empty | grepl("point", summary$geometry_type),
-    "",
-    maybe_grey(paste0("{", summary$n_coordinates, "}"), col = col)
-  )
-
-  rect_str <- ifelse(
-    summary$is_empty,
-    maybe_yellow("EMPTY", col = col),
-    ifelse(
-      summary$geometry_type == "point",
-      maybe_blue(format(geo_xy(field(summary$envelope, "xmin"), field(summary$envelope, "ymin"))), col = col),
-      maybe_blue(format(summary$envelope), col = col)
-    )
-  )
-
   ifelse(
     geo_is_missing(x),
     na,
-    paste0(sym, n_sub_geom_str, n_coord_str, " ", rect_str)
+    paste0(sym, n_sub_geom_str, " ", coord_str)
   )
 }
 
@@ -108,7 +106,7 @@ geometry_type_symbol <- function(type, use_z, short = FALSE) {
       "multipoint" = "\U2234",
       "multilinestring" = "//",
       "multipolygon" = "\U25B3\U25BD",
-      "geometrycollection" = "\U2234, /, \U25B3"
+      "geometrycollection" = "<\U2234 / \U25B3>"
     )[type]
     txt <- unname(sym)
   } else {
@@ -117,8 +115,8 @@ geometry_type_symbol <- function(type, use_z, short = FALSE) {
 
   ifelse(
     use_z,
-    paste0("<", txt, " Z>"),
-    paste0("<", txt, ">")
+    paste0(txt, " Z"),
+    txt
   )
 }
 

@@ -152,7 +152,7 @@ SEXP UnaryOperator::operate() {
   } catch(Rcpp::exception e) {
     this->finish();
     throw e;
-  } catch(std::exception  e) {
+  } catch(std::exception e) {
     this->finish();
     throw e;
   }

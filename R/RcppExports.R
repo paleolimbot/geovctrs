@@ -53,6 +53,10 @@ cpp_coordinate_dimensions <- function(x) {
     .Call(`_geovctrs_cpp_coordinate_dimensions`, x)
 }
 
+cpp_first_coordinate <- function(x) {
+    .Call(`_geovctrs_cpp_first_coordinate`, x)
+}
+
 cpp_version_impl <- function() {
     .Call(`_geovctrs_cpp_version_impl`)
 }
