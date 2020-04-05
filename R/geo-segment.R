@@ -62,7 +62,7 @@ vec_ptype_abbr.geo_segment <- function(x, ...) {
 #' @export
 format.geo_segment <- function(x, ...) {
   sprintf(
-    "(%s %s)=>(%s %s)",
+    "(%s %s)\U2192(%s %s)",
     format(field(field(x, "start"), "x"), trim = TRUE, ...),
     format(field(field(x, "start"), "y"), trim = TRUE, ...),
     format(field(field(x, "end"), "x"), trim = TRUE, ...),

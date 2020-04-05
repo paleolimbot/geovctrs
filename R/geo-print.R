@@ -64,6 +64,14 @@ geo_format.geovctr <- function(x, ..., short = FALSE, col = FALSE) {
   geo_format_summary(summary, class(x), short = short, col = col)
 }
 
+#' @export
+as.character.geovctr <- function(x, ...) {
+  # this gives a better summary in the viewer than
+  # well-known text, and will eventually be very fast
+  format(x, ...)
+}
+
+
 geo_format_summary <- function(summary, class, short, col) {
   na <- format_na_type(class, col = col)
   sym <- maybe_grey(

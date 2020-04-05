@@ -19,3 +19,15 @@ test_that("geo_format works", {
   expect_output(print(tibble(geom = as_geo_wkb(wkts))), "tibble")
   expect_output(print(tibble(geom = as_geo_collection(wkts))), "tibble")
 })
+
+test_that("all geovctrs work in the RStudio viewer", {
+  if (FALSE) {
+    View(geo_nc)
+    View(tibble(as_geo_wkt(geo_nc$geometry)))
+    View(tibble(geo_envelope(geo_nc)))
+    View(geo_summary(geo_nc))
+    View(tibble(geo_segment(geo_xy(0, 0), geo_xy(12, 11))))
+  }
+
+  expect_true(TRUE)
+})

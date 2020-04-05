@@ -143,6 +143,14 @@ vec_cast.geo_wkt.character <- function(x, to, ...) {
   geo_wkt(x)
 }
 
+#' @export
+as.character.geo_wkt <- function(x, ...) {
+  # override default geovctr method, because this is more
+  # intuitive representation
+  vec_cast(x, character())
+}
+
+
 #' @method vec_cast.character geo_wkt
 #' @export
 vec_cast.character.geo_wkt <- function(x, to, ...) {
