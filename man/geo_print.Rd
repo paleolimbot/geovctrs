@@ -2,9 +2,12 @@
 % Please edit documentation in R/geo-print.R
 \name{geo_print}
 \alias{geo_print}
+\alias{geo_format}
 \title{Format and print geovctrs}
 \usage{
 geo_print(x, ..., short = FALSE, col = TRUE)
+
+geo_format(x, ..., short = FALSE, col = FALSE)
 }
 \arguments{
 \item{x}{A geometry-like object, or one that can be

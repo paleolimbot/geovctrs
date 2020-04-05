@@ -3,50 +3,109 @@
 #include "geos-coords.h"
 using namespace Rcpp;
 
+double min_reg(double x1i, double x2i) {
+  bool x1NA = NumericVector::is_na(x1i);
+  bool x2NA = NumericVector::is_na(x2i);
+  if (x1NA || x2NA) {
+    return NA_REAL;
+  } else {
+    return std::min(x1i, x2i);
+  }
+}
+
+double max_reg(double x1i, double x2i) {
+  bool x1NA = NumericVector::is_na(x1i);
+  bool x2NA = NumericVector::is_na(x2i);
+  if (x1NA || x2NA) {
+    return NA_REAL;
+  } else {
+    return std::max(x1i, x2i);
+  }
+}
+
+double min_na_rm(double x1i, double x2i) {
+  bool x1NA = NumericVector::is_na(x1i);
+  bool x2NA = NumericVector::is_na(x2i);
+  if (x1NA && x2NA) {
+    return R_PosInf;
+  } else if (x1NA || x2NA) {
+    return NA_REAL;
+  } else {
+    return std::min(x1i, x2i);
+  }
+}
+
+double max_na_rm(double x1i, double x2i) {
+  bool x1NA = NumericVector::is_na(x1i);
+  bool x2NA = NumericVector::is_na(x2i);
+  if (x1NA && x2NA) {
+    return R_NegInf;
+  } else if (x1NA || x2NA) {
+    return NA_REAL;
+  } else {
+    return std::max(x1i, x2i);
+  }
+}
+
 // [[Rcpp::export]]
 NumericVector pmin2(NumericVector x1, NumericVector x2)  {
   NumericVector out (x1.size());
-  double x1i, x2i;
-  bool x1NA, x2NA;
 
   for (size_t i=0; i<out.size(); i++) {
-    x1i = x1[i];
-    x2i = x2[i];
-    x1NA = NumericVector::is_na(x1i);
-    x2NA = NumericVector::is_na(x2i);
-    if (x1NA && x2NA) {
-      out[i] = R_PosInf;
-    } else if (x1NA || x2NA) {
-      out[i] = NA_REAL;
-    } else {
-      out[i] = std::min(x1i, x2i);
-    }
+    out[i] = min_na_rm(x1[i], x2[i]);
   }
 
   return out;
 }
 
+
+
 // [[Rcpp::export]]
 NumericVector pmax2(NumericVector x1, NumericVector x2)  {
   NumericVector out (x1.size());
-  double x1i, x2i;
-  bool x1NA, x2NA;
 
   for (size_t i=0; i<out.size(); i++) {
-    x1i = x1[i];
-    x2i = x2[i];
-    x1NA = NumericVector::is_na(x1i);
-    x2NA = NumericVector::is_na(x2i);
-    if (x1NA && x2NA) {
-      out[i] = R_NegInf;
-    } else if (x1NA || x2NA) {
-      out[i] = NA_REAL;
-    } else {
-      out[i] = std::max(x1i, x2i);
-    }
+    out[i] = max_na_rm(x1[i], x2[i]);
   }
 
   return out;
+}
+
+NumericVector bounds_from_coords(List item, bool naRm) {
+  if (Rf_inherits(item, "geo_collection")) {
+    List features = item["feature"];
+    NumericVector bounds = NumericVector::create(R_PosInf, R_PosInf, R_NegInf, R_NegInf);
+    if (naRm) {
+      for (size_t i=0; i<features.size(); i++) {
+        NumericVector itemBounds = bounds_from_coords(features[i], naRm);
+        bounds[0] = min_na_rm(bounds[0], itemBounds[0]);
+        bounds[1] = min_na_rm(bounds[1], itemBounds[1]);
+        bounds[2] = max_na_rm(bounds[2], itemBounds[2]);
+        bounds[3] = max_na_rm(bounds[3], itemBounds[3]);
+      }
+    } else {
+      for (size_t i=0; i<features.size(); i++) {
+        NumericVector itemBounds = bounds_from_coords(features[i], naRm);
+        bounds[0] = min_reg(bounds[0], itemBounds[0]);
+        bounds[1] = min_reg(bounds[1], itemBounds[1]);
+        bounds[2] = max_reg(bounds[2], itemBounds[2]);
+        bounds[3] = max_reg(bounds[3], itemBounds[3]);
+      }
+    }
+
+    return bounds;
+  } else {
+    List xy = item["xy"];
+    NumericVector x = as<NumericVector>(xy["x"]);
+    NumericVector y = as<NumericVector>(xy["y"]);
+
+    if (naRm) {
+      x = x[!is_na(x)];
+      y = y[!is_na(y)];
+    }
+
+    return NumericVector::create(min(x), min(y), max(x), max(y));
+  }
 }
 
 class EnvelopeOperator: public UnaryOperator {
@@ -100,19 +159,12 @@ public:
       srid = GEOSGetSRID_r(this->context, geometry);
     } else {
       List coords = geometry_to_geo_coord(context, geometry);
-      List xy = coords["xy"];
-      NumericVector x = as<NumericVector>(xy["x"]);
-      NumericVector y = as<NumericVector>(xy["y"]);
+      NumericVector bounds = bounds_from_coords(coords, this->naRm);
 
-      if (this->naRm) {
-        x = x[!is_na(x)];
-        y = y[!is_na(y)];
-      }
-
-      xmin1 = min(x);
-      ymin1 = min(y);
-      xmax1 = max(x);
-      ymax1 = max(y);
+      xmin1 = bounds[0];
+      ymin1 = bounds[1];
+      xmax1 = bounds[2];
+      ymax1 = bounds[3];
       srid = GEOSGetSRID_r(this->context, geometry);
     }
 

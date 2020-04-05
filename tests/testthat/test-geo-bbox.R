@@ -17,6 +17,25 @@ test_that("envelope works", {
   )
 })
 
+test_that("envelope works with nested collections", {
+  nested_collection_wkt <- geo_wkt("GEOMETRYCOLLECTION (LINESTRING (0 0, 1 2, 6 4))")
+
+  expect_identical(
+    geo_envelope(geo_wkt("GEOMETRYCOLLECTION (LINESTRING (0 0, 1 2, 6 4))")),
+    geo_rect(0, 0, 6, 4)
+  )
+
+  expect_identical(
+    geo_envelope(geo_wkt("GEOMETRYCOLLECTION (LINESTRING (nan 0, 1 2, 6 4))"), na.rm = FALSE),
+    geo_rect(NA, 0, NA, 4)
+  )
+
+  expect_identical(
+    geo_envelope(geo_wkt("GEOMETRYCOLLECTION (LINESTRING (nan 0, 1 2, 6 4))"), na.rm = TRUE),
+    geo_rect(1, 0, 6, 4)
+  )
+})
+
 test_that("envelope works with corner cases", {
   expect_identical(geo_envelope(geo_xy()), geo_rect())
   expect_identical(geo_envelope(geo_xy(NA, NA), na.rm = FALSE), geo_rect(NA, NA, NA, NA))

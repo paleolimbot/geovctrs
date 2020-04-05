@@ -149,7 +149,10 @@ SEXP UnaryOperator::operate() {
       geometry = this->provider->getNext();
       this->operateNext(geometry);
     }
-  } catch(std::exception e) {
+  } catch(Rcpp::exception e) {
+    this->finish();
+    throw e;
+  } catch(std::exception  e) {
     this->finish();
     throw e;
   }

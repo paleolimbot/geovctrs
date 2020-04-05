@@ -54,7 +54,7 @@ validate_geo_collection <- function(x) {
 
 #' @export
 vec_ptype_abbr.geo_collection <- function(x, ...) {
-  "geo_clctn"
+  "clctn"
 }
 
 #' @export

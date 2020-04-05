@@ -24,7 +24,7 @@ coerced to a geometry-like object using \code{\link[=as_geovctr]{as_geovctr()}}.
 }
 \value{
 A \code{\link[tibble:tibble]{tibble::tibble()}} with columns \code{geometry_type}, \code{is_empty},
-\code{n_coordinates}, \code{envelope}, \code{srid}, and \code{dimensions}.
+\code{n_coordinates}, \code{srid}, \code{coordinate_dimensions}, and \code{envelope}.
 }
 \description{
 Feature-level geometry summaries

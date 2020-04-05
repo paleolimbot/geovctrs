@@ -133,7 +133,10 @@ SEXP UnaryVectorOperator<VectorType, ScalarType>::operate() {
 
       this->data[i] = result;
     }
-  } catch(std::exception e) {
+  } catch(Rcpp::exception e) {
+    this->finish();
+    throw e;
+  } catch(std::exception  e) {
     this->finish();
     throw e;
   }
