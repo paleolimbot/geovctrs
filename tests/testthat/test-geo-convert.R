@@ -2,11 +2,20 @@
 test_that("wkt conversion works", {
   wkt <- geo_wkt(c("POINT (30 10)", "POINT (20 20)"))
   wkt_roundtrip <- cpp_convert(wkt, new_geo_wkt())
-  expect_is(wkt_roundtrip, "geo_wkt")
-  expect_match(wkt_roundtrip, "^POINT")
-  expect_match(wkt_roundtrip[1], c("\\(30\\."))
-  expect_match(wkt_roundtrip[1], c("10\\.0+\\)"))
-  expect_match(wkt_roundtrip[2], c("\\(20\\."))
+  expect_identical(wkt_roundtrip, wkt)
+})
+
+test_that("conversion prototype args are used", {
+  wkt <- geo_wkt("POINT Z (10 11 12)")
+  expect_identical(
+    cpp_convert(wkt, geo_wkt(trim = FALSE, precision = 2)),
+    geo_wkt("POINT Z (10.00 11.00 12.00)")
+  )
+
+  expect_identical(
+    cpp_convert(wkt, geo_wkt(trim = FALSE, precision = 2, dimensions = 2)),
+    geo_wkt("POINT (10.00 11.00)")
+  )
 })
 
 test_that("wkb conversion works", {

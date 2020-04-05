@@ -101,15 +101,33 @@ size_t WKTGeometryProvider::size() {
 
 // --- WKT exporter
 
-WKTGeometryExporter::WKTGeometryExporter() {
+WKTGeometryExporter::WKTGeometryExporter(bool trim, int precision, int dimensions) {
+  this->trim = trim;
+  this->precision = precision;
+  this->dimensions = dimensions;
   this->counter = 0;
 }
 
 void WKTGeometryExporter::init(GEOSContextHandle_t context, size_t size) {
   this->context = context;
+
   this->wkt_writer = GEOSWKTWriter_create_r(context);
+  GEOSWKTWriter_setTrim_r(this->context, this->wkt_writer, this->trim);
+  GEOSWKTWriter_setRoundingPrecision_r(this->context, this->wkt_writer, this->precision);
+
+  if (!IntegerVector::is_na(this->dimensions)) {
+    GEOSWKTWriter_setOutputDimension_r(this->context, this->wkt_writer, this->dimensions);
+  }
+
   CharacterVector data(size);
   data.attr("class") = CharacterVector::create("geo_wkt", "geovctr", "vctrs_vctr");
+
+  // set these to the defaults rather than the input values, as they aren't
+  // used for reading (only writing)
+  data.attr("trim") = true;
+  data.attr("precision") =  IntegerVector::create(16);
+  data.attr("dimensions") = IntegerVector::get_na();
+
   this->data = data;
 }
 
@@ -117,6 +135,11 @@ void WKTGeometryExporter::putNext(GEOSGeometry* geometry) {
   if (geometry == NULL) {
     this->data[this->counter] = NA_STRING;
   } else {
+    if (IntegerVector::is_na(this->dimensions)) {
+      int featureDims = GEOSGeom_getCoordinateDimension_r(this->context, geometry);
+      GEOSWKTWriter_setOutputDimension_r(this->context, this->wkt_writer, featureDims);
+    }
+
     std::string wkt_single;
     wkt_single = GEOSWKTWriter_write_r(this->context, wkt_writer, geometry);
     this->data[this->counter] = wkt_single;
@@ -674,7 +697,14 @@ std::unique_ptr<GeometryProvider> resolve_provider(SEXP data) {
 
 std::unique_ptr<GeometryExporter> resolve_exporter(SEXP ptype) {
   if (Rf_inherits(ptype, "geo_wkt")) {
-    return std::unique_ptr<GeometryExporter> { new WKTGeometryExporter() };
+    CharacterVector data = (CharacterVector)ptype;
+    bool trim = data.attr("trim");
+    int precision = data.attr("precision");
+    int dimensions = data.attr("dimensions");
+
+    return std::unique_ptr<GeometryExporter> {
+      new WKTGeometryExporter(trim, precision, dimensions)
+    };
 
   } else if(Rf_inherits(ptype, "geo_wkb")) {
     return std::unique_ptr<GeometryExporter> { new WKBGeometryExporter() };

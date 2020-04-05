@@ -10,7 +10,12 @@
 \alias{vec_ptype2.geo_wkt}
 \title{S3 details for geo_wkt}
 \usage{
-new_geo_wkt(x = character())
+new_geo_wkt(
+  x = character(),
+  trim = TRUE,
+  precision = 16L,
+  dimensions = NA_integer_
+)
 
 is_geo_wkt(x)
 
@@ -26,6 +31,13 @@ as_geo_wkt(x, ...)
 }
 \arguments{
 \item{x}{A character vector containing well-known text}
+
+\item{trim}{Trim unnecessary zeroes in the output?}
+
+\item{precision}{The rounding precision to use when writing
+(number of decimal places).}
+
+\item{dimensions}{The number of dimensions to consider when r}
 
 \item{...}{Unused}
 

@@ -6,6 +6,11 @@
 #' To skip validation, use [new_geo_wkt()].
 #'
 #' @param x A character vector containing well-known text
+#' @param trim Trim unnecessary zeroes in the output?
+#' @param precision The rounding precision to use when writing
+#'  (number of decimal places).
+#' @param dimensions The number of dimensions to consider when r
+#'
 #'
 #' @return A [new_geo_wkt()]
 #' @export
@@ -13,9 +18,16 @@
 #' @examples
 #' geo_wkt("POINT (30 10)")
 #'
-geo_wkt <- function(x = character()) {
+geo_wkt <- function(x = character(), trim = TRUE, precision = 16, dimensions = NA) {
   x <- vec_cast(x, character())
-  wkt <- validate_geo_wkt(new_geo_wkt(x))
+  wkt <- validate_geo_wkt(
+    new_geo_wkt(
+      x,
+      trim = vec_cast(trim, logical()),
+      precision = vec_cast(precision, integer()),
+      dimensions = vec_cast(dimensions, integer())
+    )
+  )
   wkt
 }
 
@@ -33,9 +45,12 @@ geo_wkt <- function(x = character()) {
 #' wkt <- geo_wkt("POINT (30 10)")
 #' is_geo_wkt(wkt)
 #'
-new_geo_wkt <- function(x = character()) {
+new_geo_wkt <- function(x = character(), trim = TRUE, precision = 16L, dimensions = NA_integer_) {
   vec_assert(x, character())
-  new_vctr(x, class = c("geo_wkt", "geovctr"))
+  vec_assert(trim, logical())
+  vec_assert(precision, integer())
+  vec_assert(dimensions, integer())
+  new_vctr(x, class = c("geo_wkt", "geovctr"), trim = trim, precision = precision, dimensions = dimensions)
 }
 
 #' @rdname new_geo_wkt
@@ -114,7 +129,7 @@ as_geo_wkt <- function(x, ...) {
 #' @rdname new_geo_wkt
 #' @export
 as_geo_wkt.default <- function(x, ...) {
-  vec_cast(x, geo_wkt())
+  vec_cast(x, geo_wkt(...))
 }
 
 #' @method vec_cast geo_wkt
@@ -134,7 +149,11 @@ vec_cast.geo_wkt.default <- function(x, to, ...) {
 #' @method vec_cast.geo_wkt geo_wkt
 #' @export
 vec_cast.geo_wkt.geo_wkt <- function(x, to, ...) {
-  x
+  if (identical(attributes(x), attributes(to))) {
+    x
+  } else {
+    cpp_convert(x, to)
+  }
 }
 
 #' @method vec_cast.geo_wkt character
@@ -204,13 +223,14 @@ vec_ptype2.geo_wkt.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
 #' @method vec_ptype2.geo_wkt geo_wkt
 #' @export
 vec_ptype2.geo_wkt.geo_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  # always use default conversion args when combining to avoid loosing data
   geo_wkt()
 }
 
 #' @method vec_ptype2.geo_wkt geo_wkb
 #' @export
 vec_ptype2.geo_wkt.geo_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_wkt()
+  geo_wkb()
 }
 
 #' @method vec_ptype2.geo_wkt geo_collection

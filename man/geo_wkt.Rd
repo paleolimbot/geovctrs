@@ -4,10 +4,17 @@
 \alias{geo_wkt}
 \title{Create and validate well-known text}
 \usage{
-geo_wkt(x = character())
+geo_wkt(x = character(), trim = TRUE, precision = 16, dimensions = NA)
 }
 \arguments{
 \item{x}{A character vector containing well-known text}
+
+\item{trim}{Trim unnecessary zeroes in the output?}
+
+\item{precision}{The rounding precision to use when writing
+(number of decimal places).}
+
+\item{dimensions}{The number of dimensions to consider when r}
 }
 \value{
 A \code{\link[=new_geo_wkt]{new_geo_wkt()}}

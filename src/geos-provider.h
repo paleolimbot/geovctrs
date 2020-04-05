@@ -66,10 +66,13 @@ public:
 class WKTGeometryExporter: public GeometryExporter {
 public:
   CharacterVector data;
+  bool trim;
+  int precision;
+  int dimensions;
   GEOSWKTWriter *wkt_writer;
   size_t counter;
 
-  WKTGeometryExporter();
+  WKTGeometryExporter(bool trim, int precision, int dimensions);
   void init(GEOSContextHandle_t context, size_t size);
   void putNext(GEOSGeometry* geometry);
   SEXP finish();

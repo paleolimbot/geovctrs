@@ -49,10 +49,7 @@ test_that("coersion and casting works for wkt types", {
 
   wkb <- vec_cast(wkt, geo_wkb())
   wkt_roundtrip <- vec_cast(wkb, geo_wkt())
-
-  expect_match(wkt_roundtrip, "^POINT")
-  expect_match(wkt_roundtrip[1], c("\\(30\\."))
-  expect_match(wkt_roundtrip[1], c("10\\.0+\\)"))
+  expect_identical(wkt_roundtrip, wkt)
 
   expect_identical(vec_cast(wkt, geo_wkb()), wkb)
   expect_identical(as_geo_wkt(wkb), wkt_roundtrip)
