@@ -90,6 +90,9 @@ test_that("wkb writer options are respected", {
     geo_coordinate_dimensions(cpp_convert(geo_wkt("POINT Z (1 2 3)"), geo_wkb(dimensions = 3))),
     3L
   )
+
+  wkb <- as_geo_wkb(geo_wkt("POINT Z (1 2 3)"))
+  expect_identical(cpp_convert(wkb, geo_wkb(dimensions = 3)), wkb)
 })
 
 test_that("geo_point conversion works", {
