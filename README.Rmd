@@ -41,15 +41,23 @@ library(geovctrs)
 
 ## Example
 
-Convert between formats (notice how each format has a nice print method!):
+This package has reasonable `plot()` and `print()` methods for WKB and WKT types, and provides a [vctrs](https://vctrs.r-lib.org/) implementation for these types so that they "just work" with [tibble](https://tibble.tidyverse.org/), [tidyr](https://tidyr.tidyverse.org/), and [dplyr](https://dplyr.tidyverse.org/) (>=1.0.0) (among others).
 
 ```{r}
 geo_wkt("LINESTRING (30 10, 10 30, 40 40)")
 as_geo_wkb(geo_wkt("LINESTRING (30 10, 10 30, 40 40)"))
+tibble(wkt = geo_wkt("LINESTRING (30 10, 10 30, 40 40)"))
 ```
 
-Plot geometry vectors in any format!
+Most methods work on anything that can be interpreted as geometry, including character vectors and data.frames containing exactly one geometry column.
 
 ```{r ex-plot}
-geo_plot(geo_wkt("LINESTRING (30 10, 10 30, 40 40)"))
+geo_plot("LINESTRING (30 10, 10 30, 40 40)")
 ```
+
+Like any self-respecting geometry package, geovctrs contains a copy of the North Carolina dataset to play with:
+
+```{r}
+rev(geo_nc)
+```
+

@@ -57,6 +57,39 @@ vec_ptype_abbr.geo_wkt <- function(x, ...) {
   "wkt"
 }
 
+#' @export
+format.geo_wkt <- function(x, ..., trunc_width = 40, col = FALSE) {
+  # collapse whitespace, remove leading whitespace
+  x <- gsub("\\s+", " ", gsub("^\\s*", "", gsub("\\s*$", "", x)))
+  trunc <- substr(x, 1, trunc_width - 1)
+  width <- nchar(x)
+
+  abbreved <- ifelse(
+    width > (trunc_width - 1),
+    paste0(trunc, "\U2026"),
+    x
+  )
+
+  geom_type_match <- regexpr("[A-Z ]+", abbreved)
+  geom_type_start <- as.integer(geom_type_match)
+  geom_type_end <- geom_type_start + attr(geom_type_match, "match.length") - 1
+
+  formatted <- ifelse(
+    geom_type_match != -1,
+    paste0(
+      maybe_green(substr(abbreved, geom_type_start, geom_type_end), col = col),
+      maybe_blue(substr(abbreved, geom_type_end + 1, trunc_width), col = col)
+    ),
+    maybe_blue(abbreved, col = col)
+  )
+
+  ifelse(
+    is.na(x),
+    maybe_red("NA_wkt_", col = col),
+    formatted
+  )
+}
+
 #' @rdname new_geo_wkt
 #' @export
 as_geo_wkt <- function(x, ...) {

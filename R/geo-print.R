@@ -93,6 +93,11 @@ geo_format.geovctr <- function(x, ..., short = FALSE, col = FALSE) {
   )
 }
 
+# dymamically exported...see zzz.R
+pillar_shaft.geovctr <- function(x, ...) {
+  pillar::new_pillar_shaft_simple(geo_format(x, short = TRUE, col = TRUE))
+}
+
 geometry_type_symbol <- function(type, use_z, short = FALSE) {
   if (short) {
     sym <- c(
@@ -115,7 +120,6 @@ geometry_type_symbol <- function(type, use_z, short = FALSE) {
     paste0("<", txt, " Z>"),
     paste0("<", txt, ">")
   )
-
 }
 
 format_na_type <- function(x, col = TRUE) {
