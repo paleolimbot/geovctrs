@@ -16,6 +16,17 @@ test_that("conversion prototype args are used", {
     cpp_convert(wkt, geo_wkt(trim = FALSE, precision = 2, dimensions = 2)),
     geo_wkt("POINT (10.00 11.00)")
   )
+
+  # make sure casting applies args
+  expect_identical(
+    as_geo_wkt("POINT (10 11)", trim = FALSE, precision = 2),
+    geo_wkt("POINT (10.00 11.00)")
+  )
+
+  expect_identical(
+    as_geo_wkt(geo_wkt("POINT (10 11)"), trim = FALSE, precision = 2),
+    geo_wkt("POINT (10.00 11.00)")
+  )
 })
 
 test_that("wkb conversion works", {

@@ -159,7 +159,9 @@ vec_cast.geo_wkt.geo_wkt <- function(x, to, ...) {
 #' @method vec_cast.geo_wkt character
 #' @export
 vec_cast.geo_wkt.character <- function(x, to, ...) {
-  geo_wkt(x)
+  # by default, normalize the input (user can skirt this by calling
+  # geo_wkt() instead of as_geo_wkt()
+  cpp_convert(geo_wkt(x), to)
 }
 
 #' @export
