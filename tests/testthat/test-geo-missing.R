@@ -60,6 +60,28 @@ test_that("geo_has_missing works", {
   expect_false(geo_has_missing(geo_rect(1, 1, 1, 1)))
 })
 
+test_that("geo_has_missing works with nested collections", {
+  expect_false(
+    geo_has_missing(geo_wkt("GEOMETRYCOLLECTION (GEOMETRYCOLLECTION EMPTY)"))
+  )
+
+  expect_false(
+    geo_has_missing(geo_wkt("GEOMETRYCOLLECTION (LINESTRING (0 0, 1 2, 6 4))"))
+  )
+
+  expect_false(
+    geo_has_missing(geo_wkt("GEOMETRYCOLLECTION (LINESTRING (0 inf, 1 2, 6 4))"))
+  )
+
+  expect_true(
+    geo_has_missing(geo_wkt("GEOMETRYCOLLECTION (LINESTRING (nan 0, 1 2, 6 4))"))
+  )
+
+  expect_true(
+    geo_has_missing(geo_wkt("GEOMETRYCOLLECTION (LINESTRING (0 nan, 1 2, 6 4))"))
+  )
+})
+
 test_that("geo_is_finite works", {
   expect_identical(geo_is_finite(geo_wkt(NA)), NA)
   expect_true(geo_is_finite(geo_wkt("POINT (30 10)")))
@@ -95,6 +117,28 @@ test_that("geo_is_finite works", {
   expect_false(geo_is_finite(geo_rect(1, 1, NA, NA)))
   expect_false(geo_is_finite(geo_rect(1, 1, 1, NA)))
   expect_true(geo_is_finite(geo_rect(1, 1, 1, 1)))
+})
+
+test_that("geo_is_finite works with nested collections", {
+  expect_true(
+    geo_is_finite(geo_wkt("GEOMETRYCOLLECTION (GEOMETRYCOLLECTION EMPTY)"))
+  )
+
+  expect_true(
+    geo_is_finite(geo_wkt("GEOMETRYCOLLECTION (LINESTRING (0 0, 1 2, 6 4))"))
+  )
+
+  expect_false(
+    geo_is_finite(geo_wkt("GEOMETRYCOLLECTION (LINESTRING (nan 0, 1 2, 6 4))"))
+  )
+
+  expect_false(
+    geo_is_finite(geo_wkt("GEOMETRYCOLLECTION (LINESTRING (0 nan, 1 2, 6 4))"))
+  )
+
+  expect_false(
+    geo_is_finite(geo_wkt("GEOMETRYCOLLECTION (LINESTRING (0 inf, 1 2, 6 4))"))
+  )
 })
 
 test_that("geo_is_empty works", {

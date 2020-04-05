@@ -18,7 +18,10 @@ test_that("envelope works", {
 })
 
 test_that("envelope works with nested collections", {
-  nested_collection_wkt <- geo_wkt("GEOMETRYCOLLECTION (LINESTRING (0 0, 1 2, 6 4))")
+  expect_identical(
+    geo_envelope(geo_wkt("GEOMETRYCOLLECTION (GEOMETRYCOLLECTION EMPTY)")),
+    geo_rect(Inf, Inf, -Inf, -Inf)
+  )
 
   expect_identical(
     geo_envelope(geo_wkt("GEOMETRYCOLLECTION (LINESTRING (0 0, 1 2, 6 4))")),
