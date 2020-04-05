@@ -143,22 +143,6 @@ maybe_red <- function(..., col = TRUE) {
   }
 }
 
-maybe_yellow <- function(..., col = TRUE) {
-  if (col && crayon::has_color()) {
-    cli::col_yellow(...)
-  } else {
-    paste0(...)
-  }
-}
-
-maybe_green <- function(..., col = TRUE) {
-  if (col && crayon::has_color()) {
-    cli::col_green(...)
-  } else {
-    paste0(...)
-  }
-}
-
 maybe_grey <- function(..., col = TRUE) {
   if (col && crayon::has_color()) {
     cli::col_grey(...)
