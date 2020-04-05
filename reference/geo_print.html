@@ -117,7 +117,9 @@
     <p>Format and prints the <code><a href='geo_summary.html'>geo_summary()</a></code> of an geovctr.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>geo_print</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>short</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>geo_print</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>short</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='fu'>geo_format</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>short</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,8 +145,19 @@ coerced to a geometry-like object using <code><a href='is_geovctr.html'>as_geovc
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>geo_format</span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>geo_nc</span>))</div><div class='output co'>#&gt; <span class='error'>Error in geo_format(head(geo_nc)): could not find function "geo_format"</span></div><div class='input'><span class='fu'>geo_print</span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>geo_nc</span>))</div><div class='output co'>#&gt; <span class='error'>Error in UseMethod("geo_print"): no applicable method for 'geo_print' applied to an object of class "c('tbl_df', 'tbl', 'data.frame')"</span></div><div class='input'>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>geo_format</span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>geo_nc</span>))</div><div class='output co'>#&gt; [1] "&lt;MULTIPOLYGON&gt;[1]{27} (-81.74107 36.23436...-81.23989 36.58965)"
+#&gt; [2] "&lt;MULTIPOLYGON&gt;[1]{26} (-81.34754 36.36536...-80.90344 36.57286)"
+#&gt; [3] "&lt;MULTIPOLYGON&gt;[1]{28} (-80.96577 36.23388...-80.43531 36.56521)"
+#&gt; [4] "&lt;MULTIPOLYGON&gt;[3]{38} (-76.33025 36.07282...-75.77316 36.55716)"
+#&gt; [5] "&lt;MULTIPOLYGON&gt;[1]{34} (-77.90121 36.16277...-77.07531 36.55629)"
+#&gt; [6] "&lt;MULTIPOLYGON&gt;[1]{22} (-77.21767 36.23024...-76.70750 36.55629)"</div><div class='input'><span class='fu'>geo_print</span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>geo_nc</span>))</div><div class='output co'>#&gt; &lt;geo_wkb[6]&gt;
+#&gt; [1] <span style='color: #00BB00;'>&lt;MULTIPOLYGON&gt;</span><span style='color: #555555;'>[1]{27}</span><span> </span><span style='color: #0000BB;'>(-81.74107 36.23436...-81.23989 36.58965)</span><span>
+#&gt; [2] </span><span style='color: #00BB00;'>&lt;MULTIPOLYGON&gt;</span><span style='color: #555555;'>[1]{26}</span><span> </span><span style='color: #0000BB;'>(-81.34754 36.36536...-80.90344 36.57286)</span><span>
+#&gt; [3] </span><span style='color: #00BB00;'>&lt;MULTIPOLYGON&gt;</span><span style='color: #555555;'>[1]{28}</span><span> </span><span style='color: #0000BB;'>(-80.96577 36.23388...-80.43531 36.56521)</span><span>
+#&gt; [4] </span><span style='color: #00BB00;'>&lt;MULTIPOLYGON&gt;</span><span style='color: #555555;'>[3]{38}</span><span> </span><span style='color: #0000BB;'>(-76.33025 36.07282...-75.77316 36.55716)</span><span>
+#&gt; [5] </span><span style='color: #00BB00;'>&lt;MULTIPOLYGON&gt;</span><span style='color: #555555;'>[1]{34}</span><span> </span><span style='color: #0000BB;'>(-77.90121 36.16277...-77.07531 36.55629)</span><span>
+#&gt; [6] </span><span style='color: #00BB00;'>&lt;MULTIPOLYGON&gt;</span><span style='color: #555555;'>[1]{22}</span><span> </span><span style='color: #0000BB;'>(-77.21767 36.23024...-76.7075 36.55629)</span><span></div><div class='input'>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
