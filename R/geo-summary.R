@@ -4,7 +4,7 @@
 #' @inheritParams geo_bbox
 #'
 #' @return A [tibble::tibble()] with columns `geometry_type`, `is_empty`,
-#'   `n_coordinates`, `envelope`, `srid`, and `dimensions`.
+#'   `n_coordinates`, `srid`, `coordinate_dimensions`, and `envelope`.
 #' @export
 #'
 #' @examples

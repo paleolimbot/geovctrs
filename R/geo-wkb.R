@@ -74,20 +74,12 @@ vec_ptype_abbr.geo_wkb <- function(x, ...) {
 
 #' @export
 format.geo_wkb <- function(x, ...) {
-  lengths <- vapply(x, length, integer(1))
-  format(sprintf("<raw [%s]>", lengths), ...)
+  geo_format(x, ...)
 }
 
 #' @export
 print.geo_wkb <- function(x, ...) {
-  cat(
-    paste0(
-      sprintf("<geo_wkb [%s]>\n", length(x)),
-      format(x, ...)
-    )
-  )
-
-  invisible(x)
+  geo_print(x, ...)
 }
 
 #' @export

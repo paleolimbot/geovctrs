@@ -70,7 +70,7 @@ vec_ptype_abbr.geo_rect <- function(x, ...) {
 #' @export
 format.geo_rect <- function(x, ...) {
   sprintf(
-    "(%s %s)x(%s %s)",
+    "(%s %s...%s %s)",
     format(field(x, "xmin"), trim = TRUE, ...),
     format(field(x, "ymin"), trim = TRUE, ...),
     format(field(x, "xmax"), trim = TRUE, ...),
