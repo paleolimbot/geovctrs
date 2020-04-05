@@ -4,7 +4,7 @@
 #' @inheritParams geo_bbox
 #'
 #' @return A [tibble::tibble()] with columns `geometry_type`, `is_empty`,
-#'   `n_coordinates`, `srid`, `coordinate_dimensions`, and `envelope`.
+#'   `n_coordinates`, `srid`, `coordinate_dimensions`, and `first_coordinate`.
 #' @export
 #'
 #' @examples
@@ -36,7 +36,7 @@ geo_summary.geovctr <- function(x) {
     n_geometries =  geo_n_geometries(x),
     srid = geo_srid(x),
     coordinate_dimensions = geo_coordinate_dimensions(x),
-    envelope = geo_envelope(x)
+    first_coordinate = geo_first_coordinate(x)
   )
 }
 

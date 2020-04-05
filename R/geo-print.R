@@ -53,7 +53,6 @@ geo_format.geovctr <- function(x, ..., short = FALSE, col = FALSE) {
   }
 
   summary <- geo_summary(x)
-  summary$first_point <- geo_first_coordinate(x)
 
   na <- format_na_type(x, col = col)
   sym <- maybe_grey(
@@ -70,9 +69,9 @@ geo_format.geovctr <- function(x, ..., short = FALSE, col = FALSE) {
     maybe_grey("EMPTY", col = col),
     ifelse(
       summary$geometry_type == "point",
-      maybe_blue(format(geo_xy(field(summary$envelope, "xmin"), field(summary$envelope, "ymin"))), col = col),
+      maybe_blue(format(summary$first_coordinate), col = col),
       paste0(
-        maybe_blue(format(summary$first_point), col = col),
+        maybe_blue(format(summary$first_coordinate), col = col),
         maybe_grey("\U2026+", summary$n_coordinates - 1, col = col)
       )
     )

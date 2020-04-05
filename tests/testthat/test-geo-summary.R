@@ -37,7 +37,7 @@ test_that("geo_summary components methods work", {
     n_geometries =  geo_n_geometries(x),
     srid = geo_srid(x),
     coordinate_dimensions = geo_coordinate_dimensions(x),
-    envelope = geo_envelope(x)
+    first_coordinate = geo_first_coordinate(x)
   )
 
   expect_identical(summary_manual, geo_summary(geo_wkt(x)))
