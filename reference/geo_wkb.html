@@ -123,7 +123,7 @@ To skip validation, use <code><a href='new_geo_wkb.html'>new_geo_wkb()</a></code
 the result of <code>vec_cast(list(...), .ptype = raw())</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>geo_wkb</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+    <pre class="usage"><span class='fu'>geo_wkb</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>include_srid</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>dimensions</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>endian</span> <span class='kw'>=</span> <span class='fl'>NA</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -132,6 +132,22 @@ the result of <code>vec_cast(list(...), .ptype = raw())</code>.</p>
       <th>x</th>
       <td><p>A <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code> of <code><a href='https://rdrr.io/r/base/raw.html'>raw()</a></code> objects, each of which
 represent well-known binary</p></td>
+    </tr>
+    <tr>
+      <th>include_srid</th>
+      <td><p>Use <code>TRUE</code> to always include, <code>FALSE</code>
+to never include, or <code>NA</code> to only include if the SRID
+is non-zero.</p></td>
+    </tr>
+    <tr>
+      <th>dimensions</th>
+      <td><p>The maximum number of dimensions to consider
+when generating text.</p></td>
+    </tr>
+    <tr>
+      <th>endian</th>
+      <td><p>Use <code>0</code> for big endian, <code>1</code> for little endian
+or <code>NA</code> to use the default on your system.</p></td>
     </tr>
     </table>
 

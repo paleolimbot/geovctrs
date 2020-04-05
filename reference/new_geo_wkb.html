@@ -117,7 +117,12 @@
     <p>S3 details for geo_wkb</p>
     </div>
 
-    <pre class="usage"><span class='fu'>new_geo_wkb</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='kw pkg'>vctrs</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/vctrs/man/list_of.html'>list_of</a></span>(<span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/raw.html'>raw</a></span>()))
+    <pre class="usage"><span class='fu'>new_geo_wkb</span>(
+  <span class='kw'>x</span> <span class='kw'>=</span> <span class='kw pkg'>vctrs</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/vctrs/man/list_of.html'>list_of</a></span>(<span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/raw.html'>raw</a></span>()),
+  <span class='kw'>include_srid</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>dimensions</span> <span class='kw'>=</span> <span class='fl'>3L</span>,
+  <span class='kw'>endian</span> <span class='kw'>=</span> <span class='fl'>NA_integer_</span>
+)
 
 <span class='fu'>is_geo_wkb</span>(<span class='no'>x</span>)
 
@@ -141,6 +146,22 @@
       <th>x</th>
       <td><p>A <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code> of <code><a href='https://rdrr.io/r/base/raw.html'>raw()</a></code> objects, each of which
 represent well-known binary</p></td>
+    </tr>
+    <tr>
+      <th>include_srid</th>
+      <td><p>Use <code>TRUE</code> to always include, <code>FALSE</code>
+to never include, or <code>NA</code> to only include if the SRID
+is non-zero.</p></td>
+    </tr>
+    <tr>
+      <th>dimensions</th>
+      <td><p>The maximum number of dimensions to consider
+when generating text.</p></td>
+    </tr>
+    <tr>
+      <th>endian</th>
+      <td><p>Use <code>0</code> for big endian, <code>1</code> for little endian
+or <code>NA</code> to use the default on your system.</p></td>
     </tr>
     <tr>
       <th>...</th>
