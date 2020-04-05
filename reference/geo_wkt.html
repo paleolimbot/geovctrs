@@ -121,7 +121,7 @@ but does validate it using <code><a href='new_geo_wkt.html'>validate_geo_wkt()</
 To skip validation, use <code><a href='new_geo_wkt.html'>new_geo_wkt()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>geo_wkt</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())</pre>
+    <pre class="usage"><span class='fu'>geo_wkt</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(), <span class='kw'>trim</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>16</span>, <span class='kw'>dimensions</span> <span class='kw'>=</span> <span class='fl'>NA</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -129,6 +129,19 @@ To skip validation, use <code><a href='new_geo_wkt.html'>new_geo_wkt()</a></code
     <tr>
       <th>x</th>
       <td><p>A character vector containing well-known text</p></td>
+    </tr>
+    <tr>
+      <th>trim</th>
+      <td><p>Trim unnecessary zeroes in the output?</p></td>
+    </tr>
+    <tr>
+      <th>precision</th>
+      <td><p>The rounding precision to use when writing
+(number of decimal places).</p></td>
+    </tr>
+    <tr>
+      <th>dimensions</th>
+      <td><p>The number of dimensions to consider when r</p></td>
     </tr>
     </table>
 

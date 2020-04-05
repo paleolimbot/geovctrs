@@ -117,7 +117,12 @@
     <p>S3 details for geo_wkt</p>
     </div>
 
-    <pre class="usage"><span class='fu'>new_geo_wkt</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())
+    <pre class="usage"><span class='fu'>new_geo_wkt</span>(
+  <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(),
+  <span class='kw'>trim</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>16L</span>,
+  <span class='kw'>dimensions</span> <span class='kw'>=</span> <span class='fl'>NA_integer_</span>
+)
 
 <span class='fu'>is_geo_wkt</span>(<span class='no'>x</span>)
 
@@ -140,6 +145,19 @@
     <tr>
       <th>x</th>
       <td><p>A character vector containing well-known text</p></td>
+    </tr>
+    <tr>
+      <th>trim</th>
+      <td><p>Trim unnecessary zeroes in the output?</p></td>
+    </tr>
+    <tr>
+      <th>precision</th>
+      <td><p>The rounding precision to use when writing
+(number of decimal places).</p></td>
+    </tr>
+    <tr>
+      <th>dimensions</th>
+      <td><p>The number of dimensions to consider when r</p></td>
     </tr>
     <tr>
       <th>...</th>
