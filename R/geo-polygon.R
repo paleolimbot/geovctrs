@@ -44,8 +44,3 @@ validate_geo_polygon <-function(x) {
 
   invisible(x)
 }
-
-#' @export
-format.geo_polygon <- function(x, ...) {
-  format.geo_linestring(x, ...)
-}

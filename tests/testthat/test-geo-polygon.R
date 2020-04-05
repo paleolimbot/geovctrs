@@ -37,6 +37,6 @@ test_that("geo_polygon() works", {
   )
 
   # output
-  expect_output(print(geo_polygon(geo_xy())), "geo_polygon")
-  expect_output(print(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10)))), "geo_polygon")
+  expect_output(print(geo_polygon(geo_xy())), "POLYGON")
+  expect_output(print(geo_polygon(geo_xy(c(0, 10, 0, 0), c(0, 0, 10, 0)))), "POLYGON")
 })

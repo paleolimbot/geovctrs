@@ -13,6 +13,6 @@ test_that("geo_multilinestring() works", {
   expect_length(geo_multilinestring(geo_linestring(geo_xy(10:11, 30:31))), 1)
 
   # test output
-  expect_output(print(geo_multilinestring(geo_linestring(geo_xy()))), "geo_multilinestring")
-  expect_output(print(geo_multilinestring(geo_linestring(geo_xy(10:11, 30:31)))), "geo_multilinestring")
+  expect_output(print(geo_multilinestring(geo_linestring(geo_xy()))), "MULTILINESTRING")
+  expect_output(print(geo_multilinestring(geo_linestring(geo_xy(10:11, 30:31)))), "MULTILINESTRING")
 })

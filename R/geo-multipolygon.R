@@ -46,8 +46,3 @@ new_geo_multipolygon <- function(x) {
 validate_geo_multipolygon <-function(x) {
   invisible(x)
 }
-
-#' @export
-format.geo_multipolygon <- function(x, ...) {
-  format.geo_linestring(x, ...)
-}

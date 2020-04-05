@@ -13,6 +13,6 @@ test_that("geo_linestring() works", {
   expect_error(geo_linestring(geo_xy(10, 30)), "is not TRUE")
 
   # formatting
-  expect_output(print(geo_linestring(geo_xy())), "geo_linestring")
-  expect_output(print(geo_linestring(geo_xy(10:11, 30:31))), "geo_linestring")
+  expect_output(print(geo_linestring(geo_xy())), "LINESTRING")
+  expect_output(print(geo_linestring(geo_xy(10:11, 30:31))), "LINESTRING")
 })

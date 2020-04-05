@@ -58,12 +58,13 @@ vec_ptype_abbr.geo_collection <- function(x, ...) {
 }
 
 #' @export
-format.geo_collection <- function(x, ..., top_level = TRUE) {
-  if (top_level) {
-    vapply(field(x, "feature"), format, ..., top_level = FALSE, FUN.VALUE = character(1))
-  } else {
-    sprintf("<geo_collection[%s]>", length(x))
-  }
+format.geo_collection <- function(x, ...) {
+  geo_format(x, ...)
+}
+
+#' @export
+print.geo_collection <- function(x, ...) {
+  geo_print(x, ...)
 }
 
 #' @rdname new_geo_collection

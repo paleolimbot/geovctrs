@@ -13,6 +13,6 @@ test_that("geo_point() works", {
   expect_error(geo_point(geo_xy(10:11, 30:31)), "is not TRUE")
 
   # formatting
-  expect_output(print(geo_point(geo_xy())), "geo_point")
-  expect_output(print(geo_point(geo_xy(30, 10))), "geo_point")
+  expect_output(print(geo_point(geo_xy())), "POINT")
+  expect_output(print(geo_point(geo_xy(30, 10))), "POINT")
 })

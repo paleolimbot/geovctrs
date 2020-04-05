@@ -8,5 +8,5 @@ test_that("geo_collection class works", {
   expect_true(vec_is(collection))
 
   # output with  nexted collection
-  expect_output(print(geo_collection(list(collection))), "\\[1\\]\\s*<geo_collection")
+  expect_output(print(geo_collection(list(collection))), "GEOMETRYCOLLECTION")
 })
