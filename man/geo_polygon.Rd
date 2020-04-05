@@ -26,7 +26,7 @@ Create a polygon
 }
 \examples{
 # a polygon
-geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10)))
+geo_polygon(geo_xy(c(0, 10, 0, 0), c(0, 0, 10, 0)))
 
 # polygon with a hole
 poly_hole <- geo_polygon(

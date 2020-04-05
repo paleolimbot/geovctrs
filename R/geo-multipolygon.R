@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' geo_multipolygon(
-#'   geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10)))
+#'   geo_polygon(geo_xy(c(0, 10, 0, 0), c(0, 0, 10, 0)))
 #' )
 #'
 geo_multipolygon <- function(feature, srid = 0) {
