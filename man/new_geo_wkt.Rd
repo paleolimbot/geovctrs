@@ -10,12 +10,7 @@
 \alias{vec_ptype2.geo_wkt}
 \title{S3 details for geo_wkt}
 \usage{
-new_geo_wkt(
-  x = character(),
-  trim = TRUE,
-  precision = 16L,
-  dimensions = NA_integer_
-)
+new_geo_wkt(x = character(), trim = TRUE, precision = 16L, dimensions = 3L)
 
 is_geo_wkt(x)
 
@@ -37,7 +32,8 @@ as_geo_wkt(x, ...)
 \item{precision}{The rounding precision to use when writing
 (number of decimal places).}
 
-\item{dimensions}{The number of dimensions to consider when r}
+\item{dimensions}{The maximum number of dimensions to consider
+when generating text.}
 
 \item{...}{Unused}
 

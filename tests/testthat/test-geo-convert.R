@@ -43,10 +43,53 @@ test_that("wkb conversion works", {
   expect_identical(wkb, wkb_roundtrip)
 })
 
-test_that("wkb conversion propogates SRIDs by default", {
+test_that("wkb writer options are respected", {
   collection_empty <- geo_collection(list(geo_collection()), srid = 23)
   collection_wkb <- cpp_convert(collection_empty, geo_wkb())
   expect_identical(cpp_convert(collection_wkb, geo_collection()), collection_empty)
+
+  collection_with_srid <- c(
+    geo_point(geo_xy(0, 1), srid = 12),
+    geo_point(geo_xy(10, 12), srid = 27)
+  )
+
+  expect_identical(
+    unclass(as_geo_wkb(collection_with_srid, endian = 1))[[1]][1],
+    as.raw(0x01)
+  )
+
+  expect_identical(
+    unclass(as_geo_wkb(collection_with_srid, endian = 0))[[1]][1],
+    as.raw(0x00)
+  )
+
+  expect_identical(
+    geo_srid(as_geo_wkb(collection_with_srid)),
+    c(12L, 27L)
+  )
+
+  expect_identical(
+    geo_srid(as_geo_wkb(collection_with_srid, include_srid = TRUE)),
+    c(12L, 27L)
+  )
+
+  expect_identical(
+    geo_srid(cpp_convert(collection_with_srid, geo_wkb(include_srid = FALSE))),
+    c(0L, 0L)
+  )
+
+  expect_identical(
+    geo_coordinate_dimensions(cpp_convert(geo_wkt("POINT Z (1 2 3)"), geo_wkb(dimensions = NA))),
+    3L
+  )
+  expect_identical(
+    geo_coordinate_dimensions(cpp_convert(geo_wkt("POINT Z (1 2 3)"), geo_wkb(dimensions = 2))),
+    2L
+  )
+  expect_identical(
+    geo_coordinate_dimensions(cpp_convert(geo_wkt("POINT Z (1 2 3)"), geo_wkb(dimensions = 3))),
+    3L
+  )
 })
 
 test_that("geo_point conversion works", {

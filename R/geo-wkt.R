@@ -8,8 +8,9 @@
 #' @param x A character vector containing well-known text
 #' @param trim Trim unnecessary zeroes in the output?
 #' @param precision The rounding precision to use when writing
-#'  (number of decimal places).
-#' @param dimensions The number of dimensions to consider when r
+#'   (number of decimal places).
+#' @param dimensions The maximum number of dimensions to consider
+#'   when generating text.
 #'
 #'
 #' @return A [new_geo_wkt()]
@@ -18,7 +19,7 @@
 #' @examples
 #' geo_wkt("POINT (30 10)")
 #'
-geo_wkt <- function(x = character(), trim = TRUE, precision = 16, dimensions = NA) {
+geo_wkt <- function(x = character(), trim = TRUE, precision = 16, dimensions = 3) {
   x <- vec_cast(x, character())
   wkt <- validate_geo_wkt(
     new_geo_wkt(
@@ -45,7 +46,7 @@ geo_wkt <- function(x = character(), trim = TRUE, precision = 16, dimensions = N
 #' wkt <- geo_wkt("POINT (30 10)")
 #' is_geo_wkt(wkt)
 #'
-new_geo_wkt <- function(x = character(), trim = TRUE, precision = 16L, dimensions = NA_integer_) {
+new_geo_wkt <- function(x = character(), trim = TRUE, precision = 16L, dimensions = 3L) {
   vec_assert(x, character())
   vec_assert(trim, logical())
   vec_assert(precision, integer())

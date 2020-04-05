@@ -126,7 +126,7 @@ void WKTGeometryExporter::init(GEOSContextHandle_t context, size_t size) {
   // used for reading (only writing)
   data.attr("trim") = true;
   data.attr("precision") =  IntegerVector::create(16);
-  data.attr("dimensions") = IntegerVector::get_na();
+  data.attr("dimensions") = IntegerVector::create(3);
 
   this->data = data;
 }
@@ -188,22 +188,33 @@ size_t WKBGeometryProvider::size() {
 
 // --- WKB exporter
 
-WKBGeometryExporter::WKBGeometryExporter() {
+WKBGeometryExporter::WKBGeometryExporter(int includeSRID, int dimensions, int endian) {
   this->counter = 0;
-  // -1 = guess, 0 = false, 1 = true
-  this->useEWKB = -1;
+  this->includeSRID = includeSRID;
+  this->dimensions = dimensions;
+  this->endian = endian;
 }
 
 void WKBGeometryExporter::init(GEOSContextHandle_t context, size_t size) {
   this->context = context;
   this->wkb_writer = GEOSWKBWriter_create_r(context);
-  if (this->useEWKB == 1) {
-    GEOSWKBWriter_setIncludeSRID_r(this->context, this->wkb_writer, 1);
+  if (!LogicalVector::is_na(this->includeSRID)) {
+    GEOSWKBWriter_setIncludeSRID_r(this->context, this->wkb_writer, this->includeSRID);
+  }
+  if (!IntegerVector::is_na(this->dimensions)) {
+    GEOSWKBWriter_setOutputDimension_r(this->context, this->wkb_writer, this->dimensions);
+  }
+  if (!IntegerVector::is_na(this->endian)) {
+    GEOSWKBWriter_setByteOrder_r(this->context, this->wkb_writer, this->endian);
   }
 
   List data(size);
   data.attr("class") = CharacterVector::create("geo_wkb", "geovctr", "vctrs_list_of", "vctrs_vctr");
   data.attr("ptype") = RawVector::create();
+  data.attr("include_srid") = LogicalVector::create(LogicalVector::get_na());
+  data.attr("dimensions") = IntegerVector::create(3);
+  data.attr("endian") = IntegerVector::create(LogicalVector::get_na());
+
   this->data = data;
 }
 
@@ -211,15 +222,16 @@ void WKBGeometryExporter::putNext(GEOSGeometry* geometry) {
   if (geometry == NULL) {
     this->data[this->counter] = R_NilValue;
   } else {
-    if (this->useEWKB == -1) {
-      int sridFirst = GEOSGetSRID_r(this->context, geometry);
-      if (sridFirst != 0) {
-        GEOSWKBWriter_setIncludeSRID_r(this->context, this->wkb_writer, 1);
-        this->useEWKB = 1;
-      }  else {
-        this->useEWKB = 0;
-      }
+    if (IntegerVector::is_na(this->includeSRID)) {
+      int srid = GEOSGetSRID_r(this->context, geometry);
+      bool useSRID = (srid != 0) && !IntegerVector::is_na(srid);
+      GEOSWKBWriter_setIncludeSRID_r(this->context, this->wkb_writer, useSRID);
     }
+    if (IntegerVector::is_na(this->dimensions)) {
+      int featureDims = GEOSGeom_getCoordinateDimension_r(this->context, geometry);
+      GEOSWKBWriter_setOutputDimension_r(this->context, this->wkb_writer, featureDims);
+    }
+
 
     // GEOSWKBWriter won't deal with POINT EMPTY, but we handle in the same way
     // as sf (GEOSWKBReader seems to have no problem with this solution)
@@ -707,7 +719,14 @@ std::unique_ptr<GeometryExporter> resolve_exporter(SEXP ptype) {
     };
 
   } else if(Rf_inherits(ptype, "geo_wkb")) {
-    return std::unique_ptr<GeometryExporter> { new WKBGeometryExporter() };
+    List data = (List)ptype;
+    int includeSRID = data.attr("include_srid");
+    int dimensions = data.attr("dimensions");
+    int endian = data.attr("endian");
+
+    return std::unique_ptr<GeometryExporter> {
+      new WKBGeometryExporter(includeSRID, dimensions, endian)
+    };
 
   } else if(Rf_inherits(ptype, "geo_collection")) {
     return std::unique_ptr<GeometryExporter> { new GeoCollectionExporter() };

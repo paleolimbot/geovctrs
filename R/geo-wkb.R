@@ -8,6 +8,12 @@
 #'
 #' @param x A [list()] of [raw()] objects, each of which
 #'   represent well-known binary
+#' @param include_srid Use `TRUE` to always include, `FALSE`
+#'   to never include, or `NA` to only include if the SRID
+#'   is non-zero.
+#' @inheritParams geo_wkt
+#' @param endian Use `0` for big endian, `1` for little endian
+#'   or `NA` to use the default on your system.
 #'
 #' @return A [new_geo_wkb()]
 #' @export
@@ -23,12 +29,21 @@
 #' )
 #' geo_wkb(list(wkb))
 #'
-geo_wkb <- function(x = list()) {
+geo_wkb <- function(x = list(), include_srid = NA, dimensions = 3, endian = NA) {
   x <- vec_cast(x,  list_of(.ptype = raw()))
-  wkb <- validate_geo_wkb(new_geo_wkb(x))
+  include_srid <- vec_cast(include_srid, logical())
+  dimensions <- vec_cast(dimensions, integer())
+  endian <- vec_cast(endian, integer())
+  wkb <- validate_geo_wkb(
+    new_geo_wkb(
+      x,
+      include_srid = include_srid,
+      dimensions = dimensions,
+      endian = endian
+    )
+  )
   wkb
 }
-
 
 #' S3 details for geo_wkb
 #'
@@ -48,9 +63,17 @@ geo_wkb <- function(x = list()) {
 #' wkb <- geo_wkb(list(wkb_raw))
 #' is_geo_wkb(wkb)
 #'
-new_geo_wkb <- function(x = vctrs::list_of(.ptype = raw())) {
+new_geo_wkb <- function(x = vctrs::list_of(.ptype = raw()),
+                        include_srid = NA, dimensions = 3L, endian = NA_integer_) {
   vec_assert(x, list_of(.ptype = raw()))
-  new_list_of(x, raw(), class = c("geo_wkb", "geovctr"))
+  new_list_of(
+    x,
+    raw(),
+    class = c("geo_wkb", "geovctr"),
+    include_srid = include_srid,
+    dimensions = dimensions,
+    endian = endian
+  )
 }
 
 #' @rdname new_geo_wkb
@@ -91,7 +114,7 @@ as_geo_wkb <- function(x, ...) {
 #' @export
 #' @rdname new_geo_wkb
 as_geo_wkb.default <- function(x, ...) {
-  vec_cast(x, geo_wkb())
+  vec_cast(x, geo_wkb(...))
 }
 
 #' @method vec_cast geo_wkb
@@ -117,7 +140,7 @@ vec_cast.geo_wkb.geo_wkb <- function(x, to, ...) {
 #' @method vec_cast.geo_wkb list
 #' @export
 vec_cast.geo_wkb.list <- function(x, to, ...) {
-  geo_wkb(x)
+  cpp_convert(geo_wkb(x), to)
 }
 
 #' @method vec_cast.geo_wkb geo_wkt

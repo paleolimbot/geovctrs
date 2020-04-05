@@ -98,9 +98,11 @@ public:
   List data;
   GEOSWKBWriter *wkb_writer;
   size_t counter;
-  int useEWKB;
+  int includeSRID;
+  int dimensions;
+  int endian;
 
-  WKBGeometryExporter();
+  WKBGeometryExporter(int includeSRID, int dimensions, int endian);
   void init(GEOSContextHandle_t context, size_t size);
   void putNext(GEOSGeometry* geometry);
   SEXP finish();

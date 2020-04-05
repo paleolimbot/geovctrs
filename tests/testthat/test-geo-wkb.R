@@ -65,7 +65,7 @@ test_that("wkb casting and coersion works", {
   expect_identical(vec_cast(list(wkb_raw), geo_wkb()), wkb)
 
   expect_identical(vec_cast(list(wkb_raw), geo_wkb()), as_geo_wkb(wkb))
-  expect_identical(vec_cast(wkb, list()), list(wkb_raw))
+  expect_identical(vec_cast(wkb, list())[[1]], unclass(wkb)[[1]])
   expect_identical(as_geo_wkb(list(wkb_raw)), wkb)
   expect_error(as_geo_wkb(list(wkb_bad)), class = "parse_error")
   expect_error(vec_cast(list(wkb_bad), geo_wkb()), class = "parse_error")
