@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create and validate well-known binary — geo_wkb • geovctrs</title>
+<title>Format and print geovctrs — geo_print • geovctrs</title>
 
 
 <!-- jquery -->
@@ -39,11 +39,8 @@
 
 
 
-<meta property="og:title" content="Create and validate well-known binary — geo_wkb" />
-<meta property="og:description" content="Like other geo types, geo_wkb() doesn't convert its input
-but does validate it using validate_geo_wkb().
-To skip validation, use new_geo_wkb() with
-the result of vec_cast(list(...), .ptype = raw())." />
+<meta property="og:title" content="Format and print geovctrs — geo_print" />
+<meta property="og:description" content="Format and prints the geo_summary() of an geovctr." />
 
 
 
@@ -111,46 +108,43 @@ the result of vec_cast(list(...), .ptype = raw())." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create and validate well-known binary</h1>
-    <small class="dont-index">Source: <a href='https://github.com/paleolimbot/geovctrs/blob/master/R/geo-wkb.R'><code>R/geo-wkb.R</code></a></small>
-    <div class="hidden name"><code>geo_wkb.Rd</code></div>
+    <h1>Format and print geovctrs</h1>
+    <small class="dont-index">Source: <a href='https://github.com/paleolimbot/geovctrs/blob/master/R/geo-print.R'><code>R/geo-print.R</code></a></small>
+    <div class="hidden name"><code>geo_print.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Like other geo types, <code>geo_wkb()</code> doesn't convert its input
-but does validate it using <code><a href='new_geo_wkb.html'>validate_geo_wkb()</a></code>.
-To skip validation, use <code><a href='new_geo_wkb.html'>new_geo_wkb()</a></code> with
-the result of <code>vec_cast(list(...), .ptype = raw())</code>.</p>
+    <p>Format and prints the <code><a href='geo_summary.html'>geo_summary()</a></code> of an geovctr.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>geo_wkb</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())</pre>
+    <pre class="usage"><span class='fu'>geo_print</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>short</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code> of <code><a href='https://rdrr.io/r/base/raw.html'>raw()</a></code> objects, each of which
-represent well-known binary</p></td>
+      <td><p>A geometry-like object, or one that can be
+coerced to a geometry-like object using <code><a href='is_geovctr.html'>as_geovctr()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Passed to <code>geo_format()</code></p></td>
+    </tr>
+    <tr>
+      <th>short</th>
+      <td><p>Use to print a shorter summary</p></td>
+    </tr>
+    <tr>
+      <th>col</th>
+      <td><p>Use to colourize the output</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A <code><a href='new_geo_wkb.html'>new_geo_wkb()</a></code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># POINT (30 10) in WKB</span>
-<span class='no'>wkb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/raw.html'>as.raw</a></span>(
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
-    <span class='fl'>0x01</span>, <span class='fl'>0x01</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>,
-    <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x3e</span>, <span class='fl'>0x40</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>,
-    <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x24</span>, <span class='fl'>0x40</span>
-  )
-)
-<span class='fu'>geo_wkb</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>wkb</span>))</div><div class='output co'>#&gt; &lt;geo_wkb[1]&gt;
-#&gt; [1] <span style='color: #00BB00;'>&lt;POINT&gt;</span><span> </span><span style='color: #0000BB;'>(30 10)</span><span></div><div class='input'>
-</div></span></pre>
+    <pre class="examples"><div class='input'><span class='fu'>geo_format</span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>geo_nc</span>))</div><div class='output co'>#&gt; <span class='error'>Error in geo_format(head(geo_nc)): could not find function "geo_format"</span></div><div class='input'><span class='fu'>geo_print</span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>geo_nc</span>))</div><div class='output co'>#&gt; <span class='error'>Error in UseMethod("geo_print"): no applicable method for 'geo_print' applied to an object of class "c('tbl_df', 'tbl', 'data.frame')"</span></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
