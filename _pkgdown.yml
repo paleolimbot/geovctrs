@@ -4,6 +4,7 @@ reference:
 
 - title: Create geometry vectors
   contents:
+  - is_geovctr
   - geo_xy
   - geo_rect
   - geo_segment
@@ -18,6 +19,8 @@ reference:
   - geo_plot
   - geo_srid
   - geo_is_missing
+  - geo_summary
+  - geo_print
 
 - title: Create geometry features
   contents:
@@ -28,7 +31,10 @@ reference:
   - geo_polygon
   - geo_multipolygon
 
+- title: Example data
+  contents:
+  - geo_nc
+
 - title: S3 Details
   contents:
   - starts_with("new_")
-  - vec_ptype2.geo_coord
