@@ -96,9 +96,12 @@ obj_print_data.geo_wkt <- function(x, ...) {
     return()
   }
 
-  out <- paste0("[", seq_along(x), "] ", format(x, col = TRUE), collapse = "\n")
-  cat(out)
-  cat("\n")
+  print_default_colour(
+    format(x, col = FALSE),
+    format(x, col = TRUE),
+    ...
+  )
+
   invisible(x)
 }
 

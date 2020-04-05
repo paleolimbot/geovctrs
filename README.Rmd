@@ -45,7 +45,7 @@ This package has reasonable `plot()` and `print()` methods for WKB and WKT types
 
 ```{r}
 head(geo_example_wkt)
-head
+head(as_geo_wkb(geo_example_wkt))
 ```
 
 Most methods work on anything that can be interpreted as geometry, including character vectors and data.frames containing exactly one geometry column.

@@ -42,17 +42,19 @@ implementation for these types so that they “just work” with
 [dplyr](https://dplyr.tidyverse.org/) (\>=1.0.0) (among others).
 
 ``` r
-geo_wkt("LINESTRING (30 10, 10 30, 40 40)")
-#> <geo_wkt[1]>
-#> [1] LINESTRING (30 10, 10 30, 40 40)
-as_geo_wkb(geo_wkt("LINESTRING (30 10, 10 30, 40 40)"))
-#> <geo_wkb[1]>
-#> [1] <LINESTRING>{3} (10 10...40 40)
-tibble(wkt = geo_wkt("LINESTRING (30 10, 10 30, 40 40)"))
-#> # A tibble: 1 x 1
-#>   wkt                   
-#>   <wkt>                 
-#> 1 </>{3} (10 10...40 40)
+head(geo_example_wkt)
+#> <geo_wkt[6]>
+#> [1] NA_wkt_                                
+#> [2] POINT (30 10)                          
+#> [3] POINT EMPTY                            
+#> [4] POINT Z (1 1 5)                        
+#> [5] MULTIPOINT (10 40, 40 30, 20 20, 30 10)
+#> [6] MULTIPOINT EMPTY
+head(as_geo_wkb(geo_example_wkt))
+#> <geo_wkb[6]>
+#> [1] NA_wkb_                  POINT (30 10)           
+#> [3] POINT EMPTY              POINT (1 1)             
+#> [5] MULTIPOINT[4] (10 40)…+3 MULTIPOINT EMPTY
 ```
 
 Most methods work on anything that can be interpreted as geometry,
@@ -71,19 +73,18 @@ the North Carolina dataset to play with:
 ``` r
 rev(geo_nc)
 #> # A tibble: 100 x 12
-#>    geometry                                              NWBIR79 SID79
-#>    <wkb>                                                   <dbl> <dbl>
-#>  1 <△▽>[1]{27} (-81.74107 36.23436...-81.23989 36.58965)      19     0
-#>  2 <△▽>[1]{26} (-81.34754 36.36536...-80.90344 36.57286)      12     3
-#>  3 <△▽>[1]{28} (-80.96577 36.23388...-80.43531 36.56521)     260     6
-#>  4 <△▽>[3]{38} (-76.33025 36.07282...-75.77316 36.55716)     145     2
-#>  5 <△▽>[1]{34} (-77.90121 36.16277...-77.07531 36.55629)    1197     3
-#>  6 <△▽>[1]{22} (-77.21767 36.23024...-76.70750 36.55629)    1237     5
-#>  7 <△▽>[1]{24} (-76.56358 36.16973...-75.95718 36.55606)     139     2
-#>  8 <△▽>[1]{17} (-76.95367 36.29452...-76.46035 36.55525)     371     2
-#>  9 <△▽>[1]{14} (-78.32125 36.19595...-77.89886 36.55294)     844     2
-#> 10 <△▽>[1]{6} (-80.45301 36.25023...-80.02406 36.55104)      176     5
-#> # … with 90 more rows, and 9 more variables: BIR79 <dbl>, NWBIR74 <dbl>,
-#> #   SID74 <dbl>, BIR74 <dbl>, CRESS_ID <int>, FIPSNO <dbl>, FIPS <chr>,
-#> #   NAME <chr>, CNTY_ID <dbl>
+#>    geometry                       NWBIR79 SID79 BIR79 NWBIR74 SID74 BIR74
+#>    <wkb>                            <dbl> <dbl> <dbl>   <dbl> <dbl> <dbl>
+#>  1 △▽[1] (-81.47276 36.23436)…+26      19     0  1364      10     1  1091
+#>  2 △▽[1] (-81.23989 36.36536)…+25      12     3   542      10     0   487
+#>  3 △▽[1] (-80.45634 36.24256)…+27     260     6  3616     208     5  3188
+#>  4 △▽[3] (-76.00897 36.31960)…+37     145     2   830     123     1   508
+#>  5 △▽[1] (-77.21767 36.24098)…+33    1197     3  1606    1066     9  1421
+#>  6 △▽[1] (-76.74506 36.23392)…+21    1237     5  1838     954     7  1452
+#>  7 △▽[1] (-76.00897 36.31960)…+23     139     2   350     115     0   286
+#>  8 △▽[1] (-76.56251 36.34057)…+16     371     2   594     254     0   420
+#>  9 △▽[1] (-78.30876 36.26004)…+13     844     2  1190     748     4   968
+#> 10 △▽[1] (-80.02567 36.25023)…+5      176     5  2038     160     1  1612
+#> # … with 90 more rows, and 5 more variables: CRESS_ID <int>, FIPSNO <dbl>,
+#> #   FIPS <chr>, NAME <chr>, CNTY_ID <dbl>
 ```
