@@ -24,10 +24,20 @@
 #' # use as_geo_wkt() to use conversion options
 #' as_geo_wkt("POINT (30 10)", trim = FALSE, precision = 2)
 #'
+#' # use parse_wkt() to identify parsing failures
+#' parse_wkt("POINT EMTPY")
+#'
 geo_wkt <- function(x = character()) {
   x <- vec_cast(x, character())
   wkt <- validate_geo_wkt(new_geo_wkt(x))
   wkt
+}
+
+#' @export
+#' @rdname geo_wkt
+parse_wkt <- function(x) {
+  x <- vec_cast(x, character())
+  validate_provider(new_geo_wkt(x))
 }
 
 #' @rdname geo_wkt
@@ -65,7 +75,13 @@ new_geo_wkt <- function(x = character(), trim = TRUE, precision = 16L, dimension
   vec_assert(trim, logical())
   vec_assert(precision, integer())
   vec_assert(dimensions, integer())
-  new_vctr(x, class = c("geo_wkt", "geovctr"), trim = trim, precision = precision, dimensions = dimensions)
+  new_vctr(
+    x,
+    class = c("geo_wkt", "geovctr"),
+    trim = trim,
+    precision = precision,
+    dimensions = dimensions
+  )
 }
 
 #' @rdname new_geo_wkt
@@ -77,8 +93,7 @@ is_geo_wkt <- function(x) {
 #' @rdname new_geo_wkt
 #' @export
 validate_geo_wkt <- function(x) {
-  is_parseable <- cpp_validate_provider(x)
-  stop_for_non_parseable(is_parseable)
+  stop_for_non_parseable(validate_provider(x))
   invisible(x)
 }
 

@@ -33,10 +33,21 @@
 #' # use as_geo_wkb() to use conversion options
 #' as_geo_wkb(wkb, endian = 0)
 #'
+#' # use parse_wkb() to identify parse errors
+#' wkb_item[2] <- as.raw(0x11)
+#' parse_wkb(list(wkb_item))
+#'
 geo_wkb <- function(x = list()) {
   x <- vec_cast(x,  list_of(.ptype = raw()))
   wkb <- validate_geo_wkb(new_geo_wkb(x))
   wkb
+}
+
+#' @export
+#' @rdname geo_wkb
+parse_wkb <- function(x) {
+  x <- vec_cast(x,  list_of(.ptype = raw()))
+  validate_provider(new_geo_wkb(x))
 }
 
 #' @export
@@ -98,8 +109,7 @@ is_geo_wkb <- function(x) {
 #' @rdname new_geo_wkb
 #' @export
 validate_geo_wkb <- function(x) {
-  is_parseable <- cpp_validate_provider(x)
-  stop_for_non_parseable(is_parseable)
+  stop_for_non_parseable(validate_provider(x))
   invisible(x)
 }
 

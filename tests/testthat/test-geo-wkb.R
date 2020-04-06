@@ -35,10 +35,25 @@ test_that("geo_wkb parse validation works", {
   )
 
   wkb <- new_geo_wkb(vec_cast(list(wkb_raw, wkb_bad), list_of(.ptype = raw())))
-  expect_identical(cpp_validate_provider(wkb), c(TRUE, FALSE))
+  expect_warning(
+    expect_equivalent(
+      parse_wkb(list(wkb_raw, wkb_bad)),
+      geo_wkb(list(wkb_raw, NULL))
+    ),
+    "parsing failure"
+  )
+  expect_identical(is.na(cpp_validate_provider(wkb)), c(TRUE, FALSE))
 
   expect_identical(validate_geo_wkb(wkb[1]), wkb[1])
-  expect_error(validate_geo_wkb(wkb), "1 geometry", class = "parse_error")
+  expect_warning(
+    expect_error(validate_geo_wkb(wkb), "1 geometry", class = "parse_error"),
+    "parsing failure"
+  )
+})
+
+test_that("subset assignment works for WKB class", {
+  #wkbs <- as_geo_wkb(geo_example_wkt)
+  #wkbs[2] <- geo_wkt("POINT (1000 1000)")
 })
 
 test_that("wkb casting and coersion works", {
@@ -67,8 +82,16 @@ test_that("wkb casting and coersion works", {
   expect_identical(vec_cast(list(wkb_raw), geo_wkb()), as_geo_wkb(wkb))
   expect_identical(vec_cast(wkb, list())[[1]], unclass(wkb)[[1]])
   expect_identical(as_geo_wkb(list(wkb_raw)), wkb)
-  expect_error(as_geo_wkb(list(wkb_bad)), class = "parse_error")
-  expect_error(vec_cast(list(wkb_bad), geo_wkb()), class = "parse_error")
+
+  expect_warning(
+    expect_error(as_geo_wkb(list(wkb_bad)), class = "parse_error"),
+    "parsing failure"
+  )
+  expect_warning(
+    expect_error(vec_cast(list(wkb_bad), geo_wkb()), class = "parse_error"),
+    "parsing failure"
+  )
+
   expect_error(as_geo_wkb(5), class = "vctrs_error_incompatible_cast")
 
   wkt <- vec_cast(wkb, geo_wkt())
@@ -103,9 +126,15 @@ test_that("casting and coercion respects options", {
 test_that("geo_wkb can handle empty (multi)points", {
   expect_identical(as_geo_wkt(as_geo_wkb(geo_wkt("POINT EMPTY"))), geo_wkt("POINT EMPTY"))
   expect_identical(as_geo_wkt(as_geo_wkb(geo_wkt("POINT (nan nan)"))), geo_wkt("POINT EMPTY"))
-  expect_identical(as_geo_wkt(as_geo_wkb(geo_wkt("MULTIPOINT EMPTY"))), geo_wkt("MULTIPOINT EMPTY"))
+  expect_identical(
+    as_geo_wkt(as_geo_wkb(geo_wkt("MULTIPOINT EMPTY"))),
+    geo_wkt("MULTIPOINT EMPTY")
+  )
   # "MULTIPOINT (nan nan)" currently cannot be written to WKB
-  # expect_identical(as_geo_wkt(as_geo_wkb(geo_wkt("MULTIPOINT (nan nan)"))), geo_wkt("MULTIPOINT EMPTY"))
+  # expect_identical(
+  #   as_geo_wkt(as_geo_wkb(geo_wkt("MULTIPOINT (nan nan)"))),
+  #   geo_wkt("MULTIPOINT EMPTY")
+  # )
   expect_identical(as_geo_xy(as_geo_wkb(geo_xy(NA, NA))), geo_xy(NA, NA))
   expect_identical(as_geo_collection(as_geo_wkb(geo_point(geo_xy()))), geo_point(geo_xy()))
 })

@@ -2,10 +2,13 @@
 % Please edit documentation in R/geo-wkb.R
 \name{geo_wkb}
 \alias{geo_wkb}
+\alias{parse_wkb}
 \alias{as_geo_wkb}
 \title{Create and validate well-known binary}
 \usage{
 geo_wkb(x = list())
+
+parse_wkb(x)
 
 as_geo_wkb(x, ..., include_srid = NA, dimensions = 3, endian = NA)
 }
@@ -48,5 +51,9 @@ wkb
 
 # use as_geo_wkb() to use conversion options
 as_geo_wkb(wkb, endian = 0)
+
+# use parse_wkb() to identify parse errors
+wkb_item[2] <- as.raw(0x11)
+parse_wkb(list(wkb_item))
 
 }

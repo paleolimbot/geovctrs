@@ -6,25 +6,27 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-LogicalVector cpp_validate_provider(SEXP data) {
+CharacterVector cpp_validate_provider(SEXP data) {
   std::unique_ptr<GeometryProvider> provider = resolve_provider(data);
-  LogicalVector output(provider->size());
+  CharacterVector problems(provider->size());
+
   GEOSContextHandle_t context = geos_init();
   provider->init(context);
 
   for (size_t i=0; i < provider->size(); i++) {
     try {
       provider->getNext();
-      output[i] = true;
+      problems[i] = NA_STRING;
+    } catch(Rcpp::exception e) {
+      problems[i] = e.what();
     } catch(std::exception e) {
-      // don't know how to get the error message here...
-      // importing geos::util::GEOSException or the parse exception
-      // don't seem to work, despite a nice error message in R
-      output[i] = false;
+      provider->finish();
+      geos_finish(context);
+      throw e;
     }
   }
 
   provider->finish();
   geos_finish(context);
-  return output;
+  return problems;
 }

@@ -2,10 +2,13 @@
 % Please edit documentation in R/geo-wkt.R
 \name{geo_wkt}
 \alias{geo_wkt}
+\alias{parse_wkt}
 \alias{as_geo_wkt}
 \title{Create and validate well-known text}
 \usage{
 geo_wkt(x = character())
+
+parse_wkt(x)
 
 as_geo_wkt(x, ..., trim = TRUE, precision = 16, dimensions = 3)
 }
@@ -36,5 +39,8 @@ geo_wkt("POINT (30 10)")
 
 # use as_geo_wkt() to use conversion options
 as_geo_wkt("POINT (30 10)", trim = FALSE, precision = 2)
+
+# use parse_wkt() to identify parsing failures
+parse_wkt("POINT EMTPY")
 
 }

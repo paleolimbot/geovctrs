@@ -86,6 +86,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cpp_validate_provider
+CharacterVector cpp_validate_provider(SEXP data);
+RcppExport SEXP _geovctrs_cpp_validate_provider(SEXP dataSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type data(dataSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_validate_provider(data));
+    return rcpp_result_gen;
+END_RCPP
+}
 // cpp_get_srid
 IntegerVector cpp_get_srid(SEXP x);
 RcppExport SEXP _geovctrs_cpp_get_srid(SEXP xSEXP) {
@@ -174,17 +185,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// cpp_validate_provider
-LogicalVector cpp_validate_provider(SEXP data);
-RcppExport SEXP _geovctrs_cpp_validate_provider(SEXP dataSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type data(dataSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_validate_provider(data));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_convert", (DL_FUNC) &_geovctrs_cpp_convert, 2},
@@ -194,6 +194,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_has_missing", (DL_FUNC) &_geovctrs_cpp_has_missing, 1},
     {"_geovctrs_cpp_is_finite", (DL_FUNC) &_geovctrs_cpp_is_finite, 1},
     {"_geovctrs_cpp_is_empty", (DL_FUNC) &_geovctrs_cpp_is_empty, 1},
+    {"_geovctrs_cpp_validate_provider", (DL_FUNC) &_geovctrs_cpp_validate_provider, 1},
     {"_geovctrs_cpp_get_srid", (DL_FUNC) &_geovctrs_cpp_get_srid, 1},
     {"_geovctrs_cpp_set_srid", (DL_FUNC) &_geovctrs_cpp_set_srid, 2},
     {"_geovctrs_cpp_geom_type_id", (DL_FUNC) &_geovctrs_cpp_geom_type_id, 1},
@@ -202,7 +203,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_coordinate_dimensions", (DL_FUNC) &_geovctrs_cpp_coordinate_dimensions, 1},
     {"_geovctrs_cpp_first_coordinate", (DL_FUNC) &_geovctrs_cpp_first_coordinate, 1},
     {"_geovctrs_cpp_version_impl", (DL_FUNC) &_geovctrs_cpp_version_impl, 0},
-    {"_geovctrs_cpp_validate_provider", (DL_FUNC) &_geovctrs_cpp_validate_provider, 1},
     {NULL, NULL, 0}
 };
 

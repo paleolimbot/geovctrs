@@ -29,6 +29,10 @@ cpp_is_empty <- function(data) {
     .Call(`_geovctrs_cpp_is_empty`, data)
 }
 
+cpp_validate_provider <- function(data) {
+    .Call(`_geovctrs_cpp_validate_provider`, data)
+}
+
 cpp_get_srid <- function(x) {
     .Call(`_geovctrs_cpp_get_srid`, x)
 }
@@ -59,9 +63,5 @@ cpp_first_coordinate <- function(x) {
 
 cpp_version_impl <- function() {
     .Call(`_geovctrs_cpp_version_impl`)
-}
-
-cpp_validate_provider <- function(data) {
-    .Call(`_geovctrs_cpp_validate_provider`, data)
 }
 
