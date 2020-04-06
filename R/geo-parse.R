@@ -45,11 +45,11 @@ warn_problems <- function(probs) {
     probs_f <- Map(c, probs_f, dots)
   }
 
-  probs_f <- do.call(paste, c(probs_f, list(sep = " ", collapse = "\n")))
+  probs_f <- rlang::exec(paste, !!!probs_f, sep = " ", collapse = "\n")
   warning(
     n, " parsing failure", if (n > 1)  "s", ".\n",
     probs_f, "\n",
-    if (many_problems) "See problems(...) for more details.\n",
+    "See attr(result, 'problems') for more details.\n",
     call. = FALSE, immediate. = TRUE, noBreaks. = TRUE
   )
 }
