@@ -121,7 +121,7 @@
 <span class='fu'><a href='geo_wkb.html'>as_geo_wkb</a></span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>include_srid</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>dimensions</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>endian</span> <span class='kw'>=</span> <span class='fl'>NA</span>)
 
 <span class='fu'>new_geo_wkb</span>(
-  <span class='kw'>x</span> <span class='kw'>=</span> <span class='kw pkg'>vctrs</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/vctrs/man/list_of.html'>list_of</a></span>(<span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/raw.html'>raw</a></span>()),
+  <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
   <span class='kw'>include_srid</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
   <span class='kw'>dimensions</span> <span class='kw'>=</span> <span class='fl'>3L</span>,
   <span class='kw'>endian</span> <span class='kw'>=</span> <span class='fl'>NA_integer_</span>
@@ -190,7 +190,7 @@ or <code>NA</code> to use the default on your system.</p></td>
 <span class='fu'>is_geo_wkb</span>(<span class='no'>wkb</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># to skip parse validation if you know your object is</span>
 <span class='co'># valid, use new_geo_wkb()</span>
-<span class='fu'>new_geo_wkb</span>(<span class='kw pkg'>vctrs</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/vctrs/man/new_list_of.html'>new_list_of</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>wkb_raw</span>), <span class='fu'><a href='https://rdrr.io/r/base/raw.html'>raw</a></span>()))</div><div class='output co'>#&gt; &lt;geo_wkb[1]&gt;
+<span class='fu'>new_geo_wkb</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>wkb_raw</span>))</div><div class='output co'>#&gt; &lt;geo_wkb[1]&gt;
 #&gt; [1] <span style='color: #555555;'>POINT</span><span> </span><span style='color: #0000BB;'>(30 10)</span><span></div><div class='input'>
 </div></span></pre>
   </div>
