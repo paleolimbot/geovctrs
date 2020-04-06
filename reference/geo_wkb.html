@@ -123,7 +123,9 @@ To skip validation, use <code><a href='new_geo_wkb.html'>new_geo_wkb()</a></code
 the result of <code>vec_cast(list(...), .ptype = raw())</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>geo_wkb</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>include_srid</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>dimensions</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>endian</span> <span class='kw'>=</span> <span class='fl'>NA</span>)</pre>
+    <pre class="usage"><span class='fu'>geo_wkb</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>())
+
+<span class='fu'>as_geo_wkb</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>include_srid</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>dimensions</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>endian</span> <span class='kw'>=</span> <span class='fl'>NA</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -132,6 +134,10 @@ the result of <code>vec_cast(list(...), .ptype = raw())</code>.</p>
       <th>x</th>
       <td><p>A <code><a href='https://rdrr.io/r/base/list.html'>list()</a></code> of <code><a href='https://rdrr.io/r/base/raw.html'>raw()</a></code> objects, each of which
 represent well-known binary</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Unused</p></td>
     </tr>
     <tr>
       <th>include_srid</th>
@@ -157,15 +163,19 @@ or <code>NA</code> to use the default on your system.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># POINT (30 10) in WKB</span>
-<span class='no'>wkb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/raw.html'>as.raw</a></span>(
+<span class='no'>wkb_item</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/raw.html'>as.raw</a></span>(
   <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
     <span class='fl'>0x01</span>, <span class='fl'>0x01</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>,
     <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x3e</span>, <span class='fl'>0x40</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>,
     <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x00</span>, <span class='fl'>0x24</span>, <span class='fl'>0x40</span>
   )
 )
-<span class='fu'>geo_wkb</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>wkb</span>))</div><div class='output co'>#&gt; &lt;geo_wkb[1]&gt;
+<span class='no'>wkb</span> <span class='kw'>&lt;-</span> <span class='fu'>geo_wkb</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>wkb_item</span>))
+<span class='no'>wkb</span></div><div class='output co'>#&gt; &lt;geo_wkb[1]&gt;
 #&gt; [1] <span style='color: #555555;'>POINT</span><span> </span><span style='color: #0000BB;'>(30 10)</span><span></div><div class='input'>
+<span class='co'># use as_geo_wkb() to use conversion options</span>
+<span class='fu'>as_geo_wkb</span>(<span class='no'>wkb</span>, <span class='kw'>endian</span> <span class='kw'>=</span> <span class='fl'>0</span>)</div><div class='output co'>#&gt; &lt;geo_wkb[1]&gt;
+#&gt; [1] </span><span style='color: #555555;'>POINT</span><span> </span><span style='color: #0000BB;'>(30 10)</span><span></div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

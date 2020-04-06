@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>S3 details for geo_wkb — new_geo_wkb • geovctrs</title>
+<title>S3 details for geo_wkb — as_geo_wkb.default • geovctrs</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="S3 details for geo_wkb — new_geo_wkb" />
+<meta property="og:title" content="S3 details for geo_wkb — as_geo_wkb.default" />
 <meta property="og:description" content="S3 details for geo_wkb" />
 
 
@@ -117,7 +117,10 @@
     <p>S3 details for geo_wkb</p>
     </div>
 
-    <pre class="usage"><span class='fu'>new_geo_wkb</span>(
+    <pre class="usage"><span class='co'># S3 method for default</span>
+<span class='fu'><a href='geo_wkb.html'>as_geo_wkb</a></span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>include_srid</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>dimensions</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>endian</span> <span class='kw'>=</span> <span class='fl'>NA</span>)
+
+<span class='fu'>new_geo_wkb</span>(
   <span class='kw'>x</span> <span class='kw'>=</span> <span class='kw pkg'>vctrs</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/vctrs/man/list_of.html'>list_of</a></span>(<span class='kw'>.ptype</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/raw.html'>raw</a></span>()),
   <span class='kw'>include_srid</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
   <span class='kw'>dimensions</span> <span class='kw'>=</span> <span class='fl'>3L</span>,
@@ -127,11 +130,6 @@
 <span class='fu'>is_geo_wkb</span>(<span class='no'>x</span>)
 
 <span class='fu'>validate_geo_wkb</span>(<span class='no'>x</span>)
-
-<span class='fu'>as_geo_wkb</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>as_geo_wkb</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for geo_wkb</span>
 <span class='fu'>vec_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
@@ -148,6 +146,10 @@
 represent well-known binary</p></td>
     </tr>
     <tr>
+      <th>...</th>
+      <td><p>Unused</p></td>
+    </tr>
+    <tr>
       <th>include_srid</th>
       <td><p>Use <code>TRUE</code> to always include, <code>FALSE</code>
 to never include, or <code>NA</code> to only include if the SRID
@@ -162,10 +164,6 @@ when generating text.</p></td>
       <th>endian</th>
       <td><p>Use <code>0</code> for big endian, <code>1</code> for little endian
 or <code>NA</code> to use the default on your system.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Unused</p></td>
     </tr>
     <tr>
       <th>to</th>
@@ -190,7 +188,11 @@ or <code>NA</code> to use the default on your system.</p></td>
 )
 <span class='no'>wkb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='geo_wkb.html'>geo_wkb</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>wkb_raw</span>))
 <span class='fu'>is_geo_wkb</span>(<span class='no'>wkb</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
-</div></pre>
+<span class='co'># to skip parse validation if you know your object is</span>
+<span class='co'># valid, use new_geo_wkb()</span>
+<span class='fu'>new_geo_wkb</span>(<span class='kw pkg'>vctrs</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/vctrs/man/new_list_of.html'>new_list_of</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>wkb_raw</span>), <span class='fu'><a href='https://rdrr.io/r/base/raw.html'>raw</a></span>()))</div><div class='output co'>#&gt; &lt;geo_wkb[1]&gt;
+#&gt; [1] <span style='color: #555555;'>POINT</span><span> </span><span style='color: #0000BB;'>(30 10)</span><span></div><div class='input'>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
