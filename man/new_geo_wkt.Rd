@@ -4,8 +4,6 @@
 \alias{new_geo_wkt}
 \alias{is_geo_wkt}
 \alias{validate_geo_wkt}
-\alias{as_geo_wkt}
-\alias{as_geo_wkt.default}
 \alias{vec_cast.geo_wkt}
 \alias{vec_ptype2.geo_wkt}
 \title{S3 details for geo_wkt}
@@ -15,10 +13,6 @@ new_geo_wkt(x = character(), trim = TRUE, precision = 16L, dimensions = 3L)
 is_geo_wkt(x)
 
 validate_geo_wkt(x)
-
-as_geo_wkt(x, ...)
-
-\method{as_geo_wkt}{default}(x, ...)
 
 \method{vec_cast}{geo_wkt}(x, to, ...)
 
@@ -46,5 +40,9 @@ S3 details for geo_wkt
 \examples{
 wkt <- geo_wkt("POINT (30 10)")
 is_geo_wkt(wkt)
+
+# use new_geo_wkt() to skip parse validation if you know
+# your text is valid WKT
+new_geo_wkt("POINT (30 10)")
 
 }

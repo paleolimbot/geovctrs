@@ -2,13 +2,18 @@
 % Please edit documentation in R/geo-wkb.R
 \name{geo_wkb}
 \alias{geo_wkb}
+\alias{as_geo_wkb}
 \title{Create and validate well-known binary}
 \usage{
-geo_wkb(x = list(), include_srid = NA, dimensions = 3, endian = NA)
+geo_wkb(x = list())
+
+as_geo_wkb(x, ..., include_srid = NA, dimensions = 3, endian = NA)
 }
 \arguments{
 \item{x}{A \code{\link[=list]{list()}} of \code{\link[=raw]{raw()}} objects, each of which
 represent well-known binary}
+
+\item{...}{Unused}
 
 \item{include_srid}{Use \code{TRUE} to always include, \code{FALSE}
 to never include, or \code{NA} to only include if the SRID
@@ -31,13 +36,17 @@ the result of \code{vec_cast(list(...), .ptype = raw())}.
 }
 \examples{
 # POINT (30 10) in WKB
-wkb <- as.raw(
+wkb_item <- as.raw(
   c(
     0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x3e, 0x40, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x24, 0x40
   )
 )
-geo_wkb(list(wkb))
+wkb <- geo_wkb(list(wkb_item))
+wkb
+
+# use as_geo_wkb() to use conversion options
+as_geo_wkb(wkb, endian = 0)
 
 }

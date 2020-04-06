@@ -11,38 +11,47 @@
 #' @param include_srid Use `TRUE` to always include, `FALSE`
 #'   to never include, or `NA` to only include if the SRID
 #'   is non-zero.
-#' @inheritParams geo_wkt
 #' @param endian Use `0` for big endian, `1` for little endian
 #'   or `NA` to use the default on your system.
+#' @inheritParams geo_wkt
 #'
 #' @return A [new_geo_wkb()]
 #' @export
 #'
 #' @examples
 #' # POINT (30 10) in WKB
-#' wkb <- as.raw(
+#' wkb_item <- as.raw(
 #'   c(
 #'     0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 #'     0x00, 0x00, 0x00, 0x3e, 0x40, 0x00, 0x00, 0x00,
 #'     0x00, 0x00, 0x00, 0x24, 0x40
 #'   )
 #' )
-#' geo_wkb(list(wkb))
+#' wkb <- geo_wkb(list(wkb_item))
+#' wkb
 #'
-geo_wkb <- function(x = list(), include_srid = NA, dimensions = 3, endian = NA) {
+#' # use as_geo_wkb() to use conversion options
+#' as_geo_wkb(wkb, endian = 0)
+#'
+geo_wkb <- function(x = list()) {
   x <- vec_cast(x,  list_of(.ptype = raw()))
+  wkb <- validate_geo_wkb(new_geo_wkb(x))
+  wkb
+}
+
+#' @export
+#' @rdname geo_wkb
+as_geo_wkb <- function(x, ..., include_srid = NA, dimensions = 3, endian = NA) {
+  UseMethod("as_geo_wkb")
+}
+
+#' @export
+#' @rdname new_geo_wkb
+as_geo_wkb.default <- function(x, ..., include_srid = NA, dimensions = 3, endian = NA) {
   include_srid <- vec_cast(include_srid, logical())
   dimensions <- vec_cast(dimensions, integer())
   endian <- vec_cast(endian, integer())
-  wkb <- validate_geo_wkb(
-    new_geo_wkb(
-      x,
-      include_srid = include_srid,
-      dimensions = dimensions,
-      endian = endian
-    )
-  )
-  wkb
+  vec_cast(x, new_geo_wkb(include_srid = include_srid, dimensions = dimensions, endian = endian))
 }
 
 #' S3 details for geo_wkb
@@ -62,6 +71,10 @@ geo_wkb <- function(x = list(), include_srid = NA, dimensions = 3, endian = NA) 
 #' )
 #' wkb <- geo_wkb(list(wkb_raw))
 #' is_geo_wkb(wkb)
+#'
+#' # to skip parse validation if you know your object is
+#' # valid, use new_geo_wkb()
+#' new_geo_wkb(vctrs::new_list_of(list(wkb_raw), raw()))
 #'
 new_geo_wkb <- function(x = vctrs::list_of(.ptype = raw()),
                         include_srid = NA, dimensions = 3L, endian = NA_integer_) {
@@ -105,18 +118,6 @@ print.geo_wkb <- function(x, ...) {
   geo_print(x, ...)
 }
 
-#' @export
-#' @rdname new_geo_wkb
-as_geo_wkb <- function(x, ...) {
-  UseMethod("as_geo_wkb")
-}
-
-#' @export
-#' @rdname new_geo_wkb
-as_geo_wkb.default <- function(x, ...) {
-  vec_cast(x, geo_wkb(...))
-}
-
 #' @method vec_cast geo_wkb
 #' @export
 #' @export vec_cast.geo_wkb
@@ -134,7 +135,11 @@ vec_cast.geo_wkb.default <- function(x, to, ...) {
 #' @method vec_cast.geo_wkb geo_wkb
 #' @export
 vec_cast.geo_wkb.geo_wkb <- function(x, to, ...) {
-  x
+  if (identical(attributes(x), attributes(to))) {
+    x
+  } else {
+    cpp_convert(x, to)
+  }
 }
 
 #' @method vec_cast.geo_wkb list

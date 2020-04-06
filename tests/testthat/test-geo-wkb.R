@@ -93,6 +93,13 @@ test_that("wkb casting and coersion works", {
   )
 })
 
+test_that("casting and coercion respects options", {
+  wkb <- as_geo_wkb(geo_wkt("POINT Z (1 2 3)"))
+  expect_identical(geo_coordinate_dimensions(as_geo_wkb(wkb, dimensions = 3)), 3L)
+  expect_identical(geo_coordinate_dimensions(as_geo_wkb(wkb, dimensions = 2)), 2L)
+  expect_identical(as.list(as_geo_wkb(wkb, endian = 0))[[1]][1], as.raw(0x00))
+})
+
 test_that("geo_wkb can handle empty (multi)points", {
   expect_identical(as_geo_wkt(as_geo_wkb(geo_wkt("POINT EMPTY"))), geo_wkt("POINT EMPTY"))
   expect_identical(as_geo_wkt(as_geo_wkb(geo_wkt("POINT (nan nan)"))), geo_wkt("POINT EMPTY"))

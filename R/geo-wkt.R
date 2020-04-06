@@ -11,32 +11,42 @@
 #'   (number of decimal places).
 #' @param dimensions The maximum number of dimensions to consider
 #'   when generating text.
+#' @param ... Unused
 #'
 #'
 #' @return A [new_geo_wkt()]
 #' @export
 #'
 #' @examples
+#' # use geo_wkt() to "mark" a vector as well-known text
 #' geo_wkt("POINT (30 10)")
 #'
-geo_wkt <- function(x = character(), trim = TRUE, precision = 16, dimensions = 3) {
+#' # use as_geo_wkt() to use conversion options
+#' as_geo_wkt("POINT (30 10)", trim = FALSE, precision = 2)
+#'
+geo_wkt <- function(x = character()) {
   x <- vec_cast(x, character())
-  wkt <- validate_geo_wkt(
-    new_geo_wkt(
-      x,
-      trim = vec_cast(trim, logical()),
-      precision = vec_cast(precision, integer()),
-      dimensions = vec_cast(dimensions, integer())
-    )
-  )
+  wkt <- validate_geo_wkt(new_geo_wkt(x))
   wkt
 }
 
+#' @rdname geo_wkt
+#' @export
+as_geo_wkt <- function(x, ..., trim = TRUE, precision = 16, dimensions = 3) {
+  UseMethod("as_geo_wkt")
+}
+
+#' @export
+as_geo_wkt.default <- function(x, ..., trim = TRUE, precision = 16, dimensions = 3) {
+  trim <- vec_cast(trim, logical())
+  precision <- vec_cast(precision, integer())
+  dimensions <- vec_cast(dimensions, integer())
+  vec_cast(x, new_geo_wkt(trim = trim, precision = precision, dimensions = dimensions))
+}
 
 #' S3 details for geo_wkt
 #'
 #' @inheritParams geo_wkt
-#' @param ... Unused
 #' @param y,to A prototype to cast to. See [vctrs::vec_cast()] and
 #'   [vctrs::vec_ptype2()]
 #'
@@ -45,6 +55,10 @@ geo_wkt <- function(x = character(), trim = TRUE, precision = 16, dimensions = 3
 #' @examples
 #' wkt <- geo_wkt("POINT (30 10)")
 #' is_geo_wkt(wkt)
+#'
+#' # use new_geo_wkt() to skip parse validation if you know
+#' # your text is valid WKT
+#' new_geo_wkt("POINT (30 10)")
 #'
 new_geo_wkt <- function(x = character(), trim = TRUE, precision = 16L, dimensions = 3L) {
   vec_assert(x, character())
@@ -119,18 +133,6 @@ obj_print_data.geo_wkt <- function(x, ...) {
   )
 
   invisible(x)
-}
-
-#' @rdname new_geo_wkt
-#' @export
-as_geo_wkt <- function(x, ...) {
-  UseMethod("as_geo_wkt")
-}
-
-#' @rdname new_geo_wkt
-#' @export
-as_geo_wkt.default <- function(x, ...) {
-  vec_cast(x, geo_wkt(...))
 }
 
 #' @method vec_cast geo_wkt

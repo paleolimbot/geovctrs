@@ -8,24 +8,24 @@ test_that("wkt conversion works", {
 test_that("conversion prototype args are used", {
   wkt <- geo_wkt("POINT Z (10 11 12)")
   expect_identical(
-    cpp_convert(wkt, geo_wkt(trim = FALSE, precision = 2)),
+    cpp_convert(wkt, new_geo_wkt(trim = FALSE, precision = 2L)),
     geo_wkt("POINT Z (10.00 11.00 12.00)")
   )
 
   expect_identical(
-    cpp_convert(wkt, geo_wkt(trim = FALSE, precision = 2, dimensions = 2)),
+    cpp_convert(wkt, new_geo_wkt(trim = FALSE, precision = 2L, dimensions = 2L)),
     geo_wkt("POINT (10.00 11.00)")
   )
 
   # make sure casting applies args
   expect_identical(
-    as_geo_wkt("POINT (10 11)", trim = FALSE, precision = 2),
+    as_geo_wkt(wkt, trim = FALSE, precision = 2, dimensions = 2),
     geo_wkt("POINT (10.00 11.00)")
   )
 
   expect_identical(
-    as_geo_wkt(geo_wkt("POINT (10 11)"), trim = FALSE, precision = 2),
-    geo_wkt("POINT (10.00 11.00)")
+    as_geo_wkt(wkt, trim = FALSE, precision = 2, dimensions = 3),
+    geo_wkt("POINT Z (10.00 11.00 12.00)")
   )
 })
 
@@ -74,25 +74,25 @@ test_that("wkb writer options are respected", {
   )
 
   expect_identical(
-    geo_srid(cpp_convert(collection_with_srid, geo_wkb(include_srid = FALSE))),
+    geo_srid(cpp_convert(collection_with_srid, new_geo_wkb(include_srid = FALSE))),
     c(0L, 0L)
   )
 
   expect_identical(
-    geo_coordinate_dimensions(cpp_convert(geo_wkt("POINT Z (1 2 3)"), geo_wkb(dimensions = NA))),
+    geo_coordinate_dimensions(cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_geo_wkb(dimensions = NA))),
     3L
   )
   expect_identical(
-    geo_coordinate_dimensions(cpp_convert(geo_wkt("POINT Z (1 2 3)"), geo_wkb(dimensions = 2))),
+    geo_coordinate_dimensions(cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_geo_wkb(dimensions = 2))),
     2L
   )
   expect_identical(
-    geo_coordinate_dimensions(cpp_convert(geo_wkt("POINT Z (1 2 3)"), geo_wkb(dimensions = 3))),
+    geo_coordinate_dimensions(cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_geo_wkb(dimensions = 3))),
     3L
   )
 
   wkb <- as_geo_wkb(geo_wkt("POINT Z (1 2 3)"))
-  expect_identical(cpp_convert(wkb, geo_wkb(dimensions = 3)), wkb)
+  expect_identical(cpp_convert(wkb, new_geo_wkb(dimensions = 3)), wkb)
 })
 
 test_that("geo_point conversion works", {

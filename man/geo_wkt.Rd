@@ -2,12 +2,17 @@
 % Please edit documentation in R/geo-wkt.R
 \name{geo_wkt}
 \alias{geo_wkt}
+\alias{as_geo_wkt}
 \title{Create and validate well-known text}
 \usage{
-geo_wkt(x = character(), trim = TRUE, precision = 16, dimensions = 3)
+geo_wkt(x = character())
+
+as_geo_wkt(x, ..., trim = TRUE, precision = 16, dimensions = 3)
 }
 \arguments{
 \item{x}{A character vector containing well-known text}
+
+\item{...}{Unused}
 
 \item{trim}{Trim unnecessary zeroes in the output?}
 
@@ -26,6 +31,10 @@ but does validate it using \code{\link[=validate_geo_wkt]{validate_geo_wkt()}}.
 To skip validation, use \code{\link[=new_geo_wkt]{new_geo_wkt()}}.
 }
 \examples{
+# use geo_wkt() to "mark" a vector as well-known text
 geo_wkt("POINT (30 10)")
+
+# use as_geo_wkt() to use conversion options
+as_geo_wkt("POINT (30 10)", trim = FALSE, precision = 2)
 
 }
