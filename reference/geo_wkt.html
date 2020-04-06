@@ -123,6 +123,8 @@ To skip validation, use <code><a href='new_geo_wkt.html'>new_geo_wkt()</a></code
 
     <pre class="usage"><span class='fu'>geo_wkt</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())
 
+<span class='fu'>parse_wkt</span>(<span class='no'>x</span>)
+
 <span class='fu'>as_geo_wkt</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>trim</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>16</span>, <span class='kw'>dimensions</span> <span class='kw'>=</span> <span class='fl'>3</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -163,6 +165,11 @@ when generating text.</p></td>
 <span class='co'># use as_geo_wkt() to use conversion options</span>
 <span class='fu'>as_geo_wkt</span>(<span class='st'>"POINT (30 10)"</span>, <span class='kw'>trim</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; &lt;geo_wkt[1]&gt;
 #&gt; [1] </span><span style='color: #555555;'>POINT </span><span style='color: #0000BB;'>(30.00 10.00)</span><span></div><div class='input'>
+<span class='co'># use parse_wkt() to identify parsing failures</span>
+<span class='fu'>parse_wkt</span>(<span class='st'>"POINT EMTPY"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 1 parsing failure.</span>
+#&gt; <span class='warning'>row col expected actual      error                                                            </span>
+#&gt; <span class='warning'>1   --  geo_wkt  POINT EMTPY Expected 'Z', 'M', 'ZM', 'EMPTY' or '(' but encountered : 'EMTPY'</span></div><div class='output co'>#&gt; &lt;geo_wkt[1]&gt;
+#&gt; [1] </span><span style='color: #BB0000;'>NA_wkt_</span><span></div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
