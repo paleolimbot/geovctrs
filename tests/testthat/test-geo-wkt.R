@@ -49,6 +49,16 @@ test_that("parse problems for WKT are detected", {
   )
 })
 
+test_that("subset assignment works for WKT class", {
+  wkts <- geo_example_wkt
+
+  wkts[2] <- geo_wkt("POINT (1234 4321)")
+  expect_identical(wkts[2], geo_wkt("POINT (1234 4321)"))
+
+  wkts[2] <- as_geo_wkb(geo_wkt("POINT (1000 1000)"))
+  expect_identical(wkts[2], geo_wkt("POINT (1000 1000)"))
+})
+
 test_that("coersion and casting works for wkt types", {
   wkt <- geo_wkt("POINT (30 10)")
 

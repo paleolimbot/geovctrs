@@ -38,7 +38,6 @@
 #' parse_wkb(list(wkb_item))
 #'
 geo_wkb <- function(x = list()) {
-  x <- vec_cast(x,  list_of(.ptype = raw()))
   wkb <- validate_geo_wkb(new_geo_wkb(x))
   wkb
 }
@@ -46,7 +45,6 @@ geo_wkb <- function(x = list()) {
 #' @export
 #' @rdname geo_wkb
 parse_wkb <- function(x) {
-  x <- vec_cast(x,  list_of(.ptype = raw()))
   validate_provider(new_geo_wkb(x))
 }
 
@@ -85,14 +83,13 @@ as_geo_wkb.default <- function(x, ..., include_srid = NA, dimensions = 3, endian
 #'
 #' # to skip parse validation if you know your object is
 #' # valid, use new_geo_wkb()
-#' new_geo_wkb(vctrs::new_list_of(list(wkb_raw), raw()))
+#' new_geo_wkb(list(wkb_raw))
 #'
-new_geo_wkb <- function(x = vctrs::list_of(.ptype = raw()),
+new_geo_wkb <- function(x = list(),
                         include_srid = NA, dimensions = 3L, endian = NA_integer_) {
-  vec_assert(x, list_of(.ptype = raw()))
-  new_list_of(
+  vec_assert(x, list())
+  new_vctr(
     x,
-    raw(),
     class = c("geo_wkb", "geovctr"),
     include_srid = include_srid,
     dimensions = dimensions,

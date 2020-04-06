@@ -34,7 +34,7 @@ test_that("geo_wkb parse validation works", {
     )
   )
 
-  wkb <- new_geo_wkb(vec_cast(list(wkb_raw, wkb_bad), list_of(.ptype = raw())))
+  wkb <- new_geo_wkb(list(wkb_raw, wkb_bad))
   expect_warning(
     expect_equivalent(
       parse_wkb(list(wkb_raw, wkb_bad)),
@@ -52,8 +52,13 @@ test_that("geo_wkb parse validation works", {
 })
 
 test_that("subset assignment works for WKB class", {
-  #wkbs <- as_geo_wkb(geo_example_wkt)
-  #wkbs[2] <- geo_wkt("POINT (1000 1000)")
+  wkbs <- as_geo_wkb(geo_example_wkt)
+
+  wkbs[2] <- as_geo_wkb(geo_wkt("POINT (1000 1000)"))
+  expect_identical(wkbs[2], as_geo_wkb(geo_wkt("POINT (1000 1000)")))
+
+  wkbs[2] <- geo_wkt("POINT (1234 4321)")
+  expect_identical(wkbs[2], as_geo_wkb(geo_wkt("POINT (1234 4321)")))
 })
 
 test_that("wkb casting and coersion works", {

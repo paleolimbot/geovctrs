@@ -12,7 +12,7 @@
 \method{as_geo_wkb}{default}(x, ..., include_srid = NA, dimensions = 3, endian = NA)
 
 new_geo_wkb(
-  x = vctrs::list_of(.ptype = raw()),
+  x = list(),
   include_srid = NA,
   dimensions = 3L,
   endian = NA_integer_
@@ -64,6 +64,6 @@ is_geo_wkb(wkb)
 
 # to skip parse validation if you know your object is
 # valid, use new_geo_wkb()
-new_geo_wkb(vctrs::new_list_of(list(wkb_raw), raw()))
+new_geo_wkb(list(wkb_raw))
 
 }

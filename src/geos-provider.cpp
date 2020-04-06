@@ -209,8 +209,7 @@ void WKBGeometryExporter::init(GEOSContextHandle_t context, size_t size) {
   }
 
   List data(size);
-  data.attr("class") = CharacterVector::create("geo_wkb", "geovctr", "vctrs_list_of", "vctrs_vctr");
-  data.attr("ptype") = RawVector::create();
+  data.attr("class") = CharacterVector::create("geo_wkb", "geovctr", "vctrs_vctr");
   data.attr("include_srid") = LogicalVector::create(LogicalVector::get_na());
   data.attr("dimensions") = IntegerVector::create(3);
   data.attr("endian") = IntegerVector::create(LogicalVector::get_na());
