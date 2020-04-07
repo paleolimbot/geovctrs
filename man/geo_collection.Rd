@@ -26,3 +26,12 @@ or more objects of type \code{\link[=geo_point]{geo_point()}}, \code{\link[=geo_
 \code{\link[=geo_multipoint]{geo_multipoint()}}, \code{\link[=geo_multilinestring]{geo_multilinestring()}}, and/or
 \code{\link[=geo_multipolygon]{geo_multipolygon()}}.
 }
+\examples{
+# geo_point() and family all return a geo_collection() of length 1
+c(geo_point(geo_xy(0, 1)), geo_point(geo_xy(1, 2)))
+
+# create a nested geo_collection by passing a geo_collection()
+# as `feature`
+c(geo_point(geo_xy(0, 1)), geo_collection(geo_point(geo_xy(1, 2))))
+
+}

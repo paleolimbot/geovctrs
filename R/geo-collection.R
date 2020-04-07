@@ -15,13 +15,29 @@
 #' @return A [new_geo_collection()]
 #' @export
 #'
+#' @examples
+#' # geo_point() and family all return a geo_collection() of length 1
+#' c(geo_point(geo_xy(0, 1)), geo_point(geo_xy(1, 2)))
+#'
+#' # create a nested geo_collection by passing a geo_collection()
+#' # as `feature`
+#' c(geo_point(geo_xy(0, 1)), geo_collection(geo_point(geo_xy(1, 2))))
+#'
 geo_collection <- function(feature = list(), srid = 0) {
-  new_geo_collection(
+  # make it possible to create a nested geo_collection
+  if (is_geo_collection(feature)) {
+    feature = list(feature)
+  }
+
+  collection <- new_geo_collection(
     vec_recycle_common(
       feature = feature,
       srid = as_geo_srid(srid)
     )
   )
+
+  validate_geo_collection(collection)
+  collection
 }
 
 #' S3 Details for coordinate vector collections
@@ -39,14 +55,15 @@ new_geo_collection <- function(x = list(feature = list(), srid = integer())) {
 #' @rdname new_geo_collection
 #' @export
 validate_geo_collection <- function(x) {
-  lapply(x, function(item) {
-    inherits(x, "geo_coord_point") ||
-      inherits(x, "geo_coord_multipoint") ||
-      inherits(x, "geo_coord_linestring") ||
-      inherits(x, "geo_coord_multilinestring") ||
-      inherits(x, "geo_coord_polygon") ||
-      inherits(x, "geo_coord_multipolygon") ||
-      inherits(x, "geo_collection")
+  lapply(field(x, "feature"), function(item) {
+    is.null(item) ||
+      inherits(item, "geo_coord_point") ||
+      inherits(item, "geo_coord_multipoint") ||
+      inherits(item, "geo_coord_linestring") ||
+      inherits(item, "geo_coord_multilinestring") ||
+      inherits(item, "geo_coord_polygon") ||
+      inherits(item, "geo_coord_multipolygon") ||
+      inherits(item, "geo_collection")
   })
 
   invisible(x)
