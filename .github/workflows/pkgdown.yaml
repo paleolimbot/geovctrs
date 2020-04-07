@@ -15,14 +15,13 @@ jobs:
         if: runner.os == 'MacOS'
         run: |
           brew install geos
-          brew install gdal
           brew install cairo
           brew cask install xquartz
       - name: Install dependencies
         run: |
           install.packages("remotes")
           remotes::install_deps(dependencies = TRUE)
-          remotes::install_cran("sf")
+          remotes::install_cran("sf", type = "binary")
           remotes::install_dev("pkgdown")
         shell: Rscript {0}
 
