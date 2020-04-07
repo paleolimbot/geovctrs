@@ -56,7 +56,6 @@ as_geo_wkb <- function(x, ..., include_srid = NA, dimensions = 3, endian = NA) {
 }
 
 #' @export
-#' @rdname new_geo_wkb
 as_geo_wkb.default <- function(x, ..., include_srid = NA, dimensions = 3, endian = NA) {
   include_srid <- vec_cast(include_srid, logical())
   dimensions <- vec_cast(dimensions, integer())
@@ -148,6 +147,12 @@ vec_cast.geo_wkb.geo_wkb <- function(x, to, ...) {
   } else {
     cpp_convert(x, to)
   }
+}
+
+#' @method vec_cast.geo_wkb character
+#' @export
+vec_cast.geo_wkb.character <- function(x, to, ...) {
+  cpp_convert(geo_wkt(x), to)
 }
 
 #' @method vec_cast.geo_wkb list

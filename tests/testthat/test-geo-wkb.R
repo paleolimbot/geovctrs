@@ -119,6 +119,11 @@ test_that("wkb casting and coersion works", {
     vec_cast(geo_point(geo_xy(1, 2)), geo_wkb()),
     as_geo_wkb(geo_point(geo_xy(1, 2)), geo_wkb())
   )
+
+  expect_identical(
+    as_geo_wkb("POINT Z (21 23 13)"),
+    as_geo_wkb(geo_wkt("POINT Z (21 23 13)"))
+  )
 })
 
 test_that("casting and coercion respects options", {
