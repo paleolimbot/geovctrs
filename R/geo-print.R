@@ -87,17 +87,22 @@ geo_format_summary <- function(summary, class, short, col) {
     summary$is_empty,
     maybe_grey("EMPTY", col = col),
     ifelse(
-      summary$geometry_type == "point",
-      maybe_blue(format(summary$first_coordinate), col = col),
-      paste0(
+      summary$geometry_type == "geometrycollection",
+      "",
+      ifelse(
+        summary$geometry_type == "point",
         maybe_blue(format(summary$first_coordinate), col = col),
-        maybe_grey("\U2026+", summary$n_coordinates - 1, col = col)
+        paste0(
+          maybe_blue(format(summary$first_coordinate), col = col),
+          maybe_grey("\U2026+", summary$n_coordinates - 1, col = col)
+        )
       )
     )
   )
 
   n_sub_geom_str <- ifelse(
-    is_multi_geometry_type(summary$geometry_type) & !summary$is_empty,
+    (summary$geometry_type == "geometrycollection")  |
+    (is_multi_geometry_type(summary$geometry_type) & !summary$is_empty),
     maybe_grey(paste0("[", summary$n_geometries, "]"), col = col),
     ""
   )
