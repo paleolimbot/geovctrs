@@ -38,6 +38,7 @@
 #' parse_wkb(list(wkb_item))
 #'
 geo_wkb <- function(x = list()) {
+  x <- as.list(x)
   wkb <- validate_geo_wkb(new_geo_wkb(x))
   wkb
 }
