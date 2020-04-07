@@ -79,10 +79,6 @@ test_that("wkb writer options are respected", {
   )
 
   expect_identical(
-    geo_coordinate_dimensions(cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_geo_wkb(dimensions = NA))),
-    3L
-  )
-  expect_identical(
     geo_coordinate_dimensions(cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_geo_wkb(dimensions = 2))),
     2L
   )

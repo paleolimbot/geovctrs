@@ -114,10 +114,7 @@ void WKTGeometryExporter::init(GEOSContextHandle_t context, size_t size) {
   this->wkt_writer = GEOSWKTWriter_create_r(context);
   GEOSWKTWriter_setTrim_r(this->context, this->wkt_writer, this->trim);
   GEOSWKTWriter_setRoundingPrecision_r(this->context, this->wkt_writer, this->precision);
-
-  if (!IntegerVector::is_na(this->dimensions)) {
-    GEOSWKTWriter_setOutputDimension_r(this->context, this->wkt_writer, this->dimensions);
-  }
+  GEOSWKTWriter_setOutputDimension_r(this->context, this->wkt_writer, this->dimensions);
 
   CharacterVector data(size);
   data.attr("class") = CharacterVector::create("geo_wkt", "geovctr", "vctrs_vctr");
@@ -135,11 +132,6 @@ void WKTGeometryExporter::putNext(GEOSGeometry* geometry) {
   if (geometry == NULL) {
     this->data[this->counter] = NA_STRING;
   } else {
-    if (IntegerVector::is_na(this->dimensions)) {
-      int featureDims = GEOSGeom_getCoordinateDimension_r(this->context, geometry);
-      GEOSWKTWriter_setOutputDimension_r(this->context, this->wkt_writer, featureDims);
-    }
-
     std::string wkt_single;
     wkt_single = GEOSWKTWriter_write_r(this->context, wkt_writer, geometry);
     this->data[this->counter] = wkt_single;
@@ -201,9 +193,7 @@ void WKBGeometryExporter::init(GEOSContextHandle_t context, size_t size) {
   if (!LogicalVector::is_na(this->includeSRID)) {
     GEOSWKBWriter_setIncludeSRID_r(this->context, this->wkb_writer, this->includeSRID);
   }
-  if (!IntegerVector::is_na(this->dimensions)) {
-    GEOSWKBWriter_setOutputDimension_r(this->context, this->wkb_writer, this->dimensions);
-  }
+  GEOSWKBWriter_setOutputDimension_r(this->context, this->wkb_writer, this->dimensions);
   if (!IntegerVector::is_na(this->endian)) {
     GEOSWKBWriter_setByteOrder_r(this->context, this->wkb_writer, this->endian);
   }
@@ -226,11 +216,6 @@ void WKBGeometryExporter::putNext(GEOSGeometry* geometry) {
       bool useSRID = (srid != 0) && !IntegerVector::is_na(srid);
       GEOSWKBWriter_setIncludeSRID_r(this->context, this->wkb_writer, useSRID);
     }
-    if (IntegerVector::is_na(this->dimensions)) {
-      int featureDims = GEOSGeom_getCoordinateDimension_r(this->context, geometry);
-      GEOSWKBWriter_setOutputDimension_r(this->context, this->wkb_writer, featureDims);
-    }
-
 
     // GEOSWKBWriter won't deal with POINT EMPTY, but we handle in the same way
     // as sf (GEOSWKBReader seems to have no problem with this solution)
