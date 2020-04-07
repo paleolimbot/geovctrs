@@ -86,7 +86,7 @@
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
-<p>This package has reasonable <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code> and <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> methods for WKB and WKT types, and provides a <a href="https://vctrs.r-lib.org/">vctrs</a> implementation for these types so that they âjust workâ with <a href="https://tibble.tidyverse.org/">tibble</a>, <a href="https://tidyr.tidyverse.org/">tidyr</a>, and <a href="https://dplyr.tidyverse.org/">dplyr</a> (&gt;=1.0.0) (among others).</p>
+<p>This package has reasonable <code><a href="https://rdrr.io/pkg/sf/man/plot.html">plot()</a></code> and <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> methods for WKB and WKT types, and provides a <a href="https://vctrs.r-lib.org/">vctrs</a> implementation for these types so that they âjust workâ with <a href="https://tibble.tidyverse.org/">tibble</a>, <a href="https://tidyr.tidyverse.org/">tidyr</a>, and <a href="https://dplyr.tidyverse.org/">dplyr</a> (&gt;=1.0.0) (among others).</p>
 <div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">geo_example_wkt</span>)
 <span class="co">#&gt; &lt;geo_wkt[6]&gt;</span>
 <span class="co">#&gt; [1] NA_wkt_                                </span>
@@ -98,7 +98,7 @@
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fu"><a href="reference/geo_wkb.html">as_geo_wkb</a></span>(<span class="no">geo_example_wkt</span>))
 <span class="co">#&gt; &lt;geo_wkb[6]&gt;</span>
 <span class="co">#&gt; [1] NA_wkb_                  POINT (30 10)           </span>
-<span class="co">#&gt; [3] POINT EMPTY              POINT (1 1)             </span>
+<span class="co">#&gt; [3] POINT EMPTY              POINT Z (1 1)           </span>
 <span class="co">#&gt; [5] MULTIPOINT[4] (10 40)â¦+3 MULTIPOINT EMPTY</span></pre></div>
 <p>Most methods work on anything that can be interpreted as geometry, including character vectors and data.frames containing exactly one geometry column.</p>
 <div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="reference/geo_plot.html">geo_plot</a></span>(<span class="st">"LINESTRING (30 10, 10 30, 40 40)"</span>)</pre></div>
@@ -120,6 +120,62 @@
 <span class="co">#&gt; 10 â³â½[1] (-80.02567 36.25023)â¦+5      176     5  2038     160     1  1612</span>
 <span class="co">#&gt; # â¦ with 90 more rows, and 5 more variables: CRESS_ID &lt;int&gt;, FIPSNO &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   FIPS &lt;chr&gt;, NAME &lt;chr&gt;, CNTY_ID &lt;dbl&gt;</span></pre></div>
+</div>
+<div id="sf-and-data-frame-support" class="section level2">
+<h2 class="hasAnchor">
+<a href="#sf-and-data-frame-support" class="anchor"></a>sf and data frame support</h2>
+<p>The geovctrs package has tentative sf and data frame support for all processing functions, following the principle that well-mannered transformation functions return the same type and shape as the input. For data frames with exactly one geovctr column, transformation functions replace the output column with another geovctr (this might be of a different type, but will be a geovctr).</p>
+<div class="sourceCode" id="cb6"><pre class="r"><span class="fu"><a href="reference/geo_bbox.html">geo_envelope</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span>(<span class="no">geo_nc</span>))
+<span class="co">#&gt; # A tibble: 100 x 12</span>
+<span class="co">#&gt;    geometry                  NWBIR79 SID79 BIR79 NWBIR74 SID74 BIR74</span>
+<span class="co">#&gt;    &lt;rect&gt;                      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 â³ (-81.74107 36.23436)â¦+4      19     0  1364      10     1  1091</span>
+<span class="co">#&gt;  2 â³ (-81.34754 36.36536)â¦+4      12     3   542      10     0   487</span>
+<span class="co">#&gt;  3 â³ (-80.96577 36.23388)â¦+4     260     6  3616     208     5  3188</span>
+<span class="co">#&gt;  4 â³ (-76.33025 36.07282)â¦+4     145     2   830     123     1   508</span>
+<span class="co">#&gt;  5 â³ (-77.90121 36.16277)â¦+4    1197     3  1606    1066     9  1421</span>
+<span class="co">#&gt;  6 â³ (-77.21767 36.23024)â¦+4    1237     5  1838     954     7  1452</span>
+<span class="co">#&gt;  7 â³ (-76.56358 36.16973)â¦+4     139     2   350     115     0   286</span>
+<span class="co">#&gt;  8 â³ (-76.95367 36.29452)â¦+4     371     2   594     254     0   420</span>
+<span class="co">#&gt;  9 â³ (-78.32125 36.19595)â¦+4     844     2  1190     748     4   968</span>
+<span class="co">#&gt; 10 â³ (-80.45301 36.25023)â¦+4     176     5  2038     160     1  1612</span>
+<span class="co">#&gt; # â¦ with 90 more rows, and 5 more variables: CRESS_ID &lt;int&gt;, FIPSNO &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   FIPS &lt;chr&gt;, NAME &lt;chr&gt;, CNTY_ID &lt;dbl&gt;</span></pre></div>
+<p>For sf objects, this means that valid sf objects are returned:</p>
+<div class="sourceCode" id="cb7"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sf</span>)
+<span class="co">#&gt; Linking to GEOS 3.7.2, GDAL 2.4.2, PROJ 5.2.0</span>
+<span class="no">sf_nc</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_read.html">read_sf</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"sf"</span>))
+<span class="fu"><a href="reference/geo_bbox.html">geo_envelope</a></span>(<span class="no">sf_nc</span>)
+<span class="co">#&gt; Simple feature collection with 100 features and 14 fields</span>
+<span class="co">#&gt; geometry type:  POLYGON</span>
+<span class="co">#&gt; dimension:      XY</span>
+<span class="co">#&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
+<span class="co">#&gt; epsg (SRID):    4267</span>
+<span class="co">#&gt; proj4string:    +proj=longlat +datum=NAD27 +no_defs</span>
+<span class="co">#&gt; # A tibble: 100 x 15</span>
+<span class="co">#&gt;     AREA PERIMETER CNTY_ CNTY_ID NAME  FIPS  FIPSNO CRESS_ID BIR74 SID74</span>
+<span class="co">#&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;    &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 0.114      1.44  1825    1825 Ashe  37009  37009        5  1091     1</span>
+<span class="co">#&gt;  2 0.061      1.23  1827    1827 Alleâ¦ 37005  37005        3   487     0</span>
+<span class="co">#&gt;  3 0.143      1.63  1828    1828 Surry 37171  37171       86  3188     5</span>
+<span class="co">#&gt;  4 0.07       2.97  1831    1831 Currâ¦ 37053  37053       27   508     1</span>
+<span class="co">#&gt;  5 0.153      2.21  1832    1832 Nortâ¦ 37131  37131       66  1421     9</span>
+<span class="co">#&gt;  6 0.097      1.67  1833    1833 Hertâ¦ 37091  37091       46  1452     7</span>
+<span class="co">#&gt;  7 0.062      1.55  1834    1834 Camdâ¦ 37029  37029       15   286     0</span>
+<span class="co">#&gt;  8 0.091      1.28  1835    1835 Gates 37073  37073       37   420     0</span>
+<span class="co">#&gt;  9 0.118      1.42  1836    1836 Warrâ¦ 37185  37185       93   968     4</span>
+<span class="co">#&gt; 10 0.124      1.43  1837    1837 Stokâ¦ 37169  37169       85  1612     1</span>
+<span class="co">#&gt; # â¦ with 90 more rows, and 5 more variables: NWBIR74 &lt;dbl&gt;, BIR79 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   SID79 &lt;dbl&gt;, NWBIR79 &lt;dbl&gt;, geometry &lt;POLYGON [Â°]&gt;</span></pre></div>
+<p>Other functions that accept geometry as input will treat sf and data frame objects as vectors with the length of <code><a href="https://rdrr.io/r/base/nrow.html">nrow(x)</a></code>:</p>
+<div class="sourceCode" id="cb8"><pre class="r"><span class="fu"><a href="reference/geo_summary.html">geo_n_coordinates</a></span>(<span class="no">sf_nc</span>)
+<span class="co">#&gt;   [1] 27 26 28 38 34 22 24 17 14  6  7  7 17  6 13 53 20 47 23 12 17 28 24</span>
+<span class="co">#&gt;  [24] 20 22  6 10 45  9 18 23 34 28 27 33 37 27 30 19 29 17 31 34 18 16 35</span>
+<span class="co">#&gt;  [47]  7 27 19 18 45 14 45 27 39 24 36 44 23 24 33 29 22 21 11 36 29 31 14</span>
+<span class="co">#&gt;  [70] 24 32 35 27 31 22 19 16 29 40 20 27 29 31 18 27 14 31 30 36 17 39 17</span>
+<span class="co">#&gt;  [93] 19 25 30 31 34 33 23 27</span>
+<span class="fu"><a href="reference/geo_plot.html">geo_plot</a></span>(<span class="no">sf_nc</span>)</pre></div>
+<p><img src="reference/figures/README-sf-nc-plot-1.png" width="100%"></p>
 </div>
 </div>
   </div>
