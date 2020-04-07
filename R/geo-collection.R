@@ -169,13 +169,13 @@ vec_ptype2.geo_collection.default <- function(x, y, ..., x_arg = "x", y_arg = "y
 #' @method vec_ptype2.geo_collection geo_wkb
 #' @export
 vec_ptype2.geo_collection.geo_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_collection()
+  geo_wkb()
 }
 
 #' @method vec_ptype2.geo_collection geo_wkt
 #' @export
 vec_ptype2.geo_collection.geo_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_collection()
+  geo_wkt()
 }
 
 #' @method vec_ptype2.geo_collection geo_collection
