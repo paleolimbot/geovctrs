@@ -58,6 +58,7 @@
 #' geometry vector.
 #'
 #' @param x A (possibly) geovctr
+#' @param result The result of a transformation operation
 #' @param ... Passed to the constructor
 #'
 #' @export
@@ -96,6 +97,54 @@ as_geovctr.character <- function(x, ...) {
 #' @export
 as_geovctr.data.frame <- function(x, ...) {
   x[[find_geovctr_column(x)]]
+}
+
+#' @rdname is_geovctr
+#' @export
+as_geovctr.sfc <- function(x, ...) {
+  wkb_list <- unclass(sf_compat_as_binary(x, ..., EWKB = TRUE))
+  new_geo_wkb(wkb_list)
+}
+
+#' @rdname is_geovctr
+#' @export
+as_geovctr.sf <- function(x, ...) {
+  as_geovctr(x[[attr(x, "sf_column")]], ...)
+}
+
+#' @rdname is_geovctr
+#' @export
+restore_geovctr <- function(x, result, ...) {
+  UseMethod("restore_geovctr")
+}
+
+#' @rdname is_geovctr
+#' @export
+restore_geovctr.default <- function(x, result, ...) {
+  result
+}
+
+#' @rdname is_geovctr
+#' @export
+restore_geovctr.data.frame <- function(x, result, ...) {
+  x[[find_geovctr_column(x)]] <- result
+  x
+}
+
+#' @rdname is_geovctr
+#' @export
+restore_geovctr.sfc <- function(x, result, ...) {
+  wkb <- as_geo_wkb(result)
+  wkb[is.na(wkb)] <- as_geo_wkb("GEOMETRYCOLLECTION EMPTY")
+  class(wkb) <- "WKB"
+  sf_compat_as_sfc(wkb, ..., EWKB = TRUE)
+}
+
+#' @rdname is_geovctr
+#' @export
+restore_geovctr.sf <- function(x, result, ...) {
+  x[[attr(x, "sf_column")]] <- restore_geovctr(x[[attr(x, "sf_column")]], result, ...)
+  x
 }
 
 find_geovctr_column <- function(x) {

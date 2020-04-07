@@ -28,7 +28,7 @@
 #' )
 #'
 #' geo_srid(geometries)
-#' geo_srid(set_geo_srid(geometries, NA))
+#' geo_srid(geo_set_srid(geometries, NA))
 #'
 #' # SRIDs are propogated through conversions,
 #' # or discarded with a warning
@@ -47,8 +47,14 @@ geo_srid.default <- function(x) {
 
 #' @export
 #' @rdname geo_srid
-set_geo_srid <- function(x, srid) {
-  UseMethod("set_geo_srid")
+geo_set_srid <- function(x, srid) {
+  UseMethod("geo_set_srid")
+}
+
+#' @export
+#' @rdname geo_srid
+geo_set_srid.default <- function(x, srid) {
+  restore_geovctr(x, geo_set_srid(as_geovctr(x), srid))
 }
 
 #' @export
@@ -57,7 +63,7 @@ geo_srid.vctrs_rcrd <- function(x) {
 }
 
 #' @export
-set_geo_srid.vctrs_rcrd <- function(x, srid) {
+geo_set_srid.vctrs_rcrd <- function(x, srid) {
   srid <- vec_recycle(srid, vec_size(x))
   field(x, "srid") <- as_geo_srid(srid)
   x
@@ -71,7 +77,7 @@ geo_srid.geo_wkt <- function(x) {
 }
 
 #' @export
-set_geo_srid.geo_wkt <- function(x, srid) {
+geo_set_srid.geo_wkt <- function(x, srid) {
   if (any(srid != 0)) {
     abort("Can't store SRID with a geo_wkt()")
   }
@@ -86,7 +92,7 @@ geo_srid.geo_xy <- function(x) {
 }
 
 #' @export
-set_geo_srid.geo_xy <- function(x, srid) {
+geo_set_srid.geo_xy <- function(x, srid) {
   if (any(srid != 0, na.rm = TRUE)) {
     abort("Can't store SRID with a geo_xy()")
   }
@@ -99,7 +105,7 @@ geo_srid.geo_wkb <- function(x) {
 }
 
 #' @export
-set_geo_srid.geo_wkb <- function(x, srid) {
+geo_set_srid.geo_wkb <- function(x, srid) {
   srid <- vec_recycle(srid, vec_size(x))
   cpp_set_srid(x, srid)
 }

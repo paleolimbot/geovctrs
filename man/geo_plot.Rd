@@ -6,6 +6,7 @@
 \alias{geo_plot_add.default}
 \alias{geo_plot_add.geovctr}
 \alias{geo_plot_add.data.frame}
+\alias{geo_plot_add.sf}
 \alias{geo_plot_add.geo_xy}
 \alias{geo_plot_add.geo_segment}
 \alias{geo_plot_add.geo_rect}
@@ -21,6 +22,8 @@ geo_plot_add(x, ...)
 \method{geo_plot_add}{geovctr}(x, ...)
 
 \method{geo_plot_add}{data.frame}(x, ...)
+
+\method{geo_plot_add}{sf}(x, ...)
 
 \method{geo_plot_add}{geo_xy}(x, ...)
 

@@ -3,7 +3,8 @@
 \name{geo_srid}
 \alias{geo_srid}
 \alias{geo_srid.default}
-\alias{set_geo_srid}
+\alias{geo_set_srid}
+\alias{geo_set_srid.default}
 \alias{as_geo_srid}
 \title{Extract a spatial reference identifier}
 \usage{
@@ -11,7 +12,9 @@ geo_srid(x)
 
 \method{geo_srid}{default}(x)
 
-set_geo_srid(x, srid)
+geo_set_srid(x, srid)
+
+\method{geo_set_srid}{default}(x, srid)
 
 as_geo_srid(x)
 }
@@ -46,7 +49,7 @@ geometries <- c(
 )
 
 geo_srid(geometries)
-geo_srid(set_geo_srid(geometries, NA))
+geo_srid(geo_set_srid(geometries, NA))
 
 # SRIDs are propogated through conversions,
 # or discarded with a warning

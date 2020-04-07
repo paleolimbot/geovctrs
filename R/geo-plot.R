@@ -94,6 +94,15 @@ geo_plot_add.data.frame <- function(x, ...) {
 
 #' @rdname geo_plot
 #' @export
+geo_plot_add.sf <- function(x, ...) {
+  geometry_col <- attr(x, "sf_column")
+  as_df <- tibble::as_tibble(unclass(x))
+  as_df[[geometry_col]] <- as_geovctr(x)
+  geo_plot_add(as_df, ...)
+}
+
+#' @rdname geo_plot
+#' @export
 geo_plot_add.geo_xy <- function(x, ...) {
   graphics::points(field(x, "x"), field(x, "y"), ...)
   invisible(x)

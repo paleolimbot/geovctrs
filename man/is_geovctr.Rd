@@ -6,6 +6,13 @@
 \alias{as_geovctr.geovctr}
 \alias{as_geovctr.character}
 \alias{as_geovctr.data.frame}
+\alias{as_geovctr.sfc}
+\alias{as_geovctr.sf}
+\alias{restore_geovctr}
+\alias{restore_geovctr.default}
+\alias{restore_geovctr.data.frame}
+\alias{restore_geovctr.sfc}
+\alias{restore_geovctr.sf}
 \alias{expect_geovctr}
 \title{Test for geovctrs}
 \usage{
@@ -19,12 +26,28 @@ as_geovctr(x, ...)
 
 \method{as_geovctr}{data.frame}(x, ...)
 
+\method{as_geovctr}{sfc}(x, ...)
+
+\method{as_geovctr}{sf}(x, ...)
+
+restore_geovctr(x, result, ...)
+
+\method{restore_geovctr}{default}(x, result, ...)
+
+\method{restore_geovctr}{data.frame}(x, result, ...)
+
+\method{restore_geovctr}{sfc}(x, result, ...)
+
+\method{restore_geovctr}{sf}(x, result, ...)
+
 expect_geovctr(x)
 }
 \arguments{
 \item{x}{A (possibly) geovctr}
 
 \item{...}{Passed to the constructor}
+
+\item{result}{The result of a transformation operation}
 }
 \description{
 A geovctr is a geometry-like collection of objects. In the geovctrs

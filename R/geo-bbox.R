@@ -31,7 +31,7 @@ geo_envelope <- function(x, ..., na.rm = FALSE) {
 
 #' @export
 geo_envelope.default <- function(x, ..., na.rm = FALSE) {
-  cpp_envelope(as_geovctr(x), na.rm)
+  restore_geovctr(x, cpp_envelope(as_geovctr(x), na.rm))
 }
 
 #' @export
@@ -105,7 +105,7 @@ geo_envelope.geo_rect <- function(x, ..., na.rm = FALSE) {
 
 #' @export
 geo_bbox.default <- function(x, ..., na.rm = FALSE) {
-  rects <- geo_envelope(x, ..., na.rm = na.rm)
+  rects <- geo_envelope(as_geovctr(x), ..., na.rm = na.rm)
   srid <- unique(geo_srid(rects))[1]
 
   xmin <- suppressWarnings(min(field(rects, "xmin"), na.rm = na.rm))

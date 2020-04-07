@@ -60,3 +60,25 @@ Like any self-respecting geometry package, geovctrs contains a copy of the North
 rev(geo_nc)
 ```
 
+## sf and data frame support
+
+The geovctrs package has tentative sf and data frame support for all processing functions, following the principle that well-mannered transformation functions return the same type and shape as the input. For data frames with exactly one geovctr column, transformation functions replace the output column with another geovctr (this might be of a different type, but will be a geovctr).
+
+```{r}
+geo_envelope(rev(geo_nc))
+```
+
+For sf objects, this means that valid sf objects are returned:
+
+```{r}
+library(sf)
+sf_nc <- read_sf(system.file("shape/nc.shp", package = "sf"))
+geo_envelope(sf_nc)
+```
+
+Other functions that accept geometry as input will treat sf and data frame objects as vectors with the length of `nrow(x)`:
+
+```{r sf-nc-plot}
+geo_n_coordinates(sf_nc)
+geo_plot(sf_nc)
+```

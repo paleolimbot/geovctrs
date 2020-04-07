@@ -11,15 +11,15 @@ test_that("SRID extraction works", {
 
   # collection
   expect_identical(geo_srid(geometries), c(26920L, 0L))
-  expect_identical(geo_srid(set_geo_srid(geometries, 0)), c(0L, 0L))
+  expect_identical(geo_srid(geo_set_srid(geometries, 0)), c(0L, 0L))
 
   # wkt
-  expect_identical(geo_srid(set_geo_srid(geometries_wkt, 0)), c(0L, 0L))
-  expect_error(geo_srid(set_geo_srid(geometries_wkt, 2)), "Can't store SRID")
+  expect_identical(geo_srid(geo_set_srid(geometries_wkt, 0)), c(0L, 0L))
+  expect_error(geo_srid(geo_set_srid(geometries_wkt, 2)), "Can't store SRID")
 
   # wkb
   expect_identical(geo_srid(geometries_wkb), c(26920L, 0L))
-  expect_identical(geo_srid(set_geo_srid(geometries_wkb, 0)), c(0L, 0L))
+  expect_identical(geo_srid(geo_set_srid(geometries_wkb, 0)), c(0L, 0L))
 
   # via as_geovctr()
   expect_identical(geo_srid("POINT EMPTY"), 0L)
