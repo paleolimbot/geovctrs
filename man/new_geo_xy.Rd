@@ -3,7 +3,6 @@
 \name{new_geo_xy}
 \alias{new_geo_xy}
 \alias{is_geo_xy}
-\alias{validate_geo_xy}
 \alias{as_geo_xy.matrix}
 \alias{as.matrix.geo_xy}
 \alias{as_geo_xy}
@@ -15,8 +14,6 @@
 new_geo_xy(x = list(x = double(), y = double()))
 
 is_geo_xy(x)
-
-validate_geo_xy(x)
 
 \method{as_geo_xy}{matrix}(x, ...)
 

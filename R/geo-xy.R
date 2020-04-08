@@ -39,12 +39,6 @@ is_geo_xy <- function(x) {
 }
 
 #' @export
-#' @rdname new_geo_xy
-validate_geo_xy <- function(x) {
-  abort("not implemented")
-}
-
-#' @export
 vec_ptype_abbr.geo_xy <- function(x, ...) {
   "xy"
 }
@@ -154,7 +148,7 @@ vec_ptype2.geo_xy <- function(x, y, ...) {
 #' @method vec_ptype2.geo_xy default
 #' @export
 vec_ptype2.geo_xy.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg)
+  vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg) # nocov
 }
 
 #' @method vec_ptype2.geo_xy geo_xy

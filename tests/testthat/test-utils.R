@@ -40,3 +40,9 @@ test_that("SRID summariser works", {
   expect_silent(summarise_srids(1))
   expect_silent(summarise_srids(integer()))
 })
+
+test_that("grepl_na works", {
+  expect_identical(grepl_na("something", NA_character_), NA)
+  expect_identical(grepl_na("something", "something"), TRUE)
+  expect_identical(grepl_na("something", "nothing"), FALSE)
+})

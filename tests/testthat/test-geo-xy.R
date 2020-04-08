@@ -13,7 +13,21 @@ test_that("geo_xy casting works", {
 
   expect_equal(as.data.frame(xy), data.frame(x = 0:5, y = 1:6))
   expect_equal(tibble::as_tibble(xy), tibble(x = 0:5, y = 1:6))
-  expect_identical(dim(as.matrix(xy)), c(6L, 2L))
+
+  mat <- as.matrix(xy)
+  expect_identical(dim(mat), c(6L, 2L))
+  expect_identical(as_geo_xy(mat), xy)
+  # colnames matter!
+  mat2 <- mat[, c("y", "x")]
+  expect_identical(as_geo_xy(mat2), xy)
+  # fallback on order
+  colnames(mat2) <- NULL
+  expect_identical(as_geo_xy(mat2), geo_xy(1:6, 0:5))
+})
+
+test_that("geo_xy c() works", {
+  expect_is(c(geo_xy(), geo_xy()), "geo_xy")
+  expect_error(c(geo_xy(), 5), class = "vctrs_error_incompatible_type")
 })
 
 test_that("coersion to xy works", {

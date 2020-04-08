@@ -147,7 +147,7 @@ vec_ptype2.geo_segment <- function(x, y, ...) {
 #' @method vec_ptype2.geo_segment default
 #' @export
 vec_ptype2.geo_segment.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg)
+  vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg) # nocov
 }
 
 #' @method vec_ptype2.geo_segment geo_segment
