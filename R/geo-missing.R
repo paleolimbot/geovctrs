@@ -107,7 +107,7 @@ geo_has_missing.geo_segment <- function(x) {
 }
 
 #' @export
-geo_has_missing.geo_rect <- function(x) {
+geo_has_missing.geovctrs_rect <- function(x) {
   result <- is.na(field(x, "xmin")) |
     is.na(field(x, "ymin")) |
     is.na(field(x, "xmax")) |
@@ -152,7 +152,7 @@ geo_is_finite.geo_segment <- function(x) {
 }
 
 #' @export
-geo_is_finite.geo_rect <- function(x) {
+geo_is_finite.geovctrs_rect <- function(x) {
   result <- is.finite(field(x, "xmin")) &
     is.finite(field(x, "ymin")) &
     is.finite(field(x, "xmax")) &
@@ -195,8 +195,8 @@ geo_is_empty.geo_segment <- function(x) {
 }
 
 #' @export
-geo_is_empty.geo_rect <- function(x) {
-  geo_has_missing.geo_rect(x)
+geo_is_empty.geovctrs_rect <- function(x) {
+  geo_has_missing.geovctrs_rect(x)
 }
 
 # ----- missing values (assigned in .onLoad) --------

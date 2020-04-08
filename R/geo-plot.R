@@ -125,7 +125,7 @@ geo_plot_add.geo_segment <- function(x, ...) {
 
 #' @rdname geo_plot
 #' @export
-geo_plot_add.geo_rect <- function(x, ...) {
+geo_plot_add.geovctrs_rect <- function(x, ...) {
   graphics::rect(
     field(x, "xmin"), field(x, "ymin"),
     field(x, "xmax"), field(x, "ymax"),

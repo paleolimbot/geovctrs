@@ -183,7 +183,7 @@ public:
       _["ymax"] = this->ymax,
       _["srid"] = this->srid
     );
-    result.attr("class") = CharacterVector::create("geo_rect", "geovctr", "vctrs_rcrd", "vctrs_vctr");
+    result.attr("class") = CharacterVector::create("geovctrs_rect", "geovctr", "vctrs_rcrd", "vctrs_vctr");
     return result;
   }
 };

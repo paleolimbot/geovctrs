@@ -33,7 +33,7 @@ geo_rect <- function(xmin = double(), ymin = double(), xmax = double(), ymax = d
   result
 }
 
-#' S3 details for geo_rect
+#' S3 details for geovctrs_rect
 #'
 #' @param x A (possibly) [geo_rect()]
 #' @inheritParams new_geo_xy
@@ -47,22 +47,22 @@ new_geo_rect <- function(x = list(xmin = double(), ymin = double(),
   vec_assert(x$xmax, double())
   vec_assert(x$ymax, double())
   vec_assert(x$srid, integer())
-  new_rcrd(x, class = c("geo_rect", "geovctr"))
+  new_rcrd(x, class = c("geovctrs_rect", "geovctr"))
 }
 
 #' @export
 #' @rdname new_geo_rect
 is_geo_rect <- function(x) {
-  inherits(x, "geo_rect")
+  inherits(x, "geovctrs_rect")
 }
 
 #' @export
-vec_ptype_abbr.geo_rect <- function(x, ...) {
+vec_ptype_abbr.geovctrs_rect <- function(x, ...) {
   "rect"
 }
 
 #' @export
-format.geo_rect <- function(x, ...) {
+format.geovctrs_rect <- function(x, ...) {
   sprintf(
     "(%s %s\U2197%s %s)",
     format(field(x, "xmin"), trim = TRUE, ...),
@@ -74,14 +74,14 @@ format.geo_rect <- function(x, ...) {
 
 #' @export
 #' @importFrom tibble as_tibble
-as_tibble.geo_rect <- function(x, ...) {
+as_tibble.geovctrs_rect <- function(x, ...) {
   as_tibble(vec_data(x), ...)
 }
 
 #' @export
 #' @importFrom tibble as_tibble
-as.data.frame.geo_rect <- function(x, ...) {
-  as.data.frame(as_tibble.geo_rect(x, ...))
+as.data.frame.geovctrs_rect <- function(x, ...) {
+  as.data.frame(as_tibble.geovctrs_rect(x, ...))
 }
 
 #' @export
@@ -96,62 +96,62 @@ as_geo_rect.default <- function(x, ...) {
   vec_cast(x, geo_rect())
 }
 
-#' @method vec_cast geo_rect
+#' @method vec_cast geovctrs_rect
 #' @export
-#' @export vec_cast.geo_rect
+#' @export vec_cast.geovctrs_rect
 #' @rdname new_geo_rect
-vec_cast.geo_rect <- function(x, to, ...) {
-  UseMethod("vec_cast.geo_rect")
+vec_cast.geovctrs_rect <- function(x, to, ...) {
+  UseMethod("vec_cast.geovctrs_rect")
 }
 
-#' @method vec_cast.geo_rect default
+#' @method vec_cast.geovctrs_rect default
 #' @export
-vec_cast.geo_rect.default <- function(x, to, ...) {
+vec_cast.geovctrs_rect.default <- function(x, to, ...) {
   vec_default_cast(x, to)
 }
 
-#' @method vec_cast.geo_rect geo_rect
+#' @method vec_cast.geovctrs_rect geovctrs_rect
 #' @export
-vec_cast.geo_rect.geo_rect <- function(x, to, ...) {
+vec_cast.geovctrs_rect.geovctrs_rect <- function(x, to, ...) {
   x
 }
 
 # ------------- prototypes ------------
 
-#' @method vec_ptype2 geo_rect
+#' @method vec_ptype2 geovctrs_rect
 #' @export
-#' @export vec_ptype2.geo_rect
+#' @export vec_ptype2.geovctrs_rect
 #' @rdname new_geo_rect
-vec_ptype2.geo_rect <- function(x, y, ...) {
-  UseMethod("vec_ptype2.geo_rect", y)
+vec_ptype2.geovctrs_rect <- function(x, y, ...) {
+  UseMethod("vec_ptype2.geovctrs_rect", y)
 }
 
-#' @method vec_ptype2.geo_rect default
+#' @method vec_ptype2.geovctrs_rect default
 #' @export
-vec_ptype2.geo_rect.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.geovctrs_rect.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg) # nocov
 }
 
-#' @method vec_ptype2.geo_rect geo_rect
+#' @method vec_ptype2.geovctrs_rect geovctrs_rect
 #' @export
-vec_ptype2.geo_rect.geo_rect <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.geovctrs_rect.geovctrs_rect <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_rect()
 }
 
-#' @method vec_ptype2.geo_rect geovctrs_wkt
+#' @method vec_ptype2.geovctrs_rect geovctrs_wkt
 #' @export
-vec_ptype2.geo_rect.geovctrs_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.geovctrs_rect.geovctrs_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_wkt()
 }
 
-#' @method vec_ptype2.geo_rect geovctrs_wkb
+#' @method vec_ptype2.geovctrs_rect geovctrs_wkb
 #' @export
-vec_ptype2.geo_rect.geovctrs_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.geovctrs_rect.geovctrs_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_wkb()
 }
 
-#' @method vec_ptype2.geo_rect geovctrs_collection
+#' @method vec_ptype2.geovctrs_rect geovctrs_collection
 #' @export
-vec_ptype2.geo_rect.geovctrs_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.geovctrs_rect.geovctrs_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_collection()
 }

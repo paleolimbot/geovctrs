@@ -128,9 +128,9 @@ vec_cast.geovctrs_collection.geovctrs_xy <- function(x, to, ...) {
   cpp_convert(x, to)
 }
 
-#' @method vec_cast.geovctrs_collection geo_rect
+#' @method vec_cast.geovctrs_collection geovctrs_rect
 #' @export
-vec_cast.geovctrs_collection.geo_rect <- function(x, to, ...) {
+vec_cast.geovctrs_collection.geovctrs_rect <- function(x, to, ...) {
   cpp_convert(x, to)
 }
 
@@ -196,8 +196,8 @@ vec_ptype2.geovctrs_collection.geo_segment <- function(x, y, ..., x_arg = "x", y
   geo_collection()
 }
 
-#' @method vec_ptype2.geovctrs_collection geo_rect
+#' @method vec_ptype2.geovctrs_collection geovctrs_rect
 #' @export
-vec_ptype2.geovctrs_collection.geo_rect <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.geovctrs_collection.geovctrs_rect <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_collection()
 }

@@ -5,9 +5,9 @@
 \alias{is_geo_rect}
 \alias{as_geo_rect}
 \alias{as_geo_rect.default}
-\alias{vec_cast.geo_rect}
-\alias{vec_ptype2.geo_rect}
-\title{S3 details for geo_rect}
+\alias{vec_cast.geovctrs_rect}
+\alias{vec_ptype2.geovctrs_rect}
+\title{S3 details for geovctrs_rect}
 \usage{
 new_geo_rect(
   x = list(xmin = double(), ymin = double(), xmax = double(), ymax = double(), srid =
@@ -20,9 +20,9 @@ as_geo_rect(x, ...)
 
 \method{as_geo_rect}{default}(x, ...)
 
-\method{vec_cast}{geo_rect}(x, to, ...)
+\method{vec_cast}{geovctrs_rect}(x, to, ...)
 
-\method{vec_ptype2}{geo_rect}(x, y, ...)
+\method{vec_ptype2}{geovctrs_rect}(x, y, ...)
 }
 \arguments{
 \item{x}{A (possibly) \code{\link[=geo_rect]{geo_rect()}}}
@@ -34,5 +34,5 @@ as_geo_rect(x, ...)
 \item{y}{Arguments to \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} and \code{\link[vctrs:vec_ptype2]{vctrs::vec_ptype2()}}}
 }
 \description{
-S3 details for geo_rect
+S3 details for geovctrs_rect
 }

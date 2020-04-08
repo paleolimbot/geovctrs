@@ -80,7 +80,7 @@ geo_envelope.geo_segment <- function(x, ..., na.rm = FALSE) {
 }
 
 #' @export
-geo_envelope.geo_rect <- function(x, ..., na.rm = FALSE) {
+geo_envelope.geovctrs_rect <- function(x, ..., na.rm = FALSE) {
   # *almost* the same, except a geo_rect might not have been constructed
   # with bounds in the correct order
   xmin <- field(x, "xmin")

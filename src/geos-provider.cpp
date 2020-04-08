@@ -660,7 +660,7 @@ std::unique_ptr<GeometryProvider> resolve_provider(SEXP data) {
         new SegmentProvider(x0, y0, x1, y1, srid)
       };
     }
-  } else if(Rf_inherits(data, "geo_rect")) {
+  } else if(Rf_inherits(data, "geovctrs_rect")) {
     List rect = (List) data;
     NumericVector xmin = rect["xmin"];
     NumericVector ymin = rect["ymin"];
