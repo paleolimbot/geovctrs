@@ -1,13 +1,7 @@
 
 #include "geos-base.h"
-#include "geos-coords.h"
 #include <Rcpp.h>
 using namespace Rcpp;
-
-// [[Rcpp::export]]
-std::string cpp_version_impl() {
-  return GEOSversion();
-}
 
 static void __errorHandler(const char *fmt, ...) {
 

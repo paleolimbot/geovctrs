@@ -1,8 +1,5 @@
 
-#include "geos-base.h"
 #include "geos-provider.h"
-#include <memory.h>
-#include <Rcpp.h>
 using namespace Rcpp;
 
 // [[Rcpp::export]]

@@ -6,7 +6,6 @@
 #define GEOS_USE_ONLY_R_API
 #include <geos_c.h>
 #include <memory>
-#include <vector>
 #include <Rcpp.h>
 
 // version constants

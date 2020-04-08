@@ -1,7 +1,7 @@
 # dnl Process this file with autoconf to produce a configure script.
 define([pkgversion], esyscmd([sh -c "grep Version: DESCRIPTION | cut -d' ' -f2 | tr -d '\n'"]))dnl
 AC_INIT(geovctrs, [pkgversion], dewey@fishandwhistle.net)
-AC_CONFIG_SRCDIR(src/geos-base.cpp)
+AC_CONFIG_SRCDIR(src/geos-base.h)
 
 # find R home and set correct compiler + flags
 : ${R_HOME=`R RHOME`}
