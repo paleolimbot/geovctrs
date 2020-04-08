@@ -169,8 +169,8 @@ and should be managed outside of geovctrs except for
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># two points with an SRID</span>
 <span class='no'>geometries</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
-  <span class='fu'><a href='geo_point.html'>geo_point</a></span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>259473</span>, <span class='fl'>4876249</span>), <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fl'>26920</span>),
-  <span class='fu'><a href='geo_point.html'>geo_point</a></span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(-<span class='fl'>66</span>, <span class='fl'>44</span>), <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
+  <span class='fu'><a href='geo_collection.html'>geo_point</a></span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>259473</span>, <span class='fl'>4876249</span>), <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fl'>26920</span>),
+  <span class='fu'><a href='geo_collection.html'>geo_point</a></span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(-<span class='fl'>66</span>, <span class='fl'>44</span>), <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
 )
 
 <span class='fu'>geo_srid</span>(<span class='no'>geometries</span>)</div><div class='output co'>#&gt; [1] 26920  4326</div><div class='input'><span class='fu'>geo_srid</span>(<span class='fu'>geo_set_srid</span>(<span class='no'>geometries</span>, <span class='fl'>NA</span>))</div><div class='output co'>#&gt; [1] NA NA</div><div class='input'>
