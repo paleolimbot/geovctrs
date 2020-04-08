@@ -63,7 +63,7 @@ GEOSGeometry* feature_from_geo_coord(GEOSContextHandle_t context, List feature) 
   } else if(Rf_inherits(feature, "geo_multipolygon")) {
     return multipolygon_from_geo_coord(context, feature);
 
-  } else if(Rf_inherits(feature, "geo_collection")) {
+  } else if(Rf_inherits(feature, "geovctrs_collection")) {
     return geometrycollection_from_geo_coord(context, feature);
 
   } else {

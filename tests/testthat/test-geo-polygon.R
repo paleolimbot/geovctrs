@@ -1,11 +1,11 @@
 
 test_that("geo_polygon() works", {
   # empty
-  expect_is(geo_polygon(geo_xy()), "geo_collection")
+  expect_is(geo_polygon(geo_xy()), "geovctrs_collection")
   expect_length(geo_polygon(geo_xy()), 1)
 
   # length 3
-  expect_is(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10))), "geo_collection")
+  expect_is(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10))), "geovctrs_collection")
   expect_is(field(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10))), "feature")[[1]], "geo_polygon")
   expect_length(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10))), 1)
 
@@ -17,7 +17,7 @@ test_that("geo_polygon() works", {
     ),
     ring = c(1, 1, 1, 1, 1, 2, 2, 2, 2)
   )
-  expect_is(poly_hole, "geo_collection")
+  expect_is(poly_hole, "geovctrs_collection")
   expect_length(poly_hole, 1)
   expect_is(field(poly_hole, "feature")[[1]], "geo_polygon")
 

@@ -4,7 +4,7 @@
 using namespace Rcpp;
 
 bool coords_have_missing(List item) {
-  if (Rf_inherits(item, "geo_collection")) {
+  if (Rf_inherits(item, "geovctrs_collection")) {
     List features = item["feature"];
     bool anyNA = false;
     for (size_t i=0; i<features.size(); i++) {
@@ -40,7 +40,7 @@ LogicalVector cpp_has_missing(SEXP x) {
 }
 
 bool coords_is_finite(List item) {
-  if (Rf_inherits(item, "geo_collection")) {
+  if (Rf_inherits(item, "geovctrs_collection")) {
     List features = item["feature"];
     bool isFinite = true;
     for (size_t i=0; i<features.size(); i++) {

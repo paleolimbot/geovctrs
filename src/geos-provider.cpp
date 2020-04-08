@@ -314,7 +314,7 @@ void GeoCollectionExporter::putNext(GEOSGeometry* geometry) {
 
 SEXP GeoCollectionExporter::finish() {
   List out = List::create(_["feature"] = this->data, _["srid"] = this->srid);
-  out.attr("class") = CharacterVector::create("geo_collection", "geovctr", "vctrs_rcrd", "vctrs_vctr");
+  out.attr("class") = CharacterVector::create("geovctrs_collection", "geovctr", "vctrs_rcrd", "vctrs_vctr");
   return out;
 }
 
@@ -677,7 +677,7 @@ std::unique_ptr<GeometryProvider> resolve_provider(SEXP data) {
         new GeoRectProvider(xmin, ymin, xmax, ymax, srid)
       };
     }
-  } else if(Rf_inherits(data, "geo_collection")) {
+  } else if(Rf_inherits(data, "geovctrs_collection")) {
     List col = (List) data;
     List features = col["feature"];
 
@@ -712,7 +712,7 @@ std::unique_ptr<GeometryExporter> resolve_exporter(SEXP ptype) {
       new WKBGeometryExporter(includeSRID, dimensions, endian)
     };
 
-  } else if(Rf_inherits(ptype, "geo_collection")) {
+  } else if(Rf_inherits(ptype, "geovctrs_collection")) {
     return std::unique_ptr<GeometryExporter> { new GeoCollectionExporter() };
   } else if(Rf_inherits(ptype, "geovctrs_xy")) {
     return std::unique_ptr<GeometryExporter> { new XYExporter() };

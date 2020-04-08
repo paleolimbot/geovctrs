@@ -10,7 +10,7 @@
 \alias{geo_plot_add.geovctrs_xy}
 \alias{geo_plot_add.geo_segment}
 \alias{geo_plot_add.geo_rect}
-\alias{geo_plot_add.geo_collection}
+\alias{geo_plot_add.geovctrs_collection}
 \title{Plot geometry vectors}
 \usage{
 geo_plot(x, ..., asp = 1, xlim = NULL, ylim = NULL, xlab = "", ylab = "")
@@ -31,7 +31,7 @@ geo_plot_add(x, ...)
 
 \method{geo_plot_add}{geo_rect}(x, ...)
 
-\method{geo_plot_add}{geo_collection}(x, ...)
+\method{geo_plot_add}{geovctrs_collection}(x, ...)
 }
 \arguments{
 \item{x}{A geometry-like object, or one that can be

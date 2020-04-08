@@ -171,12 +171,12 @@ expect_geovctr <- function(x) {
   # must be castable to WKT, WKB, and collection
   testthat::expect_is(vec_cast(x, geo_wkb()), "geovctrs_wkb")
   testthat::expect_is(vec_cast(x, geo_wkt()), "geovctrs_wkt")
-  testthat::expect_is(vec_cast(x, geo_collection()), "geo_collection")
+  testthat::expect_is(vec_cast(x, geo_collection()), "geovctrs_collection")
 
   # must have implementations for as_WKT, WKB, and collection
   testthat::expect_is(as_geo_wkb(x), "geovctrs_wkb")
   testthat::expect_is(as_geo_wkt(x), "geovctrs_wkt")
-  testthat::expect_is(as_geo_collection(x), "geo_collection")
+  testthat::expect_is(as_geo_collection(x), "geovctrs_collection")
 
   # must be combinable with wkb, wkt, and  collection
   testthat::expect_silent(vec_c(geo_wkb(), x))

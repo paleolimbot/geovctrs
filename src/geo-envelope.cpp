@@ -72,7 +72,7 @@ NumericVector pmax2(NumericVector x1, NumericVector x2)  {
 }
 
 NumericVector bounds_from_coords(List item, bool naRm) {
-  if (Rf_inherits(item, "geo_collection")) {
+  if (Rf_inherits(item, "geovctrs_collection")) {
     List features = item["feature"];
     NumericVector bounds = NumericVector::create(R_PosInf, R_PosInf, R_NegInf, R_NegInf);
     if (naRm) {

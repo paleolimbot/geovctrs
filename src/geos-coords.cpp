@@ -237,6 +237,6 @@ List geometrycollection_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* 
   }
 
   List out = List::create(_["feature"] = features, _["srid"] = srid);
-  out.attr("class") = CharacterVector::create("geo_collection", "geovctr", "vctrs_rcrd", "vctrs_vctr");
+  out.attr("class") = CharacterVector::create("geovctrs_collection", "geovctr", "vctrs_rcrd", "vctrs_vctr");
   return out;
 }

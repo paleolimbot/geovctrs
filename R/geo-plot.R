@@ -136,7 +136,7 @@ geo_plot_add.geo_rect <- function(x, ...) {
 
 #' @rdname geo_plot
 #' @export
-geo_plot_add.geo_collection <- function(x, ...) {
+geo_plot_add.geovctrs_collection <- function(x, ...) {
   features <- field(x, "feature")
 
   # evaluate dots, wrap scalar types in a list(), and vectorize
