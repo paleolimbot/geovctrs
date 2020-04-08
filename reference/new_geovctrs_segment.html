@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Geometry constructors — geo_collection • geovctrs</title>
+<title>S3 details for geovctrs_segment — new_geovctrs_segment • geovctrs</title>
 
 
 <!-- jquery -->
@@ -39,14 +39,8 @@
 
 
 
-<meta property="og:title" content="Geometry constructors — geo_collection" />
-<meta property="og:description" content="A geo_collection() is an in-memory R-native format that can store most
-geometries. It is used to power geo_plot() in addition to providing
-constructors for geometries from data frames (possibly using
-dplyr::group_by() and dplyr::summarise()). Collections contain zero
-or more objects of type geo_point(), geo_linestring(), geo_polygon(),
-geo_multipoint(), geo_multilinestring(), and/or
-geo_multipolygon()." />
+<meta property="og:title" content="S3 details for geovctrs_segment — new_geovctrs_segment" />
+<meta property="og:description" content="S3 details for geovctrs_segment" />
 
 
 
@@ -114,52 +108,56 @@ geo_multipolygon()." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Geometry constructors</h1>
-    <small class="dont-index">Source: <a href='https://github.com/paleolimbot/geovctrs/blob/master/R/geo-collection.R'><code>R/geo-collection.R</code></a></small>
-    <div class="hidden name"><code>geo_collection.Rd</code></div>
+    <h1>S3 details for geovctrs_segment</h1>
+    <small class="dont-index">Source: <a href='https://github.com/paleolimbot/geovctrs/blob/master/R/geo-segment.R'><code>R/geo-segment.R</code></a></small>
+    <div class="hidden name"><code>new_geovctrs_segment.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A <code>geo_collection()</code> is an in-memory R-native format that can store most
-geometries. It is used to power <code><a href='geo_plot.html'>geo_plot()</a></code> in addition to providing
-constructors for geometries from data frames (possibly using
-<code>dplyr::group_by()</code> and <code>dplyr::summarise()</code>). Collections contain zero
-or more objects of type <code><a href='geo_point.html'>geo_point()</a></code>, <code><a href='geo_linestring.html'>geo_linestring()</a></code>, <code><a href='geo_polygon.html'>geo_polygon()</a></code>,
-<code><a href='geo_multipoint.html'>geo_multipoint()</a></code>, <code><a href='geo_multilinestring.html'>geo_multilinestring()</a></code>, and/or
-<code><a href='geo_multipolygon.html'>geo_multipolygon()</a></code>.</p>
+    <p>S3 details for geovctrs_segment</p>
     </div>
 
-    <pre class="usage"><span class='fu'>geo_collection</span>(<span class='kw'>feature</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
+    <pre class="usage"><span class='fu'>new_geovctrs_segment</span>(
+  <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>start</span> <span class='kw'>=</span> <span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(), <span class='kw'>end</span> <span class='kw'>=</span> <span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(), <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>())
+)
+
+<span class='fu'>is_geo_segment</span>(<span class='no'>x</span>)
+
+<span class='fu'>validate_geo_segment</span>(<span class='no'>x</span>)
+
+<span class='fu'>as_geo_segment</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for default</span>
+<span class='fu'>as_geo_segment</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for geovctrs_segment</span>
+<span class='fu'>vec_cast</span>(<span class='no'>x</span>, <span class='no'>to</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for geovctrs_segment</span>
+<span class='fu'>vec_ptype2</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>feature</th>
-      <td><p>A list of one or more features.</p></td>
+      <th>x</th>
+      <td><p>A (possibly) <code><a href='geo_segment.html'>geo_segment()</a></code></p></td>
     </tr>
     <tr>
-      <th>srid</th>
-      <td><p>A spatial reference identifier, coerced to
-an integer by <code><a href='geo_srid.html'>as_geo_srid()</a></code>. These identifiers can
-and should be managed outside of geovctrs except for
-0, which is interpreted as "not set".</p></td>
+      <th>...</th>
+      <td><p>Unused</p></td>
+    </tr>
+    <tr>
+      <th>to</th>
+      <td><p>Arguments to <code><a href='https://rdrr.io/pkg/vctrs/man/vec_cast.html'>vctrs::vec_cast()</a></code> and <code><a href='https://rdrr.io/pkg/vctrs/man/vec_ptype2.html'>vctrs::vec_ptype2()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>y</th>
+      <td><p>Arguments to <code><a href='https://rdrr.io/pkg/vctrs/man/vec_cast.html'>vctrs::vec_cast()</a></code> and <code><a href='https://rdrr.io/pkg/vctrs/man/vec_ptype2.html'>vctrs::vec_ptype2()</a></code></p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code><a href='new_geovctrs_collection.html'>new_geovctrs_collection()</a></code></p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># geo_point() and family all return a geo_collection() of length 1</span>
-<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='geo_point.html'>geo_point</a></span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>)), <span class='fu'><a href='geo_point.html'>geo_point</a></span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>)))</div><div class='output co'>#&gt; &lt;geovctrs_collection[2]&gt;
-#&gt; [1] <span style='color: #555555;'>POINT</span><span> </span><span style='color: #0000BB;'>(0 1)</span><span> </span><span style='color: #555555;'>POINT</span><span> </span><span style='color: #0000BB;'>(1 2)</span><span></div><div class='input'>
-<span class='co'># create a nested geo_collection by passing a geo_collection()</span>
-<span class='co'># as `feature`</span>
-<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='geo_point.html'>geo_point</a></span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>)), <span class='fu'>geo_collection</span>(<span class='fu'><a href='geo_point.html'>geo_point</a></span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>))))</div><div class='output co'>#&gt; &lt;geovctrs_collection[2]&gt;
-#&gt; [1] </span><span style='color: #555555;'>POINT</span><span> </span><span style='color: #0000BB;'>(0 1)</span><span>            </span><span style='color: #555555;'>GEOMETRYCOLLECTION[1]</span><span> </div><div class='input'>
-</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
