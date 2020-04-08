@@ -8,7 +8,7 @@
 \alias{geo_plot_add.data.frame}
 \alias{geo_plot_add.sf}
 \alias{geo_plot_add.geovctrs_xy}
-\alias{geo_plot_add.geo_segment}
+\alias{geo_plot_add.geovctrs_segment}
 \alias{geo_plot_add.geovctrs_rect}
 \alias{geo_plot_add.geovctrs_collection}
 \title{Plot geometry vectors}
@@ -27,7 +27,7 @@ geo_plot_add(x, ...)
 
 \method{geo_plot_add}{geovctrs_xy}(x, ...)
 
-\method{geo_plot_add}{geo_segment}(x, ...)
+\method{geo_plot_add}{geovctrs_segment}(x, ...)
 
 \method{geo_plot_add}{geovctrs_rect}(x, ...)
 

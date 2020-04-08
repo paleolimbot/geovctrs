@@ -110,7 +110,7 @@ geo_plot_add.geovctrs_xy <- function(x, ...) {
 
 #' @rdname geo_plot
 #' @export
-geo_plot_add.geo_segment <- function(x, ...) {
+geo_plot_add.geovctrs_segment <- function(x, ...) {
   start <- field(x, "start")
   end <- field(x, "end")
 

@@ -543,7 +543,7 @@ SEXP SegmentExporter::finish() {
   p2.attr("class") = CharacterVector::create("geovctrs_xy", "geovctr", "vctrs_rcrd", "vctrs_vctr");
 
   List result = List::create(_["start"] = p1, _["end"] = p2, _["srid"] = this->srid);
-  result.attr("class") = CharacterVector::create("geo_segment", "geovctr", "vctrs_rcrd", "vctrs_vctr");
+  result.attr("class") = CharacterVector::create("geovctrs_segment", "geovctr", "vctrs_rcrd", "vctrs_vctr");
 
   return result;
 }
@@ -641,7 +641,7 @@ std::unique_ptr<GeometryProvider> resolve_provider(SEXP data) {
     } else {
       return std::unique_ptr<GeometryProvider> { new XYProvider(x, y) };
     }
-  } else if(Rf_inherits(data, "geo_segment")) {
+  } else if(Rf_inherits(data, "geovctrs_segment")) {
     List segment = (List) data;
     List start = segment["start"];
     List end = segment["end"];
@@ -716,7 +716,7 @@ std::unique_ptr<GeometryExporter> resolve_exporter(SEXP ptype) {
     return std::unique_ptr<GeometryExporter> { new GeoCollectionExporter() };
   } else if(Rf_inherits(ptype, "geovctrs_xy")) {
     return std::unique_ptr<GeometryExporter> { new XYExporter() };
-  } else if(Rf_inherits(ptype, "geo_segment")) {
+  } else if(Rf_inherits(ptype, "geovctrs_segment")) {
     return std::unique_ptr<GeometryExporter> { new SegmentExporter() };
   }
 

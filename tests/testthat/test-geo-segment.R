@@ -1,9 +1,9 @@
 
 test_that("geo_segment class works", {
   segment <- geo_segment(start = geo_xy(0, 0), end = geo_xy(1, 1))
-  expect_output(print(segment), "geo_segment")
+  expect_output(print(segment), "geovctrs_segment")
   expect_output(print(tibble(segment)), "segment")
-  expect_is(segment, "geo_segment")
+  expect_is(segment, "geovctrs_segment")
   expect_true(is_geo_segment(segment))
   expect_true(vec_is(segment))
 })
@@ -13,7 +13,7 @@ test_that("geo_segment() c() works", {
   segment <- geo_segment(start = geo_xy(0:5, 0:5), end = geo_xy(1:6, 1:6))
   expect_is(c(segment, geo_wkt("POINT (30 10)")), "geovctrs_wkt")
   expect_is(c(segment, as_geo_wkb(geo_wkt("POINT (30 10)"))), "geovctrs_wkb")
-  expect_is(c(segment, segment), "geo_segment")
+  expect_is(c(segment, segment), "geovctrs_segment")
   expect_error(vec_c(5, segment), class = "vctrs_error_incompatible_type")
 })
 
