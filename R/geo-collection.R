@@ -140,9 +140,9 @@ vec_cast.geo_collection.geo_segment <- function(x, to, ...) {
   cpp_convert(x, to)
 }
 
-#' @method vec_cast.geo_collection geo_wkt
+#' @method vec_cast.geo_collection geovctrs_wkt
 #' @export
-vec_cast.geo_collection.geo_wkt <- function(x, to, ...) {
+vec_cast.geo_collection.geovctrs_wkt <- function(x, to, ...) {
   cpp_convert(x, to)
 }
 
@@ -172,9 +172,9 @@ vec_ptype2.geo_collection.geo_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y
   geo_wkb()
 }
 
-#' @method vec_ptype2.geo_collection geo_wkt
+#' @method vec_ptype2.geo_collection geovctrs_wkt
 #' @export
-vec_ptype2.geo_collection.geo_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.geo_collection.geovctrs_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_wkt()
 }
 

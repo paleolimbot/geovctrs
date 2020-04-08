@@ -70,14 +70,14 @@ geo_set_srid.vctrs_rcrd <- function(x, srid) {
 }
 
 #' @export
-geo_srid.geo_wkt <- function(x) {
+geo_srid.geovctrs_wkt <- function(x) {
   srid <- rep_len(0L, vec_size(x))
   srid[is.na(x)] <- NA_integer_
   srid
 }
 
 #' @export
-geo_set_srid.geo_wkt <- function(x, srid) {
+geo_set_srid.geovctrs_wkt <- function(x, srid) {
   if (any(srid != 0)) {
     abort("Can't store SRID with a geo_wkt()")
   }

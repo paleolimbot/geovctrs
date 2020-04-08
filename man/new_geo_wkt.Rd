@@ -4,8 +4,8 @@
 \alias{new_geo_wkt}
 \alias{is_geo_wkt}
 \alias{validate_geo_wkt}
-\alias{vec_cast.geo_wkt}
-\alias{vec_ptype2.geo_wkt}
+\alias{vec_cast.geovctrs_wkt}
+\alias{vec_ptype2.geovctrs_wkt}
 \title{S3 details for geo_wkt}
 \usage{
 new_geo_wkt(x = character(), trim = TRUE, precision = 16L, dimensions = 3L)
@@ -14,9 +14,9 @@ is_geo_wkt(x)
 
 validate_geo_wkt(x)
 
-\method{vec_cast}{geo_wkt}(x, to, ...)
+\method{vec_cast}{geovctrs_wkt}(x, to, ...)
 
-\method{vec_ptype2}{geo_wkt}(x, y, ...)
+\method{vec_ptype2}{geovctrs_wkt}(x, y, ...)
 }
 \arguments{
 \item{x}{A character vector containing well-known text}

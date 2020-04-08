@@ -27,7 +27,7 @@ test_that("geo_format works", {
 
   # zero len format +  print
   expect_length(geo_format(geo_wkt()), 0)
-  expect_output(geo_print(geo_wkt()), "geo_wkt\\[0\\]")
+  expect_output(geo_print(geo_wkt()), "geovctrs_wkt\\[0\\]")
 })
 
 test_that("all geovctrs work in the RStudio viewer", {

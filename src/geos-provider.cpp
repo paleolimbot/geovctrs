@@ -117,7 +117,7 @@ void WKTGeometryExporter::init(GEOSContextHandle_t context, size_t size) {
   GEOSWKTWriter_setOutputDimension_r(this->context, this->wkt_writer, this->dimensions);
 
   CharacterVector data(size);
-  data.attr("class") = CharacterVector::create("geo_wkt", "geovctr", "vctrs_vctr");
+  data.attr("class") = CharacterVector::create("geovctrs_wkt", "geovctr", "vctrs_vctr");
 
   // set these to the defaults rather than the input values, as they aren't
   // used for reading (only writing)
@@ -613,7 +613,7 @@ size_t GeoRectProvider::size() {
 // ---------- geometry provider resolvers -------------
 
 std::unique_ptr<GeometryProvider> resolve_provider(SEXP data) {
-  if (Rf_inherits(data, "geo_wkt")) {
+  if (Rf_inherits(data, "geovctrs_wkt")) {
     CharacterVector dataChar = (CharacterVector) data;
 
     if (dataChar.size() ==  1) {
@@ -692,7 +692,7 @@ std::unique_ptr<GeometryProvider> resolve_provider(SEXP data) {
 }
 
 std::unique_ptr<GeometryExporter> resolve_exporter(SEXP ptype) {
-  if (Rf_inherits(ptype, "geo_wkt")) {
+  if (Rf_inherits(ptype, "geovctrs_wkt")) {
     CharacterVector data = (CharacterVector)ptype;
     bool trim = data.attr("trim");
     int precision = data.attr("precision");

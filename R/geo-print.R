@@ -182,7 +182,7 @@ geometry_type_symbol <- function(type, use_z, short = FALSE) {
 }
 
 format_na_type <- function(class, col = TRUE) {
-  maybe_red(paste0("NA_", gsub("geo_", "", class[1]), "_"), col = col)
+  maybe_red(paste0("NA_", gsub("geo(vctrs)?_", "", class[1]), "_"), col = col)
 }
 
 is_multi_geometry_type <- function(type) {
