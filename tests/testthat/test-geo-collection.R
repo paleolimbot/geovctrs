@@ -31,7 +31,7 @@ test_that("basic casting and coersion work", {
 test_that("geo_point() works", {
   # length 1
   expect_is(geo_point(geo_xy(10, 30)), "geovctrs_collection")
-  expect_is(field(geo_point(geo_xy(10,  30)), "feature")[[1]], "geo_point")
+  expect_is(field(geo_point(geo_xy(10,  30)), "feature")[[1]], "geovctrs_point")
   expect_length(geo_point(geo_xy(10, 30)), 1)
 
   # empty
@@ -53,7 +53,7 @@ test_that("geo_linestring() works", {
 
   #  length 2
   expect_is(geo_linestring(geo_xy(10:11, 30:31)), "geovctrs_collection")
-  expect_is(field(geo_linestring(geo_xy(10:11, 30:31)), "feature")[[1]], "geo_linestring")
+  expect_is(field(geo_linestring(geo_xy(10:11, 30:31)), "feature")[[1]], "geovctrs_linestring")
   expect_length(geo_linestring(geo_xy(10:11, 30:31)), 1)
 
   # length 1 should error
@@ -71,7 +71,7 @@ test_that("geo_polygon() works", {
 
   # length 3
   expect_is(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10))), "geovctrs_collection")
-  expect_is(field(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10))), "feature")[[1]], "geo_polygon")
+  expect_is(field(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10))), "feature")[[1]], "geovctrs_polygon")
   expect_length(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10))), 1)
 
   # length 3 with hole
@@ -84,7 +84,7 @@ test_that("geo_polygon() works", {
   )
   expect_is(poly_hole, "geovctrs_collection")
   expect_length(poly_hole, 1)
-  expect_is(field(poly_hole, "feature")[[1]], "geo_polygon")
+  expect_is(field(poly_hole, "feature")[[1]], "geovctrs_polygon")
 
   #  length 2 should error
   expect_error(geo_polygon(geo_xy(10:11, 30:31)), "is not TRUE")
@@ -109,7 +109,7 @@ test_that("geo_polygon() works", {
 test_that("geo_multipoint() works", {
   # length 1
   expect_is(geo_multipoint(geo_point(geo_xy(10, 30))), "geovctrs_collection")
-  expect_is(field(geo_multipoint(geo_point(geo_xy(10, 30))), "feature")[[1]], "geo_multipoint")
+  expect_is(field(geo_multipoint(geo_point(geo_xy(10, 30))), "feature")[[1]], "geovctrs_multipoint")
   expect_length(geo_multipoint(geo_point(geo_xy(10, 30))), 1)
 
   # empty
@@ -129,7 +129,7 @@ test_that("geo_multilinestring() works", {
   expect_is(geo_multilinestring(geo_linestring(geo_xy(10:11, 30:31))), "geovctrs_collection")
   expect_is(
     field(geo_multilinestring(geo_linestring(geo_xy(10:11, 30:31))), "feature")[[1]],
-    "geo_multilinestring"
+    "geovctrs_multilinestring"
   )
   expect_length(geo_multilinestring(geo_linestring(geo_xy(10:11, 30:31))), 1)
 
@@ -148,7 +148,7 @@ test_that("geo_multipolygon() works", {
   expect_is(geo_multipolygon(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10)))), "geovctrs_collection")
   expect_is(
     field(geo_multipolygon(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10)))), "feature")[[1]],
-    "geo_multipolygon"
+    "geovctrs_multipolygon"
   )
   expect_length(geo_multipolygon(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10)))), 1)
 

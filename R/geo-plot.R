@@ -154,21 +154,21 @@ geo_plot_add.geovctrs_collection <- function(x, ...) {
 }
 
 #' @export
-geo_plot_add.geo_point <- function(x, ...) {
+geo_plot_add.geovctrs_point <- function(x, ...) {
   xy <- field(x, "xy")
   graphics::points(field(xy, "x"), field(xy, "y"), ...)
   invisible(x)
 }
 
 #' @export
-geo_plot_add.geo_linestring <- function(x, ...) {
+geo_plot_add.geovctrs_linestring <- function(x, ...) {
   xy <- field(x, "xy")
   graphics::lines(field(xy, "x"), field(xy, "y"), ...)
   invisible(x)
 }
 
 #' @export
-geo_plot_add.geo_polygon <- function(x, ..., rule = "evenodd") {
+geo_plot_add.geovctrs_polygon <- function(x, ..., rule = "evenodd") {
   # have to do one feature at a time because the "holes in polygons" problem
   xy <- separate_groups_with_na(field(x, "xy"), field(x, "ring"))
   graphics::polypath(field(xy, "x"), field(xy, "y"), ..., rule = rule)
@@ -177,14 +177,14 @@ geo_plot_add.geo_polygon <- function(x, ..., rule = "evenodd") {
 }
 
 #' @export
-geo_plot_add.geo_multipoint <- function(x, ...) {
+geo_plot_add.geovctrs_multipoint <- function(x, ...) {
   xy <- field(x, "xy")
   graphics::points(field(xy, "x"), field(xy, "y"), ...)
   invisible(x)
 }
 
 #' @export
-geo_plot_add.geo_multilinestring <- function(x, ...) {
+geo_plot_add.geovctrs_multilinestring <- function(x, ...) {
   xy <- separate_groups_with_na(
     field(x, "xy"),
     field(x, "part")
@@ -194,7 +194,7 @@ geo_plot_add.geo_multilinestring <- function(x, ...) {
 }
 
 #' @export
-geo_plot_add.geo_multipolygon <- function(x, ..., rule = "evenodd") {
+geo_plot_add.geovctrs_multipolygon <- function(x, ..., rule = "evenodd") {
   # have to do one part at a time because the "holes in polygons" problem
   crds <- tibble::tibble(xy = field(x, "xy"), ring = field(x, "ring"))
   for (crds_feat in split(crds, field(x, "part"))) {

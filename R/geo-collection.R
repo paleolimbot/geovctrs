@@ -90,7 +90,7 @@ geo_point <- function(xy, srid = 0)  {
 
 new_geovctrs_point <- function(x) {
   vec_assert(x$xy, geo_xy())
-  structure(x, class = "geo_point")
+  structure(x, class = "geovctrs_point")
 }
 
 validate_geo_point <-function(x) {
@@ -111,7 +111,7 @@ geo_linestring <- function(xy, srid = 0)  {
 
 new_geovctrs_linestring <- function(x) {
   vec_assert(x$xy, geo_xy())
-  structure(x, class = "geo_linestring")
+  structure(x, class = "geovctrs_linestring")
 }
 
 validate_geo_linestring <-function(x) {
@@ -133,7 +133,7 @@ geo_polygon <- function(xy, ring = 1L, srid = 0)  {
 new_geovctrs_polygon <- function(x) {
   vec_assert(x$xy, geo_xy())
   vec_assert(x$ring, integer())
-  structure(x, class = "geo_polygon")
+  structure(x, class = "geovctrs_polygon")
 }
 
 validate_geo_polygon <-function(x) {
@@ -149,7 +149,7 @@ validate_geo_polygon <-function(x) {
 geo_multipoint <- function(feature, srid = 0) {
   feature <- vec_cast(feature, geo_collection())
   values <- field(feature, "feature")
-  is_point <- vapply(values, inherits, "geo_point", FUN.VALUE = logical(1))
+  is_point <- vapply(values, inherits, "geovctrs_point", FUN.VALUE = logical(1))
   if (!all(is_point)) {
     abort("All features must be `geo_point()`s")
   }
@@ -167,7 +167,7 @@ geo_multipoint <- function(feature, srid = 0) {
 
 new_geovctrs_multipoint <- function(x) {
   vec_assert(x$xy, geo_xy())
-  structure(x, class = "geo_multipoint")
+  structure(x, class = "geovctrs_multipoint")
 }
 
 #' @rdname geo_collection
@@ -175,7 +175,7 @@ new_geovctrs_multipoint <- function(x) {
 geo_multilinestring <- function(feature, srid = 0) {
   feature <- vec_cast(feature, geo_collection())
   values <- field(feature, "feature")
-  is_linestring <- vapply(values, inherits, "geo_linestring", FUN.VALUE = logical(1))
+  is_linestring <- vapply(values, inherits, "geovctrs_linestring", FUN.VALUE = logical(1))
   if (!all(is_linestring)) {
     abort("All features must be `geo_linestring()`s")
   }
@@ -197,7 +197,7 @@ geo_multilinestring <- function(feature, srid = 0) {
 new_geovctrs_multilinestring <- function(x) {
   vec_assert(x$xy, geo_xy())
   vec_assert(x$part, integer())
-  structure(x, class = "geo_multilinestring")
+  structure(x, class = "geovctrs_multilinestring")
 }
 
 #' @rdname geo_collection
@@ -205,7 +205,7 @@ new_geovctrs_multilinestring <- function(x) {
 geo_multipolygon <- function(feature, srid = 0) {
   feature <- vec_cast(feature, geo_collection())
   values <- field(feature, "feature")
-  is_polygon <- vapply(values, inherits, "geo_polygon", FUN.VALUE = logical(1))
+  is_polygon <- vapply(values, inherits, "geovctrs_polygon", FUN.VALUE = logical(1))
   if (!all(is_polygon)) {
     abort("All features must be `geo_polygon()`s")
   }
@@ -230,7 +230,7 @@ new_geovctrs_multipolygon <- function(x) {
   vec_assert(x$xy, geo_xy())
   vec_assert(x$part, integer())
   vec_assert(x$ring, integer())
-  structure(x, class = "geo_multipolygon")
+  structure(x, class = "geovctrs_multipolygon")
 }
 
 #' S3 Details for coordinate vector collections

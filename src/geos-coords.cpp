@@ -111,7 +111,7 @@ List point_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry) {
   NumericVector yVec(nCoordinates);
   write_simple_geometry(context, geometry, xVec, yVec, 0);
 
-  return geo_reclass(new_geo_coord(xVec, yVec), "geo_point");
+  return geo_reclass(new_geo_coord(xVec, yVec), "geovctrs_point");
 }
 
 List linestring_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry) {
@@ -120,7 +120,7 @@ List linestring_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry
   NumericVector yVec(nCoordinates);
   write_simple_geometry(context, geometry, xVec, yVec, 0);
 
-  return geo_reclass(new_geo_coord(xVec, yVec), "geo_linestring");
+  return geo_reclass(new_geo_coord(xVec, yVec), "geovctrs_linestring");
 }
 
 List polygon_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry) {
@@ -140,7 +140,7 @@ List polygon_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry) {
     offset += write_simple_geometry(context, ring, xVec, yVec, ringVec, 2 + i, offset);
   }
 
-  return geo_reclass(new_geo_coord(xVec, yVec, ringVec), "geo_polygon");
+  return geo_reclass(new_geo_coord(xVec, yVec, ringVec), "geovctrs_polygon");
 }
 
 List multipoint_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry) {
@@ -157,7 +157,7 @@ List multipoint_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry
     offset += write_simple_geometry(context, part, xVec, yVec, offset);
   }
 
-  return geo_reclass(new_geo_coord(xVec, yVec), "geo_multipoint");
+  return geo_reclass(new_geo_coord(xVec, yVec), "geovctrs_multipoint");
 }
 
 List multilinestring_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry) {
@@ -177,7 +177,7 @@ List multilinestring_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geo
 
   List output = new_geo_coord(xVec, yVec);
   output.push_back(partVec, "part");
-  return geo_reclass(output, "geo_multilinestring");
+  return geo_reclass(output, "geovctrs_multilinestring");
 }
 
 List multipolygon_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry) {
@@ -216,7 +216,7 @@ List multipolygon_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geomet
     }
   }
 
-  return geo_reclass(new_geo_coord(xVec, yVec, partVec, ringVec), "geo_multipolygon");
+  return geo_reclass(new_geo_coord(xVec, yVec, partVec, ringVec), "geovctrs_multipolygon");
 }
 
 List geometrycollection_to_geo_coord(GEOSContextHandle_t context, GEOSGeometry* geometry) {

@@ -45,22 +45,22 @@ GEOSCoordSequence* seq_from_xy(GEOSContextHandle_t context, List xy, int offset,
 }
 
 GEOSGeometry* feature_from_geo_coord(GEOSContextHandle_t context, List feature) {
-  if (Rf_inherits(feature, "geo_point")) {
+  if (Rf_inherits(feature, "geovctrs_point")) {
     return point_from_geo_coord(context, feature);
 
-  } else if(Rf_inherits(feature, "geo_linestring")) {
+  } else if(Rf_inherits(feature, "geovctrs_linestring")) {
     return linestring_from_geo_coord(context, feature);
 
-  } else if(Rf_inherits(feature, "geo_polygon")) {
+  } else if(Rf_inherits(feature, "geovctrs_polygon")) {
     return polygon_from_geo_coord(context, feature);
 
-  } else if(Rf_inherits(feature, "geo_multipoint")) {
+  } else if(Rf_inherits(feature, "geovctrs_multipoint")) {
     return multipoint_from_geo_coord(context, feature);
 
-  } else if(Rf_inherits(feature, "geo_multilinestring")) {
+  } else if(Rf_inherits(feature, "geovctrs_multilinestring")) {
     return multilinestring_from_geo_coord(context, feature);
 
-  } else if(Rf_inherits(feature, "geo_multipolygon")) {
+  } else if(Rf_inherits(feature, "geovctrs_multipolygon")) {
     return multipolygon_from_geo_coord(context, feature);
 
   } else if(Rf_inherits(feature, "geovctrs_collection")) {
