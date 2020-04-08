@@ -8,7 +8,7 @@ test_that("geos_version works", {
 test_that("GEOS errors are caught and rethrown", {
   # geometry operator
   expect_error(
-    cpp_convert(new_geo_wkt("NOT"), geo_collection()),
+    cpp_convert(new_geovctrs_wkt("NOT"), geo_collection()),
     "ParseException",
     class = "Rcpp::exception"
   )

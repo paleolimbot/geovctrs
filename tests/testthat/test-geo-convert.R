@@ -1,19 +1,19 @@
 
 test_that("wkt conversion works", {
   wkt <- geo_wkt(c("POINT (30 10)", "POINT (20 20)"))
-  wkt_roundtrip <- cpp_convert(wkt, new_geo_wkt())
+  wkt_roundtrip <- cpp_convert(wkt, new_geovctrs_wkt())
   expect_identical(wkt_roundtrip, wkt)
 })
 
 test_that("conversion prototype args are used", {
   wkt <- geo_wkt("POINT Z (10 11 12)")
   expect_identical(
-    cpp_convert(wkt, new_geo_wkt(trim = FALSE, precision = 2L)),
+    cpp_convert(wkt, new_geovctrs_wkt(trim = FALSE, precision = 2L)),
     geo_wkt("POINT Z (10.00 11.00 12.00)")
   )
 
   expect_identical(
-    cpp_convert(wkt, new_geo_wkt(trim = FALSE, precision = 2L, dimensions = 2L)),
+    cpp_convert(wkt, new_geovctrs_wkt(trim = FALSE, precision = 2L, dimensions = 2L)),
     geo_wkt("POINT (10.00 11.00)")
   )
 
@@ -39,7 +39,7 @@ test_that("wkb conversion works", {
   )
 
   wkb <- geo_wkb(list(wkb_raw))
-  wkb_roundtrip <- cpp_convert(wkb, new_geo_wkb())
+  wkb_roundtrip <- cpp_convert(wkb, new_geovctrs_wkb())
   expect_identical(wkb, wkb_roundtrip)
 })
 
@@ -74,21 +74,21 @@ test_that("wkb writer options are respected", {
   )
 
   expect_identical(
-    geo_srid(cpp_convert(collection_with_srid, new_geo_wkb(include_srid = FALSE))),
+    geo_srid(cpp_convert(collection_with_srid, new_geovctrs_wkb(include_srid = FALSE))),
     c(0L, 0L)
   )
 
   expect_identical(
-    geo_coordinate_dimensions(cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_geo_wkb(dimensions = 2))),
+    geo_coordinate_dimensions(cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_geovctrs_wkb(dimensions = 2))),
     2L
   )
   expect_identical(
-    geo_coordinate_dimensions(cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_geo_wkb(dimensions = 3))),
+    geo_coordinate_dimensions(cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_geovctrs_wkb(dimensions = 3))),
     3L
   )
 
   wkb <- as_geo_wkb(geo_wkt("POINT Z (1 2 3)"))
-  expect_identical(cpp_convert(wkb, new_geo_wkb(dimensions = 3)), wkb)
+  expect_identical(cpp_convert(wkb, new_geovctrs_wkb(dimensions = 3)), wkb)
 })
 
 test_that("geo_point conversion works", {
@@ -345,6 +345,6 @@ test_that("missings are propogated through conversions between wkt, wkb, and col
 })
 
 test_that("error occurs with unknown object in conversions", {
-  expect_error(cpp_convert(as.Date("2020-01-01"), new_geo_wkt()), "Can't resolve")
+  expect_error(cpp_convert(as.Date("2020-01-01"), new_geovctrs_wkt()), "Can't resolve")
   expect_error(cpp_convert(geo_wkt("POINT EMPTY"), as.Date("2020-01-01")), "Can't resolve")
 })

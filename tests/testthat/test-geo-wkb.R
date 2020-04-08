@@ -35,7 +35,7 @@ test_that("geo_wkb parse validation works", {
     )
   )
 
-  wkb <- new_geo_wkb(list(wkb_raw, wkb_bad))
+  wkb <- new_geovctrs_wkb(list(wkb_raw, wkb_bad))
   expect_warning(
     expect_equivalent(
       parse_wkb(list(wkb_raw, wkb_bad)),

@@ -16,7 +16,7 @@ and should be managed outside of geovctrs except for
 0, which is interpreted as "not set".}
 }
 \value{
-A \code{\link[=new_geo_segment]{new_geo_segment()}}
+A \code{\link[=new_geovctrs_segment]{new_geovctrs_segment()}}
 }
 \description{
 The \code{\link[=geo_segment]{geo_segment()}} type is useful as an efficient representation of

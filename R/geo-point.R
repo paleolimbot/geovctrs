@@ -14,12 +14,12 @@ geo_point <- function(xy, srid = 0)  {
   xy <- vec_cast(xy, geo_xy())
   stopifnot(vec_size(srid) == 1)
 
-  point <- new_geo_point(list(xy = xy))
+  point <- new_geovctrs_point(list(xy = xy))
   validate_geo_point(point)
-  new_geo_collection(list(feature = list(point), srid = as_geo_srid(srid)))
+  new_geovctrs_collection(list(feature = list(point), srid = as_geo_srid(srid)))
 }
 
-new_geo_point <- function(x) {
+new_geovctrs_point <- function(x) {
   vec_assert(x$xy, geo_xy())
   structure(x, class = "geo_point")
 }

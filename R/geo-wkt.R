@@ -3,7 +3,7 @@
 #'
 #' Like other geo types, [geo_wkt()] doesn't convert its input
 #' but does validate it using [validate_geo_wkt()].
-#' To skip validation, use [new_geo_wkt()].
+#' To skip validation, use [new_geovctrs_wkt()].
 #'
 #' @param x A character vector containing well-known text
 #' @param trim Trim unnecessary zeroes in the output?
@@ -14,7 +14,7 @@
 #' @param ... Unused
 #'
 #'
-#' @return A [new_geo_wkt()]
+#' @return A [new_geovctrs_wkt()]
 #' @export
 #'
 #' @examples
@@ -29,7 +29,7 @@
 #'
 geo_wkt <- function(x = character()) {
   x <- vec_cast(x, character())
-  wkt <- validate_geo_wkt(new_geo_wkt(x))
+  wkt <- validate_geo_wkt(new_geovctrs_wkt(x))
   wkt
 }
 
@@ -37,7 +37,7 @@ geo_wkt <- function(x = character()) {
 #' @rdname geo_wkt
 parse_wkt <- function(x) {
   x <- vec_cast(x, character())
-  validate_provider(new_geo_wkt(x))
+  validate_provider(new_geovctrs_wkt(x))
 }
 
 #' @rdname geo_wkt
@@ -51,7 +51,7 @@ as_geo_wkt.default <- function(x, ..., trim = TRUE, precision = 16, dimensions =
   trim <- vec_cast(trim, logical())
   precision <- vec_cast(precision, integer())
   dimensions <- vec_cast(dimensions, integer())
-  vec_cast(x, new_geo_wkt(trim = trim, precision = precision, dimensions = dimensions))
+  vec_cast(x, new_geovctrs_wkt(trim = trim, precision = precision, dimensions = dimensions))
 }
 
 #' S3 details for geo_wkt
@@ -66,11 +66,11 @@ as_geo_wkt.default <- function(x, ..., trim = TRUE, precision = 16, dimensions =
 #' wkt <- geo_wkt("POINT (30 10)")
 #' is_geo_wkt(wkt)
 #'
-#' # use new_geo_wkt() to skip parse validation if you know
+#' # use new_geovctrs_wkt() to skip parse validation if you know
 #' # your text is valid WKT
-#' new_geo_wkt("POINT (30 10)")
+#' new_geovctrs_wkt("POINT (30 10)")
 #'
-new_geo_wkt <- function(x = character(), trim = TRUE, precision = 16L, dimensions = 3L) {
+new_geovctrs_wkt <- function(x = character(), trim = TRUE, precision = 16L, dimensions = 3L) {
   vec_assert(x, character())
   vec_assert(trim, logical())
   vec_assert(precision, integer())
@@ -84,13 +84,13 @@ new_geo_wkt <- function(x = character(), trim = TRUE, precision = 16L, dimension
   )
 }
 
-#' @rdname new_geo_wkt
+#' @rdname new_geovctrs_wkt
 #' @export
 is_geo_wkt <- function(x) {
   inherits(x, "geovctrs_wkt")
 }
 
-#' @rdname new_geo_wkt
+#' @rdname new_geovctrs_wkt
 #' @export
 validate_geo_wkt <- function(x) {
   stop_for_non_parseable(validate_provider(x))
@@ -153,7 +153,7 @@ obj_print_data.geovctrs_wkt <- function(x, ...) {
 #' @method vec_cast geovctrs_wkt
 #' @export
 #' @export vec_cast.geovctrs_wkt
-#' @rdname new_geo_wkt
+#' @rdname new_geovctrs_wkt
 vec_cast.geovctrs_wkt <- function(x, to, ...) {
   UseMethod("vec_cast.geovctrs_wkt")
 }
@@ -229,7 +229,7 @@ vec_cast.geovctrs_wkt.geovctrs_collection <- function(x, to, ...) {
 #' @method vec_ptype2 geovctrs_wkt
 #' @export
 #' @export vec_ptype2.geovctrs_wkt
-#' @rdname new_geo_wkt
+#' @rdname new_geovctrs_wkt
 vec_ptype2.geovctrs_wkt <- function(x, y, ...) {
   UseMethod("vec_ptype2.geovctrs_wkt", y)
 }

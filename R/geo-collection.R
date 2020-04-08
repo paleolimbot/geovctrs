@@ -12,7 +12,7 @@
 #' @param feature A list of one or more features.
 #' @inheritParams geo_srid
 #'
-#' @return A [new_geo_collection()]
+#' @return A [new_geovctrs_collection()]
 #' @export
 #'
 #' @examples
@@ -29,7 +29,7 @@ geo_collection <- function(feature = list(), srid = 0) {
     feature = list(feature)
   }
 
-  collection <- new_geo_collection(
+  collection <- new_geovctrs_collection(
     vec_recycle_common(
       feature = feature,
       srid = as_geo_srid(srid)
@@ -43,16 +43,16 @@ geo_collection <- function(feature = list(), srid = 0) {
 #' S3 Details for coordinate vector collections
 #'
 #' @param x A (possibly) [geo_collection()]
-#' @inheritParams new_geo_wkt
+#' @inheritParams new_geovctrs_wkt
 #'
 #' @export
 #'
-new_geo_collection <- function(x = list(feature = list(), srid = integer())) {
+new_geovctrs_collection <- function(x = list(feature = list(), srid = integer())) {
   vec_assert(x$feature, list())
   new_rcrd(x, class = c("geovctrs_collection", "geovctr"))
 }
 
-#' @rdname new_geo_collection
+#' @rdname new_geovctrs_collection
 #' @export
 validate_geo_collection <- function(x) {
   lapply(field(x, "feature"), function(item) {
@@ -84,19 +84,19 @@ print.geovctrs_collection <- function(x, ...) {
   geo_print(x, ...)
 }
 
-#' @rdname new_geo_collection
+#' @rdname new_geovctrs_collection
 #' @export
 is_geo_collection <- function(x) {
   inherits(x, "geovctrs_collection")
 }
 
-#' @rdname new_geo_collection
+#' @rdname new_geovctrs_collection
 #' @export
 as_geo_collection <- function(x, ...) {
   UseMethod("as_geo_collection")
 }
 
-#' @rdname new_geo_collection
+#' @rdname new_geovctrs_collection
 #' @export
 as_geo_collection.default <- function(x, ...) {
   vec_cast(x, geo_collection())
@@ -105,7 +105,7 @@ as_geo_collection.default <- function(x, ...) {
 #' @method vec_cast geovctrs_collection
 #' @export
 #' @export vec_cast.geovctrs_collection
-#' @rdname new_geo_collection
+#' @rdname new_geovctrs_collection
 vec_cast.geovctrs_collection <- function(x, to, ...) {
   UseMethod("vec_cast.geovctrs_collection")
 }
@@ -155,7 +155,7 @@ vec_cast.geovctrs_collection.geovctrs_wkb <- function(x, to, ...) {
 #' @method vec_ptype2 geovctrs_collection
 #' @export
 #' @export vec_ptype2.geovctrs_collection
-#' @rdname new_geo_collection
+#' @rdname new_geovctrs_collection
 vec_ptype2.geovctrs_collection <- function(x, y, ...) {
   UseMethod("vec_ptype2.geovctrs_collection", y)
 }

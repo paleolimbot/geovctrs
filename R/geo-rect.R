@@ -13,14 +13,14 @@
 #'   length using [vctrs::vec_recycle_common()].
 #' @inheritParams geo_srid
 #'
-#' @return A [new_geo_rect()]
+#' @return A [new_geovctrs_rect()]
 #' @export
 #'
 #' @examples
 #' geo_plot(geo_rect(xmin = 0:5, ymin = 0:5, xmax = 2:7, ymax = 2:7))
 #'
 geo_rect <- function(xmin = double(), ymin = double(), xmax = double(), ymax = double(), srid = 0) {
-  result <- new_geo_rect(
+  result <- new_geovctrs_rect(
     vec_recycle_common(
       xmin = vec_cast(xmin, double()),
       ymin = vec_cast(ymin, double()),
@@ -36,11 +36,11 @@ geo_rect <- function(xmin = double(), ymin = double(), xmax = double(), ymax = d
 #' S3 details for geovctrs_rect
 #'
 #' @param x A (possibly) [geo_rect()]
-#' @inheritParams new_geo_xy
+#' @inheritParams new_geovctrs_xy
 #'
 #' @export
 #'
-new_geo_rect <- function(x = list(xmin = double(), ymin = double(),
+new_geovctrs_rect <- function(x = list(xmin = double(), ymin = double(),
                                   xmax = double(), ymax = double(), srid = integer())) {
   vec_assert(x$xmin, double())
   vec_assert(x$ymin, double())
@@ -51,7 +51,7 @@ new_geo_rect <- function(x = list(xmin = double(), ymin = double(),
 }
 
 #' @export
-#' @rdname new_geo_rect
+#' @rdname new_geovctrs_rect
 is_geo_rect <- function(x) {
   inherits(x, "geovctrs_rect")
 }
@@ -85,13 +85,13 @@ as.data.frame.geovctrs_rect <- function(x, ...) {
 }
 
 #' @export
-#' @rdname new_geo_rect
+#' @rdname new_geovctrs_rect
 as_geo_rect <- function(x, ...) {
   UseMethod("as_geo_rect")
 }
 
 #' @export
-#' @rdname new_geo_rect
+#' @rdname new_geovctrs_rect
 as_geo_rect.default <- function(x, ...) {
   vec_cast(x, geo_rect())
 }
@@ -99,7 +99,7 @@ as_geo_rect.default <- function(x, ...) {
 #' @method vec_cast geovctrs_rect
 #' @export
 #' @export vec_cast.geovctrs_rect
-#' @rdname new_geo_rect
+#' @rdname new_geovctrs_rect
 vec_cast.geovctrs_rect <- function(x, to, ...) {
   UseMethod("vec_cast.geovctrs_rect")
 }
@@ -121,7 +121,7 @@ vec_cast.geovctrs_rect.geovctrs_rect <- function(x, to, ...) {
 #' @method vec_ptype2 geovctrs_rect
 #' @export
 #' @export vec_ptype2.geovctrs_rect
-#' @rdname new_geo_rect
+#' @rdname new_geovctrs_rect
 vec_ptype2.geovctrs_rect <- function(x, y, ...) {
   UseMethod("vec_ptype2.geovctrs_rect", y)
 }

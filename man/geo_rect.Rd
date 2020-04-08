@@ -22,7 +22,7 @@ and should be managed outside of geovctrs except for
 0, which is interpreted as "not set".}
 }
 \value{
-A \code{\link[=new_geo_rect]{new_geo_rect()}}
+A \code{\link[=new_geovctrs_rect]{new_geovctrs_rect()}}
 }
 \description{
 The \code{\link[=geo_rect]{geo_rect()}} type is useful as an efficient representation of

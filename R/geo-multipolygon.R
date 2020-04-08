@@ -25,7 +25,7 @@ geo_multipolygon <- function(feature, srid = 0) {
   lengths <- vapply(xy, length, integer(1))
   part_rle <- structure(list(lengths = lengths, values = seq_along(lengths)), class = "rle")
 
-  feat <- new_geo_multipolygon(
+  feat <- new_geovctrs_multipolygon(
     list(
       xy = vec_c(!!!xy, .ptype = geo_xy()),
       part = inverse.rle(part_rle),
@@ -33,10 +33,10 @@ geo_multipolygon <- function(feature, srid = 0) {
     )
   )
 
-  new_geo_collection(list(feature = list(feat), srid = as_geo_srid(srid)))
+  new_geovctrs_collection(list(feature = list(feat), srid = as_geo_srid(srid)))
 }
 
-new_geo_multipolygon <- function(x) {
+new_geovctrs_multipolygon <- function(x) {
   vec_assert(x$xy, geo_xy())
   vec_assert(x$part, integer())
   vec_assert(x$ring, integer())

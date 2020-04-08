@@ -11,14 +11,14 @@
 #'   of the segment, respectively.
 #' @inheritParams geo_srid
 #'
-#' @return A [new_geo_segment()]
+#' @return A [new_geovctrs_segment()]
 #' @export
 #'
 #' @examples
 #' geo_plot(geo_segment(geo_xy(0, 0), geo_xy(10, -10:10)))
 #'
 geo_segment <- function(start = geo_xy(), end = geo_xy(), srid = 0) {
-  result <- new_geo_segment(
+  result <- new_geovctrs_segment(
     vec_recycle_common(
       start = vec_cast(start, geo_xy()),
       end = vec_cast(end, geo_xy()),
@@ -32,24 +32,24 @@ geo_segment <- function(start = geo_xy(), end = geo_xy(), srid = 0) {
 #' S3 details for geovctrs_segment
 #'
 #' @param x A (possibly) [geo_segment()]
-#' @inheritParams new_geo_xy
+#' @inheritParams new_geovctrs_xy
 #'
 #' @export
 #'
-new_geo_segment <- function(x = list(start = geo_xy(), end = geo_xy(), srid = integer())) {
+new_geovctrs_segment <- function(x = list(start = geo_xy(), end = geo_xy(), srid = integer())) {
   vec_assert(x$start, geo_xy())
   vec_assert(x$end, geo_xy())
   new_rcrd(x, class = c("geovctrs_segment", "geovctr"))
 }
 
 #' @export
-#' @rdname new_geo_segment
+#' @rdname new_geovctrs_segment
 is_geo_segment <- function(x) {
   inherits(x, "geovctrs_segment")
 }
 
 #' @export
-#' @rdname new_geo_segment
+#' @rdname new_geovctrs_segment
 validate_geo_segment <- function(x) {
   abort("not implemented")
 }
@@ -85,13 +85,13 @@ as.data.frame.geovctrs_segment <- function(x, ...) {
 # -------- casting ----------
 
 #' @export
-#' @rdname new_geo_segment
+#' @rdname new_geovctrs_segment
 as_geo_segment <- function(x, ...) {
   UseMethod("as_geo_segment")
 }
 
 #' @export
-#' @rdname new_geo_segment
+#' @rdname new_geovctrs_segment
 as_geo_segment.default <- function(x, ...) {
   vec_cast(x, geo_segment())
 }
@@ -99,7 +99,7 @@ as_geo_segment.default <- function(x, ...) {
 #' @method vec_cast geovctrs_segment
 #' @export
 #' @export vec_cast.geovctrs_segment
-#' @rdname new_geo_segment
+#' @rdname new_geovctrs_segment
 vec_cast.geovctrs_segment <- function(x, to, ...) {
   UseMethod("vec_cast.geovctrs_segment")
 }
@@ -139,7 +139,7 @@ vec_cast.geovctrs_segment.geovctrs_collection <- function(x, to, ...) {
 #' @method vec_ptype2 geovctrs_segment
 #' @export
 #' @export vec_ptype2.geovctrs_segment
-#' @rdname new_geo_segment
+#' @rdname new_geovctrs_segment
 vec_ptype2.geovctrs_segment <- function(x, y, ...) {
   UseMethod("vec_ptype2.geovctrs_segment", y)
 }

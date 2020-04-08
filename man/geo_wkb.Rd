@@ -29,12 +29,12 @@ when generating text.}
 or \code{NA} to use the default on your system.}
 }
 \value{
-A \code{\link[=new_geo_wkb]{new_geo_wkb()}}
+A \code{\link[=new_geovctrs_wkb]{new_geovctrs_wkb()}}
 }
 \description{
 Like other geo types, \code{\link[=geo_wkb]{geo_wkb()}} doesn't convert its input
 but does validate it using \code{\link[=validate_geo_wkb]{validate_geo_wkb()}}.
-To skip validation, use \code{\link[=new_geo_wkb]{new_geo_wkb()}} with
+To skip validation, use \code{\link[=new_geovctrs_wkb]{new_geovctrs_wkb()}} with
 the result of \code{vec_cast(list(...), .ptype = raw())}.
 }
 \examples{

@@ -23,20 +23,20 @@ test_that("parse problems for WKT are detected", {
   expect_identical(
     is.na(
       cpp_validate_provider(
-        new_geo_wkt(c("POINT (30 10)", "POINT EMPTY", "MERR", "POINT FISH"))
+        new_geovctrs_wkt(c("POINT (30 10)", "POINT EMPTY", "MERR", "POINT FISH"))
       )
     ),
     c(TRUE, TRUE, FALSE, FALSE)
   )
 
   expect_identical(
-    validate_geo_wkt(new_geo_wkt("POINT (30 10)")),
-    new_geo_wkt("POINT (30 10)")
+    validate_geo_wkt(new_geovctrs_wkt("POINT (30 10)")),
+    new_geovctrs_wkt("POINT (30 10)")
   )
 
   expect_warning(
     expect_error(
-      validate_geo_wkt(new_geo_wkt("POINT FISH")),
+      validate_geo_wkt(new_geovctrs_wkt("POINT FISH")),
       class = "parse_error"
     ),
     "parsing failure"
@@ -44,7 +44,7 @@ test_that("parse problems for WKT are detected", {
 
   expect_warning(
     expect_error(
-      validate_geo_wkt(rep(new_geo_wkt("POINT FISH"), 21)),
+      validate_geo_wkt(rep(new_geovctrs_wkt("POINT FISH"), 21)),
       class = "parse_error"
     ),
     "parsing failures"

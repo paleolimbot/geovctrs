@@ -103,7 +103,7 @@ as_geovctr.data.frame <- function(x, ...) {
 #' @export
 as_geovctr.sfc <- function(x, ...) {
   wkb_list <- unclass(sf_compat_as_binary(x, ..., EWKB = TRUE))
-  new_geo_wkb(wkb_list)
+  new_geovctrs_wkb(wkb_list)
 }
 
 #' @rdname is_geovctr

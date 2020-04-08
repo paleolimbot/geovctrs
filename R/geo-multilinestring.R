@@ -24,17 +24,17 @@ geo_multilinestring <- function(feature, srid = 0) {
   lengths <- vapply(xy, length, integer(1))
   part_rle <- structure(list(lengths = lengths, values = seq_along(lengths)), class = "rle")
 
-  feat <- new_geo_multilinestring(
+  feat <- new_geovctrs_multilinestring(
     list(
       xy = vec_c(!!!xy, .ptype = geo_xy()),
       part = inverse.rle(part_rle)
     )
   )
 
-  new_geo_collection(list(feature = list(feat), srid = as_geo_srid(srid)))
+  new_geovctrs_collection(list(feature = list(feat), srid = as_geo_srid(srid)))
 }
 
-new_geo_multilinestring <- function(x) {
+new_geovctrs_multilinestring <- function(x) {
   vec_assert(x$xy, geo_xy())
   vec_assert(x$part, integer())
   structure(x, class = "geo_multilinestring")

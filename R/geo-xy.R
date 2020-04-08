@@ -8,14 +8,14 @@
 #'
 #' @param x,y x and y coordinates
 #'
-#' @return A [new_geo_xy()]
+#' @return A [new_geovctrs_xy()]
 #' @export
 #'
 #' @examples
 #' geo_plot(geo_xy(0:5, 1:6))
 #'
 geo_xy <- function(x = double(), y = double()) {
-  new_geo_xy(vec_recycle_common(x = vec_cast(x, double()), y = vec_cast(y, double())))
+  new_geovctrs_xy(vec_recycle_common(x = vec_cast(x, double()), y = vec_cast(y, double())))
 }
 
 #' S3 details for geovctrs_xy
@@ -26,14 +26,14 @@ geo_xy <- function(x = double(), y = double()) {
 #'
 #' @export
 #'
-new_geo_xy <- function(x = list(x = double(), y = double())) {
+new_geovctrs_xy <- function(x = list(x = double(), y = double())) {
   vec_assert(x$x, double())
   vec_assert(x$y, double())
   new_rcrd(x, class = c("geovctrs_xy", "geovctr"))
 }
 
 #' @export
-#' @rdname new_geo_xy
+#' @rdname new_geovctrs_xy
 is_geo_xy <- function(x) {
   inherits(x, "geovctrs_xy")
 }
@@ -65,7 +65,7 @@ as.data.frame.geovctrs_xy <- function(x, ...) {
 }
 
 #' @export
-#' @rdname new_geo_xy
+#' @rdname new_geovctrs_xy
 as_geo_xy.matrix <- function(x, ...) {
   names <- colnames(x)
   if (all(c("x", "y") %in% names)) {
@@ -80,19 +80,19 @@ as_geo_xy.matrix <- function(x, ...) {
 }
 
 #' @export
-#' @rdname new_geo_xy
+#' @rdname new_geovctrs_xy
 as.matrix.geovctrs_xy <- function(x, ...) {
   as.matrix(as.data.frame(x))
 }
 
 #' @export
-#' @rdname new_geo_xy
+#' @rdname new_geovctrs_xy
 as_geo_xy <- function(x, ...) {
   UseMethod("as_geo_xy")
 }
 
 #' @export
-#' @rdname new_geo_xy
+#' @rdname new_geovctrs_xy
 as_geo_xy.default <- function(x, ...) {
   vec_cast(x, geo_xy())
 }
@@ -100,7 +100,7 @@ as_geo_xy.default <- function(x, ...) {
 #' @method vec_cast geovctrs_xy
 #' @export
 #' @export vec_cast.geovctrs_xy
-#' @rdname new_geo_xy
+#' @rdname new_geovctrs_xy
 vec_cast.geovctrs_xy <- function(x, to, ...) {
   UseMethod("vec_cast.geovctrs_xy")
 }
@@ -140,7 +140,7 @@ vec_cast.geovctrs_xy.geovctrs_collection <- function(x, to, ...) {
 #' @method vec_ptype2 geovctrs_xy
 #' @export
 #' @export vec_ptype2.geovctrs_xy
-#' @rdname new_geo_xy
+#' @rdname new_geovctrs_xy
 vec_ptype2.geovctrs_xy <- function(x, y, ...) {
   UseMethod("vec_ptype2.geovctrs_xy", y)
 }

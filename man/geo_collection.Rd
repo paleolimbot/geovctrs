@@ -15,7 +15,7 @@ and should be managed outside of geovctrs except for
 0, which is interpreted as "not set".}
 }
 \value{
-A \code{\link[=new_geo_collection]{new_geo_collection()}}
+A \code{\link[=new_geovctrs_collection]{new_geovctrs_collection()}}
 }
 \description{
 A \code{\link[=geo_collection]{geo_collection()}} is an in-memory R-native format that can store most

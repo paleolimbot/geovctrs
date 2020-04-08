@@ -22,16 +22,16 @@ geo_multipoint <- function(feature, srid = 0) {
 
   xy <- lapply(values, `[[`, "xy")
 
-  feat <- new_geo_multipoint(
+  feat <- new_geovctrs_multipoint(
     list(
       xy = vec_c(!!!xy, .ptype = geo_xy())
     )
   )
 
-  new_geo_collection(list(feature = list(feat), srid = as_geo_srid(srid)))
+  new_geovctrs_collection(list(feature = list(feat), srid = as_geo_srid(srid)))
 }
 
-new_geo_multipoint <- function(x) {
+new_geovctrs_multipoint <- function(x) {
   vec_assert(x$xy, geo_xy())
   structure(x, class = "geo_multipoint")
 }

@@ -3,7 +3,7 @@
 #'
 #' Like other geo types, [geo_wkb()] doesn't convert its input
 #' but does validate it using [validate_geo_wkb()].
-#' To skip validation, use [new_geo_wkb()] with
+#' To skip validation, use [new_geovctrs_wkb()] with
 #' the result of `vec_cast(list(...), .ptype = raw())`.
 #'
 #' @param x A [list()] of [raw()] objects, each of which
@@ -15,7 +15,7 @@
 #'   or `NA` to use the default on your system.
 #' @inheritParams geo_wkt
 #'
-#' @return A [new_geo_wkb()]
+#' @return A [new_geovctrs_wkb()]
 #' @export
 #'
 #' @examples
@@ -39,14 +39,14 @@
 #'
 geo_wkb <- function(x = list()) {
   x <- as.list(x)
-  wkb <- validate_geo_wkb(new_geo_wkb(x))
+  wkb <- validate_geo_wkb(new_geovctrs_wkb(x))
   wkb
 }
 
 #' @export
 #' @rdname geo_wkb
 parse_wkb <- function(x) {
-  validate_provider(new_geo_wkb(x))
+  validate_provider(new_geovctrs_wkb(x))
 }
 
 #' @export
@@ -60,13 +60,13 @@ as_geo_wkb.default <- function(x, ..., include_srid = NA, dimensions = 3, endian
   include_srid <- vec_cast(include_srid, logical())
   dimensions <- vec_cast(dimensions, integer())
   endian <- vec_cast(endian, integer())
-  vec_cast(x, new_geo_wkb(include_srid = include_srid, dimensions = dimensions, endian = endian))
+  vec_cast(x, new_geovctrs_wkb(include_srid = include_srid, dimensions = dimensions, endian = endian))
 }
 
 #' S3 details for geo_wkb
 #'
 #' @inheritParams geo_wkb
-#' @inheritParams new_geo_wkt
+#' @inheritParams new_geovctrs_wkt
 #'
 #' @export
 #'
@@ -82,10 +82,10 @@ as_geo_wkb.default <- function(x, ..., include_srid = NA, dimensions = 3, endian
 #' is_geo_wkb(wkb)
 #'
 #' # to skip parse validation if you know your object is
-#' # valid, use new_geo_wkb()
-#' new_geo_wkb(list(wkb_raw))
+#' # valid, use new_geovctrs_wkb()
+#' new_geovctrs_wkb(list(wkb_raw))
 #'
-new_geo_wkb <- function(x = list(),
+new_geovctrs_wkb <- function(x = list(),
                         include_srid = NA, dimensions = 3L, endian = NA_integer_) {
   vec_assert(x, list())
   new_vctr(
@@ -97,13 +97,13 @@ new_geo_wkb <- function(x = list(),
   )
 }
 
-#' @rdname new_geo_wkb
+#' @rdname new_geovctrs_wkb
 #' @export
 is_geo_wkb <- function(x) {
   inherits(x, "geovctrs_wkb")
 }
 
-#' @rdname new_geo_wkb
+#' @rdname new_geovctrs_wkb
 #' @export
 validate_geo_wkb <- function(x) {
   stop_for_non_parseable(validate_provider(x))
@@ -128,7 +128,7 @@ print.geovctrs_wkb <- function(x, ...) {
 #' @method vec_cast geovctrs_wkb
 #' @export
 #' @export vec_cast.geovctrs_wkb
-#' @rdname new_geo_wkb
+#' @rdname new_geovctrs_wkb
 vec_cast.geovctrs_wkb <- function(x, to, ...) {
   UseMethod("vec_cast.geovctrs_wkb")
 }
@@ -194,7 +194,7 @@ vec_cast.geovctrs_wkb.geovctrs_collection <- function(x, to, ...) {
 #' @method vec_ptype2 geovctrs_wkb
 #' @export
 #' @export vec_ptype2.geovctrs_wkb
-#' @rdname new_geo_wkb
+#' @rdname new_geovctrs_wkb
 vec_ptype2.geovctrs_wkb <- function(x, y, ...) {
   UseMethod("vec_ptype2.geovctrs_wkb", y)
 }

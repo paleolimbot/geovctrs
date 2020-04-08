@@ -10,7 +10,7 @@ geo_xy(x = double(), y = double())
 \item{x, y}{x and y coordinates}
 }
 \value{
-A \code{\link[=new_geo_xy]{new_geo_xy()}}
+A \code{\link[=new_geovctrs_xy]{new_geovctrs_xy()}}
 }
 \description{
 The \code{\link[=geo_xy]{geo_xy()}} type is useful as an efficient representation of points
