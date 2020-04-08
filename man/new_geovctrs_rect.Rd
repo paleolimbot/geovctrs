@@ -2,7 +2,7 @@
 % Please edit documentation in R/geo-rect.R
 \name{new_geovctrs_rect}
 \alias{new_geovctrs_rect}
-\alias{is_geo_rect}
+\alias{is_geovctrs_rect}
 \alias{as_geo_rect}
 \alias{as_geo_rect.default}
 \alias{vec_cast.geovctrs_rect}
@@ -14,7 +14,7 @@ new_geovctrs_rect(
     integer())
 )
 
-is_geo_rect(x)
+is_geovctrs_rect(x)
 
 as_geo_rect(x, ...)
 

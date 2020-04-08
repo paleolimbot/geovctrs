@@ -44,13 +44,13 @@ new_geovctrs_segment <- function(x = list(start = geo_xy(), end = geo_xy(), srid
 
 #' @export
 #' @rdname new_geovctrs_segment
-is_geo_segment <- function(x) {
+is_geovctrs_segment <- function(x) {
   inherits(x, "geovctrs_segment")
 }
 
 #' @export
 #' @rdname new_geovctrs_segment
-validate_geo_segment <- function(x) {
+validate_geovctrs_segment <- function(x) {
   abort("not implemented")
 }
 

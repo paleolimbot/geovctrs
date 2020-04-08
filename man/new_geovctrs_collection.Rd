@@ -2,8 +2,8 @@
 % Please edit documentation in R/geo-collection.R
 \name{new_geovctrs_collection}
 \alias{new_geovctrs_collection}
-\alias{validate_geo_collection}
-\alias{is_geo_collection}
+\alias{validate_geovctrs_collection}
+\alias{is_geovctrs_collection}
 \alias{as_geo_collection}
 \alias{as_geo_collection.default}
 \alias{vec_cast.geovctrs_collection}
@@ -12,9 +12,9 @@
 \usage{
 new_geovctrs_collection(x = list(feature = list(), srid = integer()))
 
-validate_geo_collection(x)
+validate_geovctrs_collection(x)
 
-is_geo_collection(x)
+is_geovctrs_collection(x)
 
 as_geo_collection(x, ...)
 

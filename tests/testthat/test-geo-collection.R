@@ -4,7 +4,7 @@ test_that("geo_collection class works", {
   expect_output(print(collection), "geovctrs_collection")
   expect_output(print(tibble(collection)), "clctn")
   expect_is(collection, "geovctrs_collection")
-  expect_true(is_geo_collection(collection))
+  expect_true(is_geovctrs_collection(collection))
   expect_true(vec_is(collection))
 
   # output with nested collection

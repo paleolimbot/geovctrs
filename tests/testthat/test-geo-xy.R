@@ -4,7 +4,7 @@ test_that("geo_xy class works", {
   expect_output(print(xy), "geovctrs_xy")
   expect_output(print(tibble(xy)), "xy")
   expect_is(xy, "geovctrs_xy")
-  expect_true(is_geo_xy(xy))
+  expect_true(is_geovctrs_xy(xy))
   expect_true(vec_is(xy))
 })
 

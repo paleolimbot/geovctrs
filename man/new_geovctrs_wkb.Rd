@@ -2,8 +2,8 @@
 % Please edit documentation in R/geo-wkb.R
 \name{new_geovctrs_wkb}
 \alias{new_geovctrs_wkb}
-\alias{is_geo_wkb}
-\alias{validate_geo_wkb}
+\alias{is_geovctrs_wkb}
+\alias{validate_geovctrs_wkb}
 \alias{vec_cast.geovctrs_wkb}
 \alias{vec_ptype2.geovctrs_wkb}
 \title{S3 details for geo_wkb}
@@ -15,9 +15,9 @@ new_geovctrs_wkb(
   endian = NA_integer_
 )
 
-is_geo_wkb(x)
+is_geovctrs_wkb(x)
 
-validate_geo_wkb(x)
+validate_geovctrs_wkb(x)
 
 \method{vec_cast}{geovctrs_wkb}(x, to, ...)
 
@@ -57,7 +57,7 @@ wkb_raw <- as.raw(
   )
 )
 wkb <- geo_wkb(list(wkb_raw))
-is_geo_wkb(wkb)
+is_geovctrs_wkb(wkb)
 
 # to skip parse validation if you know your object is
 # valid, use new_geovctrs_wkb()

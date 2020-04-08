@@ -2,7 +2,7 @@
 #' Create and validate well-known text
 #'
 #' Like other geo types, [geo_wkt()] doesn't convert its input
-#' but does validate it using [validate_geo_wkt()].
+#' but does validate it using [validate_geovctrs_wkt()].
 #' To skip validation, use [new_geovctrs_wkt()].
 #'
 #' @param x A character vector containing well-known text
@@ -29,7 +29,7 @@
 #'
 geo_wkt <- function(x = character()) {
   x <- vec_cast(x, character())
-  wkt <- validate_geo_wkt(new_geovctrs_wkt(x))
+  wkt <- validate_geovctrs_wkt(new_geovctrs_wkt(x))
   wkt
 }
 
@@ -64,7 +64,7 @@ as_geo_wkt.default <- function(x, ..., trim = TRUE, precision = 16, dimensions =
 #'
 #' @examples
 #' wkt <- geo_wkt("POINT (30 10)")
-#' is_geo_wkt(wkt)
+#' is_geovctrs_wkt(wkt)
 #'
 #' # use new_geovctrs_wkt() to skip parse validation if you know
 #' # your text is valid WKT
@@ -86,13 +86,13 @@ new_geovctrs_wkt <- function(x = character(), trim = TRUE, precision = 16L, dime
 
 #' @rdname new_geovctrs_wkt
 #' @export
-is_geo_wkt <- function(x) {
+is_geovctrs_wkt <- function(x) {
   inherits(x, "geovctrs_wkt")
 }
 
 #' @rdname new_geovctrs_wkt
 #' @export
-validate_geo_wkt <- function(x) {
+validate_geovctrs_wkt <- function(x) {
   stop_for_non_parseable(validate_provider(x))
   invisible(x)
 }

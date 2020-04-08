@@ -2,7 +2,7 @@
 #' Create and validate well-known binary
 #'
 #' Like other geo types, [geo_wkb()] doesn't convert its input
-#' but does validate it using [validate_geo_wkb()].
+#' but does validate it using [validate_geovctrs_wkb()].
 #' To skip validation, use [new_geovctrs_wkb()] with
 #' the result of `vec_cast(list(...), .ptype = raw())`.
 #'
@@ -39,7 +39,7 @@
 #'
 geo_wkb <- function(x = list()) {
   x <- as.list(x)
-  wkb <- validate_geo_wkb(new_geovctrs_wkb(x))
+  wkb <- validate_geovctrs_wkb(new_geovctrs_wkb(x))
   wkb
 }
 
@@ -79,7 +79,7 @@ as_geo_wkb.default <- function(x, ..., include_srid = NA, dimensions = 3, endian
 #'   )
 #' )
 #' wkb <- geo_wkb(list(wkb_raw))
-#' is_geo_wkb(wkb)
+#' is_geovctrs_wkb(wkb)
 #'
 #' # to skip parse validation if you know your object is
 #' # valid, use new_geovctrs_wkb()
@@ -99,13 +99,13 @@ new_geovctrs_wkb <- function(x = list(),
 
 #' @rdname new_geovctrs_wkb
 #' @export
-is_geo_wkb <- function(x) {
+is_geovctrs_wkb <- function(x) {
   inherits(x, "geovctrs_wkb")
 }
 
 #' @rdname new_geovctrs_wkb
 #' @export
-validate_geo_wkb <- function(x) {
+validate_geovctrs_wkb <- function(x) {
   stop_for_non_parseable(validate_provider(x))
   invisible(x)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/geo-xy.R
 \name{new_geovctrs_xy}
 \alias{new_geovctrs_xy}
-\alias{is_geo_xy}
+\alias{is_geovctrs_xy}
 \alias{as_geo_xy.matrix}
 \alias{as.matrix.geovctrs_xy}
 \alias{as_geo_xy}
@@ -13,7 +13,7 @@
 \usage{
 new_geovctrs_xy(x = list(x = double(), y = double()))
 
-is_geo_xy(x)
+is_geovctrs_xy(x)
 
 \method{as_geo_xy}{matrix}(x, ...)
 

@@ -52,7 +52,7 @@ new_geovctrs_rect <- function(x = list(xmin = double(), ymin = double(),
 
 #' @export
 #' @rdname new_geovctrs_rect
-is_geo_rect <- function(x) {
+is_geovctrs_rect <- function(x) {
   inherits(x, "geovctrs_rect")
 }
 

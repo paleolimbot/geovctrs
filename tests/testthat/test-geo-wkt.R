@@ -6,7 +6,7 @@ test_that("geo_wkt class works", {
   expect_match(format(wkt), "POINT")
   expect_output(print(tibble(wkt)), "wkt")
   expect_is(wkt, "geovctrs_wkt")
-  expect_true(is_geo_wkt(wkt))
+  expect_true(is_geovctrs_wkt(wkt))
   expect_true(vec_is(wkt))
   expect_equal(vec_size(wkt), 1)
 })
@@ -30,13 +30,13 @@ test_that("parse problems for WKT are detected", {
   )
 
   expect_identical(
-    validate_geo_wkt(new_geovctrs_wkt("POINT (30 10)")),
+    validate_geovctrs_wkt(new_geovctrs_wkt("POINT (30 10)")),
     new_geovctrs_wkt("POINT (30 10)")
   )
 
   expect_warning(
     expect_error(
-      validate_geo_wkt(new_geovctrs_wkt("POINT FISH")),
+      validate_geovctrs_wkt(new_geovctrs_wkt("POINT FISH")),
       class = "parse_error"
     ),
     "parsing failure"
@@ -44,7 +44,7 @@ test_that("parse problems for WKT are detected", {
 
   expect_warning(
     expect_error(
-      validate_geo_wkt(rep(new_geovctrs_wkt("POINT FISH"), 21)),
+      validate_geovctrs_wkt(rep(new_geovctrs_wkt("POINT FISH"), 21)),
       class = "parse_error"
     ),
     "parsing failures"

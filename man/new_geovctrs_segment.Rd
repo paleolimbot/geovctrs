@@ -2,8 +2,8 @@
 % Please edit documentation in R/geo-segment.R
 \name{new_geovctrs_segment}
 \alias{new_geovctrs_segment}
-\alias{is_geo_segment}
-\alias{validate_geo_segment}
+\alias{is_geovctrs_segment}
+\alias{validate_geovctrs_segment}
 \alias{as_geo_segment}
 \alias{as_geo_segment.default}
 \alias{vec_cast.geovctrs_segment}
@@ -14,9 +14,9 @@ new_geovctrs_segment(
   x = list(start = geo_xy(), end = geo_xy(), srid = integer())
 )
 
-is_geo_segment(x)
+is_geovctrs_segment(x)
 
-validate_geo_segment(x)
+validate_geovctrs_segment(x)
 
 as_geo_segment(x, ...)
 

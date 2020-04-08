@@ -4,7 +4,7 @@ test_that("geo_rect class works", {
   expect_output(print(rect), "geovctrs_rect")
   expect_output(print(tibble(rect)), "rect")
   expect_is(rect, "geovctrs_rect")
-  expect_true(is_geo_rect(rect))
+  expect_true(is_geovctrs_rect(rect))
   expect_true(vec_is(rect))
 })
 

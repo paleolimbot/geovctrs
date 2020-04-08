@@ -62,7 +62,7 @@
 #'
 geo_collection <- function(feature = list(), srid = 0) {
   # make it possible to create a nested geovctrs_collection
-  if (is_geo_collection(feature)) {
+  if (is_geovctrs_collection(feature)) {
     feature = list(feature)
   }
 
@@ -73,7 +73,7 @@ geo_collection <- function(feature = list(), srid = 0) {
     )
   )
 
-  validate_geo_collection(collection)
+  validate_geovctrs_collection(collection)
   collection
 }
 
@@ -84,7 +84,7 @@ geo_point <- function(xy, srid = 0)  {
   stopifnot(vec_size(srid) == 1)
 
   point <- new_geovctrs_point(list(xy = xy))
-  validate_geo_point(point)
+  validate_geovctrs_point(point)
   new_geovctrs_collection(list(feature = list(point), srid = as_geo_srid(srid)))
 }
 
@@ -93,7 +93,7 @@ new_geovctrs_point <- function(x) {
   structure(x, class = "geovctrs_point")
 }
 
-validate_geo_point <-function(x) {
+validate_geovctrs_point <-function(x) {
   stopifnot(vec_size(x$xy) %in% c(0, 1))
   invisible(x)
 }
@@ -105,7 +105,7 @@ geo_linestring <- function(xy, srid = 0)  {
   stopifnot(vec_size(srid) == 1)
 
   feat <- new_geovctrs_linestring(list(xy = xy))
-  validate_geo_linestring(feat)
+  validate_geovctrs_linestring(feat)
   new_geovctrs_collection(list(feature = list(feat), srid = as_geo_srid(srid)))
 }
 
@@ -114,7 +114,7 @@ new_geovctrs_linestring <- function(x) {
   structure(x, class = "geovctrs_linestring")
 }
 
-validate_geo_linestring <-function(x) {
+validate_geovctrs_linestring <-function(x) {
   stopifnot(vec_size(x$xy) != 1)
   invisible(x)
 }
@@ -126,7 +126,7 @@ geo_polygon <- function(xy, ring = 1L, srid = 0)  {
   stopifnot(vec_size(srid) == 1)
 
   feat <- new_geovctrs_polygon(as_part_identifier(xy, ring = ring))
-  validate_geo_polygon(feat)
+  validate_geovctrs_polygon(feat)
   new_geovctrs_collection(list(feature = list(feat), srid = as_geo_srid(srid)))
 }
 
@@ -136,7 +136,7 @@ new_geovctrs_polygon <- function(x) {
   structure(x, class = "geovctrs_polygon")
 }
 
-validate_geo_polygon <-function(x) {
+validate_geovctrs_polygon <-function(x) {
   rings <- split(x$xy, x$ring)
   lengths <- vapply(rings, length, integer(1))
   stopifnot(!any(lengths %in% c(1, 2)))
@@ -247,7 +247,7 @@ new_geovctrs_collection <- function(x = list(feature = list(), srid = integer())
 
 #' @rdname new_geovctrs_collection
 #' @export
-validate_geo_collection <- function(x) {
+validate_geovctrs_collection <- function(x) {
   lapply(field(x, "feature"), function(item) {
     is.null(item) ||
       inherits(item, "geo_coord_point") ||
@@ -279,7 +279,7 @@ print.geovctrs_collection <- function(x, ...) {
 
 #' @rdname new_geovctrs_collection
 #' @export
-is_geo_collection <- function(x) {
+is_geovctrs_collection <- function(x) {
   inherits(x, "geovctrs_collection")
 }
 

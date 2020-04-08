@@ -2,8 +2,8 @@
 % Please edit documentation in R/geo-wkt.R
 \name{new_geovctrs_wkt}
 \alias{new_geovctrs_wkt}
-\alias{is_geo_wkt}
-\alias{validate_geo_wkt}
+\alias{is_geovctrs_wkt}
+\alias{validate_geovctrs_wkt}
 \alias{vec_cast.geovctrs_wkt}
 \alias{vec_ptype2.geovctrs_wkt}
 \title{S3 details for geo_wkt}
@@ -15,9 +15,9 @@ new_geovctrs_wkt(
   dimensions = 3L
 )
 
-is_geo_wkt(x)
+is_geovctrs_wkt(x)
 
-validate_geo_wkt(x)
+validate_geovctrs_wkt(x)
 
 \method{vec_cast}{geovctrs_wkt}(x, to, ...)
 
@@ -44,7 +44,7 @@ S3 details for geo_wkt
 }
 \examples{
 wkt <- geo_wkt("POINT (30 10)")
-is_geo_wkt(wkt)
+is_geovctrs_wkt(wkt)
 
 # use new_geovctrs_wkt() to skip parse validation if you know
 # your text is valid WKT

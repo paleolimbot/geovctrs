@@ -4,7 +4,7 @@ test_that("geo_segment class works", {
   expect_output(print(segment), "geovctrs_segment")
   expect_output(print(tibble(segment)), "segment")
   expect_is(segment, "geovctrs_segment")
-  expect_true(is_geo_segment(segment))
+  expect_true(is_geovctrs_segment(segment))
   expect_true(vec_is(segment))
 })
 

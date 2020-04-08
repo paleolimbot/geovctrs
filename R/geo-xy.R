@@ -34,7 +34,7 @@ new_geovctrs_xy <- function(x = list(x = double(), y = double())) {
 
 #' @export
 #' @rdname new_geovctrs_xy
-is_geo_xy <- function(x) {
+is_geovctrs_xy <- function(x) {
   inherits(x, "geovctrs_xy")
 }
 

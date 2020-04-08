@@ -30,7 +30,7 @@ A \code{\link[=new_geovctrs_wkt]{new_geovctrs_wkt()}}
 }
 \description{
 Like other geo types, \code{\link[=geo_wkt]{geo_wkt()}} doesn't convert its input
-but does validate it using \code{\link[=validate_geo_wkt]{validate_geo_wkt()}}.
+but does validate it using \code{\link[=validate_geovctrs_wkt]{validate_geovctrs_wkt()}}.
 To skip validation, use \code{\link[=new_geovctrs_wkt]{new_geovctrs_wkt()}}.
 }
 \examples{

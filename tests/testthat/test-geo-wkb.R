@@ -12,7 +12,7 @@ test_that("geo_wkb class works", {
   expect_match(format(wkb), "POINT")
   expect_output(print(tibble(wkb)), "wkb")
   expect_is(wkb, "geovctrs_wkb")
-  expect_true(is_geo_wkb(wkb))
+  expect_true(is_geovctrs_wkb(wkb))
   expect_true(vec_is(wkb))
   expect_equal(vec_size(wkb), 1)
 })
@@ -45,9 +45,9 @@ test_that("geo_wkb parse validation works", {
   )
   expect_identical(is.na(cpp_validate_provider(wkb)), c(TRUE, FALSE))
 
-  expect_identical(validate_geo_wkb(wkb[1]), wkb[1])
+  expect_identical(validate_geovctrs_wkb(wkb[1]), wkb[1])
   expect_warning(
-    expect_error(validate_geo_wkb(wkb), "1 geometry", class = "parse_error"),
+    expect_error(validate_geovctrs_wkb(wkb), "1 geometry", class = "parse_error"),
     "parsing failure"
   )
 })
