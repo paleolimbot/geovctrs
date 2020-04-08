@@ -199,7 +199,7 @@ void WKBGeometryExporter::init(GEOSContextHandle_t context, size_t size) {
   }
 
   List data(size);
-  data.attr("class") = CharacterVector::create("geo_wkb", "geovctr", "vctrs_vctr");
+  data.attr("class") = CharacterVector::create("geovctrs_wkb", "geovctr", "vctrs_vctr");
   data.attr("include_srid") = LogicalVector::create(LogicalVector::get_na());
   data.attr("dimensions") = IntegerVector::create(3);
   data.attr("endian") = IntegerVector::create(LogicalVector::get_na());
@@ -622,7 +622,7 @@ std::unique_ptr<GeometryProvider> resolve_provider(SEXP data) {
       return std::unique_ptr<GeometryProvider> { new WKTGeometryProvider(dataChar) };
     }
 
-  } else if(Rf_inherits(data, "geo_wkb")) {
+  } else if(Rf_inherits(data, "geovctrs_wkb")) {
     List dataList = (List) data;
 
     if (dataList.size() ==  1) {
@@ -702,7 +702,7 @@ std::unique_ptr<GeometryExporter> resolve_exporter(SEXP ptype) {
       new WKTGeometryExporter(trim, precision, dimensions)
     };
 
-  } else if(Rf_inherits(ptype, "geo_wkb")) {
+  } else if(Rf_inherits(ptype, "geovctrs_wkb")) {
     List data = (List)ptype;
     int includeSRID = data.attr("include_srid");
     int dimensions = data.attr("dimensions");

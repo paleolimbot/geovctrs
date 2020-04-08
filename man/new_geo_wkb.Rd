@@ -4,8 +4,8 @@
 \alias{new_geo_wkb}
 \alias{is_geo_wkb}
 \alias{validate_geo_wkb}
-\alias{vec_cast.geo_wkb}
-\alias{vec_ptype2.geo_wkb}
+\alias{vec_cast.geovctrs_wkb}
+\alias{vec_ptype2.geovctrs_wkb}
 \title{S3 details for geo_wkb}
 \usage{
 new_geo_wkb(
@@ -19,9 +19,9 @@ is_geo_wkb(x)
 
 validate_geo_wkb(x)
 
-\method{vec_cast}{geo_wkb}(x, to, ...)
+\method{vec_cast}{geovctrs_wkb}(x, to, ...)
 
-\method{vec_ptype2}{geo_wkb}(x, y, ...)
+\method{vec_ptype2}{geovctrs_wkb}(x, y, ...)
 }
 \arguments{
 \item{x}{A \code{\link[=list]{list()}} of \code{\link[=raw]{raw()}} objects, each of which

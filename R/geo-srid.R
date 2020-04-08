@@ -100,12 +100,12 @@ geo_set_srid.geo_xy <- function(x, srid) {
 }
 
 #' @export
-geo_srid.geo_wkb <- function(x) {
+geo_srid.geovctrs_wkb <- function(x) {
   cpp_get_srid(x)
 }
 
 #' @export
-geo_set_srid.geo_wkb <- function(x, srid) {
+geo_set_srid.geovctrs_wkb <- function(x, srid) {
   srid <- vec_recycle(srid, vec_size(x))
   cpp_set_srid(x, srid)
 }

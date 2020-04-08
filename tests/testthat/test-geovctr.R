@@ -36,7 +36,7 @@ test_that("sf/sfc works with as_geovctr()", {
   sf_nc <- pkg_fun("sf", "read_sf")(system.file("shape/nc.shp", package = "sf"))
   sfc_nc <- sf_nc[[attr(sf_nc, "sf_column")]]
 
-  expect_is(as_geovctr(sf_nc), "geo_wkb")
+  expect_is(as_geovctr(sf_nc), "geovctrs_wkb")
   expect_length(as_geovctr(sf_nc), nrow(sf_nc))
   expect_identical(as_geovctr(sf_nc), as_geovctr(sfc_nc))
 

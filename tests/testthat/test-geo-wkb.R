@@ -8,10 +8,10 @@ test_that("geo_wkb class works", {
     )
   )
   wkb <- geo_wkb(list(wkb_raw))
-  expect_output(print(wkb), "geo_wkb")
+  expect_output(print(wkb), "geovctrs_wkb")
   expect_match(format(wkb), "POINT")
   expect_output(print(tibble(wkb)), "wkb")
-  expect_is(wkb, "geo_wkb")
+  expect_is(wkb, "geovctrs_wkb")
   expect_true(is_geo_wkb(wkb))
   expect_true(vec_is(wkb))
   expect_equal(vec_size(wkb), 1)
@@ -53,7 +53,7 @@ test_that("geo_wkb parse validation works", {
 })
 
 test_that("c() works for wkb", {
-  expect_is(c(geo_wkb(), geo_wkb()), "geo_wkb")
+  expect_is(c(geo_wkb(), geo_wkb()), "geovctrs_wkb")
   expect_error(vec_c(geo_wkb(), 5), class = "vctrs_error_incompatible_type")
 })
 

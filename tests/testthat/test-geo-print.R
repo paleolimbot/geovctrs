@@ -20,7 +20,7 @@ test_that("geo_format works", {
   expect_output(print(tibble(geom = as_geo_collection(wkts))), "tibble")
 
   # default method
-  expect_output(expect_identical(geo_print(geo_nc), geo_nc), "tbl_df...geo_wkb")
+  expect_output(expect_identical(geo_print(geo_nc), geo_nc), "tbl_df...geovctrs_wkb")
 
   # named
   expect_output(geo_print(setNames(geo_wkt("POINT (30 10)"), "a name")), "a name")
