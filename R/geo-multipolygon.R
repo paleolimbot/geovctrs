@@ -42,7 +42,3 @@ new_geo_multipolygon <- function(x) {
   vec_assert(x$ring, integer())
   structure(x, class = "geo_multipolygon")
 }
-
-validate_geo_multipolygon <-function(x) {
-  invisible(x)
-}

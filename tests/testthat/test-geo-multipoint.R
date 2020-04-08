@@ -8,4 +8,7 @@ test_that("geo_multipoint() works", {
   # empty
   expect_is(geo_multipoint(geo_point(geo_xy())), "geo_collection")
   expect_length(geo_multipoint(geo_point(geo_xy())), 1)
+
+  # error
+  expect_error(geo_multipoint(geo_linestring(geo_xy())), "All features must be")
 })

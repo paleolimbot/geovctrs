@@ -39,7 +39,3 @@ new_geo_multilinestring <- function(x) {
   vec_assert(x$part, integer())
   structure(x, class = "geo_multilinestring")
 }
-
-validate_geo_multilinestring <-function(x) {
-  invisible(x)
-}

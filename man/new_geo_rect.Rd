@@ -3,7 +3,6 @@
 \name{new_geo_rect}
 \alias{new_geo_rect}
 \alias{is_geo_rect}
-\alias{validate_geo_rect}
 \alias{as_geo_rect}
 \alias{as_geo_rect.default}
 \alias{vec_cast.geo_rect}
@@ -16,8 +15,6 @@ new_geo_rect(
 )
 
 is_geo_rect(x)
-
-validate_geo_rect(x)
 
 as_geo_rect(x, ...)
 

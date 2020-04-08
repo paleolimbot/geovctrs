@@ -14,19 +14,26 @@
 #' geo_format(head(geo_nc))
 #' geo_print(head(geo_nc))
 #'
-geo_print <- function(x, ..., short = FALSE, col  = TRUE) {
+geo_print <- function(x, ..., short = FALSE, col = TRUE) {
   UseMethod("geo_print")
 }
 
 #' @export
-geo_print.default <- function(x, ..., short = FALSE, col  = TRUE) {
-  geo_print(as_geovctr(x), ..., short = short, col = col)
+geo_print.default <- function(x, ..., short = FALSE, col = TRUE) {
+  geovctr <- as_geovctr(x)
+  geo_print(
+    as_geovctr(x),
+    ...,
+    classes = paste0(class(x)[1], "...", class(geovctr)[1]),
+    short = short,
+    col = col
+  )
   invisible(x)
 }
 
 #' @export
-geo_print.geovctr <- function(x, ..., short = FALSE, col  = TRUE) {
-  cat(paste0("<", class(x)[1], "[", vec_size(x), "]>\n"))
+geo_print.geovctr <- function(x, ..., classes = class(x), short = FALSE, col = TRUE) {
+  cat(paste0("<", classes[1], "[", vec_size(x), "]>\n"))
 
   if (rlang::is_named(x) || !col) {
     out <- stats::setNames(geo_format(x, ..., short = short, col = FALSE), names(x))
@@ -184,7 +191,7 @@ is_multi_geometry_type <- function(type) {
 
 maybe_blue <- function(..., col = TRUE) {
   if (col && crayon::has_color()) {
-    cli::col_blue(...)
+    cli::col_blue(...)  # nocov
   } else {
     paste0(...)
   }
@@ -192,7 +199,7 @@ maybe_blue <- function(..., col = TRUE) {
 
 maybe_red <- function(..., col = TRUE) {
   if (col && crayon::has_color()) {
-    cli::col_red(...)
+    cli::col_red(...) # nocov
   } else {
     paste0(...)
   }
@@ -200,7 +207,7 @@ maybe_red <- function(..., col = TRUE) {
 
 maybe_grey <- function(..., col = TRUE) {
   if (col && crayon::has_color()) {
-    cli::col_grey(...)
+    cli::col_grey(...) # nocov
   } else {
     paste0(...)
   }

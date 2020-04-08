@@ -13,6 +13,8 @@ test_that("geo_segment() c() works", {
   segment <- geo_segment(start = geo_xy(0:5, 0:5), end = geo_xy(1:6, 1:6))
   expect_is(c(segment, geo_wkt("POINT (30 10)")), "geo_wkt")
   expect_is(c(segment, as_geo_wkb(geo_wkt("POINT (30 10)"))), "geo_wkb")
+  expect_is(c(segment, segment), "geo_segment")
+  expect_error(vec_c(5, segment), class = "vctrs_error_incompatible_type")
 })
 
 test_that("coersion from segment works", {

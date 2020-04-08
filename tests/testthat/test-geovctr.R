@@ -1,3 +1,4 @@
+context("test-geovctr")
 
 test_that("all geovctrs pass expect_geovctr", {
   expect_geovctr(geo_wkt())
@@ -47,4 +48,18 @@ test_that("sf/sfc works with as_geovctr()", {
   expect_is(geo_envelope(sfc_nc), "sfc")
   expect_is(geo_set_srid(sf_nc, 0), "sf")
   expect_is(geo_set_srid(sfc_nc, 0), "sfc")
+
+  sfc_tiny <- pkg_fun("sf", "st_sfc")(pkg_fun("sf", "st_point")(c(30, 10)))
+  sf_tiny <- pkg_fun("sf", "st_as_sf")(tibble(geom = sfc_tiny))
+
+  # check with plot
+  vdiffr::expect_doppelganger(
+    "sfc plot",
+    function() geo_plot(sfc_tiny)
+  )
+
+  vdiffr::expect_doppelganger(
+    "sf plot",
+    function() geo_plot(sf_tiny)
+  )
 })

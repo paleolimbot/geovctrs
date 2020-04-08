@@ -21,6 +21,25 @@ test_that("SRID extraction works", {
   expect_identical(geo_srid(geometries_wkb), c(26920L, 0L))
   expect_identical(geo_srid(geo_set_srid(geometries_wkb, 0)), c(0L, 0L))
 
+  # xy
+  expect_identical(geo_srid(geo_xy(0, 0)), 0L)
+  expect_identical(geo_set_srid(geo_xy(0, 0), NA), geo_xy(0, 0))
+  expect_error(geo_set_srid(geo_xy(0, 0), 1L), "Can't store SRID")
+
+  # segment
+  expect_identical(geo_srid(geo_segment(geo_xy(0, 0), geo_xy(1, 1), srid = 1)), 1L)
+  expect_identical(
+    geo_set_srid(geo_segment(geo_xy(0, 0), geo_xy(1, 1), srid = 1), 2L),
+    geo_segment(geo_xy(0, 0), geo_xy(1, 1), srid = 2)
+  )
+
+  # rect
+  expect_identical(geo_srid(geo_rect(0, 1, 2, 3, srid = 1L)), 1L)
+  expect_identical(
+    geo_set_srid(geo_rect(0, 1, 2, 3, srid = 1L), 2L),
+    geo_rect(0, 1, 2, 3, srid = 2L)
+  )
+
   # via as_geovctr()
   expect_identical(geo_srid("POINT EMPTY"), 0L)
 })

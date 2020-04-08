@@ -24,6 +24,12 @@ test_that("geo_is_missing works", {
   expect_false(geo_is_missing(geo_rect(NA, 1, NA, NA)))
   expect_false(geo_is_missing(geo_rect(NA, NA, 1, NA)))
   expect_false(geo_is_missing(geo_rect(NA, NA, NA, 1)))
+
+  # default
+  expect_identical(
+    geo_is_missing(NA_character_),
+    geo_is_missing(NA_wkt_)
+  )
 })
 
 test_that("geo_has_missing works", {
@@ -58,6 +64,12 @@ test_that("geo_has_missing works", {
   expect_true(geo_has_missing(geo_rect(1, 1, NA, NA)))
   expect_true(geo_has_missing(geo_rect(1, 1, 1, NA)))
   expect_false(geo_has_missing(geo_rect(1, 1, 1, 1)))
+
+  # default
+  expect_identical(
+    geo_has_missing("LINESTRING (0 nan, 1 1)"),
+    geo_has_missing(geo_wkt("LINESTRING (0 nan, 1 1)"))
+  )
 })
 
 test_that("geo_has_missing works with nested collections", {
@@ -117,6 +129,12 @@ test_that("geo_is_finite works", {
   expect_false(geo_is_finite(geo_rect(1, 1, NA, NA)))
   expect_false(geo_is_finite(geo_rect(1, 1, 1, NA)))
   expect_true(geo_is_finite(geo_rect(1, 1, 1, 1)))
+
+  # default
+  expect_identical(
+    geo_is_finite("LINESTRING (0 inf, 1 1)"),
+    geo_is_finite(geo_wkt("LINESTRING (0 inf, 1 1)"))
+  )
 })
 
 test_that("geo_is_finite works with nested collections", {
@@ -173,6 +191,9 @@ test_that("geo_is_empty works", {
   expect_true(geo_is_empty(geo_rect(1, 1, NA, NA)))
   expect_true(geo_is_empty(geo_rect(1, 1, 1, NA)))
   expect_false(geo_is_empty(geo_rect(1, 1, 1, 1)))
+
+  # default
+  expect_identical(geo_is_empty("POINT EMPTY"), geo_is_empty(geo_wkt("POINT EMPTY")))
 })
 
 test_that("handling of empty points is consistent across geovctrs", {

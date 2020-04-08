@@ -18,15 +18,26 @@ test_that("geo_format works", {
   expect_output(print(tibble(geom = wkts)), "tibble")
   expect_output(print(tibble(geom = as_geo_wkb(wkts))), "tibble")
   expect_output(print(tibble(geom = as_geo_collection(wkts))), "tibble")
+
+  # default method
+  expect_output(expect_identical(geo_print(geo_nc), geo_nc), "tbl_df...geo_wkb")
+
+  # named
+  expect_output(geo_print(setNames(geo_wkt("POINT (30 10)"), "a name")), "a name")
+
+  # zero len format +  print
+  expect_length(geo_format(geo_wkt()), 0)
+  expect_output(geo_print(geo_wkt()), "geo_wkt\\[0\\]")
 })
 
 test_that("all geovctrs work in the RStudio viewer", {
   if (FALSE) {
-    View(geo_nc)
-    View(tibble(as_geo_wkt(geo_nc$geometry)))
-    View(tibble(geo_envelope(geo_nc)))
-    View(geo_summary(geo_nc))
-    View(tibble(geo_segment(geo_xy(0, 0), geo_xy(12, 11))))
+    View(geo_nc) # wkb
+    View(tibble(as_geo_wkt(geo_nc$geometry))) # wkt
+    View(tibble(as_geo_collection(geo_nc$geometry))) # collection
+    View(geo_summary(geo_nc)) # xy
+    View(tibble(geo_segment(geo_xy(0, 0), geo_xy(12, 11)))) # segment
+    View(tibble(geo_envelope(geo_nc))) # rect
   }
 
   expect_true(TRUE)

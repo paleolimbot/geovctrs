@@ -57,12 +57,6 @@ is_geo_rect <- function(x) {
 }
 
 #' @export
-#' @rdname new_geo_rect
-validate_geo_rect <- function(x) {
-  abort("not implemented")
-}
-
-#' @export
 vec_ptype_abbr.geo_rect <- function(x, ...) {
   "rect"
 }

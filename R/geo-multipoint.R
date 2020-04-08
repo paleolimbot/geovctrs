@@ -35,7 +35,3 @@ new_geo_multipoint <- function(x) {
   vec_assert(x$xy, geo_xy())
   structure(x, class = "geo_multipoint")
 }
-
-validate_geo_multipoint <-function(x) {
-  invisible(x)
-}

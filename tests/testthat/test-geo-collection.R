@@ -25,5 +25,5 @@ test_that("basic casting and coersion work", {
 
   # erroring
   expect_error(vec_cast(5, geo_collection()), class = "vctrs_error_incompatible_cast")
-  expect_error(vec_c(5, geo_collection()), class = "vctrs_error_incompatible_type")
+  expect_error(vec_c(geo_collection(), 5), class = "vctrs_error_incompatible_type")
 })
