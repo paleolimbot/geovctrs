@@ -103,7 +103,7 @@ geo_plot_add.sf <- function(x, ...) {
 
 #' @rdname geo_plot
 #' @export
-geo_plot_add.geo_xy <- function(x, ...) {
+geo_plot_add.geovctrs_xy <- function(x, ...) {
   graphics::points(field(x, "x"), field(x, "y"), ...)
   invisible(x)
 }

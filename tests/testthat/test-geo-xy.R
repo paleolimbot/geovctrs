@@ -1,9 +1,9 @@
 
 test_that("geo_xy class works", {
   xy <- geo_xy(0, 1)
-  expect_output(print(xy), "geo_xy")
+  expect_output(print(xy), "geovctrs_xy")
   expect_output(print(tibble(xy)), "xy")
-  expect_is(xy, "geo_xy")
+  expect_is(xy, "geovctrs_xy")
   expect_true(is_geo_xy(xy))
   expect_true(vec_is(xy))
 })
@@ -26,7 +26,7 @@ test_that("geo_xy casting works", {
 })
 
 test_that("geo_xy c() works", {
-  expect_is(c(geo_xy(), geo_xy()), "geo_xy")
+  expect_is(c(geo_xy(), geo_xy()), "geovctrs_xy")
   expect_error(c(geo_xy(), 5), class = "vctrs_error_incompatible_type")
 })
 

@@ -4,12 +4,12 @@
 \alias{new_geo_xy}
 \alias{is_geo_xy}
 \alias{as_geo_xy.matrix}
-\alias{as.matrix.geo_xy}
+\alias{as.matrix.geovctrs_xy}
 \alias{as_geo_xy}
 \alias{as_geo_xy.default}
-\alias{vec_cast.geo_xy}
-\alias{vec_ptype2.geo_xy}
-\title{S3 details for geo_xy}
+\alias{vec_cast.geovctrs_xy}
+\alias{vec_ptype2.geovctrs_xy}
+\title{S3 details for geovctrs_xy}
 \usage{
 new_geo_xy(x = list(x = double(), y = double()))
 
@@ -17,15 +17,15 @@ is_geo_xy(x)
 
 \method{as_geo_xy}{matrix}(x, ...)
 
-\method{as.matrix}{geo_xy}(x, ...)
+\method{as.matrix}{geovctrs_xy}(x, ...)
 
 as_geo_xy(x, ...)
 
 \method{as_geo_xy}{default}(x, ...)
 
-\method{vec_cast}{geo_xy}(x, to, ...)
+\method{vec_cast}{geovctrs_xy}(x, to, ...)
 
-\method{vec_ptype2}{geo_xy}(x, y, ...)
+\method{vec_ptype2}{geovctrs_xy}(x, y, ...)
 }
 \arguments{
 \item{x}{A (possibly) \code{\link[=geo_xy]{geo_xy()}}}
@@ -35,5 +35,5 @@ as_geo_xy(x, ...)
 \item{to, y}{Arguments to \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} and \code{\link[vctrs:vec_ptype2]{vctrs::vec_ptype2()}}}
 }
 \description{
-S3 details for geo_xy
+S3 details for geovctrs_xy
 }

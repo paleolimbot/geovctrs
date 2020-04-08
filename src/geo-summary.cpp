@@ -98,7 +98,7 @@ public:
       _["x"] = this->x,
       _["y"] = this->y
     );
-    xy.attr("class") = CharacterVector::create("geo_xy", "geovctr", "vctrs_rcrd", "vctrs_vctr");
+    xy.attr("class") = CharacterVector::create("geovctrs_xy", "geovctr", "vctrs_rcrd", "vctrs_vctr");
     return xy;
   }
 };

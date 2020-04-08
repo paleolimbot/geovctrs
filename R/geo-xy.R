@@ -18,7 +18,7 @@ geo_xy <- function(x = double(), y = double()) {
   new_geo_xy(vec_recycle_common(x = vec_cast(x, double()), y = vec_cast(y, double())))
 }
 
-#' S3 details for geo_xy
+#' S3 details for geovctrs_xy
 #'
 #' @param x A (possibly) [geo_xy()]
 #' @param ... Unused
@@ -29,22 +29,22 @@ geo_xy <- function(x = double(), y = double()) {
 new_geo_xy <- function(x = list(x = double(), y = double())) {
   vec_assert(x$x, double())
   vec_assert(x$y, double())
-  new_rcrd(x, class = c("geo_xy", "geovctr"))
+  new_rcrd(x, class = c("geovctrs_xy", "geovctr"))
 }
 
 #' @export
 #' @rdname new_geo_xy
 is_geo_xy <- function(x) {
-  inherits(x, "geo_xy")
+  inherits(x, "geovctrs_xy")
 }
 
 #' @export
-vec_ptype_abbr.geo_xy <- function(x, ...) {
+vec_ptype_abbr.geovctrs_xy <- function(x, ...) {
   "xy"
 }
 
 #' @export
-format.geo_xy <- function(x, ...) {
+format.geovctrs_xy <- function(x, ...) {
   sprintf(
     "(%s %s)",
     format(field(x, "x"), trim = TRUE, ...),
@@ -54,14 +54,14 @@ format.geo_xy <- function(x, ...) {
 
 #' @export
 #' @importFrom tibble as_tibble
-as_tibble.geo_xy <- function(x, ...) {
+as_tibble.geovctrs_xy <- function(x, ...) {
   as_tibble(vec_data(x), ...)
 }
 
 #' @export
 #' @importFrom tibble as_tibble
-as.data.frame.geo_xy <- function(x, ...) {
-  as.data.frame(as_tibble.geo_xy(x, ...))
+as.data.frame.geovctrs_xy <- function(x, ...) {
+  as.data.frame(as_tibble.geovctrs_xy(x, ...))
 }
 
 #' @export
@@ -81,7 +81,7 @@ as_geo_xy.matrix <- function(x, ...) {
 
 #' @export
 #' @rdname new_geo_xy
-as.matrix.geo_xy <- function(x, ...) {
+as.matrix.geovctrs_xy <- function(x, ...) {
   as.matrix(as.data.frame(x))
 }
 
@@ -97,80 +97,80 @@ as_geo_xy.default <- function(x, ...) {
   vec_cast(x, geo_xy())
 }
 
-#' @method vec_cast geo_xy
+#' @method vec_cast geovctrs_xy
 #' @export
-#' @export vec_cast.geo_xy
+#' @export vec_cast.geovctrs_xy
 #' @rdname new_geo_xy
-vec_cast.geo_xy <- function(x, to, ...) {
-  UseMethod("vec_cast.geo_xy")
+vec_cast.geovctrs_xy <- function(x, to, ...) {
+  UseMethod("vec_cast.geovctrs_xy")
 }
 
-#' @method vec_cast.geo_xy default
+#' @method vec_cast.geovctrs_xy default
 #' @export
-vec_cast.geo_xy.default <- function(x, to, ...) {
+vec_cast.geovctrs_xy.default <- function(x, to, ...) {
   vec_default_cast(x, to)
 }
 
-#' @method vec_cast.geo_xy geo_xy
+#' @method vec_cast.geovctrs_xy geovctrs_xy
 #' @export
-vec_cast.geo_xy.geo_xy <- function(x, to, ...) {
+vec_cast.geovctrs_xy.geovctrs_xy <- function(x, to, ...) {
   x
 }
 
-#' @method vec_cast.geo_xy geovctrs_wkt
+#' @method vec_cast.geovctrs_xy geovctrs_wkt
 #' @export
-vec_cast.geo_xy.geovctrs_wkt <- function(x, to, ...) {
+vec_cast.geovctrs_xy.geovctrs_wkt <- function(x, to, ...) {
   cpp_convert(x, to)
 }
 
-#' @method vec_cast.geo_xy geovctrs_wkb
+#' @method vec_cast.geovctrs_xy geovctrs_wkb
 #' @export
-vec_cast.geo_xy.geovctrs_wkb <- function(x, to, ...) {
+vec_cast.geovctrs_xy.geovctrs_wkb <- function(x, to, ...) {
   cpp_convert(x, to)
 }
 
-#' @method vec_cast.geo_xy geo_collection
+#' @method vec_cast.geovctrs_xy geo_collection
 #' @export
-vec_cast.geo_xy.geo_collection <- function(x, to, ...) {
+vec_cast.geovctrs_xy.geo_collection <- function(x, to, ...) {
   cpp_convert(x, to)
 }
 
 # ------------- prototypes ------------
 
-#' @method vec_ptype2 geo_xy
+#' @method vec_ptype2 geovctrs_xy
 #' @export
-#' @export vec_ptype2.geo_xy
+#' @export vec_ptype2.geovctrs_xy
 #' @rdname new_geo_xy
-vec_ptype2.geo_xy <- function(x, y, ...) {
-  UseMethod("vec_ptype2.geo_xy", y)
+vec_ptype2.geovctrs_xy <- function(x, y, ...) {
+  UseMethod("vec_ptype2.geovctrs_xy", y)
 }
 
-#' @method vec_ptype2.geo_xy default
+#' @method vec_ptype2.geovctrs_xy default
 #' @export
-vec_ptype2.geo_xy.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.geovctrs_xy.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg) # nocov
 }
 
-#' @method vec_ptype2.geo_xy geo_xy
+#' @method vec_ptype2.geovctrs_xy geovctrs_xy
 #' @export
-vec_ptype2.geo_xy.geo_xy <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.geovctrs_xy.geovctrs_xy <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_xy()
 }
 
-#' @method vec_ptype2.geo_xy geovctrs_wkt
+#' @method vec_ptype2.geovctrs_xy geovctrs_wkt
 #' @export
-vec_ptype2.geo_xy.geovctrs_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.geovctrs_xy.geovctrs_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_wkt()
 }
 
-#' @method vec_ptype2.geo_xy geovctrs_wkb
+#' @method vec_ptype2.geovctrs_xy geovctrs_wkb
 #' @export
-vec_ptype2.geo_xy.geovctrs_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.geovctrs_xy.geovctrs_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_wkb()
 }
 
-#' @method vec_ptype2.geo_xy geo_collection
+#' @method vec_ptype2.geovctrs_xy geo_collection
 #' @export
-vec_ptype2.geo_xy.geo_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.geovctrs_xy.geo_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_collection()
 }

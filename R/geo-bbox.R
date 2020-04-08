@@ -35,7 +35,7 @@ geo_envelope.default <- function(x, ..., na.rm = FALSE) {
 }
 
 #' @export
-geo_envelope.geo_xy <- function(x, ..., na.rm = FALSE) {
+geo_envelope.geovctrs_xy <- function(x, ..., na.rm = FALSE) {
   xs <- field(x, "x")
   ys <- field(x, "y")
   xmin <- xs

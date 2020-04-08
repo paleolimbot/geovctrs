@@ -15,7 +15,7 @@ List geo_reclass(List input, const char* cls) {
 
 List new_geo_coord(NumericVector x, NumericVector y) {
   List xy = List::create(_["x"] = x, _["y"] = y);
-  xy.attr("class") = CharacterVector::create("geo_xy", "geovctr", "vctrs_rcrd", "vctrs_vctr");
+  xy.attr("class") = CharacterVector::create("geovctrs_xy", "geovctr", "vctrs_rcrd", "vctrs_vctr");
 
   List output = List::create(_["xy"] = xy);
   return output;

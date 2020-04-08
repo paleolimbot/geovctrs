@@ -68,7 +68,7 @@ geo_is_missing.default <- function(x) {
 }
 
 #' @export
-geo_is_missing.geo_xy <- function(x) {
+geo_is_missing.geovctrs_xy <- function(x) {
   rep_len(FALSE, vec_size(x))
 }
 
@@ -89,7 +89,7 @@ geo_has_missing.geovctr <- function(x) {
 }
 
 #' @export
-geo_has_missing.geo_xy <- function(x) {
+geo_has_missing.geovctrs_xy <- function(x) {
   # treat NA, NA as an empty point
   !is.na(x) & (is.na(field(x, "x")) | is.na(field(x, "y")))
 }
@@ -133,7 +133,7 @@ geo_is_finite.geovctr <- function(x) {
 }
 
 #' @export
-geo_is_finite.geo_xy <- function(x) {
+geo_is_finite.geovctrs_xy <- function(x) {
   is.na(x) |
     is.finite(field(x, "x")) &
     is.finite(field(x, "y"))
@@ -178,7 +178,7 @@ geo_is_empty.geovctr <- function(x) {
 }
 
 #' @export
-geo_is_empty.geo_xy <- function(x) {
+geo_is_empty.geovctrs_xy <- function(x) {
   is.na(field(x, "x")) &  is.na(field(x, "y"))
 }
 
