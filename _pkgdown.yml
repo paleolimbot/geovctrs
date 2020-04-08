@@ -2,7 +2,7 @@ destination: docs
 
 reference:
 
-- title: Create geometry vectors
+- title: Create and convert geometry vectors
   contents:
   - is_geovctr
   - geo_xy
@@ -12,8 +12,8 @@ reference:
   - geo_wkt
   - geo_collection
 
-- title: Geometry information
-  desc: Get basic information about features
+- title: Geometry operators
+  desc: Functions that take geometry vectors as input and produce a result
   contents:
   - geo_bbox
   - geo_plot
@@ -22,19 +22,13 @@ reference:
   - geo_summary
   - geo_print
 
-- title: Create geometry features
-  contents:
-  - geo_point
-  - geo_multipoint
-  - geo_linestring
-  - geo_multilinestring
-  - geo_polygon
-  - geo_multipolygon
-
 - title: Example data
+  desc: Data for writing testing tests, vignettes, and examples
   contents:
   - geo_nc
+  - geo_example_wkt
 
 - title: S3 Details
+  desc: The nitty gritty details of creating and validating the S3 classes that live in this package
   contents:
   - starts_with("new_")

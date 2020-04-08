@@ -8,7 +8,7 @@
 \alias{as_geo_collection.default}
 \alias{vec_cast.geovctrs_collection}
 \alias{vec_ptype2.geovctrs_collection}
-\title{S3 Details for coordinate vector collections}
+\title{S3 Details for geovctrs_collection}
 \usage{
 new_geovctrs_collection(x = list(feature = list(), srid = integer()))
 
@@ -36,5 +36,5 @@ as_geo_collection(x, ...)
 \code{\link[vctrs:vec_ptype2]{vctrs::vec_ptype2()}}}
 }
 \description{
-S3 Details for coordinate vector collections
+S3 Details for geovctrs_collection
 }

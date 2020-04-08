@@ -54,7 +54,7 @@ as_geo_wkt.default <- function(x, ..., trim = TRUE, precision = 16, dimensions =
   vec_cast(x, new_geovctrs_wkt(trim = trim, precision = precision, dimensions = dimensions))
 }
 
-#' S3 details for geo_wkt
+#' S3 details for geovctrs_wkt
 #'
 #' @inheritParams geo_wkt
 #' @param y,to A prototype to cast to. See [vctrs::vec_cast()] and

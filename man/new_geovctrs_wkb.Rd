@@ -6,7 +6,7 @@
 \alias{validate_geovctrs_wkb}
 \alias{vec_cast.geovctrs_wkb}
 \alias{vec_ptype2.geovctrs_wkb}
-\title{S3 details for geo_wkb}
+\title{S3 details for geovctrs_wkb}
 \usage{
 new_geovctrs_wkb(
   x = list(),
@@ -46,7 +46,7 @@ or \code{NA} to use the default on your system.}
 \code{\link[vctrs:vec_ptype2]{vctrs::vec_ptype2()}}}
 }
 \description{
-S3 details for geo_wkb
+S3 details for geovctrs_wkb
 }
 \examples{
 wkb_raw <- as.raw(

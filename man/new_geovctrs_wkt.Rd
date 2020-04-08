@@ -6,7 +6,7 @@
 \alias{validate_geovctrs_wkt}
 \alias{vec_cast.geovctrs_wkt}
 \alias{vec_ptype2.geovctrs_wkt}
-\title{S3 details for geo_wkt}
+\title{S3 details for geovctrs_wkt}
 \usage{
 new_geovctrs_wkt(
   x = character(),
@@ -40,7 +40,7 @@ when generating text.}
 \code{\link[vctrs:vec_ptype2]{vctrs::vec_ptype2()}}}
 }
 \description{
-S3 details for geo_wkt
+S3 details for geovctrs_wkt
 }
 \examples{
 wkt <- geo_wkt("POINT (30 10)")

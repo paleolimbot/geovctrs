@@ -63,7 +63,7 @@ as_geo_wkb.default <- function(x, ..., include_srid = NA, dimensions = 3, endian
   vec_cast(x, new_geovctrs_wkb(include_srid = include_srid, dimensions = dimensions, endian = endian))
 }
 
-#' S3 details for geo_wkb
+#' S3 details for geovctrs_wkb
 #'
 #' @inheritParams geo_wkb
 #' @inheritParams new_geovctrs_wkt

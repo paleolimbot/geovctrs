@@ -233,7 +233,7 @@ new_geovctrs_multipolygon <- function(x) {
   structure(x, class = "geovctrs_multipolygon")
 }
 
-#' S3 Details for coordinate vector collections
+#' S3 Details for geovctrs_collection
 #'
 #' @param x A (possibly) [geo_collection()]
 #' @inheritParams new_geovctrs_wkt
