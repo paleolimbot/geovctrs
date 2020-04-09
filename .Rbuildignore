@@ -2,7 +2,6 @@
 ^\.Rproj\.user$
 ^src/Makevars$
 ^windows$
-^inst$
 ^\.github$
 ^README\.Rmd$
 ^_pkgdown\.yml$

@@ -1,5 +1,5 @@
 
-#include "geos-operator.h"
+#include "geos-operator.hpp"
 #include "geos-coords.h"
 using namespace Rcpp;
 

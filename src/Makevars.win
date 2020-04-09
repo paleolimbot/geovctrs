@@ -7,6 +7,8 @@ TARGET = lib$(subst gcc,,$(COMPILED_BY))$(R_ARCH)
 PKG_CPPFLAGS =\
 	-I$(RWINLIB)/include
 
+PKG_CXXFLAGS = -I../inst/include/
+
 PKG_LIBS = \
 	-L$(RWINLIB)/$(TARGET) \
 	-L$(RWINLIB)/lib$(R_ARCH) \
