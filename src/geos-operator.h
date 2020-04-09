@@ -256,105 +256,88 @@ public:
   std::unique_ptr<GeometryProvider> provider;
   VectorType data;
 
-  virtual void initProvider(SEXP provider);
-  virtual SEXP operate();
+  virtual void initProvider(SEXP provider) {
+    this->provider = GeometryProviderFactory::get(provider);
+  }
+
+  virtual SEXP operate()  {
+    this->initBase();
+    this->init();
+
+    // TODO: there is probably a memory leak here, but
+    // GEOSGeom_destroy_r(this->context, geometry) gives
+    // an error
+    GEOSGeometry* geometry;
+    ScalarType result;
+
+    try {
+      for (size_t i=0; i < this->size(); i++) {
+        checkUserInterrupt();
+        this->counter = i;
+        geometry = this->provider->getNext(this->context, i);
+
+        if (geometry == NULL) {
+          result = this->operateNextNULL();
+        } else {
+          result = this->operateNext(geometry);
+        }
+
+        this->data[i] = result;
+      }
+    } catch(Rcpp::exception e) {
+      this->finish();
+      throw e;
+    } catch(std::exception  e) {
+      this->finish();
+      throw e;
+    }
+
+    this->finish();
+    return this->finishBase();
+  }
+
   virtual ScalarType operateNext(GEOSGeometry* geometry) = 0;
-  virtual ScalarType operateNextNULL();
-  virtual SEXP assemble();
+
+  virtual ScalarType operateNextNULL() {
+    return VectorType::get_na();
+  }
+
+  virtual SEXP assemble() {
+    return this->data;
+  }
 
 private:
-  void initBase();
-  VectorType finishBase();
-};
+  void initBase() {
+    this->context = geos_init();
+    this->provider->init(this->context);
 
-// ------ unary vector operators implementation --------
-// I don't know  why these can't be defined in geos-operator.cpp
-// but putting them there results in a linker error
+    IntegerVector allSizes = IntegerVector::create(
+      this->maxParameterLength(),
+      this->provider->size()
+    );
 
-template <class VectorType, class ScalarType>
-void UnaryVectorOperator<VectorType, ScalarType>::initProvider(SEXP provider) {
-  this->provider = GeometryProviderFactory::get(provider);
-}
-
-template <class VectorType, class ScalarType>
-void UnaryVectorOperator<VectorType, ScalarType>::initBase() {
-  this->context = geos_init();
-  this->provider->init(this->context);
-
-  IntegerVector allSizes = IntegerVector::create(
-    this->maxParameterLength(),
-    this->provider->size()
-  );
-
-  IntegerVector nonConstantSizes = allSizes[allSizes != 1];
-  if (nonConstantSizes.size() == 0) {
-    this->commonSize = 1;
-  } else {
-    this->commonSize = nonConstantSizes[0];
-  }
-
-  for (size_t i=0; i<nonConstantSizes.size(); i++) {
-    if (nonConstantSizes[i] != this->commonSize) {
-      stop("Providers with incompatible lengths passed to BinaryGeometryOperator");
+    IntegerVector nonConstantSizes = allSizes[allSizes != 1];
+    if (nonConstantSizes.size() == 0) {
+      this->commonSize = 1;
+    } else {
+      this->commonSize = nonConstantSizes[0];
     }
-  }
 
-  VectorType data(this->size());
-  this->data = data;
-}
-
-template <class VectorType, class ScalarType>
-SEXP UnaryVectorOperator<VectorType, ScalarType>::operate() {
-  this->initBase();
-  this->init();
-
-  // TODO: there is probably a memory leak here, but
-  // GEOSGeom_destroy_r(this->context, geometry) gives
-  // an error
-  GEOSGeometry* geometry;
-  ScalarType result;
-
-  try {
-    for (size_t i=0; i < this->size(); i++) {
-      checkUserInterrupt();
-      this->counter = i;
-      geometry = this->provider->getNext(this->context, i);
-
-      if (geometry == NULL) {
-        result = this->operateNextNULL();
-      } else {
-        result = this->operateNext(geometry);
+    for (size_t i=0; i<nonConstantSizes.size(); i++) {
+      if (nonConstantSizes[i] != this->commonSize) {
+        stop("Providers with incompatible lengths passed to BinaryGeometryOperator");
       }
-
-      this->data[i] = result;
     }
-  } catch(Rcpp::exception e) {
-    this->finish();
-    throw e;
-  } catch(std::exception  e) {
-    this->finish();
-    throw e;
+
+    VectorType data(this->size());
+    this->data = data;
   }
 
-  this->finish();
-  return this->finishBase();
-}
-
-template <class VectorType, class ScalarType>
-ScalarType UnaryVectorOperator<VectorType, ScalarType>::operateNextNULL() {
-  return VectorType::get_na();
-}
-
-template <class VectorType, class ScalarType>
-SEXP UnaryVectorOperator<VectorType, ScalarType>::assemble() {
-  return this->data;
-}
-
-template <class VectorType, class ScalarType>
-VectorType UnaryVectorOperator<VectorType, ScalarType>::finishBase() {
-  this->provider->finish(this->context);
-  geos_finish(this->context);
-  return this->assemble();
-}
+  VectorType finishBase() {
+    this->provider->finish(this->context);
+    geos_finish(this->context);
+    return this->assemble();
+  }
+};
 
 # endif
