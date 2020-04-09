@@ -117,7 +117,7 @@ public:
       for (size_t i=0; i < this->size(); i++) {
         checkUserInterrupt();
         this->counter = i;
-        geometry = this->provider->getNext();
+        geometry = this->provider->getNext(this->context, i);
 
         if (geometry == NULL) {
           result = this->operateNextNULL();
@@ -125,7 +125,7 @@ public:
           result = this->operateNext(geometry);
         }
 
-        this->exporter->putNext(result);
+        this->exporter->putNext(this->context, result, i);
       }
     } catch(Rcpp::exception e) {
       this->finish();
@@ -169,8 +169,8 @@ private:
   }
 
   SEXP finishBase() {
-    this->provider->finish();
-    SEXP value = this->exporter->finish();
+    this->provider->finish(this->context);
+    SEXP value = this->exporter->finish(this->context);
     geos_finish(this->context);
     return value;
   }
@@ -199,7 +199,7 @@ public:
       for (size_t i=0; i < this->size(); i++) {
         checkUserInterrupt();
         this->counter = i;
-        geometry = this->provider->getNext();
+        geometry = this->provider->getNext(this->context, i);
         this->operateNext(geometry);
       }
     } catch(Rcpp::exception e) {
@@ -244,7 +244,7 @@ public:
   }
 
   SEXP finishBase() {
-    this->provider->finish();
+    this->provider->finish(this->context);
     geos_finish(this->context);
     return this->assemble();
   }
@@ -318,7 +318,7 @@ SEXP UnaryVectorOperator<VectorType, ScalarType>::operate() {
     for (size_t i=0; i < this->size(); i++) {
       checkUserInterrupt();
       this->counter = i;
-      geometry = this->provider->getNext();
+      geometry = this->provider->getNext(this->context, i);
 
       if (geometry == NULL) {
         result = this->operateNextNULL();
@@ -352,7 +352,7 @@ SEXP UnaryVectorOperator<VectorType, ScalarType>::assemble() {
 
 template <class VectorType, class ScalarType>
 VectorType UnaryVectorOperator<VectorType, ScalarType>::finishBase() {
-  this->provider->finish();
+  this->provider->finish(this->context);
   geos_finish(this->context);
   return this->assemble();
 }

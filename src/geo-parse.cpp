@@ -12,18 +12,18 @@ CharacterVector cpp_validate_provider(SEXP data) {
 
   for (size_t i=0; i < provider->size(); i++) {
     try {
-      provider->getNext();
+      provider->getNext(context, i);
       problems[i] = NA_STRING;
     } catch(Rcpp::exception e) {
       problems[i] = e.what();
     } catch(std::exception e) {
-      provider->finish();
+      provider->finish(context);
       geos_finish(context);
       throw e;
     }
   }
 
-  provider->finish();
+  provider->finish(context);
   geos_finish(context);
   return problems;
 }

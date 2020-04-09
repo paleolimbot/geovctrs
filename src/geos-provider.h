@@ -13,16 +13,14 @@ using namespace Rcpp;
 
 class GeometryProvider {
 public:
-  GEOSContextHandle_t context;
-  size_t recycleSize;
 
   virtual void init(GEOSContextHandle_t context) {
-    this->context = context;
+
   }
 
-  virtual GEOSGeometry* getNext() = 0;
+  virtual GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) = 0;
 
-  virtual void finish() {
+  virtual void finish(GEOSContextHandle_t context) {
 
   }
 
@@ -35,15 +33,14 @@ public:
 
 class GeometryExporter {
 public:
-  GEOSContextHandle_t context;
 
   virtual void init(GEOSContextHandle_t context, size_t size) {
-    this->context = context;
+
   }
 
-  virtual void putNext(GEOSGeometry* geometry) = 0;
+  virtual void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
 
-  virtual SEXP finish() {
+  virtual SEXP finish(GEOSContextHandle_t context) {
     return R_NilValue;
   }
 
@@ -64,19 +61,18 @@ public:
   }
 
   void init(GEOSContextHandle_t context) {
-    this->context = context;
     this->baseProvider->init(context);
   }
 
-  GEOSGeometry* getNext() {
+  GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
     if (!this->hasFirst) {
-      this->geometry = this->baseProvider->getNext();
+      this->geometry = this->baseProvider->getNext(context, i);
     }
     return this->geometry;
   }
 
-  void finish() {
-    this->baseProvider->finish();
+  void finish(GEOSContextHandle_t context) {
+    this->baseProvider->finish(context);
   }
 
   size_t size() {
@@ -90,36 +86,33 @@ class WKTGeometryProvider: public GeometryProvider {
 public:
   CharacterVector data;
   GEOSWKTReader *wkt_reader;
-  size_t counter;
 
   WKTGeometryProvider(CharacterVector data) {
     this->data = data;
-    this->counter = 0;
+
   }
 
   void init(GEOSContextHandle_t context) {
-    this->context = context;
     this->wkt_reader = GEOSWKTReader_create_r(context);
   }
 
-  GEOSGeometry* getNext() {
+  GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
     GEOSGeometry* geometry;
-    if (CharacterVector::is_na(this->data[this->counter])) {
+    if (CharacterVector::is_na(this->data[i])) {
       geometry = NULL;
     } else {
       geometry = GEOSWKTReader_read_r(
-        this->context,
+        context,
         this->wkt_reader,
-        this->data[this->counter]
+        this->data[i]
       );
     }
 
-    this->counter = this->counter + 1;
     return geometry;
   }
 
-  void finish() {
-    GEOSWKTReader_destroy_r(this->context, this->wkt_reader);
+  void finish(GEOSContextHandle_t context) {
+    GEOSWKTReader_destroy_r(context, this->wkt_reader);
   }
 
   size_t size() {
@@ -134,22 +127,19 @@ public:
   int precision;
   int dimensions;
   GEOSWKTWriter *wkt_writer;
-  size_t counter;
 
   WKTGeometryExporter(CharacterVector ptype) {
     this->trim = ptype.attr("trim");
     this->precision = ptype.attr("precision");
     this->dimensions = ptype.attr("dimensions");
-    this->counter = 0;
+
   }
 
   void init(GEOSContextHandle_t context, size_t size) {
-    this->context = context;
-
     this->wkt_writer = GEOSWKTWriter_create_r(context);
-    GEOSWKTWriter_setTrim_r(this->context, this->wkt_writer, this->trim);
-    GEOSWKTWriter_setRoundingPrecision_r(this->context, this->wkt_writer, this->precision);
-    GEOSWKTWriter_setOutputDimension_r(this->context, this->wkt_writer, this->dimensions);
+    GEOSWKTWriter_setTrim_r(context, this->wkt_writer, this->trim);
+    GEOSWKTWriter_setRoundingPrecision_r(context, this->wkt_writer, this->precision);
+    GEOSWKTWriter_setOutputDimension_r(context, this->wkt_writer, this->dimensions);
 
     CharacterVector data(size);
     data.attr("class") = CharacterVector::create("geovctrs_wkt", "geovctr", "vctrs_vctr");
@@ -163,20 +153,18 @@ public:
     this->data = data;
   }
 
-  void putNext(GEOSGeometry* geometry) {
+  void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     if (geometry == NULL) {
-      this->data[this->counter] = NA_STRING;
+      this->data[i] = NA_STRING;
     } else {
       std::string wkt_single;
-      wkt_single = GEOSWKTWriter_write_r(this->context, wkt_writer, geometry);
-      this->data[this->counter] = wkt_single;
+      wkt_single = GEOSWKTWriter_write_r(context, wkt_writer, geometry);
+      this->data[i] = wkt_single;
     }
-
-    this->counter = this->counter + 1;
   }
 
-  SEXP finish() {
-    GEOSWKTWriter_destroy_r(this->context, this->wkt_writer);
+  SEXP finish(GEOSContextHandle_t context) {
+    GEOSWKTWriter_destroy_r(context, this->wkt_writer);
     return this->data;
   }
 };
@@ -187,33 +175,30 @@ class WKBGeometryProvider: public GeometryProvider {
 public:
   List data;
   GEOSWKBReader *wkb_reader;
-  size_t counter;
 
   WKBGeometryProvider(List data) {
     this->data = data;
-    this->counter = 0;
+
   }
 
   void init(GEOSContextHandle_t context) {
-    this->context = context;
     this->wkb_reader = GEOSWKBReader_create_r(context);
   }
 
-  GEOSGeometry* getNext() {
+  GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
     GEOSGeometry* geometry;
-    if (this->data[this->counter] == R_NilValue) {
+    if (this->data[i] == R_NilValue) {
       geometry = NULL;
     } else {
-      RawVector r = this->data[this->counter];
+      RawVector r = this->data[i];
       geometry = GEOSWKBReader_read_r(context, this->wkb_reader, &(r[0]), r.size());
     }
 
-    this->counter = this->counter + 1;
     return geometry;
   }
 
-  void finish() {
-    GEOSWKBReader_destroy_r(this->context, this->wkb_reader);
+  void finish(GEOSContextHandle_t context) {
+    GEOSWKBReader_destroy_r(context, this->wkb_reader);
   }
 
   size_t size() {
@@ -225,7 +210,6 @@ class WKBGeometryExporter: public GeometryExporter {
 public:
   List data;
   GEOSWKBWriter *wkb_writer;
-  size_t counter;
   int includeSRID;
   int dimensions;
   int endian;
@@ -234,18 +218,17 @@ public:
     this->includeSRID = ptype.attr("include_srid");
     this->dimensions = ptype.attr("dimensions");
     this->endian = ptype.attr("endian");
-    this->counter = 0;
+
   }
 
   void init(GEOSContextHandle_t context, size_t size) {
-    this->context = context;
     this->wkb_writer = GEOSWKBWriter_create_r(context);
     if (!LogicalVector::is_na(this->includeSRID)) {
-      GEOSWKBWriter_setIncludeSRID_r(this->context, this->wkb_writer, this->includeSRID);
+      GEOSWKBWriter_setIncludeSRID_r(context, this->wkb_writer, this->includeSRID);
     }
-    GEOSWKBWriter_setOutputDimension_r(this->context, this->wkb_writer, this->dimensions);
+    GEOSWKBWriter_setOutputDimension_r(context, this->wkb_writer, this->dimensions);
     if (!IntegerVector::is_na(this->endian)) {
-      GEOSWKBWriter_setByteOrder_r(this->context, this->wkb_writer, this->endian);
+      GEOSWKBWriter_setByteOrder_r(context, this->wkb_writer, this->endian);
     }
 
     List data(size);
@@ -257,21 +240,21 @@ public:
     this->data = data;
   }
 
-  void putNext(GEOSGeometry* geometry) {
+  void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     if (geometry == NULL) {
-      this->data[this->counter] = R_NilValue;
+      this->data[i] = R_NilValue;
     } else {
       if (IntegerVector::is_na(this->includeSRID)) {
-        int srid = GEOSGetSRID_r(this->context, geometry);
+        int srid = GEOSGetSRID_r(context, geometry);
         bool useSRID = (srid != 0) && !IntegerVector::is_na(srid);
-        GEOSWKBWriter_setIncludeSRID_r(this->context, this->wkb_writer, useSRID);
+        GEOSWKBWriter_setIncludeSRID_r(context, this->wkb_writer, useSRID);
       }
 
       // GEOSWKBWriter won't deal with POINT EMPTY, but we handle in the same way
       // as sf (GEOSWKBReader seems to have no problem with this solution)
       // TODO: handle SRID, multiple dimensions
-      if (GEOSisEmpty_r(this->context, geometry) &&
-          GEOSGeomTypeId_r(this->context, geometry) == GEOSGeomTypes::GEOS_POINT) {
+      if (GEOSisEmpty_r(context, geometry) &&
+          GEOSGeomTypeId_r(context, geometry) == GEOSGeomTypes::GEOS_POINT) {
         size_t size = 21;
         const unsigned char buf[] = {
           // little endian
@@ -285,24 +268,22 @@ public:
         };
         RawVector raw(size);
         memcpy(&(raw[0]), buf, size);
-        this->data[this->counter] = raw;
+        this->data[i] = raw;
       } else {
 
         size_t size;
-        unsigned char *buf = GEOSWKBWriter_write_r(this->context, this->wkb_writer, geometry, &size);
+        unsigned char *buf = GEOSWKBWriter_write_r(context, this->wkb_writer, geometry, &size);
         RawVector raw(size);
         memcpy(&(raw[0]), buf, size);
-        GEOSFree_r(this->context, buf);
+        GEOSFree_r(context, buf);
 
-        this->data[this->counter] = raw;
+        this->data[i] = raw;
       }
     }
-
-    this->counter = this->counter + 1;
   }
 
-  SEXP finish() {
-    GEOSWKBWriter_destroy_r(this->context, this->wkb_writer);
+  SEXP finish(GEOSContextHandle_t context) {
+    GEOSWKBWriter_destroy_r(context, this->wkb_writer);
     return data;
   }
 };
@@ -313,7 +294,6 @@ class GeoCollectionProvider: public GeometryProvider {
 public:
   List features;
   IntegerVector srid;
-  size_t counter;
 
   GeoCollectionProvider(List data) {
     this->features = data["feature"];
@@ -321,20 +301,18 @@ public:
   }
 
   void init(GEOSContextHandle_t context) {
-    this->context = context;
-    this->counter = 0;
+
   }
 
-  GEOSGeometry* getNext() {
+  GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
     GEOSGeometry* geometry;
-    if (this->features[this->counter] == R_NilValue) {
+    if (this->features[i] == R_NilValue) {
       geometry = NULL;
     } else {
-      geometry = feature_from_geo_coord(this->context, this->features[this->counter]);
-      GEOSSetSRID_r(context, geometry, this->srid[this->counter]);
+      geometry = feature_from_geo_coord(context, this->features[i]);
+      GEOSSetSRID_r(context, geometry, this->srid[i]);
     }
 
-    this->counter = this->counter + 1;
     return geometry;
   }
 
@@ -347,30 +325,26 @@ class GeoCollectionExporter: public GeometryExporter {
 public:
   List data;
   IntegerVector srid;
-  size_t counter;
 
   void init(GEOSContextHandle_t context, size_t size) {
     IntegerVector srid(size);
     this->srid = srid;
     List data(size);
     this->data = data;
-    this->context = context;
-    this->counter = 0;
+
   }
 
-  void putNext(GEOSGeometry* geometry) {
+  void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     if (geometry == NULL) {
-      this->data[this->counter] = R_NilValue;
-      this->srid[this->counter] = NA_INTEGER;
+      this->data[i] = R_NilValue;
+      this->srid[i] = NA_INTEGER;
     } else {
-      this->data[this->counter] = geometry_to_geo_coord(this->context, geometry);
-      this->srid[this->counter] = GEOSGetSRID_r(this->context, geometry);
+      this->data[i] = geometry_to_geo_coord(context, geometry);
+      this->srid[i] = GEOSGetSRID_r(context, geometry);
     }
-
-    this->counter = this->counter + 1;
   }
 
-  SEXP finish() {
+  SEXP finish(GEOSContextHandle_t context) {
     List out = List::create(_["feature"] = this->data, _["srid"] = this->srid);
     out.attr("class") = CharacterVector::create("geovctrs_collection", "geovctr", "vctrs_rcrd", "vctrs_vctr");
     return out;
@@ -383,7 +357,6 @@ class XYProvider: public GeometryProvider {
 public:
   NumericVector x;
   NumericVector y;
-  size_t counter;
 
   XYProvider(List xy) {
     this->x = xy["x"];
@@ -391,24 +364,22 @@ public:
   }
 
   void init(GEOSContextHandle_t context) {
-    this->context = context;
-    this->counter = 0;
+
   }
 
-  GEOSGeometry* getNext() {
+  GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
     GEOSGeometry* geometry;
 
-    if (NumericVector::is_na(x[this->counter]) && NumericVector::is_na(y[this->counter])) {
-      geometry = GEOSGeom_createEmptyPoint_r(this->context);
+    if (NumericVector::is_na(this->x[i]) && NumericVector::is_na(this->y[i])) {
+      geometry = GEOSGeom_createEmptyPoint_r(context);
     } else {
-      GEOSCoordSequence* seq = GEOSCoordSeq_create_r(this->context, 1, 2);
-      GEOSCoordSeq_setX_r(this->context, seq, 0, x[this->counter]);
-      GEOSCoordSeq_setY_r(this->context, seq, 0, y[this->counter]);
+      GEOSCoordSequence* seq = GEOSCoordSeq_create_r(context, 1, 2);
+      GEOSCoordSeq_setX_r(context, seq, 0, this->x[i]);
+      GEOSCoordSeq_setY_r(context, seq, 0, this->y[i]);
 
-      geometry = GEOSGeom_createPoint_r(this->context, seq);
+      geometry = GEOSGeom_createPoint_r(context, seq);
     }
 
-    this->counter = this->counter + 1;
     return geometry;
   }
 
@@ -421,7 +392,6 @@ class XYExporter: public GeometryExporter {
 public:
   NumericVector x;
   NumericVector y;
-  size_t counter;
 
   void init(GEOSContextHandle_t context, size_t size) {
     NumericVector x(size);
@@ -429,17 +399,16 @@ public:
     this->x = x;
     this->y = y;
 
-    this->context = context;
-    this->counter = 0;
+
   }
 
-  void putNext(GEOSGeometry* geometry) {
+  void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     double x, y;
     if (geometry == NULL) {
       x = NA_REAL;
       y = NA_REAL;
     } else {
-      if (GEOSGeomTypeId_r(this->context, geometry) != GEOSGeomTypes::GEOS_POINT) {
+      if (GEOSGeomTypeId_r(context, geometry) != GEOSGeomTypes::GEOS_POINT) {
         stop("Can't represent a non-point as a geo_xy()");
       }
 
@@ -449,22 +418,20 @@ public:
       }
 
       // geos doesn't differentiate between POINT (nan, nan) and POINT EMPTY
-      if (GEOSisEmpty_r(this->context, geometry)) {
+      if (GEOSisEmpty_r(context, geometry)) {
         x = NA_REAL;
         y = NA_REAL;
       } else {
-        GEOSGeomGetX_r(this->context, geometry, &x);
-        GEOSGeomGetY_r(this->context, geometry, &y);
+        GEOSGeomGetX_r(context, geometry, &x);
+        GEOSGeomGetY_r(context, geometry, &y);
       }
     }
 
-    this->x[this->counter] = x;
-    this->y[this->counter] = y;
-
-    this->counter = this->counter + 1;
+    this->x[i] = x;
+    this->y[i] = y;
   }
 
-  SEXP finish() {
+  SEXP finish(GEOSContextHandle_t context) {
     List result = List::create(
       _["x"] = this->x,
       _["y"] = this->y
@@ -483,7 +450,6 @@ public:
   NumericVector x1;
   NumericVector y1;
   IntegerVector srid;
-  size_t counter;
 
   SegmentProvider(List segment) {
     List start = segment["start"];
@@ -496,20 +462,19 @@ public:
   }
 
   void init(GEOSContextHandle_t context) {
-    this->context = context;
-    this->counter = 0;
+
   }
 
-  GEOSGeometry* getNext() {
+  GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
     double x0, y0, x1, y1;
     int srid;
     GEOSGeometry* geometry;
 
-    x0 = this->x0[this->counter];
-    y0 = this->y0[this->counter];
-    x1 = this->x1[this->counter];
-    y1 = this->y1[this->counter];
-    srid = this->srid[this->counter];
+    x0 = this->x0[i];
+    y0 = this->y0[i];
+    x1 = this->x1[i];
+    y1 = this->y1[i];
+    srid = this->srid[i];
 
     if (NumericVector::is_na(x0) &&
         NumericVector::is_na(y0) &&
@@ -521,24 +486,23 @@ public:
       NumericVector::is_na(y0) &&
       NumericVector::is_na(x1) &&
       NumericVector::is_na(y1)) {
-      geometry = GEOSGeom_createEmptyLineString_r(this->context);
-      GEOSSetSRID_r(this->context, geometry, srid);
+      geometry = GEOSGeom_createEmptyLineString_r(context);
+      GEOSSetSRID_r(context, geometry, srid);
     } else {
-      GEOSCoordSequence* seq = GEOSCoordSeq_create_r(this->context, 2, 2);
+      GEOSCoordSequence* seq = GEOSCoordSeq_create_r(context, 2, 2);
 
       // start
-      GEOSCoordSeq_setX_r(this->context, seq, 0, this->x0[this->counter]);
-      GEOSCoordSeq_setY_r(this->context, seq, 0, this->y0[this->counter]);
+      GEOSCoordSeq_setX_r(context, seq, 0, this->x0[i]);
+      GEOSCoordSeq_setY_r(context, seq, 0, this->y0[i]);
 
       // end
-      GEOSCoordSeq_setX_r(this->context, seq, 1, this->x1[this->counter]);
-      GEOSCoordSeq_setY_r(this->context, seq, 1, this->y1[this->counter]);
+      GEOSCoordSeq_setX_r(context, seq, 1, this->x1[i]);
+      GEOSCoordSeq_setY_r(context, seq, 1, this->y1[i]);
 
       geometry = GEOSGeom_createLineString_r(context, seq);
-      GEOSSetSRID_r(this->context, geometry, this->srid[this->counter]);
+      GEOSSetSRID_r(context, geometry, this->srid[i]);
     }
 
-    this->counter = this->counter + 1;
     return geometry;
   }
 
@@ -554,7 +518,6 @@ public:
   NumericVector x1;
   NumericVector y1;
   IntegerVector srid;
-  size_t counter;
 
   void init(GEOSContextHandle_t context, size_t size) {
     NumericVector x0(size);
@@ -568,11 +531,10 @@ public:
     this->y1 = y1;
     this->srid = srid;
 
-    this->context = context;
-    this->counter = 0;
+
   }
 
-  void putNext(GEOSGeometry* geometry) {
+  void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     double x0, y0, x1, y1;
     int srid;
 
@@ -583,7 +545,7 @@ public:
       y1 = NA_REAL;
       srid = NA_INTEGER;
     } else {
-      if (GEOSGeomTypeId_r(this->context, geometry) != GEOSGeomTypes::GEOS_LINESTRING) {
+      if (GEOSGeomTypeId_r(context, geometry) != GEOSGeomTypes::GEOS_LINESTRING) {
         stop("Can't represent a non-linestring as a geo_segment()");
       }
 
@@ -599,26 +561,24 @@ public:
         x1 = NA_REAL;
         y1 = NA_REAL;
       } else {
-        const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq_r(this->context, geometry);
-        GEOSCoordSeq_getX_r(this->context, seq, 0, &x0);
-        GEOSCoordSeq_getY_r(this->context, seq, 0, &y0);
-        GEOSCoordSeq_getX_r(this->context, seq, 1, &x1);
-        GEOSCoordSeq_getY_r(this->context, seq, 1, &y1);
+        const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq_r(context, geometry);
+        GEOSCoordSeq_getX_r(context, seq, 0, &x0);
+        GEOSCoordSeq_getY_r(context, seq, 0, &y0);
+        GEOSCoordSeq_getX_r(context, seq, 1, &x1);
+        GEOSCoordSeq_getY_r(context, seq, 1, &y1);
       }
 
-      srid = GEOSGetSRID_r(this->context, geometry);
+      srid = GEOSGetSRID_r(context, geometry);
     }
 
-    this->x0[this->counter] = x0;
-    this->y0[this->counter] = y0;
-    this->x1[this->counter] = x1;
-    this->y1[this->counter] = y1;
-    this->srid[this->counter] = srid;
-
-    this->counter = this->counter + 1;
+    this->x0[i] = x0;
+    this->y0[i] = y0;
+    this->x1[i] = x1;
+    this->y1[i] = y1;
+    this->srid[i] = srid;
   }
 
-  SEXP finish() {
+  SEXP finish(GEOSContextHandle_t context) {
     List p1 = List::create(
       _["x"] = this->x0,
       _["y"] = this->y0
@@ -647,7 +607,6 @@ public:
   NumericVector xmax;
   NumericVector ymax;
   IntegerVector srid;
-  size_t counter;
 
   GeoRectProvider(List rect) {
     this->xmin = rect["xmin"];
@@ -658,20 +617,19 @@ public:
   }
 
   void init(GEOSContextHandle_t context) {
-    this->context = context;
-    this->counter = 0;
+
   }
 
-  GEOSGeometry* getNext() {
+  GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
     double xmin1, ymin1, xmax1, ymax1;
     int srid;
     GEOSGeometry* geometry;
 
-    xmin1 = this->xmin[this->counter];
-    ymin1 = this->ymin[this->counter];
-    xmax1 = this->xmax[this->counter];
-    ymax1 = this->ymax[this->counter];
-    srid = this->srid[this->counter];
+    xmin1 = this->xmin[i];
+    ymin1 = this->ymin[i];
+    xmax1 = this->xmax[i];
+    ymax1 = this->ymax[i];
+    srid = this->srid[i];
 
     if (NumericVector::is_na(xmin1) &&
         NumericVector::is_na(ymin1) &&
@@ -683,24 +641,23 @@ public:
       NumericVector::is_na(ymin1) ||
       NumericVector::is_na(xmax1) ||
       NumericVector::is_na(ymax1)) {
-      geometry = GEOSGeom_createEmptyPolygon_r(this->context);
-      GEOSSetSRID_r(this->context, geometry, srid);
+      geometry = GEOSGeom_createEmptyPolygon_r(context);
+      GEOSSetSRID_r(context, geometry, srid);
     } else {
       // counter clockwise!
-      GEOSCoordSequence* seq = GEOSCoordSeq_create_r(this->context, 5, 2);
-      GEOSCoordSeq_setX_r(this->context, seq, 0, xmin1); GEOSCoordSeq_setY_r(this->context, seq, 0, ymin1);
-      GEOSCoordSeq_setX_r(this->context, seq, 1, xmax1); GEOSCoordSeq_setY_r(this->context, seq, 1, ymin1);
-      GEOSCoordSeq_setX_r(this->context, seq, 2, xmax1); GEOSCoordSeq_setY_r(this->context, seq, 2, ymax1);
-      GEOSCoordSeq_setX_r(this->context, seq, 3, xmin1); GEOSCoordSeq_setY_r(this->context, seq, 3, ymax1);
-      GEOSCoordSeq_setX_r(this->context, seq, 4, xmin1); GEOSCoordSeq_setY_r(this->context, seq, 4, ymin1);
+      GEOSCoordSequence* seq = GEOSCoordSeq_create_r(context, 5, 2);
+      GEOSCoordSeq_setX_r(context, seq, 0, xmin1); GEOSCoordSeq_setY_r(context, seq, 0, ymin1);
+      GEOSCoordSeq_setX_r(context, seq, 1, xmax1); GEOSCoordSeq_setY_r(context, seq, 1, ymin1);
+      GEOSCoordSeq_setX_r(context, seq, 2, xmax1); GEOSCoordSeq_setY_r(context, seq, 2, ymax1);
+      GEOSCoordSeq_setX_r(context, seq, 3, xmin1); GEOSCoordSeq_setY_r(context, seq, 3, ymax1);
+      GEOSCoordSeq_setX_r(context, seq, 4, xmin1); GEOSCoordSeq_setY_r(context, seq, 4, ymin1);
 
       GEOSGeometry* shell = GEOSGeom_createLinearRing_r(context, seq);
       GEOSGeometry* holes[0];
       geometry = GEOSGeom_createPolygon_r(context, shell, holes, 0);
-      GEOSSetSRID_r(this->context, geometry, srid);
+      GEOSSetSRID_r(context, geometry, srid);
     }
 
-    this->counter = this->counter + 1;
     return geometry;
   }
 
