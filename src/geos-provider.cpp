@@ -1,11 +1,6 @@
 
 #include "geos-provider.h"
-#include <Rcpp.h>
 using namespace Rcpp;
-
-// ---------- geometry provider implementations -------------
-
-// ---------- geometry provider resolvers -------------
 
 std::unique_ptr<GeometryProvider> resolve_provider(SEXP data) {
   if (Rf_inherits(data, "geovctrs_wkt")) {
@@ -27,56 +22,40 @@ std::unique_ptr<GeometryProvider> resolve_provider(SEXP data) {
     }
 
   } else if(Rf_inherits(data, "geovctrs_xy")) {
-    List xy = (List) data;
-    NumericVector x = xy["x"];
-    NumericVector y = xy["y"];
-
-    if (x.size() ==  1) {
-      return std::unique_ptr<GeometryProvider> { new ConstantGeometryProvider(new XYProvider(x, y)) };
+    List xy = (List)data;
+    if (Rf_length(xy[0]) ==  1) {
+      return std::unique_ptr<GeometryProvider> { new ConstantGeometryProvider(new XYProvider(data)) };
     } else {
-      return std::unique_ptr<GeometryProvider> { new XYProvider(x, y) };
+      return std::unique_ptr<GeometryProvider> { new XYProvider(data) };
     }
   } else if(Rf_inherits(data, "geovctrs_segment")) {
     List segment = (List) data;
-    List start = segment["start"];
-    List end = segment["end"];
-    NumericVector x0 = start["x"];
-    NumericVector y0 = start["y"];
-    NumericVector x1 = end["x"];
-    NumericVector y1 = end["y"];
-    IntegerVector srid = segment["srid"];
 
-    if (x0.size() ==  1) {
+    if (Rf_length(segment[0]) == 1) {
       return std::unique_ptr<GeometryProvider> {
-        new ConstantGeometryProvider(new SegmentProvider(x0, y0, x1, y1, srid))
+        new ConstantGeometryProvider(new SegmentProvider(segment))
       };
     } else {
       return std::unique_ptr<GeometryProvider> {
-        new SegmentProvider(x0, y0, x1, y1, srid)
+        new SegmentProvider(segment)
       };
     }
   } else if(Rf_inherits(data, "geovctrs_rect")) {
     List rect = (List) data;
-    NumericVector xmin = rect["xmin"];
-    NumericVector ymin = rect["ymin"];
-    NumericVector xmax = rect["xmax"];
-    NumericVector ymax = rect["ymax"];
-    IntegerVector srid = rect["srid"];
 
-    if (xmin.size() ==  1) {
+    if (Rf_length(rect[0]) ==  1) {
       return std::unique_ptr<GeometryProvider> {
-        new ConstantGeometryProvider(new GeoRectProvider(xmin, ymin, xmax, ymax, srid))
+        new ConstantGeometryProvider(new GeoRectProvider(rect))
       };
     } else {
       return std::unique_ptr<GeometryProvider> {
-        new GeoRectProvider(xmin, ymin, xmax, ymax, srid)
+        new GeoRectProvider(rect)
       };
     }
   } else if(Rf_inherits(data, "geovctrs_collection")) {
     List col = (List) data;
-    List features = col["feature"];
 
-    if (features.size() ==  1) {
+    if (Rf_length(col[0]) ==  1) {
       return std::unique_ptr<GeometryProvider> { new ConstantGeometryProvider(new GeoCollectionProvider(col)) };
     } else {
       return std::unique_ptr<GeometryProvider> { new GeoCollectionProvider(col) };
@@ -88,25 +67,13 @@ std::unique_ptr<GeometryProvider> resolve_provider(SEXP data) {
 
 std::unique_ptr<GeometryExporter> resolve_exporter(SEXP ptype) {
   if (Rf_inherits(ptype, "geovctrs_wkt")) {
-    CharacterVector data = (CharacterVector)ptype;
-    bool trim = data.attr("trim");
-    int precision = data.attr("precision");
-    int dimensions = data.attr("dimensions");
-
     return std::unique_ptr<GeometryExporter> {
-      new WKTGeometryExporter(trim, precision, dimensions)
+      new WKTGeometryExporter(ptype)
     };
-
   } else if(Rf_inherits(ptype, "geovctrs_wkb")) {
-    List data = (List)ptype;
-    int includeSRID = data.attr("include_srid");
-    int dimensions = data.attr("dimensions");
-    int endian = data.attr("endian");
-
     return std::unique_ptr<GeometryExporter> {
-      new WKBGeometryExporter(includeSRID, dimensions, endian)
+      new WKBGeometryExporter(ptype)
     };
-
   } else if(Rf_inherits(ptype, "geovctrs_collection")) {
     return std::unique_ptr<GeometryExporter> { new GeoCollectionExporter() };
   } else if(Rf_inherits(ptype, "geovctrs_xy")) {

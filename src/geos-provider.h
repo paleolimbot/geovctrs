@@ -136,10 +136,10 @@ public:
   GEOSWKTWriter *wkt_writer;
   size_t counter;
 
-  WKTGeometryExporter(bool trim, int precision, int dimensions) {
-    this->trim = trim;
-    this->precision = precision;
-    this->dimensions = dimensions;
+  WKTGeometryExporter(CharacterVector ptype) {
+    this->trim = ptype.attr("trim");
+    this->precision = ptype.attr("precision");
+    this->dimensions = ptype.attr("dimensions");
     this->counter = 0;
   }
 
@@ -230,11 +230,11 @@ public:
   int dimensions;
   int endian;
 
-  WKBGeometryExporter(int includeSRID, int dimensions, int endian) {
+  WKBGeometryExporter(List ptype) {
+    this->includeSRID = ptype.attr("include_srid");
+    this->dimensions = ptype.attr("dimensions");
+    this->endian = ptype.attr("endian");
     this->counter = 0;
-    this->includeSRID = includeSRID;
-    this->dimensions = dimensions;
-    this->endian = endian;
   }
 
   void init(GEOSContextHandle_t context, size_t size) {
@@ -385,9 +385,9 @@ public:
   NumericVector y;
   size_t counter;
 
-  XYProvider(NumericVector x, NumericVector y) {
-    this->x = x;
-    this->y = y;
+  XYProvider(List xy) {
+    this->x = xy["x"];
+    this->y = xy["y"];
   }
 
   void init(GEOSContextHandle_t context) {
@@ -485,13 +485,14 @@ public:
   IntegerVector srid;
   size_t counter;
 
-  SegmentProvider(NumericVector x0, NumericVector y0,
-                  NumericVector x1, NumericVector y1, IntegerVector srid) {
-    this->x0 = x0;
-    this->y0 = y0;
-    this->x1 = x1;
-    this->y1 = y1;
-    this->srid = srid;
+  SegmentProvider(List segment) {
+    List start = segment["start"];
+    List end = segment["end"];
+    this->x0 = start["x"];
+    this->y0 = start["y"];
+    this->x1 = end["x"];
+    this->y1 = end["y"];
+    this->srid = segment["srid"];
   }
 
   void init(GEOSContextHandle_t context) {
@@ -648,13 +649,12 @@ public:
   IntegerVector srid;
   size_t counter;
 
-  GeoRectProvider(NumericVector xmin, NumericVector ymin,
-                  NumericVector xmax, NumericVector ymax, IntegerVector srid) {
-    this->xmin = xmin;
-    this->ymin = ymin;
-    this->xmax = xmax;
-    this->ymax = ymax;
-    this->srid = srid;
+  GeoRectProvider(List rect) {
+    this->xmin = rect["xmin"];
+    this->ymin = rect["ymin"];
+    this->xmax = rect["xmax"];
+    this->ymax = rect["ymax"];
+    this->srid = rect["srid"];
   }
 
   void init(GEOSContextHandle_t context) {
