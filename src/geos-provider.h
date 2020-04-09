@@ -13,40 +13,21 @@ using namespace Rcpp;
 
 class GeometryProvider {
 public:
-
-  virtual void init(GEOSContextHandle_t context) {
-
-  }
-
+  virtual void init(GEOSContextHandle_t context) {}
   virtual GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) = 0;
-
-  virtual void finish(GEOSContextHandle_t context) {
-
-  }
-
+  virtual void finish(GEOSContextHandle_t context) {}
   virtual size_t size() = 0;
-
-  virtual ~GeometryProvider() {
-
-  }
+  virtual ~GeometryProvider() {}
 };
 
 class GeometryExporter {
 public:
-
-  virtual void init(GEOSContextHandle_t context, size_t size) {
-
-  }
-
+  virtual void init(GEOSContextHandle_t context, size_t size) {}
   virtual void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
-
   virtual SEXP finish(GEOSContextHandle_t context) {
     return R_NilValue;
   }
-
-  virtual ~GeometryExporter() {
-
-  }
+  virtual ~GeometryExporter() {}
 };
 
 class ConstantGeometryProvider: public GeometryProvider {
@@ -158,8 +139,7 @@ public:
 
     this->data.attr("class") = CharacterVector::create("geovctrs_wkt", "geovctr", "vctrs_vctr");
 
-    // set these to the defaults rather than the input values, as they aren't
-    // used for reading (only writing)
+    // give the default values
     this->data.attr("trim") = LogicalVector::create(true);
     this->data.attr("precision") =  IntegerVector::create(16);
     this->data.attr("dimensions") = IntegerVector::create(3);
@@ -277,6 +257,7 @@ public:
   SEXP finish(GEOSContextHandle_t context) {
     GEOSWKBWriter_destroy_r(context, this->wkb_writer);
 
+    // give the default values
     this->data.attr("class") = CharacterVector::create("geovctrs_wkb", "geovctr", "vctrs_vctr");
     this->data.attr("include_srid") = LogicalVector::create(LogicalVector::get_na());
     this->data.attr("dimensions") = IntegerVector::create(3);
