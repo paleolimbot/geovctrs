@@ -1,6 +1,6 @@
 
 #include "geos-operator.hpp"
-#include "geos-coords.h"
+#include "geovctrs/feature-factory.hpp"
 using namespace Rcpp;
 
 bool coords_have_missing(List item) {
@@ -26,7 +26,7 @@ class HasMissingOperator: public UnaryVectorOperator<LogicalVector, int> {
     if (GEOSisEmpty_r(context, geometry)) {
       return false;
     } else {
-      List coords = geometry_to_geo_coord(context, geometry);
+      List coords = GeovctrsFeatureFactory::getFeature(context, geometry);
       return coords_have_missing(coords);
     }
   }
@@ -62,7 +62,7 @@ class IsFiniteOperator: public UnaryVectorOperator<LogicalVector, int> {
     if (GEOSisEmpty_r(context, geometry)) {
       return true;
     } else {
-      List coords = geometry_to_geo_coord(context, geometry);
+      List coords = GeovctrsFeatureFactory::getFeature(context, geometry);
       return coords_is_finite(coords);
     }
   }

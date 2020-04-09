@@ -1,6 +1,6 @@
 
 #include "geos-operator.hpp"
-#include "geos-coords.h"
+#include "geovctrs/feature-factory.hpp"
 using namespace Rcpp;
 
 double min_reg(double x1i, double x2i) {
@@ -157,7 +157,7 @@ public:
       ymax1 = R_NegInf;
       srid = GEOSGetSRID_r(context, geometry);
     } else {
-      List coords = geometry_to_geo_coord(context, geometry);
+      List coords = GeovctrsFeatureFactory::getFeature(context, geometry);
       NumericVector bounds = bounds_from_coords(coords, this->naRm);
 
       xmin1 = bounds[0];

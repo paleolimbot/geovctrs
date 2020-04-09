@@ -3,8 +3,8 @@
 #define GEOS_PROVIDER_H
 
 #include <geos_c.h>
+#include "geovctrs/feature-factory.hpp"
 #include "geos-coords-write.h"
-#include "geos-coords.h"
 #include <memory.h>
 #include <Rcpp.h>
 using namespace Rcpp;
@@ -334,7 +334,7 @@ public:
       this->data[i] = R_NilValue;
       this->srid[i] = NA_INTEGER;
     } else {
-      this->data[i] = geometry_to_geo_coord(context, geometry);
+      this->data[i] = GeovctrsFeatureFactory::getFeature(context, geometry);
       this->srid[i] = GEOSGetSRID_r(context, geometry);
     }
   }

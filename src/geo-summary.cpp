@@ -1,6 +1,6 @@
 
 #include "geos-operator.hpp"
-#include "geos-coords.h"
+#include "geovctrs/feature-factory.hpp"
 using namespace Rcpp;
 
 class GeomTypeIdOperator: public UnaryVectorOperator<IntegerVector, int> {
@@ -84,7 +84,7 @@ public:
       this->x[i] = NA_REAL;
       this->y[i] = NA_REAL;
     } else {
-      List coords = geometry_to_geo_coord(context, geometry);
+      List coords = GeovctrsFeatureFactory::getFeature(context, geometry);
       List xy = coords["xy"];
       NumericVector x = as<NumericVector>(xy["x"]);
       NumericVector y = as<NumericVector>(xy["y"]);
