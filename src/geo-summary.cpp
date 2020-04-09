@@ -5,7 +5,7 @@ using namespace Rcpp;
 
 class GeomTypeIdOperator: public UnaryVectorOperator<IntegerVector, int> {
   int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
-    return GEOSGeomTypeId_r(this->context, geometry);
+    return GEOSGeomTypeId_r(context, geometry);
   }
 };
 
@@ -18,7 +18,7 @@ IntegerVector cpp_geom_type_id(SEXP x) {
 
 class GetNumGeometriesOperator: public UnaryVectorOperator<IntegerVector, int> {
   int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
-    return GEOSGetNumGeometries_r(this->context, geometry);
+    return GEOSGetNumGeometries_r(context, geometry);
   }
 };
 
@@ -31,7 +31,7 @@ IntegerVector cpp_n_geometries(SEXP x) {
 
 class GetNumCoordinatesOperator: public UnaryVectorOperator<IntegerVector, int> {
   int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
-    return GEOSGetNumCoordinates_r(this->context, geometry);
+    return GEOSGetNumCoordinates_r(context, geometry);
   }
 };
 
@@ -46,10 +46,10 @@ class CoordinateDimensionsOperator: public UnaryVectorOperator<IntegerVector, in
   int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     // the behaviour of this changed between GEOS 3.5 and 3.7, but
     // currently empty geometries have 3 dimensions
-    if (GEOSisEmpty_r(this->context, geometry)) {
+    if (GEOSisEmpty_r(context, geometry)) {
       return 3;
     } else {
-      return GEOSGeom_getCoordinateDimension_r(this->context, geometry);
+      return GEOSGeom_getCoordinateDimension_r(context, geometry);
     }
   }
 };
@@ -75,21 +75,21 @@ public:
 
   void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     if (geometry == NULL) {
-      this->x[this->counter] = NA_REAL;
-      this->y[this->counter] = NA_REAL;
-    } else if (GEOSisEmpty_r(this->context, geometry)) {
-      this->x[this->counter] = NA_REAL;
-      this->y[this->counter] = NA_REAL;
-    } else if (GEOSGeomTypeId_r(this->context, geometry) == GEOSGeomTypes::GEOS_GEOMETRYCOLLECTION) {
-      this->x[this->counter] = NA_REAL;
-      this->y[this->counter] = NA_REAL;
+      this->x[i] = NA_REAL;
+      this->y[i] = NA_REAL;
+    } else if (GEOSisEmpty_r(context, geometry)) {
+      this->x[i] = NA_REAL;
+      this->y[i] = NA_REAL;
+    } else if (GEOSGeomTypeId_r(context, geometry) == GEOSGeomTypes::GEOS_GEOMETRYCOLLECTION) {
+      this->x[i] = NA_REAL;
+      this->y[i] = NA_REAL;
     } else {
-      List coords = geometry_to_geo_coord(this->context, geometry);
+      List coords = geometry_to_geo_coord(context, geometry);
       List xy = coords["xy"];
       NumericVector x = as<NumericVector>(xy["x"]);
       NumericVector y = as<NumericVector>(xy["y"]);
-      this->x[this->counter] = x[0];
-      this->y[this->counter] = y[0];
+      this->x[i] = x[0];
+      this->y[i] = y[0];
     }
   }
 

@@ -61,7 +61,6 @@ public:
 class Operator {
 public:
   size_t commonSize;
-  size_t counter;
   GEOSContextHandle_t context;
 
   // this is the main interface: this and initProvider() are
@@ -73,7 +72,6 @@ public:
     try {
       for (size_t i=0; i < this->size(); i++) {
         checkUserInterrupt();
-        this->counter = i;
         this->loopNext(this->context, i);
       }
     } catch(Rcpp::exception e) {

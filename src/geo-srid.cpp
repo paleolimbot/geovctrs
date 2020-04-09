@@ -7,7 +7,7 @@ class GetSRIDOperator: public UnaryVectorOperator<IntegerVector, int> {
     if (geometry == NULL) {
       return NA_INTEGER;
     } else {
-      return GEOSGetSRID_r(this->context, geometry);
+      return GEOSGetSRID_r(context, geometry);
     }
   }
 };
@@ -33,7 +33,7 @@ public:
 
   GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     if (geometry != NULL) {
-      GEOSSetSRID_r(this->context, geometry, this->srid[this->counter]);
+      GEOSSetSRID_r(context, geometry, this->srid[i]);
     }
 
     return geometry;

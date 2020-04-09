@@ -151,12 +151,12 @@ public:
       xmax1 = NA_REAL;
       ymax1 = NA_REAL;
       srid = NA_INTEGER;
-    } else if (GEOSisEmpty_r(this->context, geometry)) {
+    } else if (GEOSisEmpty_r(context, geometry)) {
       xmin1 = R_PosInf;
       ymin1 = R_PosInf;
       xmax1 = R_NegInf;
       ymax1 = R_NegInf;
-      srid = GEOSGetSRID_r(this->context, geometry);
+      srid = GEOSGetSRID_r(context, geometry);
     } else {
       List coords = geometry_to_geo_coord(context, geometry);
       NumericVector bounds = bounds_from_coords(coords, this->naRm);
@@ -165,14 +165,14 @@ public:
       ymin1 = bounds[1];
       xmax1 = bounds[2];
       ymax1 = bounds[3];
-      srid = GEOSGetSRID_r(this->context, geometry);
+      srid = GEOSGetSRID_r(context, geometry);
     }
 
-    this->xmin[this->counter] = xmin1;
-    this->ymin[this->counter] = ymin1;
-    this->xmax[this->counter] = xmax1;
-    this->ymax[this->counter] = ymax1;
-    this->srid[this->counter] = srid;
+    this->xmin[i] = xmin1;
+    this->ymin[i] = ymin1;
+    this->xmax[i] = xmax1;
+    this->ymax[i] = ymax1;
+    this->srid[i] = srid;
   }
 
   SEXP assemble() {
