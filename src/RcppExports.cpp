@@ -86,14 +86,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// cpp_validate_provider
-CharacterVector cpp_validate_provider(SEXP data);
-RcppExport SEXP _geovctrs_cpp_validate_provider(SEXP dataSEXP) {
+// cpp_parse
+CharacterVector cpp_parse(SEXP data);
+RcppExport SEXP _geovctrs_cpp_parse(SEXP dataSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type data(dataSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_validate_provider(data));
+    rcpp_result_gen = Rcpp::wrap(cpp_parse(data));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -194,7 +194,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_has_missing", (DL_FUNC) &_geovctrs_cpp_has_missing, 1},
     {"_geovctrs_cpp_is_finite", (DL_FUNC) &_geovctrs_cpp_is_finite, 1},
     {"_geovctrs_cpp_is_empty", (DL_FUNC) &_geovctrs_cpp_is_empty, 1},
-    {"_geovctrs_cpp_validate_provider", (DL_FUNC) &_geovctrs_cpp_validate_provider, 1},
+    {"_geovctrs_cpp_parse", (DL_FUNC) &_geovctrs_cpp_parse, 1},
     {"_geovctrs_cpp_get_srid", (DL_FUNC) &_geovctrs_cpp_get_srid, 1},
     {"_geovctrs_cpp_set_srid", (DL_FUNC) &_geovctrs_cpp_set_srid, 2},
     {"_geovctrs_cpp_geom_type_id", (DL_FUNC) &_geovctrs_cpp_geom_type_id, 1},

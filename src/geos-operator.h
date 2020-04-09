@@ -94,22 +94,24 @@ public:
 
   // these are the functions that may be overridden by individual
   // operator subclasses
-  virtual void loopNext(GEOSContextHandle_t context, size_t i) = 0;
+  // loopNext() must be implemented
+
+  virtual size_t maxParameterLength() {
+    return 1;
+  }
 
   virtual void init(GEOSContextHandle_t context, size_t size) {
 
   }
 
-  virtual void finish(GEOSContextHandle_t context) {
-
-  }
+  virtual void loopNext(GEOSContextHandle_t context, size_t i) = 0;
 
   virtual SEXP assemble(GEOSContextHandle_t context) {
     return R_NilValue;
   }
 
-  virtual size_t maxParameterLength() {
-    return 1;
+  virtual void finish(GEOSContextHandle_t context) {
+
   }
 
   // these shouldn't be overridden except in this file
@@ -164,6 +166,17 @@ public:
 
 // ------------- unary operators ----------------
 
+class UnaryOperator: public Operator {
+public:
+
+  virtual void loopNext(GEOSContextHandle_t context, size_t i) {
+    this->geometry = this->provider->getNext(context, i);
+    this->operateNext(context, this->geometry, i);
+  }
+
+  virtual void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
+};
+
 class UnaryGeometryOperator: public Operator {
 public:
   std::unique_ptr<GeometryExporter> exporter;
@@ -201,19 +214,6 @@ public:
   virtual GEOSGeometry* operateNextNULL(GEOSContextHandle_t context, size_t i) {
     return NULL;
   }
-};
-
-// ----- unary vector operators -----
-
-class UnaryOperator: public Operator {
-public:
-
-  virtual void loopNext(GEOSContextHandle_t context, size_t i) {
-    this->geometry = this->provider->getNext(context, i);
-    this->operateNext(context, this->geometry, i);
-  }
-
-  virtual void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
 };
 
 template <class VectorType, class ScalarType>

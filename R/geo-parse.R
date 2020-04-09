@@ -1,6 +1,6 @@
 
 validate_provider <- function(x) {
-  problem_vctr <- cpp_validate_provider(x)
+  problem_vctr <- cpp_parse(x)
   has_problems <- !is.na(problem_vctr)
 
   if (!any(has_problems)) {

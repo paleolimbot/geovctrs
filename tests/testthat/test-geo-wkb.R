@@ -43,7 +43,7 @@ test_that("geo_wkb parse validation works", {
     ),
     "parsing failure"
   )
-  expect_identical(is.na(cpp_validate_provider(wkb)), c(TRUE, FALSE))
+  expect_identical(is.na(cpp_parse(wkb)), c(TRUE, FALSE))
 
   expect_identical(validate_geovctrs_wkb(wkb[1]), wkb[1])
   expect_warning(

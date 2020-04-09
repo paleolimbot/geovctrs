@@ -29,8 +29,8 @@ cpp_is_empty <- function(data) {
     .Call(`_geovctrs_cpp_is_empty`, data)
 }
 
-cpp_validate_provider <- function(data) {
-    .Call(`_geovctrs_cpp_validate_provider`, data)
+cpp_parse <- function(data) {
+    .Call(`_geovctrs_cpp_parse`, data)
 }
 
 cpp_get_srid <- function(x) {

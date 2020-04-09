@@ -2,20 +2,22 @@
 #include "geos-operator.h"
 using namespace Rcpp;
 
-// [[Rcpp::export]]
-CharacterVector cpp_validate_provider(SEXP data) {
-  std::unique_ptr<GeometryProvider> provider = GeometryProviderFactory::get(data);
-  CharacterVector problems(provider->size());
 
-  GEOSContextHandle_t context = geos_init();
-  provider->init(context);
+class ParseOperator: public Operator {
+public:
+  CharacterVector problems;
 
-  for (size_t i=0; i < provider->size(); i++) {
+  void init(GEOSContextHandle_t context, size_t size) {
+    CharacterVector problems(size);
+    this->problems = problems;
+  }
+
+  void loopNext(GEOSContextHandle_t context, size_t i) {
     try {
-      provider->getNext(context, i);
-      problems[i] = NA_STRING;
+      this->provider->getNext(context, i);
+      this->problems[i] = NA_STRING;
     } catch(Rcpp::exception e) {
-      problems[i] = e.what();
+      this->problems[i] = e.what();
     } catch(std::exception e) {
       provider->finish(context);
       geos_finish(context);
@@ -23,7 +25,14 @@ CharacterVector cpp_validate_provider(SEXP data) {
     }
   }
 
-  provider->finish(context);
-  geos_finish(context);
-  return problems;
+  SEXP assemble(GEOSContextHandle_t) {
+    return this->problems;
+  }
+};
+
+// [[Rcpp::export]]
+CharacterVector cpp_parse(SEXP data) {
+  ParseOperator op;
+  op.initProvider(data);
+  return op.operate();
 }
