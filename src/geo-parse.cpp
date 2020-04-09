@@ -1,5 +1,5 @@
 
-#include "geos-provider.h"
+#include "geos-operator.h"
 using namespace Rcpp;
 
 // [[Rcpp::export]]
