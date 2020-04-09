@@ -4,6 +4,7 @@
 
 #include <geos_c.h>
 #include "geovctrs/feature-factory.hpp"
+#include "geovctrs/factory.hpp"
 #include "geos-coords-write.h"
 #include <memory.h>
 #include <Rcpp.h>
@@ -141,14 +142,7 @@ public:
   }
 
   SEXP assemble(GEOSContextHandle_t context) {
-    this->data.attr("class") = CharacterVector::create("geovctrs_wkt", "geovctr", "vctrs_vctr");
-
-    // give the default values
-    this->data.attr("trim") = LogicalVector::create(true);
-    this->data.attr("precision") =  IntegerVector::create(16);
-    this->data.attr("dimensions") = IntegerVector::create(3);
-
-    return this->data;
+    return GeovctrsFactory::newWKT(this->data);
   }
 
   void finish(GEOSContextHandle_t context) {
@@ -271,13 +265,7 @@ public:
   }
 
   SEXP assemble(GEOSContextHandle_t context) {
-    // give the default values
-    this->data.attr("class") = CharacterVector::create("geovctrs_wkb", "geovctr", "vctrs_vctr");
-    this->data.attr("include_srid") = LogicalVector::create(LogicalVector::get_na());
-    this->data.attr("dimensions") = IntegerVector::create(3);
-    this->data.attr("endian") = IntegerVector::create(LogicalVector::get_na());
-
-    return data;
+    return GeovctrsFactory::newWKB(this->data);
   }
 
   void finish(GEOSContextHandle_t context) {
@@ -340,9 +328,7 @@ public:
   }
 
   SEXP assemble(GEOSContextHandle_t context) {
-    List out = List::create(_["feature"] = this->data, _["srid"] = this->srid);
-    out.attr("class") = CharacterVector::create("geovctrs_collection", "geovctr", "vctrs_rcrd", "vctrs_vctr");
-    return out;
+    return GeovctrsFactory::newCollection(this->data, this->srid);
   }
 };
 
@@ -421,12 +407,7 @@ public:
   }
 
   SEXP assemble(GEOSContextHandle_t context) {
-    List result = List::create(
-      _["x"] = this->x,
-      _["y"] = this->y
-    );
-    result.attr("class") = CharacterVector::create("geovctrs_xy", "geovctr", "vctrs_rcrd", "vctrs_vctr");
-    return result;
+    return GeovctrsFactory::newXY(this->x, this->y);
   }
 };
 
@@ -562,22 +543,7 @@ public:
   }
 
   SEXP assemble(GEOSContextHandle_t context) {
-    List p1 = List::create(
-      _["x"] = this->x0,
-      _["y"] = this->y0
-    );
-    p1.attr("class") = CharacterVector::create("geovctrs_xy", "geovctr", "vctrs_rcrd", "vctrs_vctr");
-
-    List p2 = List::create(
-      _["x"] = this->x1,
-      _["y"] = this->y1
-    );
-    p2.attr("class") = CharacterVector::create("geovctrs_xy", "geovctr", "vctrs_rcrd", "vctrs_vctr");
-
-    List result = List::create(_["start"] = p1, _["end"] = p2, _["srid"] = this->srid);
-    result.attr("class") = CharacterVector::create("geovctrs_segment", "geovctr", "vctrs_rcrd", "vctrs_vctr");
-
-    return result;
+    return GeovctrsFactory::newSegment(this->x0, this->y0, this->x1, this->y1, this->srid);
   }
 };
 
