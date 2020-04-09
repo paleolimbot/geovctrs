@@ -250,51 +250,29 @@ template <class VectorType, class ScalarType>
 class UnaryVectorOperator: public Operator {
 public:
   std::unique_ptr<GeometryProvider> provider;
+  GEOSGeometry* geometry;
   VectorType data;
 
   virtual void initProvider(SEXP provider) {
     this->provider = GeometryProviderFactory::get(provider);
   }
 
-  virtual SEXP operate()  {
-    this->initBase();
-    this->init();
-
-    // TODO: there is probably a memory leak here, but
-    // GEOSGeom_destroy_r(this->context, geometry) gives
-    // an error
-    GEOSGeometry* geometry;
+  virtual void loopNext(GEOSContextHandle_t context, size_t i) {
+    this->geometry = this->provider->getNext(context, i);
     ScalarType result;
 
-    try {
-      for (size_t i=0; i < this->size(); i++) {
-        checkUserInterrupt();
-        this->counter = i;
-        geometry = this->provider->getNext(this->context, i);
-
-        if (geometry == NULL) {
-          result = this->operateNextNULL();
-        } else {
-          result = this->operateNext(geometry);
-        }
-
-        this->data[i] = result;
-      }
-    } catch(Rcpp::exception e) {
-      this->finish();
-      throw e;
-    } catch(std::exception  e) {
-      this->finish();
-      throw e;
+    if (this->geometry == NULL) {
+      result = this->operateNextNULL(context, i);
+    } else {
+      result = this->operateNext(context, this->geometry, i);
     }
 
-    this->finish();
-    return this->finishBase();
+    this->data[i] = result;
   }
 
-  virtual ScalarType operateNext(GEOSGeometry* geometry) = 0;
+  virtual ScalarType operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
 
-  virtual ScalarType operateNextNULL() {
+  virtual ScalarType operateNextNULL(GEOSContextHandle_t context, size_t i) {
     return VectorType::get_na();
   }
 

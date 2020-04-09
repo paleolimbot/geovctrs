@@ -6,11 +6,10 @@
   NA_collection_ <<- geo_collection()[NA_integer_]
   NA_xy_ <<- geo_xy()[NA_integer_]
 
-  # something about the nature geo_segment()  doesn't work with
-  # devtools::document(), but does work in all other namespace
-  # loading (devtools::load_all(), library())
+  # something about the nature of geo_segment() here specifically doesn't work
   # probably related to nested calling of geo_xy()
-  NA_segment_ <<- try(geo_segment()[NA_integer_], silent = TRUE)
+  rm(list = "NA_segment_", envir = getNamespace("geovctrs"))
+  makeActiveBinding("NA_segment_", function(...) geo_segment()[NA_integer_], getNamespace("geovctrs"))
 
   NA_rect_ <<- geo_rect()[NA_integer_]
 

@@ -3,7 +3,7 @@
 using namespace Rcpp;
 
 class GetSRIDOperator: public UnaryVectorOperator<IntegerVector, int> {
-  int operateNext(GEOSGeometry* geometry) {
+  int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     if (geometry == NULL) {
       return NA_INTEGER;
     } else {

@@ -4,7 +4,7 @@
 using namespace Rcpp;
 
 class GeomTypeIdOperator: public UnaryVectorOperator<IntegerVector, int> {
-  int operateNext(GEOSGeometry* geometry) {
+  int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     return GEOSGeomTypeId_r(this->context, geometry);
   }
 };
@@ -17,7 +17,7 @@ IntegerVector cpp_geom_type_id(SEXP x) {
 }
 
 class GetNumGeometriesOperator: public UnaryVectorOperator<IntegerVector, int> {
-  int operateNext(GEOSGeometry* geometry) {
+  int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     return GEOSGetNumGeometries_r(this->context, geometry);
   }
 };
@@ -30,7 +30,7 @@ IntegerVector cpp_n_geometries(SEXP x) {
 }
 
 class GetNumCoordinatesOperator: public UnaryVectorOperator<IntegerVector, int> {
-  int operateNext(GEOSGeometry* geometry) {
+  int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     return GEOSGetNumCoordinates_r(this->context, geometry);
   }
 };
@@ -43,7 +43,7 @@ IntegerVector cpp_n_coordinates(SEXP x) {
 }
 
 class CoordinateDimensionsOperator: public UnaryVectorOperator<IntegerVector, int> {
-  int operateNext(GEOSGeometry* geometry) {
+  int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     // the behaviour of this changed between GEOS 3.5 and 3.7, but
     // currently empty geometries have 3 dimensions
     if (GEOSisEmpty_r(this->context, geometry)) {
