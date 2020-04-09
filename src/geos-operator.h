@@ -64,8 +64,12 @@ public:
   size_t counter;
   GEOSContextHandle_t context;
 
+  // this is the main interface: this and initProvider() are
+  // the only methods that should get called from the outside
   virtual SEXP operate() = 0;
 
+  // these are the functions that may be overridden by individual
+  // operator subclasses
   virtual void init() {
 
   }
@@ -78,16 +82,53 @@ public:
 
   }
 
-  virtual size_t size() {
-    return this->commonSize;
-  }
-
   virtual void finishProvider() {
 
   }
 
   virtual ~Operator() {
 
+  }
+
+  // these shouldn't be overridden except in this file
+  // to support the base operator types
+  virtual void initBase() {
+
+  }
+
+  virtual SEXP finishBase() {
+    return R_NilValue;
+  }
+
+  virtual size_t size() {
+    return this->commonSize;
+  }
+
+  // static functions
+  static size_t recycledSize(IntegerVector sizes) {
+    size_t commonSize;
+    IntegerVector nonConstantSizes = sizes[sizes != 1];
+    if (nonConstantSizes.size() == 0) {
+      commonSize = 1;
+    } else {
+       commonSize = nonConstantSizes[0];
+    }
+
+    for (size_t i=0; i < nonConstantSizes.size(); i++) {
+      if (nonConstantSizes[i] != commonSize) {
+        stop("Providers/parameters with incompatible lengths passed to Operator");
+      }
+    }
+
+    return commonSize;
+  }
+
+  static size_t recycledSize(size_t size1, size_t size2) {
+    return recycledSize(IntegerVector::create(size1, size2));
+  }
+
+  static size_t recycledSize(size_t size1, size_t size2, size_t size3) {
+    return recycledSize(IntegerVector::create(size1, size2, size3));
   }
 };
 
@@ -142,29 +183,10 @@ public:
     return NULL;
   }
 
-private:
   void initBase() {
     this->context = geos_init();
     this->provider->init(this->context);
-
-    IntegerVector allSizes = IntegerVector::create(
-      this->maxParameterLength(),
-      this->provider->size()
-    );
-
-    IntegerVector nonConstantSizes = allSizes[allSizes != 1];
-    if (nonConstantSizes.size() == 0) {
-      this->commonSize = 1;
-    } else {
-      this->commonSize = nonConstantSizes[0];
-    }
-
-    for (size_t i=0; i<nonConstantSizes.size(); i++) {
-      if (nonConstantSizes[i] != this->commonSize) {
-        stop("Providers with incompatible lengths passed to BinaryGeometryOperator");
-      }
-    }
-
+    this->commonSize = Operator::recycledSize(this->maxParameterLength(), this->provider->size());
     this->exporter->init(this->context, this->size());
   }
 
@@ -223,24 +245,7 @@ public:
   void initBase() {
     this->context = geos_init();
     this->provider->init(this->context);
-
-    IntegerVector allSizes = IntegerVector::create(
-      this->maxParameterLength(),
-      this->provider->size()
-    );
-
-    IntegerVector nonConstantSizes = allSizes[allSizes != 1];
-    if (nonConstantSizes.size() == 0) {
-      this->commonSize = 1;
-    } else {
-      this->commonSize = nonConstantSizes[0];
-    }
-
-    for (size_t i=0; i<nonConstantSizes.size(); i++) {
-      if (nonConstantSizes[i] != this->commonSize) {
-        stop("Providers with incompatible lengths passed to BinaryGeometryOperator");
-      }
-    }
+    this->commonSize = Operator::recycledSize(this->maxParameterLength(), this->provider->size());
   }
 
   SEXP finishBase() {
@@ -306,34 +311,16 @@ public:
     return this->data;
   }
 
-private:
   void initBase() {
     this->context = geos_init();
     this->provider->init(this->context);
-
-    IntegerVector allSizes = IntegerVector::create(
-      this->maxParameterLength(),
-      this->provider->size()
-    );
-
-    IntegerVector nonConstantSizes = allSizes[allSizes != 1];
-    if (nonConstantSizes.size() == 0) {
-      this->commonSize = 1;
-    } else {
-      this->commonSize = nonConstantSizes[0];
-    }
-
-    for (size_t i=0; i<nonConstantSizes.size(); i++) {
-      if (nonConstantSizes[i] != this->commonSize) {
-        stop("Providers with incompatible lengths passed to BinaryGeometryOperator");
-      }
-    }
+    this->commonSize = Operator::recycledSize(this->maxParameterLength(), this->provider->size());
 
     VectorType data(this->size());
     this->data = data;
   }
 
-  VectorType finishBase() {
+  SEXP finishBase() {
     this->provider->finish(this->context);
     geos_finish(this->context);
     return this->assemble();
