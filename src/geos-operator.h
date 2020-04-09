@@ -61,32 +61,28 @@ public:
 
 class Operator {
 public:
-  // this is the main interface: this and initProvider() are
-  // the only methods that should get called from the outside
+
+  Operator() {
+    this->provider = std::unique_ptr<GeometryProvider>(nullptr);
+  }
+
+  virtual void initProvider(SEXP data) {
+    this->provider = GeometryProviderFactory::get(data);
+  }
 
   virtual SEXP operate() {
     this->initOperator();
     this->init(this->handler.context, this->size());
 
-    try {
-      for (size_t i=0; i < this->size(); i++) {
+    for (size_t i=0; i < this->size(); i++) {
+      if (i % 1000 == 0) {
         checkUserInterrupt();
-        this->loopNext(this->handler.context, i);
       }
-    } catch(Rcpp::exception e) {
-      this->finish(this->handler.context);
-      throw e;
-    } catch(std::exception  e) {
-      this->finish(this->handler.context);
-      throw e;
+
+      this->loopNext(this->handler.context, i);
     }
 
-    this->finish(this->handler.context);
     return this->finishOperator();
-  }
-
-  virtual void initProvider(SEXP data) {
-    this->provider = GeometryProviderFactory::get(data);
   }
 
   virtual size_t size() {
@@ -122,23 +118,23 @@ protected:
     return R_NilValue;
   }
 
-  virtual void finish(GEOSContextHandle_t context) {
-
-  }
-
-  // these shouldn't be overridden except in this file
   virtual ~Operator() {
-
+    if (this->provider) {
+      this->provider->finish(this->handler.context);
+    }
   }
 
 private:
   void initOperator() {
+    if (!this->provider) {
+      stop("Operator: initProvider() was never called");
+    }
+
     this->provider->init(this->handler.context);
     this->commonSize = Operator::recycledSize(this->maxParameterLength(), this->provider->size());
   }
 
   SEXP finishOperator() {
-    this->provider->finish(this->handler.context);
     SEXP result = this->assemble(this->handler.context);
     return result;
   }
@@ -188,6 +184,10 @@ public:
   std::unique_ptr<GeometryExporter> exporter;
   GEOSGeometry* result;
 
+  UnaryGeometryOperator() {
+    std::unique_ptr<GeometryExporter> exporter = std::unique_ptr<GeometryExporter>(nullptr);
+  }
+
   virtual void initExporter(SEXP ptype) {
     this->exporter = GeometryExporterFactory::get(ptype);
   }
@@ -212,8 +212,10 @@ public:
     return this->exporter->assemble(context);
   }
 
-  void finish(GEOSContextHandle_t context) {
-    this->exporter->finish(context);
+  ~UnaryGeometryOperator() {
+    if (this->exporter) {
+      this->exporter->finish(this->handler.context);
+    }
   }
 
   virtual GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;

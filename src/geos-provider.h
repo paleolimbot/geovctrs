@@ -71,6 +71,7 @@ public:
 
   WKTGeometryProvider(CharacterVector data) {
     this->data = data;
+    this->wkt_reader = NULL;
   }
 
   void init(GEOSContextHandle_t context) {
@@ -93,7 +94,9 @@ public:
   }
 
   void finish(GEOSContextHandle_t context) {
-    GEOSWKTReader_destroy_r(context, this->wkt_reader);
+    if (this->wkt_reader != NULL) {
+      GEOSWKTReader_destroy_r(context, this->wkt_reader);
+    }
   }
 
   size_t size() {
@@ -113,6 +116,7 @@ public:
     this->trim = ptype.attr("trim");
     this->precision = ptype.attr("precision");
     this->dimensions = ptype.attr("dimensions");
+    this->wkt_writer = NULL;
   }
 
   void init(GEOSContextHandle_t context, size_t size) {
@@ -147,7 +151,9 @@ public:
   }
 
   void finish(GEOSContextHandle_t context) {
-    GEOSWKTWriter_destroy_r(context, this->wkt_writer);
+    if (this->wkt_writer != NULL) {
+      GEOSWKTWriter_destroy_r(context, this->wkt_writer);
+    }
   }
 };
 
@@ -160,6 +166,7 @@ public:
 
   WKBGeometryProvider(List data) {
     this->data = data;
+    this->wkb_reader = NULL;
   }
 
   void init(GEOSContextHandle_t context) {
@@ -179,7 +186,9 @@ public:
   }
 
   void finish(GEOSContextHandle_t context) {
-    GEOSWKBReader_destroy_r(context, this->wkb_reader);
+    if (this->wkb_reader != NULL) {
+      GEOSWKBReader_destroy_r(context, this->wkb_reader);
+    }
   }
 
   size_t size() {
@@ -199,6 +208,7 @@ public:
     this->includeSRID = ptype.attr("include_srid");
     this->dimensions = ptype.attr("dimensions");
     this->endian = ptype.attr("endian");
+    this->wkb_writer = NULL;
   }
 
   void init(GEOSContextHandle_t context, size_t size) {
@@ -268,7 +278,9 @@ public:
   }
 
   void finish(GEOSContextHandle_t context) {
-    GEOSWKBWriter_destroy_r(context, this->wkb_writer);
+    if (this->wkb_writer != NULL) {
+      GEOSWKBWriter_destroy_r(context, this->wkb_writer);
+    }
   }
 };
 

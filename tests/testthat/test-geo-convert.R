@@ -345,6 +345,28 @@ test_that("missings are propogated through conversions between wkt, wkb, and col
 })
 
 test_that("error occurs with unknown object in conversions", {
+  # test WKT and WKB because the readers/writers both need to handle these cases
+  # this is a mostly a test of the deleters and whether or not they cause segfaults
   expect_error(cpp_convert(as.Date("2020-01-01"), new_geovctrs_wkt()), "Can't resolve")
   expect_error(cpp_convert(geo_wkt("POINT EMPTY"), as.Date("2020-01-01")), "Can't resolve")
+
+  expect_error(cpp_convert(as.Date("2020-01-01"), new_geovctrs_wkb()), "Can't resolve")
+  expect_error(cpp_convert(as_geo_wkb("POINT EMPTY"), as.Date("2020-01-01")), "Can't resolve")
+})
+
+test_that("error occurs with invalid objects", {
+  wkb_bad <- as.raw(
+    c(
+      0x01, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x3e, 0x40, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x24, 0x40
+    )
+  )
+
+  wkb <- new_geovctrs_wkb(list(wkb_bad))
+
+  # test WKT and WKB because the readers/writers both need to handle these cases
+  # this is a mostly a test of the deleters and whether or not they cause segfaults
+  expect_error(cpp_convert(wkb, new_geovctrs_wkt()), "ParseException")
+  expect_error(cpp_convert(new_geovctrs_wkt("POINT NOPE"), geo_wkb()), "ParseException")
 })
