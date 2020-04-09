@@ -89,7 +89,6 @@ public:
 
   WKTGeometryProvider(CharacterVector data) {
     this->data = data;
-
   }
 
   void init(GEOSContextHandle_t context) {
@@ -116,7 +115,7 @@ public:
   }
 
   size_t size() {
-    return (this->data).size();
+    return this->data.size();
   }
 };
 
@@ -132,7 +131,6 @@ public:
     this->trim = ptype.attr("trim");
     this->precision = ptype.attr("precision");
     this->dimensions = ptype.attr("dimensions");
-
   }
 
   void init(GEOSContextHandle_t context, size_t size) {
@@ -142,14 +140,6 @@ public:
     GEOSWKTWriter_setOutputDimension_r(context, this->wkt_writer, this->dimensions);
 
     CharacterVector data(size);
-    data.attr("class") = CharacterVector::create("geovctrs_wkt", "geovctr", "vctrs_vctr");
-
-    // set these to the defaults rather than the input values, as they aren't
-    // used for reading (only writing)
-    data.attr("trim") = true;
-    data.attr("precision") =  IntegerVector::create(16);
-    data.attr("dimensions") = IntegerVector::create(3);
-
     this->data = data;
   }
 
@@ -165,6 +155,15 @@ public:
 
   SEXP finish(GEOSContextHandle_t context) {
     GEOSWKTWriter_destroy_r(context, this->wkt_writer);
+
+    this->data.attr("class") = CharacterVector::create("geovctrs_wkt", "geovctr", "vctrs_vctr");
+
+    // set these to the defaults rather than the input values, as they aren't
+    // used for reading (only writing)
+    this->data.attr("trim") = LogicalVector::create(true);
+    this->data.attr("precision") =  IntegerVector::create(16);
+    this->data.attr("dimensions") = IntegerVector::create(3);
+
     return this->data;
   }
 };
@@ -178,7 +177,6 @@ public:
 
   WKBGeometryProvider(List data) {
     this->data = data;
-
   }
 
   void init(GEOSContextHandle_t context) {
@@ -202,7 +200,7 @@ public:
   }
 
   size_t size() {
-    return (this->data).size();
+    return this->data.size();
   }
 };
 
@@ -218,7 +216,6 @@ public:
     this->includeSRID = ptype.attr("include_srid");
     this->dimensions = ptype.attr("dimensions");
     this->endian = ptype.attr("endian");
-
   }
 
   void init(GEOSContextHandle_t context, size_t size) {
@@ -232,11 +229,6 @@ public:
     }
 
     List data(size);
-    data.attr("class") = CharacterVector::create("geovctrs_wkb", "geovctr", "vctrs_vctr");
-    data.attr("include_srid") = LogicalVector::create(LogicalVector::get_na());
-    data.attr("dimensions") = IntegerVector::create(3);
-    data.attr("endian") = IntegerVector::create(LogicalVector::get_na());
-
     this->data = data;
   }
 
@@ -284,6 +276,12 @@ public:
 
   SEXP finish(GEOSContextHandle_t context) {
     GEOSWKBWriter_destroy_r(context, this->wkb_writer);
+
+    this->data.attr("class") = CharacterVector::create("geovctrs_wkb", "geovctr", "vctrs_vctr");
+    this->data.attr("include_srid") = LogicalVector::create(LogicalVector::get_na());
+    this->data.attr("dimensions") = IntegerVector::create(3);
+    this->data.attr("endian") = IntegerVector::create(LogicalVector::get_na());
+
     return data;
   }
 };
@@ -300,10 +298,6 @@ public:
     this->srid = data["srid"];
   }
 
-  void init(GEOSContextHandle_t context) {
-
-  }
-
   GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
     GEOSGeometry* geometry;
     if (this->features[i] == R_NilValue) {
@@ -317,7 +311,7 @@ public:
   }
 
   size_t size() {
-    return (this->features).size();
+    return this->features.size();
   }
 };
 
@@ -327,11 +321,10 @@ public:
   IntegerVector srid;
 
   void init(GEOSContextHandle_t context, size_t size) {
+    NumericVector data(size);
     IntegerVector srid(size);
-    this->srid = srid;
-    List data(size);
     this->data = data;
-
+    this->srid = srid;
   }
 
   void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
@@ -363,10 +356,6 @@ public:
     this->y = xy["y"];
   }
 
-  void init(GEOSContextHandle_t context) {
-
-  }
-
   GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
     GEOSGeometry* geometry;
 
@@ -384,7 +373,7 @@ public:
   }
 
   size_t size() {
-    return (this->x).size();
+    return this->x.size();
   }
 };
 
@@ -398,8 +387,6 @@ public:
     NumericVector y(size);
     this->x = x;
     this->y = y;
-
-
   }
 
   void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
@@ -461,10 +448,6 @@ public:
     this->srid = segment["srid"];
   }
 
-  void init(GEOSContextHandle_t context) {
-
-  }
-
   GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
     double x0, y0, x1, y1;
     int srid;
@@ -507,7 +490,7 @@ public:
   }
 
   size_t size() {
-    return (this->x0).size();
+    return this->x0.size();
   }
 };
 
@@ -530,8 +513,6 @@ public:
     this->x1 = x1;
     this->y1 = y1;
     this->srid = srid;
-
-
   }
 
   void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
@@ -616,10 +597,6 @@ public:
     this->srid = rect["srid"];
   }
 
-  void init(GEOSContextHandle_t context) {
-
-  }
-
   GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
     double xmin1, ymin1, xmax1, ymax1;
     int srid;
@@ -662,7 +639,7 @@ public:
   }
 
   size_t size() {
-    return (this->xmin).size();
+    return this->xmin.size();
   }
 };
 
