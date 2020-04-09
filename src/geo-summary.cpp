@@ -66,9 +66,9 @@ public:
   NumericVector x;
   NumericVector y;
 
-  void init() {
-    NumericVector x(this->size());
-    NumericVector y(this->size());
+  void init(GEOSContextHandle_t context, size_t size) {
+    NumericVector x(size);
+    NumericVector y(size);
     this->x = x;
     this->y = y;
   }

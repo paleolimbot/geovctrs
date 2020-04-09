@@ -121,8 +121,7 @@ public:
     this->naRm = naRm;
   }
 
-  void init() {
-    size_t size = this->provider->size();
+  void init(GEOSContextHandle_t context, size_t size) {
     NumericVector xmin(size);
     NumericVector ymin(size);
     NumericVector xmax(size);

@@ -68,8 +68,8 @@ public:
   // this is the main interface: this and initProvider() are
   // the only methods that should get called from the outside
   virtual SEXP operate() {
-    this->initBase();
-    this->init();
+    this->initOperator();
+    this->init(this->context, this->size());
 
     try {
       for (size_t i=0; i < this->size(); i++) {
@@ -77,32 +77,30 @@ public:
         this->loopNext(this->context, i);
       }
     } catch(Rcpp::exception e) {
-      this->finish();
+      this->finish(this->context);
       throw e;
     } catch(std::exception  e) {
-      this->finish();
+      this->finish(this->context);
       throw e;
     }
 
-    this->finish();
-    return this->finishBase();
+    this->finish(this->context);
+    return this->finishOperator();
   }
 
-  virtual void initProvider(SEXP provider) {
-    this->provider = GeometryProviderFactory::get(provider);
+  virtual void initProvider(SEXP data) {
+    this->provider = GeometryProviderFactory::get(data);
   }
 
   // these are the functions that may be overridden by individual
   // operator subclasses
-  virtual void loopNext(GEOSContextHandle_t context, size_t i) {
+  virtual void loopNext(GEOSContextHandle_t context, size_t i) = 0;
+
+  virtual void init(GEOSContextHandle_t context, size_t size) {
 
   }
 
-  virtual void init() {
-
-  }
-
-  virtual void finish() {
+  virtual void finish(GEOSContextHandle_t context) {
 
   }
 
@@ -119,21 +117,17 @@ public:
 
   }
 
-  virtual void initBase() {
+  virtual void initOperator() {
     this->context = geos_init();
     this->provider->init(this->context);
     this->commonSize = Operator::recycledSize(this->maxParameterLength(), this->provider->size());
   }
 
-  virtual SEXP finishBase() {
+  virtual SEXP finishOperator() {
     this->provider->finish(this->context);
     SEXP result = this->assemble();
     geos_finish(this->context);
     return result;
-  }
-
-  virtual void finishProvider() {
-
   }
 
   virtual size_t size() {
@@ -179,7 +173,11 @@ public:
     this->exporter = GeometryExporterFactory::get(ptype);
   }
 
-  virtual void loopNext(GEOSContextHandle_t context, size_t i) {
+  void init(GEOSContextHandle_t context, size_t size) {
+    this->exporter->init(this->context, this->size());
+  }
+
+  void loopNext(GEOSContextHandle_t context, size_t i) {
     this->geometry = this->provider->getNext(context, i);
 
     if (this->geometry == NULL) {
@@ -191,28 +189,13 @@ public:
     this->exporter->putNext(context, this->result, i);
   }
 
-  virtual GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
-
-  virtual GEOSGeometry* operateNextNULL(GEOSContextHandle_t context, size_t i) {
-    return NULL;
-  }
-
-  void initBase() {
-    this->context = geos_init();
-    this->provider->init(this->context);
-    this->commonSize = Operator::recycledSize(this->maxParameterLength(), this->provider->size());
-    this->exporter->init(this->context, this->size());
-  }
-
   SEXP assemble() {
     return this->exporter->finish(this->context);
   }
 
-  SEXP finishBase() {
-    this->provider->finish(this->context);
-    SEXP value = this->assemble();
-    geos_finish(this->context);
-    return value;
+  virtual GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
+  virtual GEOSGeometry* operateNextNULL(GEOSContextHandle_t context, size_t i) {
+    return NULL;
   }
 };
 
@@ -234,7 +217,12 @@ class UnaryVectorOperator: public Operator {
 public:
   VectorType data;
 
-  virtual void loopNext(GEOSContextHandle_t context, size_t i) {
+  void init(GEOSContextHandle_t context, size_t size) {
+    VectorType data(size);
+    this->data = data;
+  }
+
+  void loopNext(GEOSContextHandle_t context, size_t i) {
     this->geometry = this->provider->getNext(context, i);
     ScalarType result;
 
@@ -247,23 +235,13 @@ public:
     this->data[i] = result;
   }
 
-  virtual ScalarType operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
-
-  virtual ScalarType operateNextNULL(GEOSContextHandle_t context, size_t i) {
-    return VectorType::get_na();
-  }
-
-  virtual SEXP assemble() {
+  SEXP assemble() {
     return this->data;
   }
 
-  void initBase() {
-    this->context = geos_init();
-    this->provider->init(this->context);
-    this->commonSize = Operator::recycledSize(this->maxParameterLength(), this->provider->size());
-
-    VectorType data(this->size());
-    this->data = data;
+  virtual ScalarType operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
+  virtual ScalarType operateNextNULL(GEOSContextHandle_t context, size_t i) {
+    return VectorType::get_na();
   }
 };
 
