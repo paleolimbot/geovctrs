@@ -44,6 +44,7 @@ public:
 SEXP cpp_set_srid(SEXP x, IntegerVector srid) {
   SetSRIDOperator op(srid);
   // returning the same type as input
-  op.initProvider(x, x);
+  op.initProvider(x);
+  op.initExporter(x);
   return op.operate();
 }

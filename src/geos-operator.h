@@ -62,6 +62,8 @@ class Operator {
 public:
   size_t commonSize;
   GEOSContextHandle_t context;
+  std::unique_ptr<GeometryProvider> provider;
+  GEOSGeometry* geometry;
 
   // this is the main interface: this and initProvider() are
   // the only methods that should get called from the outside
@@ -86,6 +88,10 @@ public:
     return this->finishBase();
   }
 
+  virtual void initProvider(SEXP provider) {
+    this->provider = GeometryProviderFactory::get(provider);
+  }
+
   // these are the functions that may be overridden by individual
   // operator subclasses
   virtual void loopNext(GEOSContextHandle_t context, size_t i) {
@@ -100,6 +106,10 @@ public:
 
   }
 
+  virtual SEXP assemble() {
+    return R_NilValue;
+  }
+
   virtual size_t maxParameterLength() {
     return 1;
   }
@@ -110,11 +120,16 @@ public:
   }
 
   virtual void initBase() {
-
+    this->context = geos_init();
+    this->provider->init(this->context);
+    this->commonSize = Operator::recycledSize(this->maxParameterLength(), this->provider->size());
   }
 
   virtual SEXP finishBase() {
-    return R_NilValue;
+    this->provider->finish(this->context);
+    SEXP result = this->assemble();
+    geos_finish(this->context);
+    return result;
   }
 
   virtual void finishProvider() {
@@ -157,15 +172,11 @@ public:
 
 class UnaryGeometryOperator: public Operator {
 public:
-  std::unique_ptr<GeometryProvider> provider;
   std::unique_ptr<GeometryExporter> exporter;
-
-  GEOSGeometry* geometry;
   GEOSGeometry* result;
 
-  virtual void initProvider(SEXP provider, SEXP exporter) {
-    this->provider = GeometryProviderFactory::get(provider);
-    this->exporter = GeometryExporterFactory::get(exporter);
+  virtual void initExporter(SEXP ptype) {
+    this->exporter = GeometryExporterFactory::get(ptype);
   }
 
   virtual void loopNext(GEOSContextHandle_t context, size_t i) {
@@ -193,9 +204,13 @@ public:
     this->exporter->init(this->context, this->size());
   }
 
+  SEXP assemble() {
+    return this->exporter->finish(this->context);
+  }
+
   SEXP finishBase() {
     this->provider->finish(this->context);
-    SEXP value = this->exporter->finish(this->context);
+    SEXP value = this->assemble();
     geos_finish(this->context);
     return value;
   }
@@ -205,55 +220,19 @@ public:
 
 class UnaryOperator: public Operator {
 public:
-  std::unique_ptr<GeometryProvider> provider;
-  GEOSGeometry* geometry;
-
-  virtual void initProvider(SEXP provider) {
-    this->provider = GeometryProviderFactory::get(provider);
-  }
 
   virtual void loopNext(GEOSContextHandle_t context, size_t i) {
     this->geometry = this->provider->getNext(context, i);
-
-    if (this->geometry == NULL) {
-      this->operateNextNULL(context, i);
-    } else {
-      this->operateNext(context, this->geometry, i);
-    }
+    this->operateNext(context, this->geometry, i);
   }
 
   virtual void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
-  virtual void operateNextNULL(GEOSContextHandle_t context, size_t i) {
-    this->operateNext(context, NULL, i);
-  }
-
-  virtual SEXP assemble() {
-    return R_NilValue;
-  }
-
-  void initBase() {
-    this->context = geos_init();
-    this->provider->init(this->context);
-    this->commonSize = Operator::recycledSize(this->maxParameterLength(), this->provider->size());
-  }
-
-  SEXP finishBase() {
-    this->provider->finish(this->context);
-    geos_finish(this->context);
-    return this->assemble();
-  }
 };
 
 template <class VectorType, class ScalarType>
 class UnaryVectorOperator: public Operator {
 public:
-  std::unique_ptr<GeometryProvider> provider;
-  GEOSGeometry* geometry;
   VectorType data;
-
-  virtual void initProvider(SEXP provider) {
-    this->provider = GeometryProviderFactory::get(provider);
-  }
 
   virtual void loopNext(GEOSContextHandle_t context, size_t i) {
     this->geometry = this->provider->getNext(context, i);
@@ -285,12 +264,6 @@ public:
 
     VectorType data(this->size());
     this->data = data;
-  }
-
-  SEXP finishBase() {
-    this->provider->finish(this->context);
-    geos_finish(this->context);
-    return this->assemble();
   }
 };
 
