@@ -7,9 +7,16 @@
   NA_xy_ <<- geo_xy()[NA_integer_]
 
   # something about the nature of geo_segment() here specifically doesn't work
-  # probably related to nested calling of geo_xy()
-  rm(list = "NA_segment_", envir = getNamespace("geovctrs"))
-  makeActiveBinding("NA_segment_", function(...) geo_segment()[NA_integer_], getNamespace("geovctrs"))
+  # related to nested calling of geo_xy()
+  NA_segment_ <<- new_geovctrs_segment(
+    list(
+      start = new_geovctrs_xy(list(x = NA_real_, y = NA_real_)),
+      end = new_geovctrs_xy(list(x = NA_real_, y = NA_real_)),
+      srid = NA_integer_
+    )
+  )
+  #rm(list = "NA_segment_", envir = getNamespace("geovctrs"))
+  #makeActiveBinding("NA_segment_", function(...) geo_segment()[NA_integer_], getNamespace("geovctrs"))
 
   NA_rect_ <<- geo_rect()[NA_integer_]
 
