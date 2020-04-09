@@ -67,15 +67,15 @@ public:
 class WKTGeometryProvider: public GeometryProvider {
 public:
   CharacterVector data;
-  GEOSWKTReader *wkt_reader;
+  GEOSWKTReader *wktReader;
 
   WKTGeometryProvider(CharacterVector data) {
     this->data = data;
-    this->wkt_reader = NULL;
+    this->wktReader = NULL;
   }
 
   void init(GEOSContextHandle_t context) {
-    this->wkt_reader = GEOSWKTReader_create_r(context);
+    this->wktReader = GEOSWKTReader_create_r(context);
   }
 
   GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
@@ -85,7 +85,7 @@ public:
     } else {
       geometry = GEOSWKTReader_read_r(
         context,
-        this->wkt_reader,
+        this->wktReader,
         this->data[i]
       );
     }
@@ -94,8 +94,9 @@ public:
   }
 
   void finish(GEOSContextHandle_t context) {
-    if (this->wkt_reader != NULL) {
-      GEOSWKTReader_destroy_r(context, this->wkt_reader);
+    if (this->wktReader != NULL) {
+      GEOSWKTReader_destroy_r(context, this->wktReader);
+      this->wktReader = NULL;
     }
   }
 
@@ -110,20 +111,20 @@ public:
   bool trim;
   int precision;
   int dimensions;
-  GEOSWKTWriter *wkt_writer;
+  GEOSWKTWriter *wktWriter;
 
   WKTGeometryExporter(CharacterVector ptype) {
     this->trim = ptype.attr("trim");
     this->precision = ptype.attr("precision");
     this->dimensions = ptype.attr("dimensions");
-    this->wkt_writer = NULL;
+    this->wktWriter = NULL;
   }
 
   void init(GEOSContextHandle_t context, size_t size) {
-    this->wkt_writer = GEOSWKTWriter_create_r(context);
-    GEOSWKTWriter_setTrim_r(context, this->wkt_writer, this->trim);
-    GEOSWKTWriter_setRoundingPrecision_r(context, this->wkt_writer, this->precision);
-    GEOSWKTWriter_setOutputDimension_r(context, this->wkt_writer, this->dimensions);
+    this->wktWriter = GEOSWKTWriter_create_r(context);
+    GEOSWKTWriter_setTrim_r(context, this->wktWriter, this->trim);
+    GEOSWKTWriter_setRoundingPrecision_r(context, this->wktWriter, this->precision);
+    GEOSWKTWriter_setOutputDimension_r(context, this->wktWriter, this->dimensions);
 
     CharacterVector data(size);
     this->data = data;
@@ -134,7 +135,7 @@ public:
       this->data[i] = NA_STRING;
     } else {
       std::string wkt_single;
-      wkt_single = GEOSWKTWriter_write_r(context, wkt_writer, geometry);
+      wkt_single = GEOSWKTWriter_write_r(context, wktWriter, geometry);
       this->data[i] = wkt_single;
     }
   }
@@ -151,8 +152,9 @@ public:
   }
 
   void finish(GEOSContextHandle_t context) {
-    if (this->wkt_writer != NULL) {
-      GEOSWKTWriter_destroy_r(context, this->wkt_writer);
+    if (this->wktWriter != NULL) {
+      GEOSWKTWriter_destroy_r(context, this->wktWriter);
+      this->wktWriter = NULL;
     }
   }
 };
@@ -162,15 +164,15 @@ public:
 class WKBGeometryProvider: public GeometryProvider {
 public:
   List data;
-  GEOSWKBReader *wkb_reader;
+  GEOSWKBReader *wkbReader;
 
   WKBGeometryProvider(List data) {
     this->data = data;
-    this->wkb_reader = NULL;
+    this->wkbReader = NULL;
   }
 
   void init(GEOSContextHandle_t context) {
-    this->wkb_reader = GEOSWKBReader_create_r(context);
+    this->wkbReader = GEOSWKBReader_create_r(context);
   }
 
   GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
@@ -179,15 +181,16 @@ public:
       geometry = NULL;
     } else {
       RawVector r = this->data[i];
-      geometry = GEOSWKBReader_read_r(context, this->wkb_reader, &(r[0]), r.size());
+      geometry = GEOSWKBReader_read_r(context, this->wkbReader, &(r[0]), r.size());
     }
 
     return geometry;
   }
 
   void finish(GEOSContextHandle_t context) {
-    if (this->wkb_reader != NULL) {
-      GEOSWKBReader_destroy_r(context, this->wkb_reader);
+    if (this->wkbReader != NULL) {
+      GEOSWKBReader_destroy_r(context, this->wkbReader);
+      this->wkbReader = NULL;
     }
   }
 
@@ -199,7 +202,7 @@ public:
 class WKBGeometryExporter: public GeometryExporter {
 public:
   List data;
-  GEOSWKBWriter *wkb_writer;
+  GEOSWKBWriter *wkbWriter;
   int includeSRID;
   int dimensions;
   int endian;
@@ -208,17 +211,17 @@ public:
     this->includeSRID = ptype.attr("include_srid");
     this->dimensions = ptype.attr("dimensions");
     this->endian = ptype.attr("endian");
-    this->wkb_writer = NULL;
+    this->wkbWriter = NULL;
   }
 
   void init(GEOSContextHandle_t context, size_t size) {
-    this->wkb_writer = GEOSWKBWriter_create_r(context);
+    this->wkbWriter = GEOSWKBWriter_create_r(context);
     if (!LogicalVector::is_na(this->includeSRID)) {
-      GEOSWKBWriter_setIncludeSRID_r(context, this->wkb_writer, this->includeSRID);
+      GEOSWKBWriter_setIncludeSRID_r(context, this->wkbWriter, this->includeSRID);
     }
-    GEOSWKBWriter_setOutputDimension_r(context, this->wkb_writer, this->dimensions);
+    GEOSWKBWriter_setOutputDimension_r(context, this->wkbWriter, this->dimensions);
     if (!IntegerVector::is_na(this->endian)) {
-      GEOSWKBWriter_setByteOrder_r(context, this->wkb_writer, this->endian);
+      GEOSWKBWriter_setByteOrder_r(context, this->wkbWriter, this->endian);
     }
 
     List data(size);
@@ -232,7 +235,7 @@ public:
       if (IntegerVector::is_na(this->includeSRID)) {
         int srid = GEOSGetSRID_r(context, geometry);
         bool useSRID = (srid != 0) && !IntegerVector::is_na(srid);
-        GEOSWKBWriter_setIncludeSRID_r(context, this->wkb_writer, useSRID);
+        GEOSWKBWriter_setIncludeSRID_r(context, this->wkbWriter, useSRID);
       }
 
       // GEOSWKBWriter won't deal with POINT EMPTY, but we handle in the same way
@@ -257,7 +260,7 @@ public:
       } else {
 
         size_t size;
-        unsigned char *buf = GEOSWKBWriter_write_r(context, this->wkb_writer, geometry, &size);
+        unsigned char *buf = GEOSWKBWriter_write_r(context, this->wkbWriter, geometry, &size);
         RawVector raw(size);
         memcpy(&(raw[0]), buf, size);
         GEOSFree_r(context, buf);
@@ -278,8 +281,9 @@ public:
   }
 
   void finish(GEOSContextHandle_t context) {
-    if (this->wkb_writer != NULL) {
-      GEOSWKBWriter_destroy_r(context, this->wkb_writer);
+    if (this->wkbWriter != NULL) {
+      GEOSWKBWriter_destroy_r(context, this->wkbWriter);
+      this->wkbWriter = NULL;
     }
   }
 };

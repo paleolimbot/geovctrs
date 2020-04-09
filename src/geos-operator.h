@@ -64,6 +64,7 @@ public:
 
   Operator() {
     this->provider = std::unique_ptr<GeometryProvider>(nullptr);
+    this->geometry = NULL;
   }
 
   virtual void initProvider(SEXP data) {
@@ -75,7 +76,7 @@ public:
     this->init(this->handler.context, this->size());
 
     for (size_t i=0; i < this->size(); i++) {
-      if (i % 1000 == 0) {
+      if ((i + 1) % 1000 == 0) {
         checkUserInterrupt();
       }
 
@@ -118,6 +119,9 @@ protected:
     return R_NilValue;
   }
 
+  // subclasses must implement their own deleters if they need
+  // to clean up memory...this deleter won't call
+  // methods of subclasses
   virtual ~Operator() {
     if (this->provider) {
       this->provider->finish(this->handler.context);
