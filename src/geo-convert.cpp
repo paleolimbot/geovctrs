@@ -4,7 +4,7 @@ using namespace Rcpp;
 
 class IdentityOperator: public UnaryGeometryOperator {
 public:
-  GEOSGeometry* operateNext(GEOSGeometry* geometry) {
+  GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     return geometry;
   }
 };

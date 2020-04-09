@@ -135,7 +135,7 @@ public:
     this->srid = srid;
   }
 
-  void operateNext(GEOSGeometry* geometry) {
+  void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     double xmin1, ymin1, xmax1, ymax1;
     int srid;
 

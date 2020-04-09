@@ -31,7 +31,7 @@ public:
     return srid.size();
   }
 
-  GEOSGeometry* operateNext(GEOSGeometry* geometry) {
+  GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     if (geometry != NULL) {
       GEOSSetSRID_r(this->context, geometry, this->srid[this->counter]);
     }

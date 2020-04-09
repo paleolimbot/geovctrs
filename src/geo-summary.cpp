@@ -73,7 +73,7 @@ public:
     this->y = y;
   }
 
-  void operateNext(GEOSGeometry* geometry) {
+  void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     if (geometry == NULL) {
       this->x[this->counter] = NA_REAL;
       this->y[this->counter] = NA_REAL;

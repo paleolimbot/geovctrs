@@ -66,11 +66,39 @@ public:
 
   // this is the main interface: this and initProvider() are
   // the only methods that should get called from the outside
-  virtual SEXP operate() = 0;
+  virtual SEXP operate() {
+    this->initBase();
+    this->init();
+
+    try {
+      for (size_t i=0; i < this->size(); i++) {
+        checkUserInterrupt();
+        this->counter = i;
+        this->loopNext(this->context, i);
+      }
+    } catch(Rcpp::exception e) {
+      this->finish();
+      throw e;
+    } catch(std::exception  e) {
+      this->finish();
+      throw e;
+    }
+
+    this->finish();
+    return this->finishBase();
+  }
 
   // these are the functions that may be overridden by individual
   // operator subclasses
+  virtual void loopNext(GEOSContextHandle_t context, size_t i) {
+
+  }
+
   virtual void init() {
+
+  }
+
+  virtual void finish() {
 
   }
 
@@ -78,26 +106,21 @@ public:
     return 1;
   }
 
-  virtual void finish() {
-
-  }
-
-  virtual void finishProvider() {
-
-  }
-
+  // these shouldn't be overridden except in this file
   virtual ~Operator() {
 
   }
 
-  // these shouldn't be overridden except in this file
-  // to support the base operator types
   virtual void initBase() {
 
   }
 
   virtual SEXP finishBase() {
     return R_NilValue;
+  }
+
+  virtual void finishProvider() {
+
   }
 
   virtual size_t size() {
@@ -139,47 +162,29 @@ public:
   std::unique_ptr<GeometryProvider> provider;
   std::unique_ptr<GeometryExporter> exporter;
 
+  GEOSGeometry* geometry;
+  GEOSGeometry* result;
+
   virtual void initProvider(SEXP provider, SEXP exporter) {
     this->provider = GeometryProviderFactory::get(provider);
     this->exporter = GeometryExporterFactory::get(exporter);
   }
 
-  virtual SEXP operate() {
-    this->initBase();
-    this->init();
+  virtual void loopNext(GEOSContextHandle_t context, size_t i) {
+    this->geometry = this->provider->getNext(context, i);
 
-    // TODO: there is probably a memory leak here, but
-    // GEOSGeom_destroy_r(this->context, geometry) gives
-    // an error
-    GEOSGeometry* geometry;
-    GEOSGeometry* result;
-
-    try {
-      for (size_t i=0; i < this->size(); i++) {
-        checkUserInterrupt();
-        this->counter = i;
-        geometry = this->provider->getNext(this->context, i);
-
-        if (geometry == NULL) {
-          result = this->operateNextNULL();
-        } else {
-          result = this->operateNext(geometry);
-        }
-
-        this->exporter->putNext(this->context, result, i);
-      }
-    } catch(Rcpp::exception e) {
-      this->finish();
-      throw e;
+    if (this->geometry == NULL) {
+      this->result = this->operateNextNULL(context, i);
+    } else {
+      this->result = this->operateNext(context, this->geometry, i);
     }
 
-    this->finish();
-    return this->finishBase();
+    this->exporter->putNext(context, this->result, i);
   }
 
-  virtual GEOSGeometry* operateNext(GEOSGeometry* geometry) = 0;
+  virtual GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
 
-  virtual GEOSGeometry* operateNextNULL() {
+  virtual GEOSGeometry* operateNextNULL(GEOSContextHandle_t context, size_t i) {
     return NULL;
   }
 
@@ -203,40 +208,26 @@ public:
 class UnaryOperator: public Operator {
 public:
   std::unique_ptr<GeometryProvider> provider;
+  GEOSGeometry* geometry;
 
   virtual void initProvider(SEXP provider) {
     this->provider = GeometryProviderFactory::get(provider);
   }
 
-  virtual SEXP operate() {
-    this->initBase();
-    this->init();
+  virtual void loopNext(GEOSContextHandle_t context, size_t i) {
+    this->geometry = this->provider->getNext(context, i);
 
-    // TODO: there is probably a memory leak here, but
-    // GEOSGeom_destroy_r(this->context, geometry) gives
-    // an error
-    GEOSGeometry* geometry;
-
-    try {
-      for (size_t i=0; i < this->size(); i++) {
-        checkUserInterrupt();
-        this->counter = i;
-        geometry = this->provider->getNext(this->context, i);
-        this->operateNext(geometry);
-      }
-    } catch(Rcpp::exception e) {
-      this->finish();
-      throw e;
-    } catch(std::exception e) {
-      this->finish();
-      throw e;
+    if (this->geometry == NULL) {
+      this->operateNextNULL(context, i);
+    } else {
+      this->operateNext(context, this->geometry, i);
     }
-
-    this->finish();
-    return this->finishBase();
   }
 
-  virtual void operateNext(GEOSGeometry* geometry) = 0;
+  virtual void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
+  virtual void operateNextNULL(GEOSContextHandle_t context, size_t i) {
+    this->operateNext(context, NULL, i);
+  }
 
   virtual SEXP assemble() {
     return R_NilValue;
