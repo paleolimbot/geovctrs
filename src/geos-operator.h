@@ -2,6 +2,7 @@
 #ifndef GEOS_OPERATOR_H
 #define GEOS_OPERATOR_H
 
+#include "geos-handler.h"
 #include "geos-provider.h"
 #include <Rcpp.h>
 using namespace Rcpp;
@@ -60,37 +61,48 @@ public:
 
 class Operator {
 public:
-  size_t commonSize;
-  GEOSContextHandle_t context;
-  std::unique_ptr<GeometryProvider> provider;
-  GEOSGeometry* geometry;
-
   // this is the main interface: this and initProvider() are
   // the only methods that should get called from the outside
+
   virtual SEXP operate() {
     this->initOperator();
-    this->init(this->context, this->size());
+    this->init(this->handler.context, this->size());
 
     try {
       for (size_t i=0; i < this->size(); i++) {
         checkUserInterrupt();
-        this->loopNext(this->context, i);
+        this->loopNext(this->handler.context, i);
       }
     } catch(Rcpp::exception e) {
-      this->finish(this->context);
+      this->finish(this->handler.context);
       throw e;
     } catch(std::exception  e) {
-      this->finish(this->context);
+      this->finish(this->handler.context);
       throw e;
     }
 
-    this->finish(this->context);
+    this->finish(this->handler.context);
     return this->finishOperator();
   }
 
   virtual void initProvider(SEXP data) {
     this->provider = GeometryProviderFactory::get(data);
   }
+
+  virtual size_t size() {
+    return this->commonSize;
+  }
+
+protected:
+  // including this as a field ensures that it exists
+  // for the entire lifetime of the object
+  // manually instantiating it causes an extra copy to be
+  // created which causes errors
+  // ...because C++ is nuts
+  RcppGEOSHandler handler;
+  size_t commonSize;
+  std::unique_ptr<GeometryProvider> provider;
+  GEOSGeometry* geometry = NULL;
 
   // these are the functions that may be overridden by individual
   // operator subclasses
@@ -119,24 +131,18 @@ public:
 
   }
 
-  virtual void initOperator() {
-    this->context = geos_init();
-    this->provider->init(this->context);
+private:
+  void initOperator() {
+    this->provider->init(this->handler.context);
     this->commonSize = Operator::recycledSize(this->maxParameterLength(), this->provider->size());
   }
 
-  virtual SEXP finishOperator() {
-    this->provider->finish(this->context);
-    SEXP result = this->assemble(this->context);
-    geos_finish(this->context);
+  SEXP finishOperator() {
+    this->provider->finish(this->handler.context);
+    SEXP result = this->assemble(this->handler.context);
     return result;
   }
 
-  virtual size_t size() {
-    return this->commonSize;
-  }
-
-  // static functions
   static size_t recycledSize(IntegerVector sizes) {
     size_t commonSize;
     IntegerVector nonConstantSizes = sizes[sizes != 1];
@@ -187,7 +193,7 @@ public:
   }
 
   void init(GEOSContextHandle_t context, size_t size) {
-    this->exporter->init(this->context, this->size());
+    this->exporter->init(context, this->size());
   }
 
   void loopNext(GEOSContextHandle_t context, size_t i) {

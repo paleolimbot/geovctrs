@@ -2,7 +2,7 @@
 #ifndef GEOS_PROVIDER_H
 #define GEOS_PROVIDER_H
 
-#include "geos-base.h"
+#include <geos_c.h>
 #include "geos-coords-write.h"
 #include "geos-coords.h"
 #include <memory.h>

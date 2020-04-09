@@ -20,12 +20,11 @@ public:
       this->problems[i] = e.what();
     } catch(std::exception e) {
       provider->finish(context);
-      geos_finish(context);
       throw e;
     }
   }
 
-  SEXP assemble(GEOSContextHandle_t) {
+  SEXP assemble(GEOSContextHandle_t context) {
     return this->problems;
   }
 };
