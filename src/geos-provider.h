@@ -24,9 +24,10 @@ class GeometryExporter {
 public:
   virtual void init(GEOSContextHandle_t context, size_t size) {}
   virtual void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
-  virtual SEXP finish(GEOSContextHandle_t context) {
+  virtual SEXP assemble(GEOSContextHandle_t context) {
     return R_NilValue;
   }
+  virtual void finish(GEOSContextHandle_t context) {}
   virtual ~GeometryExporter() {}
 };
 
@@ -134,9 +135,7 @@ public:
     }
   }
 
-  SEXP finish(GEOSContextHandle_t context) {
-    GEOSWKTWriter_destroy_r(context, this->wkt_writer);
-
+  SEXP assemble(GEOSContextHandle_t context) {
     this->data.attr("class") = CharacterVector::create("geovctrs_wkt", "geovctr", "vctrs_vctr");
 
     // give the default values
@@ -145,6 +144,10 @@ public:
     this->data.attr("dimensions") = IntegerVector::create(3);
 
     return this->data;
+  }
+
+  void finish(GEOSContextHandle_t context) {
+    GEOSWKTWriter_destroy_r(context, this->wkt_writer);
   }
 };
 
@@ -254,9 +257,7 @@ public:
     }
   }
 
-  SEXP finish(GEOSContextHandle_t context) {
-    GEOSWKBWriter_destroy_r(context, this->wkb_writer);
-
+  SEXP assemble(GEOSContextHandle_t context) {
     // give the default values
     this->data.attr("class") = CharacterVector::create("geovctrs_wkb", "geovctr", "vctrs_vctr");
     this->data.attr("include_srid") = LogicalVector::create(LogicalVector::get_na());
@@ -264,6 +265,10 @@ public:
     this->data.attr("endian") = IntegerVector::create(LogicalVector::get_na());
 
     return data;
+  }
+
+  void finish(GEOSContextHandle_t context) {
+    GEOSWKBWriter_destroy_r(context, this->wkb_writer);
   }
 };
 
@@ -318,7 +323,7 @@ public:
     }
   }
 
-  SEXP finish(GEOSContextHandle_t context) {
+  SEXP assemble(GEOSContextHandle_t context) {
     List out = List::create(_["feature"] = this->data, _["srid"] = this->srid);
     out.attr("class") = CharacterVector::create("geovctrs_collection", "geovctr", "vctrs_rcrd", "vctrs_vctr");
     return out;
@@ -399,7 +404,7 @@ public:
     this->y[i] = y;
   }
 
-  SEXP finish(GEOSContextHandle_t context) {
+  SEXP assemble(GEOSContextHandle_t context) {
     List result = List::create(
       _["x"] = this->x,
       _["y"] = this->y
@@ -540,7 +545,7 @@ public:
     this->srid[i] = srid;
   }
 
-  SEXP finish(GEOSContextHandle_t context) {
+  SEXP assemble(GEOSContextHandle_t context) {
     List p1 = List::create(
       _["x"] = this->x0,
       _["y"] = this->y0

@@ -104,7 +104,7 @@ public:
 
   }
 
-  virtual SEXP assemble() {
+  virtual SEXP assemble(GEOSContextHandle_t context) {
     return R_NilValue;
   }
 
@@ -125,7 +125,7 @@ public:
 
   virtual SEXP finishOperator() {
     this->provider->finish(this->context);
-    SEXP result = this->assemble();
+    SEXP result = this->assemble(this->context);
     geos_finish(this->context);
     return result;
   }
@@ -189,8 +189,12 @@ public:
     this->exporter->putNext(context, this->result, i);
   }
 
-  SEXP assemble() {
-    return this->exporter->finish(this->context);
+  SEXP assemble(GEOSContextHandle_t context) {
+    return this->exporter->assemble(context);
+  }
+
+  void finish(GEOSContextHandle_t context) {
+    this->exporter->finish(context);
   }
 
   virtual GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
@@ -235,7 +239,7 @@ public:
     this->data[i] = result;
   }
 
-  SEXP assemble() {
+  SEXP assemble(GEOSContextHandle_t) {
     return this->data;
   }
 

@@ -174,7 +174,7 @@ public:
     this->srid[i] = srid;
   }
 
-  SEXP assemble() {
+  SEXP assemble(GEOSContextHandle_t context) {
     List result = List::create(
       _["xmin"] = this->xmin,
       _["ymin"] = this->ymin,

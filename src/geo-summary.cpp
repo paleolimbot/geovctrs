@@ -93,7 +93,7 @@ public:
     }
   }
 
-  SEXP assemble() {
+  SEXP assemble(GEOSContextHandle_t context) {
     List xy = List::create(
       _["x"] = this->x,
       _["y"] = this->y
