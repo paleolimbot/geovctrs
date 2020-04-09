@@ -81,6 +81,11 @@ public:
       }
 
       this->loopNext(this->handler.context, i);
+
+      if (this->geometry != NULL) {
+        GEOSGeom_destroy_r(this->handler.context, this->geometry);
+        this->geometry = NULL;
+      }
     }
 
     return this->finishOperator();
@@ -122,9 +127,15 @@ protected:
   // subclasses must implement their own deleters if they need
   // to clean up memory...this deleter won't call
   // methods of subclasses
+  // all deleters of the class heiarchy get called
   virtual ~Operator() {
     if (this->provider) {
       this->provider->finish(this->handler.context);
+    }
+
+    if (this->geometry != NULL) {
+      GEOSGeom_destroy_r(this->handler.context, this->geometry);
+      this->geometry = NULL;
     }
   }
 
@@ -190,6 +201,7 @@ public:
 
   UnaryGeometryOperator() {
     std::unique_ptr<GeometryExporter> exporter = std::unique_ptr<GeometryExporter>(nullptr);
+    this->result = NULL;
   }
 
   virtual void initExporter(SEXP ptype) {
@@ -210,6 +222,18 @@ public:
     }
 
     this->exporter->putNext(context, this->result, i);
+
+    // Most of the time, the geometry is
+    // modified instead of copied, so Operator::operate()
+    // will call GEOSGeom_destroy_r() (and any attempt to do so here
+    // will segfault). Using `!=` to detect the case where copying
+    // occurred.
+    if (this->result != NULL && this->result != this->geometry) {
+      GEOSGeom_destroy_r(context, this->result);
+      this->result = NULL;
+    } else {
+      this->result = NULL;
+    }
   }
 
   SEXP assemble(GEOSContextHandle_t context) {
@@ -219,6 +243,12 @@ public:
   ~UnaryGeometryOperator() {
     if (this->exporter) {
       this->exporter->finish(this->handler.context);
+    }
+
+    // only clean up if this->result is a copy
+    if (this->result != NULL && (this->result != this->geometry)) {
+      GEOSGeom_destroy_r(this->handler.context, this->result);
+      this->result = NULL;
     }
   }
 

@@ -14,7 +14,8 @@ public:
 
   void loopNext(GEOSContextHandle_t context, size_t i) {
     try {
-      this->provider->getNext(context, i);
+      // assign geometry so that Operator destroys it
+      this->geometry = this->provider->getNext(context, i);
       this->problems[i] = NA_STRING;
     } catch(Rcpp::exception e) {
       this->problems[i] = e.what();
