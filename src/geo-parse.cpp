@@ -4,7 +4,7 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 CharacterVector cpp_validate_provider(SEXP data) {
-  std::unique_ptr<GeometryProvider> provider = resolve_provider(data);
+  std::unique_ptr<GeometryProvider> provider = GeometryProviderFactory::get(data);
   CharacterVector problems(provider->size());
 
   GEOSContextHandle_t context = geos_init();

@@ -49,8 +49,8 @@ public:
   std::unique_ptr<GeometryExporter> exporter;
 
   virtual void initProvider(SEXP provider, SEXP exporter) {
-    this->provider = resolve_provider(provider);
-    this->exporter = resolve_exporter(exporter);
+    this->provider = GeometryProviderFactory::get(provider);
+    this->exporter = GeometryExporterFactory::get(exporter);
   }
 
   virtual SEXP operate() {
@@ -133,7 +133,7 @@ public:
   std::unique_ptr<GeometryProvider> provider;
 
   virtual void initProvider(SEXP provider) {
-    this->provider = resolve_provider(provider);
+    this->provider = GeometryProviderFactory::get(provider);
   }
 
   virtual SEXP operate() {
@@ -223,7 +223,7 @@ private:
 
 template <class VectorType, class ScalarType>
 void UnaryVectorOperator<VectorType, ScalarType>::initProvider(SEXP provider) {
-  this->provider = resolve_provider(provider);
+  this->provider = GeometryProviderFactory::get(provider);
 }
 
 template <class VectorType, class ScalarType>
