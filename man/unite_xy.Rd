@@ -3,35 +3,63 @@
 \name{unite_xy}
 \alias{unite_xy}
 \alias{separate_xy}
+\alias{unite_segment}
+\alias{separate_segment}
+\alias{unite_rect}
+\alias{separate_rect}
 \title{Unite and separate components of geometries}
 \usage{
 unite_xy(data, col, x, y, remove = TRUE)
 
 separate_xy(data, col, into = c("x", "y"), remove = TRUE)
+
+unite_segment(data, col, start, end, remove = TRUE)
+
+separate_segment(data, col, into = c("start", "end"), remove = TRUE)
+
+unite_rect(data, col, xmin, ymin, xmax, ymax, remove = TRUE)
+
+separate_rect(
+  data,
+  col,
+  into = c("xmin", "ymin", "xmax", "ymax"),
+  remove = TRUE
+)
 }
 \arguments{
 \item{data}{A \code{\link[tibble:tibble]{tibble::tibble()}} or data frame}
 
-\item{col}{A column name for the \code{\link[=geo_xy]{geo_xy()}} object}
+\item{col}{A column name for the united object}
 
-\item{x, y}{Column specifications for x and y coordinate
-columns, respectively. Use \code{\link[dplyr:select]{dplyr::select()}} syntax.}
+\item{x, y, xmin, ymin, xmax, ymax, start, end}{Column specifications for x and y coordinate
+columns, respectively. Use \code{\link[dplyr:select]{dplyr::select()}} syntax. These correspond
+to the arguments in \code{\link[=geo_xy]{geo_xy()}}, \code{\link[=geo_segment]{geo_segment()}}, and \code{\link[=geo_rect]{geo_rect()}}.}
 
-\item{remove}{Use \code{remove = FALSE} to keep \code{x} and \code{y} as columns
+\item{remove}{Use \code{remove = FALSE} to keep the source columns
 in the output.}
+
+\item{into}{Column names for the separated vectors}
 }
 \value{
-\code{data}, with a new column \code{col}
+\code{data}, with new column(s) \code{col}/\code{into}
 }
 \description{
 These functions work like \code{\link[tidyr:separate]{tidyr::separate()}} and \code{\link[tidyr:unite]{tidyr::unite()}},
-combining information from multiple columns into single column.
+combining information from multiple columns into single column. You
+can also create and separate columns using \code{\link[dplyr:mutate]{dplyr::mutate()}} and
+the constructors (\code{\link[=geo_xy]{geo_xy()}}, \code{\link[=geo_segment]{geo_segment()}}, and \code{\link[=geo_rect]{geo_rect()}}).
 }
 \examples{
-tbl <- tibble(x = 1, y = 2)
-united <- unite_xy(tbl, "xy", x, y)
-united
+tbl <- tibble(a = 1, b = 2, c = 3, d = 4)
 
-separate_xy(united, xy, into = c("x", "y"))
+(united <- unite_xy(tbl, "xy", a, b))
+separate_xy(united, xy)
+
+(united <- unite_rect(tbl, "rect", a, b, c, d))
+separate_rect(united, rect)
+
+tbl2 <- tibble(a = geo_xy(1, 2), b = geo_xy(3, 4))
+(united <- unite_segment(tbl2, "seg", a, b))
+separate_segment(united, seg)
 
 }

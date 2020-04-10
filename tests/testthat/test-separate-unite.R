@@ -38,3 +38,63 @@ test_that("separate_xy() works", {
     tibble(a = "unrelated", x = 1, y = 2, xy = geo_xy(1, 2))
   )
 })
+
+test_that("unite_segment() works", {
+  tbl <- tibble(a = geo_xy(392, 191), b = geo_xy(102, 191))
+  expect_identical(
+    unite_segment(tbl, "s", a, b, remove = TRUE),
+    tibble(s = geo_segment(geo_xy(392, 191), geo_xy(102, 191)))
+  )
+
+  expect_identical(
+    unite_segment(tbl, "s", a, b, remove = FALSE),
+    tibble(
+      s = geo_segment(geo_xy(392, 191), geo_xy(102, 191)),
+      a = geo_xy(392, 191), b = geo_xy(102, 191)
+    )
+  )
+})
+
+test_that("unite_rect() works", {
+  tbl <- tibble(a = 10, b = 11, c = 12, d = 14)
+  expect_identical(
+    unite_rect(tbl, "rect", a, b, c, d, remove = TRUE),
+    tibble(rect = geo_rect(10, 11, 12, 14))
+  )
+  expect_identical(
+    unite_rect(tbl, "rect", a, b, c, d, remove = FALSE),
+    tibble(rect = geo_rect(10, 11, 12, 14), a = 10, b = 11, c = 12, d = 14)
+  )
+
+  tbl2 <- tibble(z = "unrelated", a = 10, b = 11, c = 12, d = 14)
+  expect_identical(
+    unite_rect(tbl2, "rect", a, b, c, d, remove = TRUE),
+    tibble(z = "unrelated", rect = geo_rect(10, 11, 12, 14))
+  )
+  expect_identical(
+    unite_rect(tbl2, "rect", a, b, c, d, remove = FALSE),
+    tibble(z = "unrelated", rect = geo_rect(10, 11, 12, 14), a = 10, b = 11, c = 12, d = 14)
+  )
+})
+
+test_that("separate_rect() works", {
+  tbl <- tibble(rect = geo_rect(0, 1, 2, 3))
+  expect_identical(
+    separate_rect(tbl, rect, remove = FALSE),
+    tibble(xmin = 0, ymin = 1, xmax = 2, ymax = 3, rect = geo_rect(0, 1, 2, 3))
+  )
+  expect_identical(
+    separate_rect(tbl, rect, remove = TRUE),
+    tibble(xmin = 0, ymin = 1, xmax = 2, ymax = 3)
+  )
+
+  tbl2 <- tibble(a = "unrelated", rect = geo_rect(0, 1, 2, 3))
+  expect_identical(
+    separate_rect(tbl2, rect, remove = FALSE),
+    tibble(a = "unrelated", xmin = 0, ymin = 1, xmax = 2, ymax = 3, rect = geo_rect(0, 1, 2, 3))
+  )
+  expect_identical(
+    separate_rect(tbl2, rect, remove = TRUE),
+    tibble(a = "unrelated", xmin = 0, ymin = 1, xmax = 2, ymax = 3)
+  )
+})
