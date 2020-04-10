@@ -69,3 +69,15 @@ cpp_geos_version_build <- function() {
     .Call(`_geovctrs_cpp_geos_version_build`)
 }
 
+cpp_test_buffer2 <- function(data, ptype) {
+    .Call(`_geovctrs_cpp_test_buffer2`, data, ptype)
+}
+
+cpp_test_buffer2_bad_provider <- function(data, ptype) {
+    .Call(`_geovctrs_cpp_test_buffer2_bad_provider`, data, ptype)
+}
+
+cpp_test_buffer2_bad_exporter <- function(data, ptype) {
+    .Call(`_geovctrs_cpp_test_buffer2_bad_exporter`, data, ptype)
+}
+

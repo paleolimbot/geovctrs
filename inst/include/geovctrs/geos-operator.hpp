@@ -142,7 +142,7 @@ protected:
 private:
   void initOperator() {
     if (!this->provider) {
-      stop("Operator: initProvider() was never called");
+      stop("Operator.initProvider() was never called");
     }
 
     this->provider->init(this->handler.context);
@@ -209,6 +209,9 @@ public:
   }
 
   void init(GEOSContextHandle_t context, size_t size) {
+    if (!this->exporter) {
+      stop("UnaryGeometryOperator.initExporter() was never called");
+    }
     this->exporter->init(context, this->size());
   }
 

@@ -195,6 +195,42 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cpp_test_buffer2
+SEXP cpp_test_buffer2(SEXP data, SEXP ptype);
+RcppExport SEXP _geovctrs_cpp_test_buffer2(SEXP dataSEXP, SEXP ptypeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type ptype(ptypeSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_test_buffer2(data, ptype));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_test_buffer2_bad_provider
+SEXP cpp_test_buffer2_bad_provider(SEXP data, SEXP ptype);
+RcppExport SEXP _geovctrs_cpp_test_buffer2_bad_provider(SEXP dataSEXP, SEXP ptypeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type ptype(ptypeSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_test_buffer2_bad_provider(data, ptype));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_test_buffer2_bad_exporter
+SEXP cpp_test_buffer2_bad_exporter(SEXP data, SEXP ptype);
+RcppExport SEXP _geovctrs_cpp_test_buffer2_bad_exporter(SEXP dataSEXP, SEXP ptypeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type ptype(ptypeSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_test_buffer2_bad_exporter(data, ptype));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_convert", (DL_FUNC) &_geovctrs_cpp_convert, 2},
@@ -214,6 +250,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_first_coordinate", (DL_FUNC) &_geovctrs_cpp_first_coordinate, 1},
     {"_geovctrs_cpp_geos_version_runtime", (DL_FUNC) &_geovctrs_cpp_geos_version_runtime, 0},
     {"_geovctrs_cpp_geos_version_build", (DL_FUNC) &_geovctrs_cpp_geos_version_build, 0},
+    {"_geovctrs_cpp_test_buffer2", (DL_FUNC) &_geovctrs_cpp_test_buffer2, 2},
+    {"_geovctrs_cpp_test_buffer2_bad_provider", (DL_FUNC) &_geovctrs_cpp_test_buffer2_bad_provider, 2},
+    {"_geovctrs_cpp_test_buffer2_bad_exporter", (DL_FUNC) &_geovctrs_cpp_test_buffer2_bad_exporter, 2},
     {NULL, NULL, 0}
 };
 
