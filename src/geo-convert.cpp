@@ -2,7 +2,7 @@
 #include "geovctrs/operator.hpp"
 using namespace Rcpp;
 
-class IdentityOperator: public UnaryGeometryOperator {
+class IdentityOperator: public GeovctrsGeometryOperator {
 public:
   GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     return geometry;

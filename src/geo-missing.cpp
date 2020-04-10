@@ -21,7 +21,7 @@ bool coords_have_missing(List item) {
   }
 }
 
-class HasMissingOperator: public UnaryVectorOperator<LogicalVector, int> {
+class HasMissingOperator: public GeovctrsVectorOperator<LogicalVector, int> {
   int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     if (GEOSisEmpty_r(context, geometry)) {
       return false;
@@ -57,7 +57,7 @@ bool coords_is_finite(List item) {
   }
 }
 
-class IsFiniteOperator: public UnaryVectorOperator<LogicalVector, int> {
+class IsFiniteOperator: public GeovctrsVectorOperator<LogicalVector, int> {
   int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     if (GEOSisEmpty_r(context, geometry)) {
       return true;
@@ -75,7 +75,7 @@ LogicalVector cpp_is_finite(SEXP x) {
   return op.operate();
 }
 
-class IsEmptyOperator: public UnaryVectorOperator<LogicalVector, int> {
+class IsEmptyOperator: public GeovctrsVectorOperator<LogicalVector, int> {
 public:
 
   int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i)  {

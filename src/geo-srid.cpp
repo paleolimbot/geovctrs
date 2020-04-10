@@ -2,7 +2,7 @@
 #include "geovctrs/operator.hpp"
 using namespace Rcpp;
 
-class GetSRIDOperator: public UnaryVectorOperator<IntegerVector, int> {
+class GetSRIDOperator: public GeovctrsVectorOperator<IntegerVector, int> {
   int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     if (geometry == NULL) {
       return NA_INTEGER;
@@ -19,7 +19,7 @@ IntegerVector cpp_get_srid(SEXP x) {
   return op.operate();
 }
 
-class SetSRIDOperator: public UnaryGeometryOperator {
+class SetSRIDOperator: public GeovctrsGeometryOperator {
 public:
   IntegerVector srid;
 

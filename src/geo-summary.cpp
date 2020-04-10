@@ -4,7 +4,7 @@
 #include "geovctrs/feature-factory.hpp"
 using namespace Rcpp;
 
-class GeomTypeIdOperator: public UnaryVectorOperator<IntegerVector, int> {
+class GeomTypeIdOperator: public GeovctrsVectorOperator<IntegerVector, int> {
   int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     return GEOSGeomTypeId_r(context, geometry);
   }
@@ -17,7 +17,7 @@ IntegerVector cpp_geom_type_id(SEXP x) {
   return op.operate();
 }
 
-class GetNumGeometriesOperator: public UnaryVectorOperator<IntegerVector, int> {
+class GetNumGeometriesOperator: public GeovctrsVectorOperator<IntegerVector, int> {
   int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     return GEOSGetNumGeometries_r(context, geometry);
   }
@@ -30,7 +30,7 @@ IntegerVector cpp_n_geometries(SEXP x) {
   return op.operate();
 }
 
-class GetNumCoordinatesOperator: public UnaryVectorOperator<IntegerVector, int> {
+class GetNumCoordinatesOperator: public GeovctrsVectorOperator<IntegerVector, int> {
   int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     return GEOSGetNumCoordinates_r(context, geometry);
   }
@@ -43,7 +43,7 @@ IntegerVector cpp_n_coordinates(SEXP x) {
   return op.operate();
 }
 
-class CoordinateDimensionsOperator: public UnaryVectorOperator<IntegerVector, int> {
+class CoordinateDimensionsOperator: public GeovctrsVectorOperator<IntegerVector, int> {
   int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     // the behaviour of this changed between GEOS 3.5 and 3.7, but
     // currently empty geometries have 3 dimensions
@@ -62,7 +62,7 @@ IntegerVector cpp_coordinate_dimensions(SEXP x) {
   return op.operate();
 }
 
-class FirstCoordinateOperator: public UnaryOperator {
+class FirstCoordinateOperator: public GeovctrsOperator {
 public:
   NumericVector x;
   NumericVector y;

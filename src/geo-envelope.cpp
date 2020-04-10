@@ -1,5 +1,6 @@
 
 #include "geovctrs/operator.hpp"
+#include "geovctrs/factory.hpp"
 #include "geovctrs/feature-factory.hpp"
 using namespace Rcpp;
 
@@ -108,7 +109,7 @@ NumericVector bounds_from_coords(List item, bool naRm) {
   }
 }
 
-class EnvelopeOperator: public UnaryOperator {
+class EnvelopeOperator: public GeovctrsOperator {
 public:
   NumericVector xmin;
   NumericVector ymin;
@@ -175,15 +176,7 @@ public:
   }
 
   SEXP assemble(GEOSContextHandle_t context) {
-    List result = List::create(
-      _["xmin"] = this->xmin,
-      _["ymin"] = this->ymin,
-      _["xmax"] = this->xmax,
-      _["ymax"] = this->ymax,
-      _["srid"] = this->srid
-    );
-    result.attr("class") = CharacterVector::create("geovctrs_rect", "geovctr", "vctrs_rcrd", "vctrs_vctr");
-    return result;
+    return GeovctrsFactory::newRect(this->xmin, this->ymin, this->xmax, this->ymax, this->srid);
   }
 };
 

@@ -3,7 +3,7 @@
 using namespace Rcpp;
 
 
-class ParseOperator: public Operator {
+class ParseOperator: public GeovctrsBaseOperator {
 public:
   CharacterVector problems;
 
