@@ -4,6 +4,8 @@
 #include "geovctrs/feature-factory.hpp"
 using namespace Rcpp;
 
+// [[Rcpp::interfaces(r, cpp)]]
+
 double min_reg(double x1i, double x2i) {
   bool x1NA = NumericVector::is_na(x1i);
   bool x2NA = NumericVector::is_na(x2i);

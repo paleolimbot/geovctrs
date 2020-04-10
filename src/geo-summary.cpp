@@ -4,6 +4,8 @@
 #include "geovctrs/feature-factory.hpp"
 using namespace Rcpp;
 
+// [[Rcpp::interfaces(r, cpp)]]
+
 class GeomTypeIdOperator: public GeovctrsVectorOperator<IntegerVector, int> {
   int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     return GEOSGeomTypeId_r(context, geometry);

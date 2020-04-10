@@ -2,6 +2,8 @@
 #include "geovctrs/operator.hpp"
 using namespace Rcpp;
 
+// [[Rcpp::interfaces(r, cpp)]]
+
 class IdentityOperator: public GeovctrsGeometryOperator {
 public:
   GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {

@@ -3,6 +3,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+
 class TestBufferOp: public GeovctrsGeometryOperator {
   GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     // width, segments per quandrant

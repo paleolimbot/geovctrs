@@ -2,6 +2,7 @@
 #include "geovctrs/operator.hpp"
 using namespace Rcpp;
 
+// [[Rcpp::interfaces(r, cpp)]]
 
 class ParseOperator: public GeovctrsBaseOperator {
 public:

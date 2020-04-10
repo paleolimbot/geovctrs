@@ -3,6 +3,8 @@
 #include "geovctrs/feature-factory.hpp"
 using namespace Rcpp;
 
+// [[Rcpp::interfaces(r, cpp)]]
+
 bool coords_have_missing(List item) {
   if (Rf_inherits(item, "geovctrs_collection")) {
     List features = item["feature"];
