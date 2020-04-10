@@ -1,6 +1,6 @@
 
-#ifndef GEOVCTRS_GEOS_FEATURE_FACTORY
-#define GEOVCTRS_GEOS_FEATURE_FACTORY
+#ifndef GEOVCTRS_GEOS_FEATURE_FACTORY_H
+#define GEOVCTRS_GEOS_FEATURE_FACTORY_H
 
 #include <geos_c.h>
 #include <Rcpp.h>
@@ -43,7 +43,7 @@ public:
       return GEOSGeom_createEmptyPoint_r(context);
     }
 
-    GEOSCoordSequence* seq = seq_from_xy(context, xy, 0, x.size());
+    GEOSCoordSequence* seq = getCoordSequence(context, xy, 0, x.size());
     return GEOSGeom_createPoint_r(context, seq);
   }
 
@@ -54,7 +54,7 @@ public:
       return GEOSGeom_createEmptyLineString_r(context);
     }
 
-    GEOSCoordSequence* seq = seq_from_xy(context, xy, 0, x.size());
+    GEOSCoordSequence* seq = getCoordSequence(context, xy, 0, x.size());
     return GEOSGeom_createLineString_r(context, seq);
   }
 
@@ -65,17 +65,17 @@ public:
       return GEOSGeom_createEmptyPolygon_r(context);
     }
 
-    IntegerVector ringLengths = groups_to_lengths(ring);
+    IntegerVector ringLengths = getLengths(ring);
 
     // generate outer shell
-    GEOSCoordSequence* shellSeq = seq_from_xy(context, xy, 0, ringLengths[0]);
+    GEOSCoordSequence* shellSeq = getCoordSequence(context, xy, 0, ringLengths[0]);
     GEOSGeometry* shell = GEOSGeom_createLinearRing_r(context, shellSeq);
 
     // generate holes
     GEOSGeometry* holes[ringLengths.size() - 1];
     size_t offset = ringLengths[0];
     for (int i=1; i < ringLengths.size(); i++) {
-      GEOSCoordSequence* holeSeq = seq_from_xy(context, xy, offset, ringLengths[i]);
+      GEOSCoordSequence* holeSeq = getCoordSequence(context, xy, offset, ringLengths[i]);
       holes[i - 1] = GEOSGeom_createLinearRing_r(context, holeSeq);
       offset += ringLengths[i];
     }
@@ -94,7 +94,7 @@ public:
 
     GEOSGeometry* parts[x.size()];
     for (size_t i=0; i<x.size(); i++) {
-      GEOSCoordSequence* seq = seq_from_xy(context, xy, i, 1);
+      GEOSCoordSequence* seq = getCoordSequence(context, xy, i, 1);
       parts[i] = GEOSGeom_createPoint_r(context, seq);
     }
 
@@ -109,12 +109,12 @@ public:
     }
 
     List xy = feature["xy"];
-    IntegerVector partLengths = groups_to_lengths(part);
+    IntegerVector partLengths = getLengths(part);
 
     GEOSGeometry* parts[partLengths.size()];
     size_t offset = 0;
     for (int i=0; i < partLengths.size(); i++) {
-      GEOSCoordSequence* lineSeq = seq_from_xy(context, xy, offset, partLengths[i]);
+      GEOSCoordSequence* lineSeq = getCoordSequence(context, xy, offset, partLengths[i]);
       parts[i] = GEOSGeom_createLineString_r(context, lineSeq);
       offset += partLengths[i];
     }
@@ -137,23 +137,23 @@ public:
 
     List xy = feature["xy"];
     IntegerVector ring = feature["ring"];
-    IntegerVector partLengths = groups_to_lengths(part);
+    IntegerVector partLengths = getLengths(part);
 
     GEOSGeometry* parts[partLengths.size()];
     size_t offset = 0;
     for (int i=0; i < partLengths.size(); i++) {
       IntegerVector ringPart = ring[Range(offset, offset + partLengths[i] - 1)];
-      IntegerVector ringLengths = groups_to_lengths(ringPart);
+      IntegerVector ringLengths = getLengths(ringPart);
 
       // generate outer shell
-      GEOSCoordSequence* shellSeq = seq_from_xy(context, xy, offset, ringLengths[0]);
+      GEOSCoordSequence* shellSeq = getCoordSequence(context, xy, offset, ringLengths[0]);
       GEOSGeometry* shell = GEOSGeom_createLinearRing_r(context, shellSeq);
       offset += ringLengths[0];
 
       // generate holes
       GEOSGeometry* holes[ringLengths.size() - 1];
       for (int j=1; j < ringLengths.size(); j++) {
-        GEOSCoordSequence* holeSeq = seq_from_xy(context, xy, offset, ringLengths[j]);
+        GEOSCoordSequence* holeSeq = getCoordSequence(context, xy, offset, ringLengths[j]);
         holes[j - 1] = GEOSGeom_createLinearRing_r(context, holeSeq);
         offset += ringLengths[j];
       }
@@ -196,7 +196,7 @@ public:
   }
 
 private:
-  static IntegerVector groups_to_lengths(IntegerVector groups) {
+  static IntegerVector getLengths(IntegerVector groups) {
     if (groups.size() == 0) {
       return IntegerVector::create();
     }
@@ -225,7 +225,7 @@ private:
     return groupLengths;
   }
 
-  static GEOSCoordSequence* seq_from_xy(GEOSContextHandle_t context, List xy, int offset, size_t size) {
+  static GEOSCoordSequence* getCoordSequence(GEOSContextHandle_t context, List xy, int offset, size_t size) {
     NumericVector x = xy["x"];
     NumericVector y = xy["y"];
 
