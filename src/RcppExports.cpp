@@ -175,13 +175,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// cpp_version_impl
-std::string cpp_version_impl();
-RcppExport SEXP _geovctrs_cpp_version_impl() {
+// cpp_geos_version_runtime
+std::string cpp_geos_version_runtime();
+RcppExport SEXP _geovctrs_cpp_geos_version_runtime() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(cpp_version_impl());
+    rcpp_result_gen = Rcpp::wrap(cpp_geos_version_runtime());
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_geos_version_build
+std::string cpp_geos_version_build();
+RcppExport SEXP _geovctrs_cpp_geos_version_build() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(cpp_geos_version_build());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -202,7 +212,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_n_coordinates", (DL_FUNC) &_geovctrs_cpp_n_coordinates, 1},
     {"_geovctrs_cpp_coordinate_dimensions", (DL_FUNC) &_geovctrs_cpp_coordinate_dimensions, 1},
     {"_geovctrs_cpp_first_coordinate", (DL_FUNC) &_geovctrs_cpp_first_coordinate, 1},
-    {"_geovctrs_cpp_version_impl", (DL_FUNC) &_geovctrs_cpp_version_impl, 0},
+    {"_geovctrs_cpp_geos_version_runtime", (DL_FUNC) &_geovctrs_cpp_geos_version_runtime, 0},
+    {"_geovctrs_cpp_geos_version_build", (DL_FUNC) &_geovctrs_cpp_geos_version_build, 0},
     {NULL, NULL, 0}
 };
 

@@ -1,16 +1,18 @@
 
-#' GEOS information
+#' GEOS version information
 #'
-#' @noRd
+#' @export
 #'
 #' @examples
-#' geos_version()
-#' geos_capi_version()
+#' geos_version_runtime()
+#' geos_version_build()
 #'
-geos_version <- function() {
-  package_version(strsplit(cpp_version_impl(), "[- ]")[[1]][1])
+geos_version_runtime <- function() {
+  package_version(strsplit(cpp_geos_version_runtime(), "[- ]")[[1]][1])
 }
 
-geos_capi_version <- function() {
-  package_version(strsplit(cpp_version_impl(), "[- ]")[[1]][3])
+#' @rdname geos_version_runtime
+#' @export
+geos_version_build <- function() {
+  package_version(strsplit(cpp_geos_version_build(), "[- ]")[[1]][1])
 }

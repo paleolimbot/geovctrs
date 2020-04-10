@@ -3,9 +3,9 @@
 #define GEOS_PROVIDER_H
 
 #include <geos_c.h>
-#include "geovctrs/feature-factory.hpp"
-#include "geovctrs/geos-feature-factory.hpp"
-#include "geovctrs/factory.hpp"
+#include "feature-factory.hpp"
+#include "geos-feature-factory.hpp"
+#include "factory.hpp"
 #include <memory.h>
 #include <Rcpp.h>
 using namespace Rcpp;

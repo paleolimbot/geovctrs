@@ -1,6 +1,6 @@
 
-#ifndef GEOS_RCPP_H
-#define GEOS_RCPP_H
+#ifndef GEOVCTRS_GEOS_HANDLERS_H
+#define GEOVCTRS_GEOS_HANDLERS_H
 
 // prevents using non-thread-safe GEOSxx functions without _r extension.
 #define GEOS_USE_ONLY_R_API
@@ -34,6 +34,7 @@
 # endif
 #endif
 
+
 class RcppGEOSHandler {
 public:
   GEOSContextHandle_t context;
@@ -56,6 +57,14 @@ public:
 #endif
   }
 
+  static std::string runtimeVersion() {
+    return GEOSversion();
+  }
+
+  static std::string buildVersion() {
+    return GEOS_CAPI_VERSION;
+  }
+
   static void handleError(const char *fmt, ...) {
 
     char buf[BUFSIZ], *p;
@@ -69,6 +78,8 @@ public:
     throw Rcpp::exception(buf);
   }
 
+  // no idea how to get this to fire
+  // nocov start
   static void handleWarning(const char *fmt, ...) {
 
     char buf[BUFSIZ], *p;
@@ -84,6 +95,7 @@ public:
 
     return;
   }
+  // nocov end
 };
 
 #endif

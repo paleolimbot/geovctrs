@@ -2,7 +2,7 @@
 #ifndef GEOS_OPERATOR_H
 #define GEOS_OPERATOR_H
 
-#include "geovctrs/geos-handler.hpp"
+#include "geos-handler.hpp"
 #include "geos-provider.hpp"
 #include <Rcpp.h>
 using namespace Rcpp;

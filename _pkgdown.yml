@@ -32,3 +32,4 @@ reference:
   desc: The nitty gritty details of creating and validating the S3 classes that live in this package
   contents:
   - starts_with("new_")
+  - geos_version_runtime

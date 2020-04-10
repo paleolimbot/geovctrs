@@ -61,7 +61,11 @@ cpp_first_coordinate <- function(x) {
     .Call(`_geovctrs_cpp_first_coordinate`, x)
 }
 
-cpp_version_impl <- function() {
-    .Call(`_geovctrs_cpp_version_impl`)
+cpp_geos_version_runtime <- function() {
+    .Call(`_geovctrs_cpp_geos_version_runtime`)
+}
+
+cpp_geos_version_build <- function() {
+    .Call(`_geovctrs_cpp_geos_version_build`)
 }
 

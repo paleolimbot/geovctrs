@@ -1,5 +1,5 @@
 
-#include "geos-operator.hpp"
+#include "geovctrs/geos-operator.hpp"
 using namespace Rcpp;
 
 class IdentityOperator: public UnaryGeometryOperator {

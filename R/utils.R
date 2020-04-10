@@ -1,7 +1,13 @@
 
 assert_geos_version <- function(version) {
-  if (geos_version() < version) {
-    abort(sprintf("GEOS >= %s is required", version))
+  if (geos_version_build() < version) {
+    abort(
+      sprintf(
+        "GEOS >= %s is required (this package was built with GEOS %s)",
+        version,
+        geos_version_build()
+      )
+    )
   }
 }
 
