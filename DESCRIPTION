@@ -23,7 +23,8 @@ Suggests:
     vdiffr,
     pillar,
     knitr,
-    rmarkdown
+    rmarkdown,
+    tidyselect
 Imports: 
     rlang,
     tibble,
