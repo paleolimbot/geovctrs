@@ -1,6 +1,6 @@
 
 validate_provider <- function(x) {
-  problem_vctr <- cpp_parse(x)
+  problem_vctr <- geovctrs_cpp_parse(x)
   has_problems <- !is.na(problem_vctr)
 
   if (!any(has_problems)) {

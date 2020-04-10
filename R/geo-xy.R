@@ -120,19 +120,19 @@ vec_cast.geovctrs_xy.geovctrs_xy <- function(x, to, ...) {
 #' @method vec_cast.geovctrs_xy geovctrs_wkt
 #' @export
 vec_cast.geovctrs_xy.geovctrs_wkt <- function(x, to, ...) {
-  cpp_convert(x, to)
+  geovctrs_cpp_convert(x, to)
 }
 
 #' @method vec_cast.geovctrs_xy geovctrs_wkb
 #' @export
 vec_cast.geovctrs_xy.geovctrs_wkb <- function(x, to, ...) {
-  cpp_convert(x, to)
+  geovctrs_cpp_convert(x, to)
 }
 
 #' @method vec_cast.geovctrs_xy geovctrs_collection
 #' @export
 vec_cast.geovctrs_xy.geovctrs_collection <- function(x, to, ...) {
-  cpp_convert(x, to)
+  geovctrs_cpp_convert(x, to)
 }
 
 # ------------- prototypes ------------

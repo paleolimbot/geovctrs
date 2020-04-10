@@ -53,7 +53,7 @@ geo_n_geometries.default <- function(x) {
 
 #' @export
 geo_n_geometries.geovctr <- function(x) {
-  cpp_n_geometries(x)
+  geovctrs_cpp_n_geometries(x)
 }
 
 #' @rdname geo_summary
@@ -69,7 +69,7 @@ geo_n_coordinates.default <- function(x) {
 
 #' @export
 geo_n_coordinates.geovctr <- function(x) {
-  cpp_n_coordinates(x)
+  geovctrs_cpp_n_coordinates(x)
 }
 
 #' @rdname geo_summary
@@ -89,7 +89,7 @@ geo_geometry_type.geovctr <- function(x) {
     "point", "linestring", "linearring", "polygon",
     "multipoint", "multilinestring", "multipolygon",
     "geometrycollection"
-  )[cpp_geom_type_id(x) + 1]
+  )[geovctrs_cpp_geom_type_id(x) + 1]
 }
 
 #' @rdname geo_summary
@@ -105,7 +105,7 @@ geo_coordinate_dimensions.default <- function(x) {
 
 #' @export
 geo_coordinate_dimensions.geovctr <- function(x) {
-  cpp_coordinate_dimensions(x)
+  geovctrs_cpp_coordinate_dimensions(x)
 }
 
 #' @rdname geo_summary
@@ -121,5 +121,5 @@ geo_first_coordinate.default <- function(x) {
 
 #' @export
 geo_first_coordinate.geovctr <- function(x) {
-  cpp_first_coordinate(x)
+  geovctrs_cpp_first_coordinate(x)
 }

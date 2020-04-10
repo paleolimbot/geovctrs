@@ -11,7 +11,7 @@ class GeomTypeIdOperator: public GeovctrsVectorOperator<IntegerVector, int> {
 };
 
 // [[Rcpp::export]]
-IntegerVector cpp_geom_type_id(SEXP x) {
+IntegerVector geovctrs_cpp_geom_type_id(SEXP x) {
   GeomTypeIdOperator op;
   op.initProvider(x);
   return op.operate();
@@ -24,7 +24,7 @@ class GetNumGeometriesOperator: public GeovctrsVectorOperator<IntegerVector, int
 };
 
 // [[Rcpp::export]]
-IntegerVector cpp_n_geometries(SEXP x) {
+IntegerVector geovctrs_cpp_n_geometries(SEXP x) {
   GetNumGeometriesOperator op;
   op.initProvider(x);
   return op.operate();
@@ -37,7 +37,7 @@ class GetNumCoordinatesOperator: public GeovctrsVectorOperator<IntegerVector, in
 };
 
 // [[Rcpp::export]]
-IntegerVector cpp_n_coordinates(SEXP x) {
+IntegerVector geovctrs_cpp_n_coordinates(SEXP x) {
   GetNumCoordinatesOperator op;
   op.initProvider(x);
   return op.operate();
@@ -56,7 +56,7 @@ class CoordinateDimensionsOperator: public GeovctrsVectorOperator<IntegerVector,
 };
 
 // [[Rcpp::export]]
-IntegerVector cpp_coordinate_dimensions(SEXP x) {
+IntegerVector geovctrs_cpp_coordinate_dimensions(SEXP x) {
   CoordinateDimensionsOperator op;
   op.initProvider(x);
   return op.operate();
@@ -100,7 +100,7 @@ public:
 };
 
 // [[Rcpp::export]]
-SEXP cpp_first_coordinate(SEXP x) {
+SEXP geovctrs_cpp_first_coordinate(SEXP x) {
   FirstCoordinateOperator op;
   op.initProvider(x);
   return op.operate();

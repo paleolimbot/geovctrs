@@ -4,11 +4,11 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-std::string cpp_geos_version_runtime() {
+std::string geovctrs_cpp_geos_version_runtime() {
   return GeovctrsGEOSHandler::runtimeVersion();
 }
 
 // [[Rcpp::export]]
-std::string cpp_geos_version_build() {
+std::string geovctrs_cpp_geos_version_build() {
   return GeovctrsGEOSHandler::buildVersion();
 }

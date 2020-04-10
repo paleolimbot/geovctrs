@@ -31,7 +31,7 @@ geo_envelope <- function(x, ..., na.rm = FALSE) {
 
 #' @export
 geo_envelope.default <- function(x, ..., na.rm = FALSE) {
-  restore_geovctr(x, cpp_envelope(as_geovctr(x), na.rm))
+  restore_geovctr(x, geovctrs_cpp_envelope(as_geovctr(x), na.rm))
 }
 
 #' @export

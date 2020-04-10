@@ -22,7 +22,7 @@ test_that("parse problems for WKT are detected", {
 
   expect_identical(
     is.na(
-      cpp_parse(
+      geovctrs_cpp_parse(
         new_geovctrs_wkt(c("POINT (30 10)", "POINT EMPTY", "MERR", "POINT FISH"))
       )
     ),

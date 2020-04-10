@@ -318,31 +318,31 @@ vec_cast.geovctrs_collection.geovctrs_collection <- function(x, to, ...) {
 #' @method vec_cast.geovctrs_collection geovctrs_xy
 #' @export
 vec_cast.geovctrs_collection.geovctrs_xy <- function(x, to, ...) {
-  cpp_convert(x, to)
+  geovctrs_cpp_convert(x, to)
 }
 
 #' @method vec_cast.geovctrs_collection geovctrs_rect
 #' @export
 vec_cast.geovctrs_collection.geovctrs_rect <- function(x, to, ...) {
-  cpp_convert(x, to)
+  geovctrs_cpp_convert(x, to)
 }
 
 #' @method vec_cast.geovctrs_collection geovctrs_segment
 #' @export
 vec_cast.geovctrs_collection.geovctrs_segment <- function(x, to, ...) {
-  cpp_convert(x, to)
+  geovctrs_cpp_convert(x, to)
 }
 
 #' @method vec_cast.geovctrs_collection geovctrs_wkt
 #' @export
 vec_cast.geovctrs_collection.geovctrs_wkt <- function(x, to, ...) {
-  cpp_convert(x, to)
+  geovctrs_cpp_convert(x, to)
 }
 
 #' @method vec_cast.geovctrs_collection geovctrs_wkb
 #' @export
 vec_cast.geovctrs_collection.geovctrs_wkb <- function(x, to, ...) {
-  cpp_convert(x, to)
+  geovctrs_cpp_convert(x, to)
 }
 
 #' @method vec_ptype2 geovctrs_collection

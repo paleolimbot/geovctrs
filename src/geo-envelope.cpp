@@ -181,7 +181,7 @@ public:
 };
 
 // [[Rcpp::export]]
-SEXP cpp_envelope(SEXP data, bool naRm) {
+SEXP geovctrs_cpp_envelope(SEXP data, bool naRm) {
   EnvelopeOperator op(naRm);
   op.initProvider(data);
   return op.operate();

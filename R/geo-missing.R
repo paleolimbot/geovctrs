@@ -85,7 +85,7 @@ geo_has_missing.default <- function(x) {
 
 #' @export
 geo_has_missing.geovctr <- function(x) {
-  cpp_has_missing(x)
+  geovctrs_cpp_has_missing(x)
 }
 
 #' @export
@@ -129,7 +129,7 @@ geo_is_finite.default <- function(x) {
 
 #' @export
 geo_is_finite.geovctr <- function(x) {
-  cpp_is_finite(x)
+  geovctrs_cpp_is_finite(x)
 }
 
 #' @export
@@ -174,7 +174,7 @@ geo_is_empty.default <- function(x) {
 
 #' @export
 geo_is_empty.geovctr <- function(x) {
-  cpp_is_empty(x)
+  geovctrs_cpp_is_empty(x)
 }
 
 #' @export

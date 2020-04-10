@@ -10,7 +10,7 @@ public:
 };
 
 // [[Rcpp::export]]
-SEXP cpp_convert(SEXP data, SEXP ptype) {
+SEXP geovctrs_cpp_convert(SEXP data, SEXP ptype) {
   IdentityOperator op;
   op.initProvider(data);
   op.initExporter(ptype);

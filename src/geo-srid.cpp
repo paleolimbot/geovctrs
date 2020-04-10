@@ -13,7 +13,7 @@ class GetSRIDOperator: public GeovctrsVectorOperator<IntegerVector, int> {
 };
 
 // [[Rcpp::export]]
-IntegerVector cpp_get_srid(SEXP x) {
+IntegerVector geovctrs_cpp_get_srid(SEXP x) {
   GetSRIDOperator op;
   op.initProvider(x);
   return op.operate();
@@ -41,7 +41,7 @@ public:
 };
 
 // [[Rcpp::export]]
-SEXP cpp_set_srid(SEXP x, IntegerVector srid) {
+SEXP geovctrs_cpp_set_srid(SEXP x, IntegerVector srid) {
   SetSRIDOperator op(srid);
   // returning the same type as input
   op.initProvider(x);

@@ -33,7 +33,7 @@ class HasMissingOperator: public GeovctrsVectorOperator<LogicalVector, int> {
 };
 
 // [[Rcpp::export]]
-LogicalVector cpp_has_missing(SEXP x) {
+LogicalVector geovctrs_cpp_has_missing(SEXP x) {
   HasMissingOperator op;
   op.initProvider(x);
   return op.operate();
@@ -69,7 +69,7 @@ class IsFiniteOperator: public GeovctrsVectorOperator<LogicalVector, int> {
 };
 
 // [[Rcpp::export]]
-LogicalVector cpp_is_finite(SEXP x) {
+LogicalVector geovctrs_cpp_is_finite(SEXP x) {
   IsFiniteOperator op;
   op.initProvider(x);
   return op.operate();
@@ -84,7 +84,7 @@ public:
 };
 
 // [[Rcpp::export]]
-LogicalVector cpp_is_empty(SEXP data) {
+LogicalVector geovctrs_cpp_is_empty(SEXP data) {
   IsEmptyOperator op;
   op.initProvider(data);
   return op.operate();

@@ -145,50 +145,50 @@ vec_cast.geovctrs_wkb.geovctrs_wkb <- function(x, to, ...) {
   if (identical(attributes(x), attributes(to))) {
     x
   } else {
-    cpp_convert(x, to)
+    geovctrs_cpp_convert(x, to)
   }
 }
 
 #' @method vec_cast.geovctrs_wkb character
 #' @export
 vec_cast.geovctrs_wkb.character <- function(x, to, ...) {
-  cpp_convert(geo_wkt(x), to)
+  geovctrs_cpp_convert(geo_wkt(x), to)
 }
 
 #' @method vec_cast.geovctrs_wkb list
 #' @export
 vec_cast.geovctrs_wkb.list <- function(x, to, ...) {
-  cpp_convert(geo_wkb(x), to)
+  geovctrs_cpp_convert(geo_wkb(x), to)
 }
 
 #' @method vec_cast.geovctrs_wkb geovctrs_wkt
 #' @export
 vec_cast.geovctrs_wkb.geovctrs_wkt <- function(x, to, ...) {
-  cpp_convert(x, to)
+  geovctrs_cpp_convert(x, to)
 }
 
 #' @method vec_cast.geovctrs_wkb geovctrs_rect
 #' @export
 vec_cast.geovctrs_wkb.geovctrs_rect <- function(x, to, ...) {
-  cpp_convert(x, to)
+  geovctrs_cpp_convert(x, to)
 }
 
 #' @method vec_cast.geovctrs_wkb geovctrs_segment
 #' @export
 vec_cast.geovctrs_wkb.geovctrs_segment <- function(x, to, ...) {
-  cpp_convert(x, to)
+  geovctrs_cpp_convert(x, to)
 }
 
 #' @method vec_cast.geovctrs_wkb geovctrs_xy
 #' @export
 vec_cast.geovctrs_wkb.geovctrs_xy <- function(x, to, ...) {
-  cpp_convert(x, to)
+  geovctrs_cpp_convert(x, to)
 }
 
 #' @method vec_cast.geovctrs_wkb geovctrs_collection
 #' @export
 vec_cast.geovctrs_wkb.geovctrs_collection <- function(x, to, ...) {
-  cpp_convert(x, to)
+  geovctrs_cpp_convert(x, to)
 }
 
 #' @method vec_ptype2 geovctrs_wkb

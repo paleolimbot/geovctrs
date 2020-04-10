@@ -31,7 +31,7 @@ public:
 };
 
 // [[Rcpp::export]]
-CharacterVector cpp_parse(SEXP data) {
+CharacterVector geovctrs_cpp_parse(SEXP data) {
   ParseOperator op;
   op.initProvider(data);
   return op.operate();

@@ -11,7 +11,7 @@ class TestBufferOp: public GeovctrsGeometryOperator {
 };
 
 // [[Rcpp::export]]
-SEXP cpp_test_buffer2(SEXP data, SEXP ptype) {
+SEXP geovctrs_cpp_test_buffer2(SEXP data, SEXP ptype) {
   TestBufferOp op;
   op.initProvider(data);
   op.initExporter(ptype);
@@ -19,14 +19,14 @@ SEXP cpp_test_buffer2(SEXP data, SEXP ptype) {
 }
 
 // [[Rcpp::export]]
-SEXP cpp_test_buffer2_bad_provider(SEXP data, SEXP ptype) {
+SEXP geovctrs_cpp_test_buffer2_bad_provider(SEXP data, SEXP ptype) {
   TestBufferOp op;
   op.initExporter(ptype);
   return op.operate();
 }
 
 // [[Rcpp::export]]
-SEXP cpp_test_buffer2_bad_exporter(SEXP data, SEXP ptype) {
+SEXP geovctrs_cpp_test_buffer2_bad_exporter(SEXP data, SEXP ptype) {
   TestBufferOp op;
   op.initProvider(data);
   return op.operate();

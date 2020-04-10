@@ -101,13 +101,13 @@ geo_set_srid.geovctrs_xy <- function(x, srid) {
 
 #' @export
 geo_srid.geovctrs_wkb <- function(x) {
-  cpp_get_srid(x)
+  geovctrs_cpp_get_srid(x)
 }
 
 #' @export
 geo_set_srid.geovctrs_wkb <- function(x, srid) {
   srid <- vec_recycle(srid, vec_size(x))
-  cpp_set_srid(x, srid)
+  geovctrs_cpp_set_srid(x, srid)
 }
 
 #' @export
