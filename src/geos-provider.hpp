@@ -4,8 +4,8 @@
 
 #include <geos_c.h>
 #include "geovctrs/feature-factory.hpp"
+#include "geovctrs/geos-feature-factory.hpp"
 #include "geovctrs/factory.hpp"
-#include "geos-coords-write.h"
 #include <memory.h>
 #include <Rcpp.h>
 using namespace Rcpp;
@@ -293,7 +293,7 @@ public:
     if (this->features[i] == R_NilValue) {
       geometry = NULL;
     } else {
-      geometry = feature_from_geo_coord(context, this->features[i]);
+      geometry = GEOSFeatureFactory::getFeature(context, this->features[i]);
       GEOSSetSRID_r(context, geometry, this->srid[i]);
     }
 
