@@ -29,37 +29,3 @@ test_that("data.frame works with as_geovctr()", {
   expect_is(geo_envelope(geo_nc), "data.frame")
   expect_is(geo_set_srid(geo_nc, 26920), "data.frame")
 })
-
-test_that("sf/sfc works with as_geovctr()", {
-  skip_if_not_installed("sf")
-
-  sf_nc <- pkg_fun("sf", "read_sf")(system.file("shape/nc.shp", package = "sf"))
-  sfc_nc <- sf_nc[[attr(sf_nc, "sf_column")]]
-
-  expect_is(as_geovctr(sf_nc), "geovctrs_wkb")
-  expect_length(as_geovctr(sf_nc), nrow(sf_nc))
-  expect_identical(as_geovctr(sf_nc), as_geovctr(sfc_nc))
-
-  expect_identical(restore_geovctr(sf_nc, as_geovctr(sf_nc)), sf_nc)
-  expect_identical(restore_geovctr(sfc_nc, as_geovctr(sfc_nc)), sfc_nc)
-
-  # check with transformation functions
-  expect_is(geo_envelope(sf_nc), "sf")
-  expect_is(geo_envelope(sfc_nc), "sfc")
-  expect_is(geo_set_srid(sf_nc, 0), "sf")
-  expect_is(geo_set_srid(sfc_nc, 0), "sfc")
-
-  sfc_tiny <- pkg_fun("sf", "st_sfc")(pkg_fun("sf", "st_point")(c(30, 10)))
-  sf_tiny <- pkg_fun("sf", "st_as_sf")(tibble(geom = sfc_tiny))
-
-  # check with plot
-  vdiffr::expect_doppelganger(
-    "sfc plot",
-    function() geo_plot(sfc_tiny)
-  )
-
-  vdiffr::expect_doppelganger(
-    "sf plot",
-    function() geo_plot(sf_tiny)
-  )
-})
