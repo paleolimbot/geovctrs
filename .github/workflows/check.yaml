@@ -56,6 +56,12 @@ jobs:
           brew install cairo
           brew cask install xquartz
 
+      - name: Install sf binary
+        if: runner.os != 'Linux'
+        run: |
+          remotes::install_cran("sf", type = "binary")
+        shell: Rscript {0}
+
       - name: Install system dependencies (Linux)
         if: runner.os == 'Linux'
         env:

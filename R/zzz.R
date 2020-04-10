@@ -22,6 +22,8 @@
 
   # register generics for soft dependencies
   register_s3_method("pillar", "pillar_shaft", "geovctr")
+  register_s3_method("sf", "st_as_sfc", "geovctr")
+  register_s3_method("sf", "st_as_sf", "geovctr")
 }
 
 register_s3_method <- function(pkg, generic, class, fun = NULL) {

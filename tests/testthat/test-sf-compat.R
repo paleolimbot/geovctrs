@@ -13,6 +13,8 @@ test_that("sf/sfc works with as_geovctr()", {
 
   expect_identical(restore_geovctr(sf_nc, as_geovctr(sf_nc)), sf_nc)
   expect_identical(restore_geovctr(sfc_nc, as_geovctr(sfc_nc)), sfc_nc)
+  expect_identical(sf::st_as_sfc(as_geovctr(sfc_nc)), sfc_nc)
+  expect_identical(sf::st_as_sf(as_geovctr(sfc_nc))["geometry"], sf_nc["geometry"])
 
   # check with transformation functions
   expect_is(geo_envelope(sf_nc), "sf")

@@ -1,4 +1,17 @@
 
+# dynamically registered in zzz.R
+st_as_sf.geovctr <- function(x, ...) {
+  sf::st_as_sf(tibble(geometry = st_as_sfc.geovctr(x, ...)))
+}
+
+# dynamically registered in zzz.R
+st_as_sfc.geovctr <- function(x, ...) {
+  wkb <- as_geo_wkb(x)
+  wkb[is.na(wkb)] <- as_geo_wkb("GEOMETRYCOLLECTION EMPTY")
+  class(wkb) <- "WKB"
+  sf::st_as_sfc(wkb, ..., EWKB = TRUE)
+}
+
 #' @rdname is_geovctr
 #' @export
 as_geovctr.sfc <- function(x, ...) {
@@ -15,10 +28,7 @@ as_geovctr.sf <- function(x, ...) {
 #' @rdname is_geovctr
 #' @export
 restore_geovctr.sfc <- function(x, result, ...) {
-  wkb <- as_geo_wkb(result)
-  wkb[is.na(wkb)] <- as_geo_wkb("GEOMETRYCOLLECTION EMPTY")
-  class(wkb) <- "WKB"
-  sf::st_as_sfc(wkb, ..., EWKB = TRUE)
+  st_as_sfc.geovctr(result, ...)
 }
 
 #' @rdname is_geovctr

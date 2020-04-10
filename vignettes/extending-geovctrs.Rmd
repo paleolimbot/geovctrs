@@ -189,6 +189,7 @@ format.circle <- function(x, ...) {
 
 # create a vector of circles
 circles <- circle(geo_xy(2, 2), c(0.5, 1, 2))
+circles
 ```
 
 Now we have a vector that stores circle information, but to do anything useful we have to implement a function that turns each circle into a set of coordinates. Recalling your pre-calculus class, you could do so for a single circle like so:
