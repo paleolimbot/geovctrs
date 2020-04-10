@@ -20,7 +20,9 @@ Depends:
 Suggests: 
     testthat (>= 2.1.0),
     vdiffr,
-    pillar
+    pillar,
+    knitr,
+    rmarkdown
 Imports: 
     rlang,
     tibble,
@@ -33,3 +35,4 @@ URL: https://paleolimbot.github.io/geovctrs, https://github.com/paleolimbot/geov
 BugReports: https://github.com/paleolimbot/geovctrs/issues
 LinkingTo: 
     Rcpp
+VignetteBuilder: knitr

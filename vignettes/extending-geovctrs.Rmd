@@ -1,0 +1,250 @@
+---
+title: "Extending geovctrs"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Extending geovctrs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The geovctrs package was designed from the ground up to be extensible. The package itself does little, but provides S3 classes and generics you can use to make processing functions and/or geometry classes that "just work" with the tidyverse and other geometry packages. There are three types of extensibility covered in this vignette: extracting functions, transforming functions, and new geometry classes.
+
+To start, we'll load the package and define a vector of geometries to use as examples.
+
+```{r setup}
+library(geovctrs)
+library(tibble)
+
+geometries <- geo_wkt(
+  c(
+    "POINT (0 0)", 
+    "LINESTRING (10 12, -11 2)",
+    "POLYGON ((-5 -5, 5 -5, 5 5, -5 5, -5 -5))"
+  )
+)
+
+geo_plot(geometries)
+```
+
+## Extracting functions
+
+Extracting functions take a vector of geometries and provide some kind of information for each feature. Examples from the geovctrs package include `geo_n_coordinates()`, `geo_geometry_type()`, and `geo_summary()`: all of these take a vector of geometries and return a vector of the same size as the input (note that the "size" of a data frame is the number of rows, after `vctrs::vec_size()`).
+
+```{r}
+geo_n_coordinates(geometries)
+geo_geometry_type(geometries)
+geo_summary(geometries)
+```
+
+All of these functions work with a variety of data types: it doesn't matter whether you have a character vector, a geovctr, or a data frame with a geometry column, the function knows to coerce the input to a geovctr by default:
+
+```{r}
+geo_n_coordinates(geo_wkt("POINT EMPTY"))
+geo_n_coordinates("POINT EMPTY")
+geo_n_coordinates(tibble(geom = geo_wkt("POINT EMPTY")))
+```
+
+This magic happens because the geovctrs package provides `as_geovctr()` implementations for character vectors and data frames, and because the `geo_n_coordinates()` is a generic that calls `as_geovctr()` in its default implementation. Following this pattern, if you would like to make an extracting function that works on any geometry type, all you need to do is call `as_geovctr()` in your default implementation:
+
+```{r}
+is_linestring <- function(x) {
+  UseMethod("is_linestring")
+}
+
+is_linestring.default <- function(x) {
+  is_linestring(as_geovctr(x))
+}
+
+is_linestring.geovctr <- function(x) {
+  geo_geometry_type(x) == "linestring"
+}
+```
+
+Here, `is_linestring()` will work on all the types supported by `as_geovctr()`:
+
+```{r}
+is_linestring(geometries) # geovctr_wkt/geovctr
+is_linestring(as.character(geometries)) # character
+is_linestring(tibble(geometries)) # data.frame
+```
+
+All extractors in the geovctrs package follow this pattern, usually providing a C++ function that works with well-known binary and faster implementations for the simpler geometry types. For example, in this case, we know that a `geo_segment()` will always be a linestring, but a `geo_xy()` and a `geo_rect()` will never be:
+
+```{r}
+is_linestring.geovctrs_segment <- function(x) {
+  rep_len(TRUE, length(x))
+}
+
+is_linestring.geovctrs_xy <- function(x) {
+  rep_len(FALSE, length(x))
+}
+
+is_linestring.geovctrs_rect <- function(x) {
+  rep_len(FALSE, length(x))
+}
+
+is_linestring(geo_segment(geo_xy(0, 0), geo_xy(1, 1)))
+is_linestring(geo_xy(0, 0))
+is_linestring(geo_rect(0, 0, 1, 1))
+```
+
+For well-known text, a regular expression can often be a fast approximation of the default method. Here, a linestring will always match the regular expression `^\s*LINESTRING` (a string starting with LINESTRING with an optional amount of whitespace at the beginning). Thus, we can implement a fast version of `is_linestring()` for well-known text:
+
+```{r}
+is_linestring.geovctrs_wkt <- function(x) {
+  grepl("^\\s*LINESTRING", x)
+}
+
+is_linestring(geometries)
+```
+
+Most extracting functions in geovctrs do this as well: implement faster S3 generics for the simple geometries, with default method that works on any geovctr (usually implemented in C++).
+
+## Transforming functions
+
+Transforming functions take a geometry vector and return a geometry vector of the same size. Examples from the geovctrs package include `geo_envelope()` (which returns the feature-specific bounding box) and `geo_first_coordinate()`. Similar to the extracting functions, both of these accept any object that can be coerced to a geovctr using `as_geovctr()`:
+
+```{r}
+geo_envelope(geometries) # geovctr_wkt/geovctr
+geo_envelope(as.character(geometries)) # character
+geo_envelope(tibble(geom = geometries)) # data.frame
+```
+
+There's a few things here that are different than extracting functions. First, transformers called on a geovctr can return any geometry vector that is also a geovctr. In this case, that means that we get back a `geo_rect()` no matter what type of geovctr we give `geo_envelope()`. The casting and concatenation rules implemented in geovctrs (primarily by means of `vctrs::vec_cast()` and `vctrs::vec_ptype2()`) mean that these vectors can be used interchangeably. Transformers in geovctrs always return the simplest geometry type possible, which for envelopes and bounding boxes means a `geo_rect()`.
+
+Second, transformers try to maintain the original data structure. For data frames with exactly one geovctr column, this means that `geo_envelope()` returns a data frame with the geometry column replaced (again, with any type of geovctr). This magic happens by way of the `restore_geovctr()` generic, which is called with the initial object and the result of the transformation (this is how the geovctrs package is able to mostly support the sf package out of box).
+
+Following this pattern, if you were to implement a `centroid()` function (returning the middle of the envelope), you could make it work in the same way by implementing a set of generics:
+
+```{r}
+centroid <- function(x) {
+  UseMethod("centroid")
+}
+
+centroid.default <- function(x) {
+  result <- centroid(as_geovctr(x))
+  restore_geovctr(x, result)
+}
+
+centroid.geovctr <- function(x) {
+  envelope_tbl <- as_tibble(geo_envelope(x))
+  geo_xy(
+    (envelope_tbl$xmax + envelope_tbl$xmin) / 2,
+    (envelope_tbl$ymax + envelope_tbl$ymin) / 2
+  )
+}
+```
+
+Here, `centroid()` will work on all the types supported by `as_geovctr()`:
+
+```{r}
+centroid(geometries) # geovctr_wkt/geovctr
+centroid(as.character(geometries)) # character
+centroid(tibble(geom = geometries)) # data.frame
+```
+
+## New geometry vector classes
+
+The geovctrs package provides three "generic" geometry vector classes (`geo_wkt()`, `geo_wkb()`, and `geo_collection()` can represent any feature) and three simple geometry vector classes (`geo_xy()`, `geo_segment()`, and `geo_rect()` are all efficient representations of specific features). To make a new type of vector work with geovctrs functions, you can either (1) implement `as_geovctr()` and (optionally) `restore_geovctr()`, or (2) go all-out and implement your class as a [vctrs](https://vctrs.r-lib.org/) class that inherits from `"geovctr"`.
+
+### The easy way
+
+As an example, consider a class that represents a vector of circles. Circles can be parameterized by their center and their radius, whereas generic geometry types would need to store a large number of coordinates. A simple class based on vctrs would look like this:
+
+```{r}
+library(vctrs)
+
+# base constructor for developers
+new_circle <- function(x = list(center = geo_xy(), radius = double()), 
+                       detail = 50L) {
+  vec_assert(x$center, geo_xy())
+  vec_assert(x$radius, double())
+  vec_assert(detail, integer())
+  
+  vctrs::new_rcrd(x, class = "circle", detail = detail)
+}
+
+# convenient constructor for users
+circle <- function(center = geo_xy(), radius = double(), detail = 50) {
+  new_circle(
+    vec_recycle_common(
+      center = vec_cast(center, geo_xy()),
+      radius = vec_cast(radius, double()),
+    ),
+    detail = vec_cast(detail, integer())
+  )
+}
+
+# rcrd vectors require a format method
+format.circle <- function(x, ...) {
+  sprintf("<circle: %s->%s>", format(field(x, "center")), field(x, "radius"))
+}
+
+# create a vector of circles
+circles <- circle(geo_xy(2, 2), c(0.5, 1, 2))
+```
+
+Now we have a vector that stores circle information, but to do anything useful we have to implement a function that turns each circle into a set of coordinates. Recalling your pre-calculus class, you could do so for a single circle like so:
+
+```{r}
+circle_coordinates <- function(center, radius, detail = 50) {
+  angles <- seq(0, 2 * pi, length.out = detail)
+  geo_xy(
+    field(center, "x") + cos(angles) * radius, 
+    field(center, "y") + sin(angles) * radius
+  )
+}
+
+circle_coordinates(geo_xy(1, 1), 2)
+```
+
+The easiest way to construct a geovctr is using the `geo_collection()` family of functions, all of which take coordinates and return a geometry vector. For a single circle, we could construct polygons like so:
+
+```{r}
+circle_polygon <- function(center, radius, detail = 50) {
+  # first and last coord must be identical
+  coords <- circle_coordinates(center, radius, detail)
+  geo_polygon(c(coords, coords[1]))
+}
+
+circle_polygon(geo_xy(1, 1), 2)
+```
+
+To turn our vector of circles into a geovctr of the same length, we can implement `as_geovctr()`:
+
+```{r}
+as_geovctr.circle <- function(x, ...) {
+  x_data <- vec_data(x)
+  features <- lapply(
+    seq_len(vec_size(x)),
+    function(i) circle_polygon(
+      x_data$center[i], 
+      x_data$radius[i], 
+      attr(x, "detail")
+    )
+  )
+  
+  vec_c(!!!features)
+}
+
+circles <- circle(geo_xy(2, 2), c(0.5, 1, 2))
+as_geovctr(circles)
+```
+
+Now, the `circles` vector works with geovctrs functions!
+
+```{r}
+geo_envelope(circles)
+geo_plot(circles, lty = 1:3)
+```
+
+### The hard way
+
+The hard way to make a vectorized geometry class is to make a full `vctrs::vec_cast()` and `vctrs::vec_ptype2()` implementation that ensures your class can be casted to the other generic geometry types. This is outside the scope of this vignette, but you may find the `expect_geovctr()` function and `vignette("s3-vector", package = "vctrs")` useful. The main advantage of a full vctrs implementation is that users will be able to combine your class with other geometry vectors in a `dplyr::bind_rows()` operation (or similar).
