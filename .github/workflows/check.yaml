@@ -53,6 +53,8 @@ jobs:
         if: runner.os == 'MacOS'
         run: |
           brew install geos
+          brew install gdal
+          brew install udunits
           brew install cairo
           brew cask install xquartz
 
