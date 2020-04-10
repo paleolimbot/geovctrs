@@ -262,7 +262,10 @@
 }
 
 <span class="co"># create a vector of circles</span>
-<span class="no">circles</span> <span class="kw">&lt;-</span> <span class="fu">circle</span>(<span class="fu"><a href="../reference/geo_xy.html">geo_xy</a></span>(<span class="fl">2</span>, <span class="fl">2</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">2</span>))</pre></body></html></div>
+<span class="no">circles</span> <span class="kw">&lt;-</span> <span class="fu">circle</span>(<span class="fu"><a href="../reference/geo_xy.html">geo_xy</a></span>(<span class="fl">2</span>, <span class="fl">2</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">2</span>))
+<span class="no">circles</span>
+<span class="co">#&gt; &lt;circle[3]&gt;</span>
+<span class="co">#&gt; [1] &lt;circle: (2 2)-&gt;0.5&gt; &lt;circle: (2 2)-&gt;1&gt;   &lt;circle: (2 2)-&gt;2&gt;</span></pre></body></html></div>
 <p>Now we have a vector that stores circle information, but to do anything useful we have to implement a function that turns each circle into a set of coordinates. Recalling your pre-calculus class, you could do so for a single circle like so:</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">circle_coordinates</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">center</span>, <span class="no">radius</span>, <span class="no">detail</span> <span class="kw">=</span> <span class="fl">50</span>) {
   <span class="no">angles</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">0</span>, <span class="fl">2</span> * <span class="no">pi</span>, <span class="kw">length.out</span> <span class="kw">=</span> <span class="no">detail</span>)
