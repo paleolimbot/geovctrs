@@ -1,6 +1,6 @@
 
-#ifndef GEOVCTRS_GEOS_HANDLER_H
-#define GEOVCTRS_GEOS_HANDLER_H
+#ifndef GEOVCTRS_GEOS_HANDLER_HPP
+#define GEOVCTRS_GEOS_HANDLER_HPP
 
 // prevents using non-thread-safe GEOSxx functions without _r extension.
 #define GEOS_USE_ONLY_R_API

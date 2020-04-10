@@ -3,13 +3,14 @@
 #define GEOS_OPERATOR_H
 
 #include "geos-handler.hpp"
-#include "geos-provider.hpp"
+#include "provider.hpp"
+#include "exporter.hpp"
 #include <Rcpp.h>
 using namespace Rcpp;
 
 // ----- resolvers -----
 
-class GeometryProviderFactory {
+class GeovctrsProviderFactory {
 public:
   static std::unique_ptr<GeovctrsProvider> get(SEXP data) {
     std::unique_ptr<GeovctrsProvider> provider;
@@ -38,21 +39,21 @@ public:
   }
 };
 
-class GeometryExporterFactory {
+class GeovctrsExporterFactory {
 public:
-  static std::unique_ptr<GeometryExporter> get(SEXP ptype) {
+  static std::unique_ptr<GeovctrsExporter> get(SEXP ptype) {
     if (Rf_inherits(ptype, "geovctrs_wkt")) {
-      return std::unique_ptr<GeometryExporter> { new WKTGeometryExporter(ptype) };
+      return std::unique_ptr<GeovctrsExporter> { new GeovctrsWKTExporter(ptype) };
     } else if(Rf_inherits(ptype, "geovctrs_wkb")) {
-      return std::unique_ptr<GeometryExporter> { new WKBGeometryExporter(ptype) };
+      return std::unique_ptr<GeovctrsExporter> { new GeovctrsWKBExporter(ptype) };
     } else if(Rf_inherits(ptype, "geovctrs_collection")) {
-      return std::unique_ptr<GeometryExporter> { new GeoCollectionExporter() };
+      return std::unique_ptr<GeovctrsExporter> { new GeovctrsCollectionExporter() };
     } else if(Rf_inherits(ptype, "geovctrs_xy")) {
-      return std::unique_ptr<GeometryExporter> { new XYExporter() };
+      return std::unique_ptr<GeovctrsExporter> { new GeovctrsXYExporter() };
     } else if(Rf_inherits(ptype, "geovctrs_segment")) {
-      return std::unique_ptr<GeometryExporter> { new SegmentExporter() };
+      return std::unique_ptr<GeovctrsExporter> { new GeovctrsSegmentExporter() };
     } else {
-      stop("Can't resolve GeometryExporter");
+      stop("Can't resolve GeovctrsExporter");
     }
   }
 };
@@ -68,7 +69,7 @@ public:
   }
 
   virtual void initProvider(SEXP data) {
-    this->provider = GeometryProviderFactory::get(data);
+    this->provider = GeovctrsProviderFactory::get(data);
   }
 
   virtual SEXP operate() {
@@ -196,16 +197,16 @@ public:
 
 class UnaryGeometryOperator: public Operator {
 public:
-  std::unique_ptr<GeometryExporter> exporter;
+  std::unique_ptr<GeovctrsExporter> exporter;
   GEOSGeometry* result;
 
   UnaryGeometryOperator() {
-    std::unique_ptr<GeometryExporter> exporter = std::unique_ptr<GeometryExporter>(nullptr);
+    std::unique_ptr<GeovctrsExporter> exporter = std::unique_ptr<GeovctrsExporter>(nullptr);
     this->result = NULL;
   }
 
   virtual void initExporter(SEXP ptype) {
-    this->exporter = GeometryExporterFactory::get(ptype);
+    this->exporter = GeovctrsExporterFactory::get(ptype);
   }
 
   void init(GEOSContextHandle_t context, size_t size) {
