@@ -5,10 +5,10 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 std::string cpp_geos_version_runtime() {
-  return RcppGEOSHandler::runtimeVersion();
+  return GeovctrsGEOSHandler::runtimeVersion();
 }
 
 // [[Rcpp::export]]
 std::string cpp_geos_version_build() {
-  return RcppGEOSHandler::buildVersion();
+  return GeovctrsGEOSHandler::buildVersion();
 }

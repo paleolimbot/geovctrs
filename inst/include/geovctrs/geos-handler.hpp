@@ -1,6 +1,6 @@
 
-#ifndef GEOVCTRS_GEOS_HANDLERS_H
-#define GEOVCTRS_GEOS_HANDLERS_H
+#ifndef GEOVCTRS_GEOS_HANDLER_H
+#define GEOVCTRS_GEOS_HANDLER_H
 
 // prevents using non-thread-safe GEOSxx functions without _r extension.
 #define GEOS_USE_ONLY_R_API
@@ -35,11 +35,11 @@
 #endif
 
 
-class RcppGEOSHandler {
+class GeovctrsGEOSHandler {
 public:
   GEOSContextHandle_t context;
 
-  RcppGEOSHandler() {
+  GeovctrsGEOSHandler() {
 #ifdef HAVE350
     context = GEOS_init_r();
     GEOSContext_setNoticeHandler_r(this->context, this->handleWarning);
@@ -49,7 +49,7 @@ public:
 #endif
   }
 
-  ~RcppGEOSHandler() {
+  ~GeovctrsGEOSHandler() {
 #ifdef HAVE350
     GEOS_finish_r(context);
 #else

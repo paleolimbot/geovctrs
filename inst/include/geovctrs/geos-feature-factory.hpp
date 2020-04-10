@@ -98,7 +98,12 @@ public:
       parts[i] = GEOSGeom_createPoint_r(context, seq);
     }
 
-    GEOSGeometry* output = GEOSGeom_createCollection_r(context, GEOSGeomTypes::GEOS_MULTIPOINT, parts, x.size());
+    GEOSGeometry* output = GEOSGeom_createCollection_r(
+      context,
+      GEOSGeomTypes::GEOS_MULTIPOINT,
+      parts,
+      x.size()
+    );
     return output;
   }
 
@@ -225,7 +230,8 @@ private:
     return groupLengths;
   }
 
-  static GEOSCoordSequence* getCoordSequence(GEOSContextHandle_t context, List xy, int offset, size_t size) {
+  static GEOSCoordSequence* getCoordSequence(GEOSContextHandle_t context,
+                                             List xy, int offset, size_t size) {
     NumericVector x = xy["x"];
     NumericVector y = xy["y"];
 

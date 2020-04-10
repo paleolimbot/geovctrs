@@ -2,7 +2,6 @@
 #ifndef GEOVCTRS_FACTORY_HPP
 #define GEOVCTRS_FACTORY_HPP
 
-#include <geos_c.h>
 #include <Rcpp.h>
 using namespace Rcpp;
 
@@ -44,16 +43,21 @@ public:
     return xy;
   }
 
-  static List newSegment(NumericVector x0, NumericVector y0, NumericVector x1, NumericVector y1,
+  static List newSegment(NumericVector x0, NumericVector y0,
+                         NumericVector x1, NumericVector y1,
                          IntegerVector srid) {
     List start = newXY(x0, y0);
     List end = newXY(x1, y1);
     List segment = List::create(_["start"] = start, _["end"] = end, _["srid"] = srid);
-    segment.attr("class") = CharacterVector::create("geovctrs_segment", "geovctr", "vctrs_rcrd", "vctrs_vctr");
+    segment.attr("class") = CharacterVector::create(
+      "geovctrs_segment", "geovctr",
+      "vctrs_rcrd", "vctrs_vctr"
+    );
     return segment;
   }
 
-  static List newRect(NumericVector xmin, NumericVector ymin, NumericVector xmax, NumericVector ymax,
+  static List newRect(NumericVector xmin, NumericVector ymin,
+                      NumericVector xmax, NumericVector ymax,
                       IntegerVector srid) {
     List result = List::create(
       _["xmin"] = xmin,
@@ -62,7 +66,10 @@ public:
       _["ymax"] = ymax,
       _["srid"] = srid
     );
-    result.attr("class") = CharacterVector::create("geovctrs_rect", "geovctr", "vctrs_rcrd", "vctrs_vctr");
+    result.attr("class") = CharacterVector::create(
+      "geovctrs_rect", "geovctr",
+      "vctrs_rcrd", "vctrs_vctr"
+    );
     return result;
   }
 
@@ -96,7 +103,8 @@ public:
     return point;
   }
 
-  static List newMultipolygon(NumericVector x, NumericVector y, IntegerVector part, IntegerVector ring) {
+  static List newMultipolygon(NumericVector x, NumericVector y, IntegerVector part,
+                              IntegerVector ring) {
     List point = List::create(_["xy"] = newXY(x, y),  _["part"] = part, _["ring"] = ring);
     point.attr("class") = CharacterVector::create("geovctrs_multipolygon");
     return point;

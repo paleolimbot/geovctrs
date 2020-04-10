@@ -101,7 +101,7 @@ protected:
   // manually instantiating it causes an extra copy to be
   // created which causes errors
   // ...because C++ is nuts
-  RcppGEOSHandler handler;
+  GeovctrsGEOSHandler handler;
   size_t commonSize;
   std::unique_ptr<GeometryProvider> provider;
   GEOSGeometry* geometry = NULL;
