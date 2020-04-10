@@ -12,13 +12,13 @@ using namespace Rcpp;
 
 // ---- base ----
 
-class GeometryProvider {
+class GeovctrsProvider {
 public:
   virtual void init(GEOSContextHandle_t context) {}
   virtual GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) = 0;
   virtual void finish(GEOSContextHandle_t context) {}
   virtual size_t size() = 0;
-  virtual ~GeometryProvider() {}
+  virtual ~GeovctrsProvider() {}
 };
 
 class GeometryExporter {
@@ -32,14 +32,14 @@ public:
   virtual ~GeometryExporter() {}
 };
 
-class ConstantGeometryProvider: public GeometryProvider {
+class GeovctrsConstantProvider: public GeovctrsProvider {
 public:
-  std::unique_ptr<GeometryProvider> baseProvider;
+  std::unique_ptr<GeovctrsProvider> baseProvider;
   GEOSGeometry* geometry;
   bool hasFirst;
 
-  ConstantGeometryProvider(GeometryProvider* baseProvider) {
-    this->baseProvider = std::unique_ptr<GeometryProvider> { baseProvider };
+  GeovctrsConstantProvider(GeovctrsProvider* baseProvider) {
+    this->baseProvider = std::unique_ptr<GeovctrsProvider> { baseProvider };
     this->hasFirst = false;
   }
 
@@ -65,12 +65,12 @@ public:
 
 // ---- WKT ----
 
-class WKTGeometryProvider: public GeometryProvider {
+class GeovctrsWKTProvider: public GeovctrsProvider {
 public:
   CharacterVector data;
   GEOSWKTReader *wktReader;
 
-  WKTGeometryProvider(CharacterVector data) {
+  GeovctrsWKTProvider(CharacterVector data) {
     this->data = data;
     this->wktReader = NULL;
   }
@@ -155,12 +155,12 @@ public:
 
 // ---- WKB -----
 
-class WKBGeometryProvider: public GeometryProvider {
+class GeovctrsWKBProvider: public GeovctrsProvider {
 public:
   List data;
   GEOSWKBReader *wkbReader;
 
-  WKBGeometryProvider(List data) {
+  GeovctrsWKBProvider(List data) {
     this->data = data;
     this->wkbReader = NULL;
   }
@@ -278,12 +278,12 @@ public:
 
 // --- GeoCollection
 
-class GeoCollectionProvider: public GeometryProvider {
+class GeovctrsCollectionProvider: public GeovctrsProvider {
 public:
   List features;
   IntegerVector srid;
 
-  GeoCollectionProvider(List data) {
+  GeovctrsCollectionProvider(List data) {
     this->features = data["feature"];
     this->srid = data["srid"];
   }
@@ -334,12 +334,12 @@ public:
 
 // --- XY
 
-class XYProvider: public GeometryProvider {
+class GeovctrsXYProvider: public GeovctrsProvider {
 public:
   NumericVector x;
   NumericVector y;
 
-  XYProvider(List xy) {
+  GeovctrsXYProvider(List xy) {
     this->x = xy["x"];
     this->y = xy["y"];
   }
@@ -413,7 +413,7 @@ public:
 
 // --- segment ----
 
-class SegmentProvider: public GeometryProvider {
+class GeovctrsSegmentProvider: public GeovctrsProvider {
 public:
   NumericVector x0;
   NumericVector y0;
@@ -421,7 +421,7 @@ public:
   NumericVector y1;
   IntegerVector srid;
 
-  SegmentProvider(List segment) {
+  GeovctrsSegmentProvider(List segment) {
     List start = segment["start"];
     List end = segment["end"];
     this->x0 = start["x"];
@@ -549,7 +549,7 @@ public:
 
 // --- rect ----
 
-class GeoRectProvider: public GeometryProvider {
+class GeovctrsRectProvider: public GeovctrsProvider {
 public:
   NumericVector xmin;
   NumericVector ymin;
@@ -557,7 +557,7 @@ public:
   NumericVector ymax;
   IntegerVector srid;
 
-  GeoRectProvider(List rect) {
+  GeovctrsRectProvider(List rect) {
     this->xmin = rect["xmin"];
     this->ymin = rect["ymin"];
     this->xmax = rect["xmax"];

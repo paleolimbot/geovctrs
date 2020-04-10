@@ -11,27 +11,27 @@ using namespace Rcpp;
 
 class GeometryProviderFactory {
 public:
-  static std::unique_ptr<GeometryProvider> get(SEXP data) {
-    std::unique_ptr<GeometryProvider> provider;
+  static std::unique_ptr<GeovctrsProvider> get(SEXP data) {
+    std::unique_ptr<GeovctrsProvider> provider;
 
     if (Rf_inherits(data, "geovctrs_wkt")) {
-      provider = std::unique_ptr<GeometryProvider> { new WKTGeometryProvider(data) };
+      provider = std::unique_ptr<GeovctrsProvider> { new GeovctrsWKTProvider(data) };
     } else if(Rf_inherits(data, "geovctrs_wkb")) {
-      provider = std::unique_ptr<GeometryProvider> { new WKBGeometryProvider(data) };
+      provider = std::unique_ptr<GeovctrsProvider> { new GeovctrsWKBProvider(data) };
     } else if(Rf_inherits(data, "geovctrs_xy")) {
-      provider = std::unique_ptr<GeometryProvider> { new XYProvider(data) };
+      provider = std::unique_ptr<GeovctrsProvider> { new GeovctrsXYProvider(data) };
     } else if(Rf_inherits(data, "geovctrs_segment")) {
-      provider = std::unique_ptr<GeometryProvider> { new SegmentProvider(data) };
+      provider = std::unique_ptr<GeovctrsProvider> { new GeovctrsSegmentProvider(data) };
     } else if(Rf_inherits(data, "geovctrs_rect")) {
-      provider = std::unique_ptr<GeometryProvider> { new GeoRectProvider(data) };
+      provider = std::unique_ptr<GeovctrsProvider> { new GeovctrsRectProvider(data) };
     } else if(Rf_inherits(data, "geovctrs_collection")) {
-      provider = std::unique_ptr<GeometryProvider> { new GeoCollectionProvider(data) };
+      provider = std::unique_ptr<GeovctrsProvider> { new GeovctrsCollectionProvider(data) };
     } else {
-      stop("Can't resolve GeometryProvider");
+      stop("Can't resolve GeovctrsProvider");
     }
 
     if (provider->size() == 1) {
-      return std::unique_ptr<GeometryProvider> { new ConstantGeometryProvider(provider.release()) };
+      return std::unique_ptr<GeovctrsProvider> { new GeovctrsConstantProvider(provider.release()) };
     } else {
       return provider;
     }
@@ -63,7 +63,7 @@ class Operator {
 public:
 
   Operator() {
-    this->provider = std::unique_ptr<GeometryProvider>(nullptr);
+    this->provider = std::unique_ptr<GeovctrsProvider>(nullptr);
     this->geometry = NULL;
   }
 
@@ -103,7 +103,7 @@ protected:
   // ...because C++ is nuts
   GeovctrsGEOSHandler handler;
   size_t commonSize;
-  std::unique_ptr<GeometryProvider> provider;
+  std::unique_ptr<GeovctrsProvider> provider;
   GEOSGeometry* geometry = NULL;
 
   // these are the functions that may be overridden by individual
