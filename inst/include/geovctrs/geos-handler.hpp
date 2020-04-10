@@ -11,26 +11,26 @@
 // version constants
 #if GEOS_VERSION_MAJOR == 3
 # if GEOS_VERSION_MINOR >= 5
-#  define HAVE350
+#  define GEOVCTRS_HAS_GEOS350
 # endif
 # if GEOS_VERSION_MINOR >= 8
-#  define HAVE380
+#  define GEOVCTRS_HAS_GEOS380
 # endif
 # if GEOS_VERSION_MINOR == 6
 #  if GEOS_VERSION_PATCH >= 1
-#   define HAVE361
+#   define GEOVCTRS_HAS_GEOS361
 #  endif
 # endif
 # if GEOS_VERSION_MINOR >= 7
-#  define HAVE361
-#  define HAVE370
+#  define GEOVCTRS_HAS_GEOS361
+#  define GEOVCTRS_HAS_GEOS370
 # endif
 #else
 # if GEOS_VERSION_MAJOR > 3
-#  define HAVE350
-#  define HAVE370
-#  define HAVE361
-#  define HAVE380
+#  define GEOVCTRS_HAS_GEOS350
+#  define GEOVCTRS_HAS_GEOS370
+#  define GEOVCTRS_HAS_GEOS361
+#  define GEOVCTRS_HAS_GEOS380
 # endif
 #endif
 
@@ -40,7 +40,7 @@ public:
   GEOSContextHandle_t context;
 
   GeovctrsGEOSHandler() {
-#ifdef HAVE350
+#ifdef GEOVCTRS_HAS_GEOS350
     context = GEOS_init_r();
     GEOSContext_setNoticeHandler_r(this->context, this->handleWarning);
     GEOSContext_setErrorHandler_r(this->context, this->handleError);
@@ -50,7 +50,7 @@ public:
   }
 
   ~GeovctrsGEOSHandler() {
-#ifdef HAVE350
+#ifdef GEOVCTRS_HAS_GEOS350
     GEOS_finish_r(context);
 #else
     finishGEOS_r(context);
