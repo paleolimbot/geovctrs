@@ -1,5 +1,5 @@
 
-#include "geovctrs/geos-operator.hpp"
+#include "geovctrs/operator.hpp"
 using namespace Rcpp;
 
 

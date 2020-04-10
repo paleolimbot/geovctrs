@@ -1,6 +1,6 @@
 
-#ifndef GEOS_OPERATOR_H
-#define GEOS_OPERATOR_H
+#ifndef GEOVCTRS_OPERATOR_HPP
+#define GEOVCTRS_OPERATOR_HPP
 
 #include "geos-handler.hpp"
 #include "provider.hpp"

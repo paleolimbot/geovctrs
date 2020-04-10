@@ -1,5 +1,6 @@
 
-#include "geovctrs/geos-operator.hpp"
+#include "geovctrs/operator.hpp"
+#include "geovctrs/factory.hpp"
 #include "geovctrs/feature-factory.hpp"
 using namespace Rcpp;
 
@@ -94,12 +95,7 @@ public:
   }
 
   SEXP assemble(GEOSContextHandle_t context) {
-    List xy = List::create(
-      _["x"] = this->x,
-      _["y"] = this->y
-    );
-    xy.attr("class") = CharacterVector::create("geovctrs_xy", "geovctr", "vctrs_rcrd", "vctrs_vctr");
-    return xy;
+    return GeovctrsFactory::newXY(this->x, this->y);
   }
 };
 
