@@ -4,7 +4,7 @@ using namespace Rcpp;
 
 // [[Rcpp::interfaces(r, cpp)]]
 
-class ParseOperator: public GeovctrsBaseOperator {
+class ParseOperator: public GeovctrsRecursiveOperator {
 public:
   CharacterVector problems;
 
@@ -13,17 +13,12 @@ public:
     this->problems = problems;
   }
 
-  void loopNext(GEOSContextHandle_t context, size_t i) {
-    try {
-      // assign geometry so that Operator destroys it
-      this->geometry = this->provider->getNext(context, i);
-      this->problems[i] = NA_STRING;
-    } catch(Rcpp::exception e) {
-      this->problems[i] = e.what();
-    } catch(std::exception e) {
-      provider->finish(context);
-      throw e;
-    }
+  void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+    this->problems[i] = NA_STRING;
+  }
+
+  void nextError(GEOSContextHandle_t context, const char* message, size_t i) {
+    this->problems[i] = message;
   }
 
   SEXP assemble(GEOSContextHandle_t context) {
