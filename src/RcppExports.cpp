@@ -113,22 +113,22 @@ RcppExport SEXP _geovctrs_pmax2(SEXP x1SEXP, SEXP x2SEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// geovctrs_cpp_envelope
-SEXP geovctrs_cpp_envelope(SEXP data, bool naRm);
-static SEXP _geovctrs_geovctrs_cpp_envelope_try(SEXP dataSEXP, SEXP naRmSEXP) {
+// geovctrs_cpp_bbox
+SEXP geovctrs_cpp_bbox(SEXP data, bool naRm);
+static SEXP _geovctrs_geovctrs_cpp_bbox_try(SEXP dataSEXP, SEXP naRmSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type data(dataSEXP);
     Rcpp::traits::input_parameter< bool >::type naRm(naRmSEXP);
-    rcpp_result_gen = Rcpp::wrap(geovctrs_cpp_envelope(data, naRm));
+    rcpp_result_gen = Rcpp::wrap(geovctrs_cpp_bbox(data, naRm));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _geovctrs_geovctrs_cpp_envelope(SEXP dataSEXP, SEXP naRmSEXP) {
+RcppExport SEXP _geovctrs_geovctrs_cpp_bbox(SEXP dataSEXP, SEXP naRmSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_geovctrs_geovctrs_cpp_envelope_try(dataSEXP, naRmSEXP));
+        rcpp_result_gen = PROTECT(_geovctrs_geovctrs_cpp_bbox_try(dataSEXP, naRmSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -148,22 +148,22 @@ RcppExport SEXP _geovctrs_geovctrs_cpp_envelope(SEXP dataSEXP, SEXP naRmSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// geovctrs_cpp_bbox
-SEXP geovctrs_cpp_bbox(SEXP data, bool naRm);
-static SEXP _geovctrs_geovctrs_cpp_bbox_try(SEXP dataSEXP, SEXP naRmSEXP) {
+// geovctrs_cpp_envelope
+SEXP geovctrs_cpp_envelope(SEXP data, bool naRm);
+static SEXP _geovctrs_geovctrs_cpp_envelope_try(SEXP dataSEXP, SEXP naRmSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type data(dataSEXP);
     Rcpp::traits::input_parameter< bool >::type naRm(naRmSEXP);
-    rcpp_result_gen = Rcpp::wrap(geovctrs_cpp_bbox(data, naRm));
+    rcpp_result_gen = Rcpp::wrap(geovctrs_cpp_envelope(data, naRm));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _geovctrs_geovctrs_cpp_bbox(SEXP dataSEXP, SEXP naRmSEXP) {
+RcppExport SEXP _geovctrs_geovctrs_cpp_envelope(SEXP dataSEXP, SEXP naRmSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_geovctrs_geovctrs_cpp_bbox_try(dataSEXP, naRmSEXP));
+        rcpp_result_gen = PROTECT(_geovctrs_geovctrs_cpp_envelope_try(dataSEXP, naRmSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -622,8 +622,8 @@ static int _geovctrs_RcppExport_validate(const char* sig) {
         signatures.insert("SEXP(*geovctrs_cpp_convert)(SEXP,SEXP)");
         signatures.insert("NumericVector(*pmin2)(NumericVector,NumericVector)");
         signatures.insert("NumericVector(*pmax2)(NumericVector,NumericVector)");
-        signatures.insert("SEXP(*geovctrs_cpp_envelope)(SEXP,bool)");
         signatures.insert("SEXP(*geovctrs_cpp_bbox)(SEXP,bool)");
+        signatures.insert("SEXP(*geovctrs_cpp_envelope)(SEXP,bool)");
         signatures.insert("LogicalVector(*geovctrs_cpp_has_missing)(SEXP)");
         signatures.insert("LogicalVector(*geovctrs_cpp_is_finite)(SEXP)");
         signatures.insert("LogicalVector(*geovctrs_cpp_is_empty)(SEXP)");
@@ -644,8 +644,8 @@ RcppExport SEXP _geovctrs_RcppExport_registerCCallable() {
     R_RegisterCCallable("geovctrs", "_geovctrs_geovctrs_cpp_convert", (DL_FUNC)_geovctrs_geovctrs_cpp_convert_try);
     R_RegisterCCallable("geovctrs", "_geovctrs_pmin2", (DL_FUNC)_geovctrs_pmin2_try);
     R_RegisterCCallable("geovctrs", "_geovctrs_pmax2", (DL_FUNC)_geovctrs_pmax2_try);
-    R_RegisterCCallable("geovctrs", "_geovctrs_geovctrs_cpp_envelope", (DL_FUNC)_geovctrs_geovctrs_cpp_envelope_try);
     R_RegisterCCallable("geovctrs", "_geovctrs_geovctrs_cpp_bbox", (DL_FUNC)_geovctrs_geovctrs_cpp_bbox_try);
+    R_RegisterCCallable("geovctrs", "_geovctrs_geovctrs_cpp_envelope", (DL_FUNC)_geovctrs_geovctrs_cpp_envelope_try);
     R_RegisterCCallable("geovctrs", "_geovctrs_geovctrs_cpp_has_missing", (DL_FUNC)_geovctrs_geovctrs_cpp_has_missing_try);
     R_RegisterCCallable("geovctrs", "_geovctrs_geovctrs_cpp_is_finite", (DL_FUNC)_geovctrs_geovctrs_cpp_is_finite_try);
     R_RegisterCCallable("geovctrs", "_geovctrs_geovctrs_cpp_is_empty", (DL_FUNC)_geovctrs_geovctrs_cpp_is_empty_try);
@@ -665,8 +665,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_geovctrs_cpp_convert", (DL_FUNC) &_geovctrs_geovctrs_cpp_convert, 2},
     {"_geovctrs_pmin2", (DL_FUNC) &_geovctrs_pmin2, 2},
     {"_geovctrs_pmax2", (DL_FUNC) &_geovctrs_pmax2, 2},
-    {"_geovctrs_geovctrs_cpp_envelope", (DL_FUNC) &_geovctrs_geovctrs_cpp_envelope, 2},
     {"_geovctrs_geovctrs_cpp_bbox", (DL_FUNC) &_geovctrs_geovctrs_cpp_bbox, 2},
+    {"_geovctrs_geovctrs_cpp_envelope", (DL_FUNC) &_geovctrs_geovctrs_cpp_envelope, 2},
     {"_geovctrs_geovctrs_cpp_has_missing", (DL_FUNC) &_geovctrs_geovctrs_cpp_has_missing, 1},
     {"_geovctrs_geovctrs_cpp_is_finite", (DL_FUNC) &_geovctrs_geovctrs_cpp_is_finite, 1},
     {"_geovctrs_geovctrs_cpp_is_empty", (DL_FUNC) &_geovctrs_geovctrs_cpp_is_empty, 1},

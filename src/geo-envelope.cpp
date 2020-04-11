@@ -31,8 +31,10 @@ double min_na_rm(double x1i, double x2i) {
   bool x2NA = NumericVector::is_na(x2i);
   if (x1NA && x2NA) {
     return R_PosInf;
-  } else if (x1NA || x2NA) {
-    return NA_REAL;
+  } else if (x1NA) {
+    return x2i;
+  } else if (x2NA) {
+    return x1i;
   } else {
     return std::min(x1i, x2i);
   }
@@ -43,8 +45,10 @@ double max_na_rm(double x1i, double x2i) {
   bool x2NA = NumericVector::is_na(x2i);
   if (x1NA && x2NA) {
     return R_NegInf;
-  } else if (x1NA || x2NA) {
-    return NA_REAL;
+  } else if (x1NA) {
+    return x2i;
+  } else if (x2NA) {
+    return x1i;
   } else {
     return std::max(x1i, x2i);
   }
@@ -61,8 +65,6 @@ NumericVector pmin2(NumericVector x1, NumericVector x2)  {
   return out;
 }
 
-
-
 // [[Rcpp::export]]
 NumericVector pmax2(NumericVector x1, NumericVector x2)  {
   NumericVector out (x1.size());
@@ -74,121 +76,6 @@ NumericVector pmax2(NumericVector x1, NumericVector x2)  {
   return out;
 }
 
-NumericVector bounds_from_coords(List item, bool naRm) {
-  if (Rf_inherits(item, "geovctrs_collection")) {
-    List features = item["feature"];
-    NumericVector bounds = NumericVector::create(R_PosInf, R_PosInf, R_NegInf, R_NegInf);
-    if (naRm) {
-      for (size_t i=0; i<features.size(); i++) {
-        NumericVector itemBounds = bounds_from_coords(features[i], naRm);
-        bounds[0] = min_na_rm(bounds[0], itemBounds[0]);
-        bounds[1] = min_na_rm(bounds[1], itemBounds[1]);
-        bounds[2] = max_na_rm(bounds[2], itemBounds[2]);
-        bounds[3] = max_na_rm(bounds[3], itemBounds[3]);
-      }
-    } else {
-      for (size_t i=0; i<features.size(); i++) {
-        NumericVector itemBounds = bounds_from_coords(features[i], naRm);
-        bounds[0] = min_reg(bounds[0], itemBounds[0]);
-        bounds[1] = min_reg(bounds[1], itemBounds[1]);
-        bounds[2] = max_reg(bounds[2], itemBounds[2]);
-        bounds[3] = max_reg(bounds[3], itemBounds[3]);
-      }
-    }
-
-    return bounds;
-  } else {
-    List xy = item["xy"];
-    NumericVector x = as<NumericVector>(xy["x"]);
-    NumericVector y = as<NumericVector>(xy["y"]);
-
-    if (naRm) {
-      x = x[!is_na(x)];
-      y = y[!is_na(y)];
-    }
-
-    return NumericVector::create(min(x), min(y), max(x), max(y));
-  }
-}
-
-class EnvelopeOperator: public GeovctrsOperator {
-public:
-  NumericVector xmin;
-  NumericVector ymin;
-  NumericVector xmax;
-  NumericVector ymax;
-  IntegerVector srid;
-  bool naRm;
-
-  EnvelopeOperator(bool naRm) {
-    this->naRm = naRm;
-  }
-
-  void init(GEOSContextHandle_t context, size_t size) {
-    NumericVector xmin(size);
-    NumericVector ymin(size);
-    NumericVector xmax(size);
-    NumericVector ymax(size);
-    IntegerVector srid(size);
-    this->xmin = xmin;
-    this->ymin = ymin;
-    this->xmax = xmax;
-    this->ymax = ymax;
-    this->srid = srid;
-  }
-
-  void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
-    double xmin1, ymin1, xmax1, ymax1;
-    int srid;
-
-    if (geometry == NULL && this->naRm) {
-      xmin1 = R_PosInf;
-      ymin1 = R_PosInf;
-      xmax1 = R_NegInf;
-      ymax1 = R_NegInf;
-      srid = NA_INTEGER;
-    } else if(geometry == NULL) {
-      xmin1 = NA_REAL;
-      ymin1 = NA_REAL;
-      xmax1 = NA_REAL;
-      ymax1 = NA_REAL;
-      srid = NA_INTEGER;
-    } else if (GEOSisEmpty_r(context, geometry)) {
-      xmin1 = R_PosInf;
-      ymin1 = R_PosInf;
-      xmax1 = R_NegInf;
-      ymax1 = R_NegInf;
-      srid = GEOSGetSRID_r(context, geometry);
-    } else {
-      List coords = GeovctrsFeatureFactory::getFeature(context, geometry);
-      NumericVector bounds = bounds_from_coords(coords, this->naRm);
-
-      xmin1 = bounds[0];
-      ymin1 = bounds[1];
-      xmax1 = bounds[2];
-      ymax1 = bounds[3];
-      srid = GEOSGetSRID_r(context, geometry);
-    }
-
-    this->xmin[i] = xmin1;
-    this->ymin[i] = ymin1;
-    this->xmax[i] = xmax1;
-    this->ymax[i] = ymax1;
-    this->srid[i] = srid;
-  }
-
-  SEXP assemble(GEOSContextHandle_t context) {
-    return GeovctrsFactory::newRect(this->xmin, this->ymin, this->xmax, this->ymax, this->srid);
-  }
-};
-
-// [[Rcpp::export]]
-SEXP geovctrs_cpp_envelope(SEXP data, bool naRm) {
-  EnvelopeOperator op(naRm);
-  op.initProvider(data);
-  return op.operate();
-}
-
 class RangeOperator: public GeovctrsRecursiveOperator {
 public:
   bool naRm;
@@ -198,7 +85,6 @@ public:
   double xmax;
   double ymax;
   double zmax;
-  int srid;
 
   RangeOperator(bool naRm) {
     this->naRm = naRm;
@@ -211,7 +97,6 @@ public:
     this->xmax = R_NegInf;
     this->ymax = R_NegInf;
     this->zmax = R_NegInf;
-    this->srid = NA_INTEGER;
   }
 
   void nextCoordinate(GEOSContextHandle_t context, double x, double y, double z) {
@@ -235,8 +120,10 @@ public:
 
 class BboxOperator: public RangeOperator {
 public:
+  int srid;
+
   BboxOperator(bool naRm): RangeOperator(naRm) {
-    this->naRm = naRm;
+    this->srid = NA_INTEGER;
     this->reset();
   }
 
@@ -267,6 +154,77 @@ public:
 // [[Rcpp::export]]
 SEXP geovctrs_cpp_bbox(SEXP data, bool naRm) {
   BboxOperator op(naRm);
+  op.initProvider(data);
+  return op.operate();
+}
+
+class EnvelopeOperator: public RangeOperator {
+public:
+  NumericVector xminVec;
+  NumericVector yminVec;
+  NumericVector xmaxVec;
+  NumericVector ymaxVec;
+  IntegerVector sridVec;
+
+  EnvelopeOperator(bool naRm): RangeOperator(naRm) {
+    this->reset();
+  }
+
+  void init(GEOSContextHandle_t context, size_t size) {
+    NumericVector xmin(size);
+    NumericVector ymin(size);
+    NumericVector xmax(size);
+    NumericVector ymax(size);
+    IntegerVector srid(size);
+    this->xminVec = xmin;
+    this->yminVec = ymin;
+    this->xmaxVec = xmax;
+    this->ymaxVec = ymax;
+    this->sridVec = srid;
+  }
+
+  void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+    int featureSRID;
+
+    if (geometry == NULL && this->naRm) {
+      this->xmin = R_PosInf;
+      this->ymin = R_PosInf;
+      this->xmax = R_NegInf;
+      this->ymax = R_NegInf;
+      featureSRID = NA_INTEGER;
+    } else if(geometry == NULL) {
+      this->xmin = NA_REAL;
+      this->ymin = NA_REAL;
+      this->xmax = NA_REAL;
+      this->ymax = NA_REAL;
+      featureSRID = NA_INTEGER;
+    } else {
+      this->reset();
+      this->nextGeometry(context, geometry);
+      featureSRID = GEOSGetSRID_r(context, geometry);
+    }
+
+    this->xminVec[i] = this->xmin;
+    this->yminVec[i] = this->ymin;
+    this->xmaxVec[i] = this->xmax;
+    this->ymaxVec[i] = this->ymax;
+    this->sridVec[i] = featureSRID;
+  }
+
+  SEXP assemble(GEOSContextHandle_t context) {
+    return GeovctrsFactory::newRect(
+      this->xminVec,
+      this->yminVec,
+      this->xmaxVec,
+      this->ymaxVec,
+      this->sridVec
+    );
+  }
+};
+
+// [[Rcpp::export]]
+SEXP geovctrs_cpp_envelope(SEXP data, bool naRm) {
+  EnvelopeOperator op(naRm);
   op.initProvider(data);
   return op.operate();
 }
