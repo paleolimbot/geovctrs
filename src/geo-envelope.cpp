@@ -188,3 +188,85 @@ SEXP geovctrs_cpp_envelope(SEXP data, bool naRm) {
   op.initProvider(data);
   return op.operate();
 }
+
+class RangeOperator: public GeovctrsRecursiveOperator {
+public:
+  bool naRm;
+  double xmin;
+  double ymin;
+  double zmin;
+  double xmax;
+  double ymax;
+  double zmax;
+  int srid;
+
+  RangeOperator(bool naRm) {
+    this->naRm = naRm;
+  }
+
+  void reset() {
+    this->xmin = R_PosInf;
+    this->ymin = R_PosInf;
+    this->zmin = R_PosInf;
+    this->xmax = R_NegInf;
+    this->ymax = R_NegInf;
+    this->zmax = R_NegInf;
+    this->srid = NA_INTEGER;
+  }
+
+  void nextCoordinate(GEOSContextHandle_t context, double x, double y, double z) {
+    if (naRm) {
+      this->xmin = min_na_rm(this->xmin, x);
+      this->ymin = min_na_rm(this->ymin, y);
+      this->zmin = min_na_rm(this->zmin, z);
+      this->xmax = max_na_rm(this->xmax, x);
+      this->ymax = max_na_rm(this->ymax, y);
+      this->zmax = max_na_rm(this->zmax, z);
+    } else {
+      this->xmin = min_reg(this->xmin, x);
+      this->ymin = min_reg(this->ymin, y);
+      this->zmin = min_reg(this->zmin, z);
+      this->xmax = max_reg(this->xmax, x);
+      this->ymax = max_reg(this->ymax, y);
+      this->zmax = max_reg(this->zmax, z);
+    }
+  }
+};
+
+class BboxOperator: public RangeOperator {
+public:
+  BboxOperator(bool naRm): RangeOperator(naRm) {
+    this->naRm = naRm;
+    this->reset();
+  }
+
+  virtual void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+    GeovctrsRecursiveOperator::operateNext(context, geometry, i);
+    if (geometry != NULL) {
+      int featureSRID = GEOSGetSRID_r(context, geometry);
+      if (IntegerVector::is_na(this->srid)) {
+        this->srid = featureSRID;
+      } else if(this->srid != featureSRID) {
+        stop("Can't compute ranges for a vector with more than one SRID");
+      }
+    }
+  }
+
+  SEXP assemble(GEOSContextHandle_t context) {
+    return GeovctrsFactory::newRect(
+      NumericVector::create(this->xmin),
+      NumericVector::create(this->ymin),
+      NumericVector::create(this->xmax),
+      NumericVector::create(this->ymax),
+      IntegerVector::create(this->srid)
+    );
+  }
+};
+
+
+// [[Rcpp::export]]
+SEXP geovctrs_cpp_bbox(SEXP data, bool naRm) {
+  BboxOperator op(naRm);
+  op.initProvider(data);
+  return op.operate();
+}

@@ -105,13 +105,10 @@ geo_envelope.geovctrs_rect <- function(x, ..., na.rm = FALSE) {
 
 #' @export
 geo_bbox.default <- function(x, ..., na.rm = FALSE) {
-  rects <- geo_envelope(as_geovctr(x), ..., na.rm = na.rm)
-  srid <- unique(geo_srid(rects))[1]
+  geo_bbox(as_geovctr(x), na.rm = na.rm)
+}
 
-  xmin <- suppressWarnings(min(field(rects, "xmin"), na.rm = na.rm))
-  ymin <- suppressWarnings(min(field(rects, "ymin"), na.rm = na.rm))
-  xmax <- suppressWarnings(max(field(rects, "xmax"), na.rm = na.rm))
-  ymax <- suppressWarnings(max(field(rects, "ymax"), na.rm = na.rm))
-
-  geo_rect(xmin, ymin, xmax, ymax, srid = srid)
+#' @export
+geo_bbox.geovctr <- function(x, ..., na.rm = FALSE) {
+  geovctrs_cpp_bbox(x, na.rm)
 }

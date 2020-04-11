@@ -295,4 +295,146 @@ public:
   }
 };
 
+class GeovctrsRecursiveOperator: public GeovctrsOperator {
+public:
+  size_t featureId;
+  int partId;
+  int ringId;
+  unsigned int coordinateId;
+  int recursionLevel;
+
+  virtual void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+    this->featureId = i;
+    this->partId = 0;
+    this->ringId = 0;
+    this->recursionLevel = 0;
+
+    if (geometry == NULL) {
+      this->nextNULL(context);
+      return;
+    } else {
+      this->nextGeometry(context, geometry);
+    }
+  }
+
+  virtual void nextNULL(GEOSContextHandle_t context) {
+
+  }
+
+  virtual void nextGeometry(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    switch(GEOSGeomTypeId_r(context, geometry)) {
+    case GEOSGeomTypes::GEOS_POINT:
+      this->nextPoint(context, geometry);
+      break;
+    case GEOSGeomTypes::GEOS_LINESTRING:
+      this->nextLinestring(context, geometry);
+      break;
+    case GEOSGeomTypes::GEOS_LINEARRING:
+      this->nextLinearring(context, geometry);
+      break;
+    case GEOSGeomTypes::GEOS_POLYGON:
+      this->nextPolygon(context, geometry);
+      break;
+    case GEOSGeomTypes::GEOS_MULTIPOINT:
+      this->nextMultipoint(context, geometry);
+      break;
+    case GEOSGeomTypes::GEOS_MULTILINESTRING:
+      this->nextMultilinestring(context, geometry);
+      break;
+    case GEOSGeomTypes::GEOS_MULTIPOLYGON:
+      this->nextMultipolygon(context, geometry);
+      break;
+    case GEOSGeomTypes::GEOS_GEOMETRYCOLLECTION:
+      this->nextGeometrycollection(context, geometry);
+      break;
+    }
+  }
+
+  virtual void nextPoint(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    this->nextGeometryDefault(context, geometry);
+  }
+
+  virtual void nextLinestring(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    this->nextGeometryDefault(context, geometry);
+  }
+
+  virtual void nextPolygon(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    int nInteriorRings = GEOSGetNumInteriorRings_r(context, geometry);
+    this->nextGeometryDefault(context, GEOSGetExteriorRing_r(context, geometry));
+    for(int i=0; i < nInteriorRings; i++) {
+      this->nextGeometry(context, GEOSGetInteriorRingN_r(context, geometry, i));
+    }
+  }
+
+  virtual void nextLinearring(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    this->ringId++;
+    this->nextGeometryDefault(context, geometry);
+  }
+
+  virtual void nextMultipoint(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    this->nextMultiGeometryDefault(context, geometry);
+  }
+
+  virtual void nextMultilinestring(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    this->nextMultiGeometryDefault(context, geometry);
+  }
+
+  virtual void nextMultipolygon(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    this->nextMultiGeometryDefault(context, geometry);
+  }
+
+  virtual void nextGeometrycollection(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    this->recursionLevel++;
+    this->nextMultiGeometryDefault(context, geometry);
+    this->recursionLevel--;
+  }
+
+  virtual void nextGeometryDefault(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    this->nextCoordinateSequence(context, geometry, GEOSGeom_getCoordSeq_r(context, geometry));
+  }
+
+  virtual void nextMultiGeometryDefault(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    int nParts = GEOSGetNumGeometries_r(context, geometry);
+    for (int i=0; i < nParts; i++) {
+      this->partId = i;
+      const GEOSGeometry* part = GEOSGetGeometryN_r(context, geometry, i);
+      this->nextGeometry(context, part);
+    }
+  }
+
+  virtual void nextCoordinateSequence(GEOSContextHandle_t context,
+                                      const GEOSGeometry* geometry,
+                                      const GEOSCoordSequence* seq) {
+    unsigned int size;
+    GEOSCoordSeq_getSize_r(context, seq, &size);
+    int ndim = GEOSGeom_getCoordinateDimension_r(context, geometry);
+
+    double xi;
+    double yi;
+
+    if (ndim == 3) {
+      double zi;
+
+      for (unsigned int i=0; i < size; i++) {
+        this->coordinateId = i;
+        GEOSCoordSeq_getX_r(context, seq, i, &xi);
+        GEOSCoordSeq_getY_r(context, seq, i, &yi);
+        GEOSCoordSeq_getZ_r(context, seq, i, &zi);
+        this->nextCoordinate(context, xi, yi, zi);
+      }
+    } else {
+      for (unsigned int i=0; i < size; i++) {
+        this->coordinateId = i;
+        GEOSCoordSeq_getX_r(context, seq, i, &xi);
+        GEOSCoordSeq_getY_r(context, seq, i, &yi);
+        this->nextCoordinate(context, xi, yi, NA_REAL);
+      }
+    }
+  }
+
+  virtual void nextCoordinate(GEOSContextHandle_t context, double x, double y, double z) {
+
+  }
+};
+
 # endif

@@ -17,6 +17,10 @@ geovctrs_cpp_envelope <- function(data, naRm) {
     .Call(`_geovctrs_geovctrs_cpp_envelope`, data, naRm)
 }
 
+geovctrs_cpp_bbox <- function(data, naRm) {
+    .Call(`_geovctrs_geovctrs_cpp_bbox`, data, naRm)
+}
+
 geovctrs_cpp_has_missing <- function(x) {
     .Call(`_geovctrs_geovctrs_cpp_has_missing`, x)
 }

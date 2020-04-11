@@ -108,6 +108,27 @@ namespace geovctrs {
         return Rcpp::as<SEXP >(rcpp_result_gen);
     }
 
+    inline SEXP geovctrs_cpp_bbox(SEXP data, bool naRm) {
+        typedef SEXP(*Ptr_geovctrs_cpp_bbox)(SEXP,SEXP);
+        static Ptr_geovctrs_cpp_bbox p_geovctrs_cpp_bbox = NULL;
+        if (p_geovctrs_cpp_bbox == NULL) {
+            validateSignature("SEXP(*geovctrs_cpp_bbox)(SEXP,bool)");
+            p_geovctrs_cpp_bbox = (Ptr_geovctrs_cpp_bbox)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_bbox");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_geovctrs_cpp_bbox(Shield<SEXP>(Rcpp::wrap(data)), Shield<SEXP>(Rcpp::wrap(naRm)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<SEXP >(rcpp_result_gen);
+    }
+
     inline LogicalVector geovctrs_cpp_has_missing(SEXP x) {
         typedef SEXP(*Ptr_geovctrs_cpp_has_missing)(SEXP);
         static Ptr_geovctrs_cpp_has_missing p_geovctrs_cpp_has_missing = NULL;
