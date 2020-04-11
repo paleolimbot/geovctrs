@@ -110,8 +110,8 @@ format.geovctrs_wkt <- function(x, ..., trunc_width = 40, col = FALSE) {
   width <- nchar(x)
 
   abbreved <- ifelse(
-    width > (trunc_width - 1),
-    paste0(trunc, "\U2026"),
+    width > (trunc_width - nchar(cli::symbol$ellipsis)),
+    paste0(trunc, cli::symbol$ellipsis),
     x
   )
 

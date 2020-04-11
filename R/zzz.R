@@ -15,13 +15,13 @@
       srid = NA_integer_
     )
   )
-  #rm(list = "NA_segment_", envir = getNamespace("geovctrs"))
-  #makeActiveBinding("NA_segment_", function(...) geo_segment()[NA_integer_], getNamespace("geovctrs"))
 
   NA_rect_ <<- geo_rect()[NA_integer_]
 
   # register generics for soft dependencies
   register_s3_method("pillar", "pillar_shaft", "geovctr")
+  register_s3_method("pillar", "pillar_shaft", "geovctrs_rect")
+  register_s3_method("pillar", "pillar_shaft", "geovctrs_segment")
   register_s3_method("sf", "st_as_sfc", "geovctr")
   register_s3_method("sf", "st_as_sf", "geovctr")
 }

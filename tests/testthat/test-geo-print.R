@@ -30,6 +30,15 @@ test_that("geo_format works", {
   expect_output(geo_print(geo_wkt()), "geovctrs_wkt\\[0\\]")
 })
 
+test_that("printing works without unicode/colour support", {
+  withr::with_options(list(crayon.enabled = FALSE, cli.unicode =  FALSE), {
+    expect_output(geo_print(geo_nc, col = TRUE), "MULTIPOLYGON")
+    expect_output(geo_print(geo_nc, short = TRUE), "mply")
+    expect_output(print(geo_rect(1, 2, 3, 4)), "...")
+    expect_output(print(geo_segment(geo_xy(1, 2), geo_xy(3, 4))), "---")
+  })
+})
+
 test_that("geo_format() and geo_print() don't error for non-parsable geometries", {
   expect_warning(geo_format(new_geovctrs_wkt("POINT ENTPY")), "1 geometry failed to parse")
   expect_output(

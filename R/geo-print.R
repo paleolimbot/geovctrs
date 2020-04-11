@@ -101,7 +101,7 @@ geo_format_summary <- function(summary, class, short, col) {
         maybe_blue(format(summary$first_coordinate), col = col),
         paste0(
           maybe_blue(format(summary$first_coordinate), col = col),
-          maybe_grey("\U2026+", summary$n_coordinates - 1, col = col)
+          maybe_grey(cli::symbol$ellipsis, "+", summary$n_coordinates - 1, col = col)
         )
       )
     )
@@ -165,16 +165,29 @@ print_default_colour <- function(x_no_col, x_col, width = getOption("width")) {
 
 geometry_type_symbol <- function(type, use_z, short = FALSE) {
   if (short) {
-    sym <- c(
-      "point" = "\U00B7",
-      "linestring" = "/",
-      # "linearring",
-      "polygon" = "\U25B3",
-      "multipoint" = "\U2234",
-      "multilinestring" = "//",
-      "multipolygon" = "\U25B3\U25BD",
-      "geometrycollection" = "<\U2234 / \U25B3>"
-    )[type]
+    sym <- if (use_utf8()) {
+      c(
+        "point" = "\U00B7",
+        "linestring" = "/",
+        # "linearring",
+        "polygon" = "\U25B3",
+        "multipoint" = "\U2234",
+        "multilinestring" = "//",
+        "multipolygon" = "\U25B3\U25BD",
+        "geometrycollection" = "<\U2234 / \U25B3>"
+      )[type]
+    } else {
+      c(
+        "point" = "pt",
+        "linestring" = "ls",
+        # "linearring",
+        "polygon" = "ply",
+        "multipoint" = "mpt",
+        "multilinestring" = "mls",
+        "multipolygon" = "mply",
+        "geometrycollection" = "clctn"
+      )[type]
+    }
     txt <- unname(sym)
   } else {
     txt <- toupper(type)
@@ -187,6 +200,8 @@ geometry_type_symbol <- function(type, use_z, short = FALSE) {
   )
 }
 
+
+
 format_na_type <- function(class, col = TRUE) {
   maybe_red(paste0("NA_", gsub("geo(vctrs)?_", "", class[1]), "_"), col = col)
 }
@@ -197,7 +212,7 @@ is_multi_geometry_type <- function(type) {
 
 maybe_blue <- function(..., col = TRUE) {
   if (col && crayon::has_color()) {
-    cli::col_blue(...)  # nocov
+    cli::col_blue(...)
   } else {
     paste0(...)
   }
@@ -205,7 +220,7 @@ maybe_blue <- function(..., col = TRUE) {
 
 maybe_red <- function(..., col = TRUE) {
   if (col && crayon::has_color()) {
-    cli::col_red(...) # nocov
+    cli::col_red(...)
   } else {
     paste0(...)
   }
@@ -233,4 +248,9 @@ str_pad_right <- function(x, width, pad = " ") {
     paste0(x, strrep(pad, width - nchar(x))),
     x
   )
+}
+
+# mimics the logic from cli:::.onLoad() for symbol ASCII
+use_utf8 <- function() {
+  isTRUE(cli::symbol$tick == "\U2713")
 }

@@ -62,14 +62,41 @@ vec_ptype_abbr.geovctrs_rect <- function(x, ...) {
 }
 
 #' @export
-format.geovctrs_rect <- function(x, ...) {
-  sprintf(
-    "(%s %s\U2197%s %s)",
-    format(field(x, "xmin"), trim = TRUE, ...),
-    format(field(x, "ymin"), trim = TRUE, ...),
-    format(field(x, "xmax"), trim = TRUE, ...),
-    format(field(x, "ymax"), trim = TRUE, ...)
+format.geovctrs_rect <- function(x, ..., col = FALSE) {
+  if (length(x) == 0) {
+    return(character(0))
+  }
+
+  paste0(
+    maybe_blue(
+      "(",
+      format(field(x, "xmin"), trim = TRUE, ...),
+      " ",
+      format(field(x, "ymin"), trim = TRUE, ...),
+      col = col
+    ),
+    maybe_grey(if (use_utf8()) "\U2197" else  cli::symbol$ellipsis, col = col),
+    maybe_blue(
+      format(field(x, "xmax"), trim = TRUE, ...),
+      " ",
+      format(field(x, "ymax"), trim = TRUE, ...),
+      ")",
+      col = col
+    )
   )
+}
+
+#' @export
+print.geovctrs_rect <- function(x, ...) {
+  obj_print_header(x, ...)
+  print_default_colour(format(x, ..., col = FALSE), format(x, ..., col = TRUE))
+  obj_print_footer(x, ...)
+  invisible(x)
+}
+
+# dyamically exported in zzz.R
+pillar_shaft.geovctrs_rect <- function(x, ...) {
+  pillar::new_pillar_shaft_simple(format(x, col = TRUE))
 }
 
 #' @export

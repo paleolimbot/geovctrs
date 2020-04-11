@@ -24,7 +24,8 @@ Suggests:
     pillar,
     knitr,
     rmarkdown,
-    tidyselect
+    tidyselect,
+    withr
 Imports: 
     rlang,
     tibble,

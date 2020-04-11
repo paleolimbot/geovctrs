@@ -60,14 +60,41 @@ vec_ptype_abbr.geovctrs_segment <- function(x, ...) {
 }
 
 #' @export
-format.geovctrs_segment <- function(x, ...) {
-  sprintf(
-    "(%s %s)\U2192(%s %s)",
-    format(field(field(x, "start"), "x"), trim = TRUE, ...),
-    format(field(field(x, "start"), "y"), trim = TRUE, ...),
-    format(field(field(x, "end"), "x"), trim = TRUE, ...),
-    format(field(field(x, "end"), "y"), trim = TRUE, ...)
+format.geovctrs_segment <- function(x, ..., col = FALSE) {
+  if (length(x) == 0) {
+    return(character(0))
+  }
+
+  paste0(
+    maybe_blue(
+      "(",
+      format(field(field(x, "start"), "x"), trim = TRUE, ...),
+      " ",
+      format(field(field(x, "start"), "y"), trim = TRUE, ...),
+      col = col
+    ),
+    maybe_grey(if(use_utf8()) cli::symbol$arrow_right else cli::symbol$em_dash, col = col),
+    maybe_blue(
+      format(field(field(x, "end"), "x"), trim = TRUE, ...),
+      " ",
+      format(field(field(x, "end"), "y"), trim = TRUE, ...),
+      ")",
+      col = col
+    )
   )
+}
+
+#' @export
+print.geovctrs_segment <- function(x, ...) {
+  obj_print_header(x, ...)
+  print_default_colour(format(x, ..., col = FALSE), format(x, ..., col = TRUE))
+  obj_print_footer(x, ...)
+  invisible(x)
+}
+
+# dyamically exported in zzz.R
+pillar_shaft.geovctrs_segment <- function(x, ...) {
+  pillar::new_pillar_shaft_simple(format(x, col = TRUE))
 }
 
 #' @export
