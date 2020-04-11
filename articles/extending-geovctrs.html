@@ -181,17 +181,17 @@
 <p>Transforming functions take a geometry vector and return a geometry vector of the same size. Examples from the geovctrs package include <code><a href="../reference/geo_bbox.html">geo_envelope()</a></code> (which returns the feature-specific bounding box) and <code><a href="../reference/geo_summary.html">geo_first_coordinate()</a></code>. Similar to the extracting functions, both of these accept any object that can be coerced to a geovctr using <code><a href="../reference/is_geovctr.html">as_geovctr()</a></code>:</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="../reference/geo_bbox.html">geo_envelope</a></span>(<span class="no">geometries</span>) <span class="co"># geovctr_wkt/geovctr</span>
 <span class="co">#&gt; &lt;geovctrs_rect[3]&gt;</span>
-<span class="co">#&gt; [1] (0 0↗0 0)     (-11 2↗10 12) (-5 -5↗5 5)</span>
+<span class="co">#&gt; [1] (0 0…0 0)     (-11 2…10 12) (-5 -5…5 5)</span>
 <span class="fu"><a href="../reference/geo_bbox.html">geo_envelope</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="no">geometries</span>)) <span class="co"># character</span>
 <span class="co">#&gt; &lt;geovctrs_rect[3]&gt;</span>
-<span class="co">#&gt; [1] (0 0↗0 0)     (-11 2↗10 12) (-5 -5↗5 5)</span>
+<span class="co">#&gt; [1] (0 0…0 0)     (-11 2…10 12) (-5 -5…5 5)</span>
 <span class="fu"><a href="../reference/geo_bbox.html">geo_envelope</a></span>(<span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="no">geometries</span>)) <span class="co"># data.frame</span>
 <span class="co">#&gt; # A tibble: 3 x 1</span>
-<span class="co">#&gt;   geom        </span>
-<span class="co">#&gt;   &lt;rect&gt;      </span>
-<span class="co">#&gt; 1 △ (0 0)…+4  </span>
-<span class="co">#&gt; 2 △ (-11 2)…+4</span>
-<span class="co">#&gt; 3 △ (-5 -5)…+4</span></pre></body></html></div>
+<span class="co">#&gt;   geom         </span>
+<span class="co">#&gt;   &lt;rect&gt;       </span>
+<span class="co">#&gt; 1 (0 0…0 0)    </span>
+<span class="co">#&gt; 2 (-11 2…10 12)</span>
+<span class="co">#&gt; 3 (-5 -5…5 5)</span></pre></body></html></div>
 <p>There’s a few things here that are different than extracting functions. First, transformers called on a geovctr can return any geometry vector that is also a geovctr. In this case, that means that we get back a <code><a href="../reference/geo_rect.html">geo_rect()</a></code> no matter what type of geovctr we give <code><a href="../reference/geo_bbox.html">geo_envelope()</a></code>. The casting and concatenation rules implemented in geovctrs (primarily by means of <code><a href="https://rdrr.io/pkg/vctrs/man/vec_cast.html">vctrs::vec_cast()</a></code> and <code><a href="https://rdrr.io/pkg/vctrs/man/vec_ptype2.html">vctrs::vec_ptype2()</a></code>) mean that these vectors can be used interchangeably. Transformers in geovctrs always return the simplest geometry type possible, which for envelopes and bounding boxes means a <code><a href="../reference/geo_rect.html">geo_rect()</a></code>.</p>
 <p>Second, transformers try to maintain the original data structure. For data frames with exactly one geovctr column, this means that <code><a href="../reference/geo_bbox.html">geo_envelope()</a></code> returns a data frame with the geometry column replaced (again, with any type of geovctr). This magic happens by way of the <code><a href="../reference/is_geovctr.html">restore_geovctr()</a></code> generic, which is called with the initial object and the result of the transformation (this is how the geovctrs package is able to mostly support the sf package out of box).</p>
 <p>Following this pattern, if you were to implement a <code>centroid()</code> function (returning the middle of the envelope), you could make it work in the same way by implementing a set of generics:</p>
@@ -220,11 +220,11 @@
 <span class="co">#&gt; [1] (0.0 0)  (-0.5 7) (0.0 0)</span>
 <span class="fu">centroid</span>(<span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="no">geometries</span>)) <span class="co"># data.frame</span>
 <span class="co">#&gt; # A tibble: 3 x 1</span>
-<span class="co">#&gt;   geom      </span>
-<span class="co">#&gt;   &lt;xy&gt;      </span>
-<span class="co">#&gt; 1 · (0.0 0) </span>
-<span class="co">#&gt; 2 · (-0.5 7)</span>
-<span class="co">#&gt; 3 · (0.0 0)</span></pre></body></html></div>
+<span class="co">#&gt;   geom       </span>
+<span class="co">#&gt;   &lt;xy&gt;       </span>
+<span class="co">#&gt; 1 pt (0.0 0) </span>
+<span class="co">#&gt; 2 pt (-0.5 7)</span>
+<span class="co">#&gt; 3 pt (0.0 0)</span></pre></body></html></div>
 </div>
 <div id="new-geometry-vector-classes" class="section level2">
 <h2 class="hasAnchor">
@@ -327,9 +327,9 @@
 <p>Now, the <code>circles</code> vector works with geovctrs functions!</p>
 <div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/geo_bbox.html">geo_envelope</a></span>(<span class="no">circles</span>)
 <span class="co">#&gt; &lt;geovctrs_rect[3]&gt;</span>
-<span class="co">#&gt; [1] (1.501027304 1.500256892↗2.5 2.499743)</span>
-<span class="co">#&gt; [2] (1.002054607 1.000513784↗3.0 2.999486)</span>
-<span class="co">#&gt; [3] (0.004109214 0.001027568↗4.0 3.998972)</span>
+<span class="co">#&gt; [1] (1.501027304 1.500256892…2.5 2.499743)</span>
+<span class="co">#&gt; [2] (1.002054607 1.000513784…3.0 2.999486)</span>
+<span class="co">#&gt; [3] (0.004109214 0.001027568…4.0 3.998972)</span>
 <span class="fu"><a href="../reference/geo_plot.html">geo_plot</a></span>(<span class="no">circles</span>, <span class="kw">lty</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">3</span>)</pre></body></html></div>
 <p><img src="extending-geovctrs_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
 </div>
