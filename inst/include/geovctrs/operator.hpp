@@ -295,7 +295,7 @@ public:
   }
 };
 
-class GeovctrsRecursiveOperator: public GeovctrsOperator {
+class GeovctrsRecursiveOperator: public GeovctrsBaseOperator {
 public:
   size_t featureId;
   int partId;
@@ -303,29 +303,39 @@ public:
   unsigned int coordinateId;
   int recursionLevel;
 
-  virtual void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+  void loopNext(GEOSContextHandle_t context, size_t i) {
     this->featureId = i;
     this->partId = 0;
     this->ringId = 0;
     this->recursionLevel = 0;
-    this->nextFeature(context, geometry, i);
+
+    try {
+      // assign geometry so that Operator destroys it
+      this->geometry = this->provider->getNext(context, i);
+      this->nextFeature(context, geometry, i);
+    } catch(Rcpp::exception e) {
+      this->nextError(context, e.what(), i);
+    } catch(std::exception e) {
+      provider->finish(context);
+      throw e;
+    }
   }
 
   virtual void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     if (geometry == NULL) {
-      this->nextNULL(context);
+      this->nextNULL(context, i);
       return;
     } else {
       this->nextGeometry(context, geometry);
     }
   }
 
-  virtual void nextNULL(GEOSContextHandle_t context) {
+  virtual void nextNULL(GEOSContextHandle_t context, size_t i) {
 
   }
 
-  virtual void nextError(GEOSContextHandle_t context, const char* message) {
-
+  virtual void nextError(GEOSContextHandle_t context, const char* message, size_t i) {
+    stop(message);
   }
 
   virtual void nextGeometry(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
