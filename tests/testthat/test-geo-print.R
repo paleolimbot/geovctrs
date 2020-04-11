@@ -30,6 +30,21 @@ test_that("geo_format works", {
   expect_output(geo_print(geo_wkt()), "geovctrs_wkt\\[0\\]")
 })
 
+test_that("geo_format() and geo_print() don't error for non-parsable geometries", {
+  expect_warning(geo_format(new_geovctrs_wkt("POINT ENTPY")), "1 geometry failed to parse")
+  expect_output(
+    expect_warning(geo_print(new_geovctrs_wkt("POINT ENTPY")), "1 geometry failed to parse"),
+    "ParseException"
+  )
+  expect_output(
+    expect_warning(
+      print(tibble(new_geovctrs_wkt("POINT ENTPY"))),
+      "1 geometry failed to parse"
+    ),
+    "ParseException"
+  )
+})
+
 test_that("all geovctrs work in the RStudio viewer", {
   if (FALSE) {
     View(geo_nc) # wkb

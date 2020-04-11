@@ -3,11 +3,14 @@
 #'
 #' @inheritParams geo_bbox
 #'
-#' @return A [tibble::tibble()] with columns `geometry_type`, `is_empty`,
-#'   `n_coordinates`, `srid`, `coordinate_dimensions`, and `first_coordinate`.
+#' @return A [tibble::tibble()] with columns `is_empty`, `geometry_type`,
+#'   `n_geometries`, `n_coordinates`, `srid`, `coordinate_dimensions`,
+#'   `first_coordinate`, `problems`, and `is_missing`.
 #' @export
 #'
 #' @examples
+#' geo_summary(geo_nc)
+#'
 #' geo_summary(
 #'   geo_wkt(
 #'     c(
@@ -35,6 +38,18 @@ geo_summary.geovctr <- function(x) {
     "multipoint", "multilinestring", "multipolygon",
     "geometrycollection"
   )[cpp_summary$geometry_type + 1]
+
+  # don't error for problems, but be very noisy about them
+  if (any(!is.na(cpp_summary$problems))) {
+    n_probs <- sum(!is.na(cpp_summary$problems))
+    rlang::warn(
+      sprintf(
+        "%s geometr%s failed to parse. See geo_summary(x)$problems for details.",
+        n_probs, if (n_probs > 1) "ies" else "y"
+      )
+    )
+  }
+
   as_tibble(cpp_summary)
 }
 

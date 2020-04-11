@@ -26,13 +26,16 @@ geo_first_coordinate(x)
 coerced to a geometry-like object using \code{\link[=as_geovctr]{as_geovctr()}}.}
 }
 \value{
-A \code{\link[tibble:tibble]{tibble::tibble()}} with columns \code{geometry_type}, \code{is_empty},
-\code{n_coordinates}, \code{srid}, \code{coordinate_dimensions}, and \code{first_coordinate}.
+A \code{\link[tibble:tibble]{tibble::tibble()}} with columns \code{is_empty}, \code{geometry_type},
+\code{n_geometries}, \code{n_coordinates}, \code{srid}, \code{coordinate_dimensions},
+\code{first_coordinate}, \code{problems}, and \code{is_missing}.
 }
 \description{
 Feature-level geometry summaries
 }
 \examples{
+geo_summary(geo_nc)
+
 geo_summary(
   geo_wkt(
     c(

@@ -114,10 +114,16 @@ geo_format_summary <- function(summary, class, short, col) {
     ""
   )
 
+  max_prob_length <- if (short) 20 else 50
+
   ifelse(
-    summary$is_missing,
-    na,
-    paste0(sym, n_sub_geom_str, " ", coord_str)
+    !is.na(summary$problems),
+    maybe_red(paste0("!!! ", substr(summary$problems, 1, max_prob_length)), col = col),
+    ifelse(
+      summary$is_missing,
+      na,
+      paste0(sym, n_sub_geom_str, " ", coord_str)
+    )
   )
 }
 

@@ -7,8 +7,6 @@ using namespace Rcpp;
 
 class SummaryOperator: public GeovctrsRecursiveOperator {
 public:
-  CharacterVector problems;
-  LogicalVector isMissing;
   LogicalVector isEmpty;
   IntegerVector geometryTypeId;
   IntegerVector nGeometries;
@@ -18,10 +16,10 @@ public:
   NumericVector firstX;
   NumericVector firstY;
   NumericVector firstZ;
+  CharacterVector problems;
+  LogicalVector isMissing;
 
   void init(GEOSContextHandle_t context, size_t size) {
-    this->problems = CharacterVector(size);
-    this->isMissing = LogicalVector(size);
     this->isEmpty = LogicalVector(size);
     this->geometryTypeId = IntegerVector(size);
     this->nGeometries = IntegerVector(size);
@@ -31,6 +29,8 @@ public:
     this->firstX = NumericVector(size);
     this->firstY = NumericVector(size);
     this->firstZ = NumericVector(size);
+    this->problems = CharacterVector(size);
+    this->isMissing = LogicalVector(size);
   }
 
   void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
@@ -83,15 +83,15 @@ public:
 
   SEXP assemble(GEOSContextHandle_t context) {
     return List::create(
-      _["problems"] = this->problems,
-      _["is_missing"] = this->isMissing,
       _["is_empty"] = this->isEmpty,
       _["geometry_type"] = this->geometryTypeId,
       _["n_geometries"] = this->nGeometries,
       _["n_coordinates"] = this->nCoordinates,
       _["srid"] = this->srid,
       _["coordinate_dimensions"] = this->coordinateDimensions,
-      _["first_coordinate"] = GeovctrsFactory::newXY(this->firstX, this->firstY)
+      _["first_coordinate"] = GeovctrsFactory::newXY(this->firstX, this->firstY),
+      _["problems"] = this->problems,
+      _["is_missing"] = this->isMissing
     );
   }
 };

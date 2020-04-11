@@ -31,15 +31,15 @@ test_that("geo_summary components methods work", {
   )
 
   summary_manual <- tibble::tibble(
-    problems = NA_character_,
-    is_missing = geo_is_missing(x),
     is_empty = geo_is_empty(x),
     geometry_type = geo_geometry_type(x),
     n_geometries =  geo_n_geometries(x),
     n_coordinates = geo_n_coordinates(x),
     srid = geo_srid(x),
     coordinate_dimensions = geo_coordinate_dimensions(x),
-    first_coordinate = geo_first_coordinate(x)
+    first_coordinate = geo_first_coordinate(x),
+    problems = NA_character_,
+    is_missing = geo_is_missing(x)
   )
 
   expect_identical(summary_manual, geo_summary(geo_wkt(x)))
@@ -57,4 +57,8 @@ test_that("geo_summary is identical for three generic geometry formats", {
   expect_identical(geo_summary(chr), geo_summary(geo_wkt(chr)))
   expect_identical(geo_summary(chr), geo_summary(as_geo_wkb(geo_wkt(chr))))
   expect_identical(geo_summary(chr), geo_summary(as_geo_collection((geo_wkt(chr)))))
+})
+
+test_that("geo_summary warns for invalid geometries", {
+  expect_warning(geo_summary(new_geovctrs_wkt("POINT ENTPY")), "1 geometry failed to parse")
 })
