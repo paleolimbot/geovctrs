@@ -38,6 +38,18 @@ test_that("geo plotting works", {
       col = "grey90"
     )
   )
+
+  vdiffr::expect_doppelganger(
+    "example WKTs",
+    function() geo_plot(geo_example_wkt)
+  )
+})
+
+test_that("limiting with bbox works", {
+  vdiffr::expect_doppelganger(
+    "NC limited by bbox",
+    function() geo_plot(geo_nc, bbox = geo_rect(-82, 35, -76, 36))
+  )
 })
 
 test_that("plot generics work", {

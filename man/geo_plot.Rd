@@ -6,6 +6,7 @@
 \alias{geo_plot_add.default}
 \alias{geo_plot_add.geovctr}
 \alias{geo_plot_add.data.frame}
+\alias{geo_plot_add.NULL}
 \alias{geo_plot_add.geovctrs_xy}
 \alias{geo_plot_add.geovctrs_segment}
 \alias{geo_plot_add.geovctrs_rect}
@@ -13,7 +14,14 @@
 \alias{geo_plot_add.sf}
 \title{Plot geometry vectors}
 \usage{
-geo_plot(x, ..., asp = 1, xlim = NULL, ylim = NULL, xlab = "", ylab = "")
+geo_plot(
+  x,
+  ...,
+  asp = 1,
+  bbox = geo_bbox(x, finite = TRUE),
+  xlab = "",
+  ylab = ""
+)
 
 geo_plot_add(x, ...)
 
@@ -22,6 +30,8 @@ geo_plot_add(x, ...)
 \method{geo_plot_add}{geovctr}(x, ...)
 
 \method{geo_plot_add}{data.frame}(x, ...)
+
+\method{geo_plot_add}{`NULL`}(x, ...)
 
 \method{geo_plot_add}{geovctrs_xy}(x, ...)
 
@@ -42,7 +52,9 @@ for point and multipoint geometries, \code{\link[graphics:lines]{graphics::lines
 and multilinestring geometries, and \code{\link[graphics:polypath]{graphics::polypath()}} for polygon
 and multipolygon geometries.}
 
-\item{asp, xlim, ylim, xlab, ylab}{Passed to \code{\link[graphics:plot]{graphics::plot()}}}
+\item{asp, xlab, ylab}{Passed to \code{\link[graphics:plot]{graphics::plot()}}}
+
+\item{bbox}{The limits of the plot. Defaults to \code{geo_bbox(x, finite = TRUE)}.}
 }
 \value{
 \code{x}, invisibly.

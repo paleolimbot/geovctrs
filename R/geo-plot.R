@@ -9,7 +9,8 @@
 #'   for point and multipoint geometries, [graphics::lines()] for linestring
 #'   and multilinestring geometries, and [graphics::polypath()] for polygon
 #'   and multipolygon geometries.
-#' @param asp,xlim,ylim,xlab,ylab Passed to [graphics::plot()]
+#' @param bbox The limits of the plot. Defaults to `geo_bbox(x, finite = TRUE)`.
+#' @param asp,xlab,ylab Passed to [graphics::plot()]
 #'
 #' @return `x`, invisibly.
 #' @export
@@ -35,19 +36,16 @@
 #' # restore initial palette
 #' palette(prev_pal)
 #'
-geo_plot <- function(x, ..., asp = 1, xlim = NULL, ylim = NULL, xlab = "", ylab = "") {
-  # until there is a geo_bbox() function
-  if (is.null(xlim) || is.null(ylim)) {
-    bbox <- geo_bbox(x)
-    calc_xlim <- c(field(bbox, "xmin"), field(bbox, "xmax"))
-    calc_ylim <- c(field(bbox, "ymin"), field(bbox, "ymax"))
-  }
+geo_plot <- function(x, ..., asp = 1, bbox = geo_bbox(x, finite = TRUE), xlab = "", ylab = "") {
+  bbox <- as_geo_rect(bbox)
+  xlim <- c(field(bbox, "xmin"), field(bbox, "xmax"))
+  ylim <- c(field(bbox, "ymin"), field(bbox, "ymax"))
 
   graphics::plot(
     numeric(0),
     numeric(0),
-    xlim = xlim %||% calc_xlim,
-    ylim = ylim %||% calc_ylim,
+    xlim = xlim,
+    ylim = ylim,
     xlab = xlab,
     ylab = ylab,
     asp = asp
@@ -89,6 +87,12 @@ geo_plot_add.data.frame <- function(x, ...) {
   rlang::exec(geo_plot_add, as_geovctr(x), !!!dots_tbl)
 
   # return the input
+  invisible(x)
+}
+
+#' @rdname geo_plot
+#' @export
+geo_plot_add.NULL <- function(x, ...) {
   invisible(x)
 }
 
@@ -162,7 +166,11 @@ geo_plot_add.geovctrs_linestring <- function(x, ...) {
 geo_plot_add.geovctrs_polygon <- function(x, ..., rule = "evenodd") {
   # have to do one feature at a time because the "holes in polygons" problem
   xy <- separate_groups_with_na(field(x, "xy"), field(x, "ring"))
-  graphics::polypath(field(xy, "x"), field(xy, "y"), ..., rule = rule)
+
+  # graphics::polypath doesn't do zero-length coords
+  if (vec_size(xy) > 0) {
+    graphics::polypath(field(xy, "x"), field(xy, "y"), ..., rule = rule)
+  }
 
   invisible(x)
 }
@@ -190,7 +198,9 @@ geo_plot_add.geovctrs_multipolygon <- function(x, ..., rule = "evenodd") {
   crds <- tibble::tibble(xy = field(x, "xy"), ring = field(x, "ring"))
   for (crds_feat in split(crds, field(x, "part"))) {
     xy_part <- separate_groups_with_na(crds_feat$xy, crds_feat$ring)
-    graphics::polypath(field(xy_part, "x"), field(xy_part, "y"), ..., rule = rule)
+    if (vec_size(xy_part) > 0) {
+      graphics::polypath(field(xy_part, "x"), field(xy_part, "y"), ..., rule = rule)
+    }
   }
   invisible(x)
 }
