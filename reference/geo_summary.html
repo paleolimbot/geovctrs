@@ -160,18 +160,18 @@ coerced to a geometry-like object using <code><a href='is_geovctr.html'>as_geovc
     <pre class="examples"><div class='input'><span class='fu'>geo_summary</span>(
   <span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(
     <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
-    <span class='st'>"POINT (30 10)"</span>,
-    <span class='st'>"LINESTRING (0 0, 10 11)"</span>,
-    <span class='st'>"POLYGON EMPTY"</span>
-   )
- )
-)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 3 x 7</span><span>
-#&gt;   geometry_type is_empty n_coordinates n_geometries  srid coordinate_dime…
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;lgl&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> point         FALSE                1            1     0                2
-#&gt; </span><span style='color: #555555;'>2</span><span> linestring    FALSE                2            1     0                2
-#&gt; </span><span style='color: #555555;'>3</span><span> polygon       TRUE                 0            1     0                3
-#&gt; </span><span style='color: #555555;'># … with 1 more variable: first_coordinate </span><span style='color: #555555;font-style: italic;'>&lt;xy&gt;</span><span></div><div class='input'>
+      <span class='st'>"POINT (30 10)"</span>,
+      <span class='st'>"LINESTRING (0 0, 10 11)"</span>,
+      <span class='st'>"POLYGON EMPTY"</span>
+    )
+  )
+)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 3 x 9</span><span>
+#&gt;   problems is_missing is_empty geometry_type n_geometries n_coordinates  srid
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;lgl&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;lgl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>         </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> </span><span style='color: #BB0000;'>NA</span><span>       FALSE      FALSE    point                    1             1     0
+#&gt; </span><span style='color: #555555;'>2</span><span> </span><span style='color: #BB0000;'>NA</span><span>       FALSE      FALSE    linestring               1             2     0
+#&gt; </span><span style='color: #555555;'>3</span><span> </span><span style='color: #BB0000;'>NA</span><span>       FALSE      TRUE     polygon                  1             0     0
+#&gt; </span><span style='color: #555555;'># … with 2 more variables: coordinate_dimensions </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span style='color: #555555;'>, first_coordinate </span><span style='color: #555555;font-style: italic;'>&lt;xy&gt;</span><span></div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

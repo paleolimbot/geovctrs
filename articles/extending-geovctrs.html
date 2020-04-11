@@ -113,13 +113,13 @@
 <span class="fu"><a href="../reference/geo_summary.html">geo_geometry_type</a></span>(<span class="no">geometries</span>)
 <span class="co">#&gt; [1] "point"      "linestring" "polygon"</span>
 <span class="fu"><a href="../reference/geo_summary.html">geo_summary</a></span>(<span class="no">geometries</span>)
-<span class="co">#&gt; # A tibble: 3 x 7</span>
-<span class="co">#&gt;   geometry_type is_empty n_coordinates n_geometries  srid coordinate_dime…</span>
-<span class="co">#&gt;   &lt;chr&gt;         &lt;lgl&gt;            &lt;int&gt;        &lt;int&gt; &lt;int&gt;            &lt;int&gt;</span>
-<span class="co">#&gt; 1 point         FALSE                1            1     0                2</span>
-<span class="co">#&gt; 2 linestring    FALSE                2            1     0                2</span>
-<span class="co">#&gt; 3 polygon       FALSE                5            1     0                2</span>
-<span class="co">#&gt; # … with 1 more variable: first_coordinate &lt;xy&gt;</span></pre></body></html></div>
+<span class="co">#&gt; # A tibble: 3 x 9</span>
+<span class="co">#&gt;   problems is_missing is_empty geometry_type n_geometries n_coordinates  srid</span>
+<span class="co">#&gt;   &lt;chr&gt;    &lt;lgl&gt;      &lt;lgl&gt;    &lt;chr&gt;                &lt;int&gt;         &lt;int&gt; &lt;int&gt;</span>
+<span class="co">#&gt; 1 &lt;NA&gt;     FALSE      FALSE    point                    1             1     0</span>
+<span class="co">#&gt; 2 &lt;NA&gt;     FALSE      FALSE    linestring               1             2     0</span>
+<span class="co">#&gt; 3 &lt;NA&gt;     FALSE      FALSE    polygon                  1             5     0</span>
+<span class="co">#&gt; # … with 2 more variables: coordinate_dimensions &lt;int&gt;, first_coordinate &lt;xy&gt;</span></pre></body></html></div>
 <p>All of these functions work with a variety of data types: it doesn’t matter whether you have a character vector, a geovctr, or a data frame with a geometry column, the function knows to coerce the input to a geovctr by default:</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/geo_summary.html">geo_n_coordinates</a></span>(<span class="fu"><a href="../reference/geo_wkt.html">geo_wkt</a></span>(<span class="st">"POINT EMPTY"</span>))
 <span class="co">#&gt; [1] 0</span>
