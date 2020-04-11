@@ -1,7 +1,6 @@
 
 #include "geovctrs/operator.hpp"
 #include "geovctrs/factory.hpp"
-#include "geovctrs/feature-factory.hpp"
 using namespace Rcpp;
 
 // [[Rcpp::interfaces(r, cpp)]]
