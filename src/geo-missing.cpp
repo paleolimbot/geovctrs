@@ -5,31 +5,42 @@ using namespace Rcpp;
 
 // [[Rcpp::interfaces(r, cpp)]]
 
-bool coords_have_missing(List item) {
-  if (Rf_inherits(item, "geovctrs_collection")) {
-    List features = item["feature"];
-    bool anyNA = false;
-    for (size_t i=0; i<features.size(); i++) {
-      anyNA = anyNA || coords_have_missing(features[i]);
-    }
-    return anyNA;
-  } else {
-    List xy = item["xy"];
-    NumericVector x = as<NumericVector>(xy["x"]);
-    NumericVector y = as<NumericVector>(xy["y"]);
-    bool naX = any(is_na(x));
-    bool naY = any(is_na(y));
-    return naX || naY;
-  }
-}
+class BadCoordinateOperator: public GeovctrsRecursiveOperator {
+public:
+  LogicalVector badCoordinate;
 
-class HasMissingOperator: public GeovctrsVectorOperator<LogicalVector, int> {
-  int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
-    if (GEOSisEmpty_r(context, geometry)) {
-      return false;
+  void init(GEOSContextHandle_t context, size_t size) {
+    badCoordinate = LogicalVector(size);
+  }
+
+  void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+    if (geometry == NULL) {
+      this->badCoordinate[i] = NA_LOGICAL;
     } else {
-      List coords = GeovctrsFeatureFactory::getFeature(context, geometry);
-      return coords_have_missing(coords);
+      try {
+        GeovctrsRecursiveOperator::nextFeature(context, geometry, i);
+        this->badCoordinate[i] = false;
+      } catch(NumericVector badCoordinates) {
+        this->badCoordinate[i] = true;
+      }
+    }
+  }
+
+  SEXP assemble(GEOSContextHandle_t context) {
+    return this->badCoordinate;
+  }
+};
+
+class HasMissingOperator: public BadCoordinateOperator {
+  void nextCoordinate(GEOSContextHandle_t context, double x, double y) {
+    if (NumericVector::is_na(x) || NumericVector::is_na(y)) {
+      throw NumericVector::create(x, y);
+    }
+  }
+
+  void nextCoordinate(GEOSContextHandle_t context, double x, double y, double z) {
+    if (NumericVector::is_na(x) || NumericVector::is_na(y) || NumericVector::is_na(z)) {
+      throw NumericVector::create(x, y, z);
     }
   }
 };
@@ -41,53 +52,30 @@ LogicalVector geovctrs_cpp_has_missing(SEXP x) {
   return op.operate();
 }
 
-bool coords_is_finite(List item) {
-  if (Rf_inherits(item, "geovctrs_collection")) {
-    List features = item["feature"];
-    bool isFinite = true;
-    for (size_t i=0; i<features.size(); i++) {
-      isFinite = isFinite && coords_is_finite(features[i]);
+class HasMissingOrInfiniteOperator: public BadCoordinateOperator {
+  void nextCoordinate(GEOSContextHandle_t context, double x, double y) {
+    if (NumericVector::is_na(x) ||
+        NumericVector::is_na(y) ||
+        x == R_PosInf || x == R_NegInf ||
+        y == R_PosInf || y == R_NegInf) {
+      throw NumericVector::create(x, y);
     }
-    return isFinite;
-  } else {
-    List xy = item["xy"];
-    NumericVector x = as<NumericVector>(xy["x"]);
-    NumericVector y = as<NumericVector>(xy["y"]);
-    bool finiteX = all(is_finite(x));
-    bool finiteY = all(is_finite(y));
-    return finiteX && finiteY;
   }
-}
 
-class IsFiniteOperator: public GeovctrsVectorOperator<LogicalVector, int> {
-  int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
-    if (GEOSisEmpty_r(context, geometry)) {
-      return true;
-    } else {
-      List coords = GeovctrsFeatureFactory::getFeature(context, geometry);
-      return coords_is_finite(coords);
+  void nextCoordinate(GEOSContextHandle_t context, double x, double y, double z) {
+    if (NumericVector::is_na(x) ||
+        NumericVector::is_na(y) ||
+        x == R_PosInf || x == R_NegInf ||
+        y == R_PosInf || y == R_NegInf ||
+        z == R_PosInf || z == R_NegInf) {
+      throw NumericVector::create(x, y, z);
     }
   }
 };
 
 // [[Rcpp::export]]
-LogicalVector geovctrs_cpp_is_finite(SEXP x) {
-  IsFiniteOperator op;
+LogicalVector geovctrs_cpp_has_missing_or_infinite(SEXP x) {
+  HasMissingOrInfiniteOperator op;
   op.initProvider(x);
-  return op.operate();
-}
-
-class IsEmptyOperator: public GeovctrsVectorOperator<LogicalVector, int> {
-public:
-
-  int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i)  {
-    return GEOSisEmpty_r(context, geometry);
-  }
-};
-
-// [[Rcpp::export]]
-LogicalVector geovctrs_cpp_is_empty(SEXP data) {
-  IsEmptyOperator op;
-  op.initProvider(data);
   return op.operate();
 }

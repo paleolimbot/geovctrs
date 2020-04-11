@@ -150,38 +150,17 @@ namespace geovctrs {
         return Rcpp::as<LogicalVector >(rcpp_result_gen);
     }
 
-    inline LogicalVector geovctrs_cpp_is_finite(SEXP x) {
-        typedef SEXP(*Ptr_geovctrs_cpp_is_finite)(SEXP);
-        static Ptr_geovctrs_cpp_is_finite p_geovctrs_cpp_is_finite = NULL;
-        if (p_geovctrs_cpp_is_finite == NULL) {
-            validateSignature("LogicalVector(*geovctrs_cpp_is_finite)(SEXP)");
-            p_geovctrs_cpp_is_finite = (Ptr_geovctrs_cpp_is_finite)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_is_finite");
+    inline LogicalVector geovctrs_cpp_has_missing_or_infinite(SEXP x) {
+        typedef SEXP(*Ptr_geovctrs_cpp_has_missing_or_infinite)(SEXP);
+        static Ptr_geovctrs_cpp_has_missing_or_infinite p_geovctrs_cpp_has_missing_or_infinite = NULL;
+        if (p_geovctrs_cpp_has_missing_or_infinite == NULL) {
+            validateSignature("LogicalVector(*geovctrs_cpp_has_missing_or_infinite)(SEXP)");
+            p_geovctrs_cpp_has_missing_or_infinite = (Ptr_geovctrs_cpp_has_missing_or_infinite)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_has_missing_or_infinite");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_geovctrs_cpp_is_finite(Shield<SEXP>(Rcpp::wrap(x)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<LogicalVector >(rcpp_result_gen);
-    }
-
-    inline LogicalVector geovctrs_cpp_is_empty(SEXP data) {
-        typedef SEXP(*Ptr_geovctrs_cpp_is_empty)(SEXP);
-        static Ptr_geovctrs_cpp_is_empty p_geovctrs_cpp_is_empty = NULL;
-        if (p_geovctrs_cpp_is_empty == NULL) {
-            validateSignature("LogicalVector(*geovctrs_cpp_is_empty)(SEXP)");
-            p_geovctrs_cpp_is_empty = (Ptr_geovctrs_cpp_is_empty)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_is_empty");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_geovctrs_cpp_is_empty(Shield<SEXP>(Rcpp::wrap(data)));
+            rcpp_result_gen = p_geovctrs_cpp_has_missing_or_infinite(Shield<SEXP>(Rcpp::wrap(x)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

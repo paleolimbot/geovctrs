@@ -124,7 +124,7 @@ geo_is_finite.default <- function(x) {
 
 #' @export
 geo_is_finite.geovctr <- function(x) {
-  geovctrs_cpp_is_finite(x)
+  !geovctrs_cpp_has_missing_or_infinite(x)
 }
 
 #' @export

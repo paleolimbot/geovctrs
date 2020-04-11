@@ -25,12 +25,8 @@ geovctrs_cpp_has_missing <- function(x) {
     .Call(`_geovctrs_geovctrs_cpp_has_missing`, x)
 }
 
-geovctrs_cpp_is_finite <- function(x) {
-    .Call(`_geovctrs_geovctrs_cpp_is_finite`, x)
-}
-
-geovctrs_cpp_is_empty <- function(data) {
-    .Call(`_geovctrs_geovctrs_cpp_is_empty`, data)
+geovctrs_cpp_has_missing_or_infinite <- function(x) {
+    .Call(`_geovctrs_geovctrs_cpp_has_missing_or_infinite`, x)
 }
 
 geovctrs_cpp_set_srid <- function(x, srid) {

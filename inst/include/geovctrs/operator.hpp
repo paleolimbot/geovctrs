@@ -444,9 +444,13 @@ public:
         this->coordinateId = i;
         GEOSCoordSeq_getX_r(context, seq, i, &xi);
         GEOSCoordSeq_getY_r(context, seq, i, &yi);
-        this->nextCoordinate(context, xi, yi, NA_REAL);
+        this->nextCoordinate(context, xi, yi);
       }
     }
+  }
+
+  virtual void nextCoordinate(GEOSContextHandle_t context, double x, double y) {
+    this->nextCoordinate(context, x, y, NA_REAL);
   }
 
   virtual void nextCoordinate(GEOSContextHandle_t context, double x, double y, double z) {
