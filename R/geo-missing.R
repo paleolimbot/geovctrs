@@ -64,12 +64,7 @@ geo_is_missing <- function(x) {
 
 #' @export
 geo_is_missing.default <- function(x) {
-  is.na(as_geovctr(x))
-}
-
-#' @export
-geo_is_missing.geovctrs_xy <- function(x) {
-  rep_len(FALSE, vec_size(x))
+  geo_summary(x)$is_missing
 }
 
 #' @rdname geo_is_missing
@@ -169,34 +164,7 @@ geo_is_empty <- function(x) {
 
 #' @export
 geo_is_empty.default <- function(x) {
-  geo_is_empty(as_geovctr(x))
-}
-
-#' @export
-geo_is_empty.geovctr <- function(x) {
-  geovctrs_cpp_is_empty(x)
-}
-
-#' @export
-geo_is_empty.geovctrs_xy <- function(x) {
-  is.na(field(x, "x")) &  is.na(field(x, "y"))
-}
-
-#' @export
-geo_is_empty.geovctrs_segment <- function(x) {
-  start <- field(x, "start")
-  end <- field(x, "end")
-  result <- is.na(field(start, "x")) &
-    is.na(field(start, "y")) &
-    is.na(field(end, "x")) &
-    is.na(field(end, "y"))
-  result[is.na(x)] <- NA
-  result
-}
-
-#' @export
-geo_is_empty.geovctrs_rect <- function(x) {
-  geo_has_missing.geovctrs_rect(x)
+  geo_summary(x)$is_empty
 }
 
 # ----- missing values (assigned in .onLoad) --------

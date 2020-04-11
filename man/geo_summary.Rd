@@ -36,11 +36,11 @@ Feature-level geometry summaries
 geo_summary(
   geo_wkt(
     c(
-    "POINT (30 10)",
-    "LINESTRING (0 0, 10 11)",
-    "POLYGON EMPTY"
-   )
- )
+      "POINT (30 10)",
+      "LINESTRING (0 0, 10 11)",
+      "POLYGON EMPTY"
+    )
+  )
 )
 
 }

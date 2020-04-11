@@ -6,104 +6,100 @@ using namespace Rcpp;
 
 // [[Rcpp::interfaces(r, cpp)]]
 
-class GeomTypeIdOperator: public GeovctrsVectorOperator<IntegerVector, int> {
-  int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
-    return GEOSGeomTypeId_r(context, geometry);
-  }
-};
-
-// [[Rcpp::export]]
-IntegerVector geovctrs_cpp_geom_type_id(SEXP x) {
-  GeomTypeIdOperator op;
-  op.initProvider(x);
-  return op.operate();
-}
-
-class GetNumGeometriesOperator: public GeovctrsVectorOperator<IntegerVector, int> {
-  int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
-    return GEOSGetNumGeometries_r(context, geometry);
-  }
-};
-
-// [[Rcpp::export]]
-IntegerVector geovctrs_cpp_n_geometries(SEXP x) {
-  GetNumGeometriesOperator op;
-  op.initProvider(x);
-  return op.operate();
-}
-
-class GetNumCoordinatesOperator: public GeovctrsVectorOperator<IntegerVector, int> {
-  int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
-    return GEOSGetNumCoordinates_r(context, geometry);
-  }
-};
-
-// [[Rcpp::export]]
-IntegerVector geovctrs_cpp_n_coordinates(SEXP x) {
-  GetNumCoordinatesOperator op;
-  op.initProvider(x);
-  return op.operate();
-}
-
-class CoordinateDimensionsOperator: public GeovctrsVectorOperator<IntegerVector, int> {
-  int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
-    // the behaviour of this changed between GEOS 3.5 and 3.7, but
-    // currently empty geometries have 3 dimensions
-    if (GEOSisEmpty_r(context, geometry)) {
-      return 3;
-    } else {
-      return GEOSGeom_getCoordinateDimension_r(context, geometry);
-    }
-  }
-};
-
-// [[Rcpp::export]]
-IntegerVector geovctrs_cpp_coordinate_dimensions(SEXP x) {
-  CoordinateDimensionsOperator op;
-  op.initProvider(x);
-  return op.operate();
-}
-
-class FirstCoordinateOperator: public GeovctrsOperator {
+class SummaryOperator: public GeovctrsRecursiveOperator {
 public:
-  NumericVector x;
-  NumericVector y;
+  CharacterVector problems;
+  LogicalVector isMissing;
+  LogicalVector isEmpty;
+  IntegerVector geometryTypeId;
+  IntegerVector nGeometries;
+  IntegerVector nCoordinates;
+  IntegerVector srid;
+  IntegerVector coordinateDimensions;
+  NumericVector firstX;
+  NumericVector firstY;
+  NumericVector firstZ;
 
   void init(GEOSContextHandle_t context, size_t size) {
-    NumericVector x(size);
-    NumericVector y(size);
-    this->x = x;
-    this->y = y;
+    this->problems = CharacterVector(size);
+    this->isMissing = LogicalVector(size);
+    this->isEmpty = LogicalVector(size);
+    this->geometryTypeId = IntegerVector(size);
+    this->nGeometries = IntegerVector(size);
+    this->nCoordinates = IntegerVector(size);
+    this->srid = IntegerVector(size);
+    this->coordinateDimensions = IntegerVector(size);
+    this->firstX = NumericVector(size);
+    this->firstY = NumericVector(size);
+    this->firstZ = NumericVector(size);
   }
 
-  void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+  void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+    this->problems[i] = NA_STRING;
+
     if (geometry == NULL) {
-      this->x[i] = NA_REAL;
-      this->y[i] = NA_REAL;
-    } else if (GEOSisEmpty_r(context, geometry)) {
-      this->x[i] = NA_REAL;
-      this->y[i] = NA_REAL;
-    } else if (GEOSGeomTypeId_r(context, geometry) == GEOSGeomTypes::GEOS_GEOMETRYCOLLECTION) {
-      this->x[i] = NA_REAL;
-      this->y[i] = NA_REAL;
+      this->setRowNULL(i);
     } else {
-      List coords = GeovctrsFeatureFactory::getFeature(context, geometry);
-      List xy = coords["xy"];
-      NumericVector x = as<NumericVector>(xy["x"]);
-      NumericVector y = as<NumericVector>(xy["y"]);
-      this->x[i] = x[0];
-      this->y[i] = y[0];
+      this->isMissing[i] = false;
+      this->isEmpty[i] = GEOSisEmpty_r(context, geometry);
+      this->geometryTypeId[i] = GEOSGeomTypeId_r(context, geometry);
+      this->nGeometries[i] = GEOSGetNumGeometries_r(context, geometry);
+      this->nCoordinates[i] = GEOSGetNumCoordinates_r(context, geometry);
+      this->srid[i] = GEOSGetSRID_r(context, geometry);
+      this->coordinateDimensions[i] = GEOSGeom_getCoordinateDimension_r(context, geometry);
+      this->firstX[i] = NA_REAL;
+      this->firstY[i] = NA_REAL;
+      this->firstZ[i] = NA_REAL;
+      try {
+        this->nextGeometry(context, geometry);
+      } catch(NumericVector firstCoords) {
+        this->firstX[i] = firstCoords[0];
+        this->firstY[i] = firstCoords[1];
+        this->firstZ[i] = firstCoords[2];
+      }
     }
+  }
+
+  void nextError(GEOSContextHandle_t context, const char* message, size_t i) {
+    this->problems[i] = message;
+    this->setRowNULL(i);
+  }
+
+  void nextCoordinate(GEOSContextHandle_t context, double x, double y, double z) {
+    throw NumericVector::create(x, y, z);
+  }
+
+  void setRowNULL(size_t i) {
+    this->isMissing[i] = true;
+    this->isEmpty[i] = true;
+    this->geometryTypeId[i] = NA_INTEGER;
+    this->nGeometries[i] = NA_INTEGER;
+    this->nCoordinates[i] = NA_INTEGER;
+    this->srid[i] = NA_INTEGER;
+    this->coordinateDimensions[i] = NA_INTEGER;
+    this->firstX[i] = NA_REAL;
+    this->firstY[i] = NA_REAL;
+    this->firstZ[i] = NA_REAL;
   }
 
   SEXP assemble(GEOSContextHandle_t context) {
-    return GeovctrsFactory::newXY(this->x, this->y);
+    return List::create(
+      _["problems"] = this->problems,
+      _["is_missing"] = this->isMissing,
+      _["is_empty"] = this->isEmpty,
+      _["geometry_type"] = this->geometryTypeId,
+      _["n_geometries"] = this->nGeometries,
+      _["n_coordinates"] = this->nCoordinates,
+      _["srid"] = this->srid,
+      _["coordinate_dimensions"] = this->coordinateDimensions,
+      _["first_coordinate"] = GeovctrsFactory::newXY(this->firstX, this->firstY)
+    );
   }
 };
 
 // [[Rcpp::export]]
-SEXP geovctrs_cpp_first_coordinate(SEXP x) {
-  FirstCoordinateOperator op;
+List geovctrs_cpp_summary(SEXP x) {
+  SummaryOperator op;
   op.initProvider(x);
   return op.operate();
 }

@@ -11,11 +11,11 @@
 #' geo_summary(
 #'   geo_wkt(
 #'     c(
-#'     "POINT (30 10)",
-#'     "LINESTRING (0 0, 10 11)",
-#'     "POLYGON EMPTY"
-#'    )
-#'  )
+#'       "POINT (30 10)",
+#'       "LINESTRING (0 0, 10 11)",
+#'       "POLYGON EMPTY"
+#'     )
+#'   )
 #' )
 #'
 geo_summary <- function(x) {
@@ -29,15 +29,13 @@ geo_summary.default <- function(x) {
 
 #' @export
 geo_summary.geovctr <- function(x) {
-  tibble::tibble(
-    geometry_type = geo_geometry_type(x),
-    is_empty = geo_is_empty(x),
-    n_coordinates = geo_n_coordinates(x),
-    n_geometries =  geo_n_geometries(x),
-    srid = geo_srid(x),
-    coordinate_dimensions = geo_coordinate_dimensions(x),
-    first_coordinate = geo_first_coordinate(x)
-  )
+  cpp_summary <- geovctrs_cpp_summary(x)
+  cpp_summary$geometry_type <- c(
+    "point", "linestring", "linearring", "polygon",
+    "multipoint", "multilinestring", "multipolygon",
+    "geometrycollection"
+  )[cpp_summary$geometry_type + 1]
+  as_tibble(cpp_summary)
 }
 
 #' @rdname geo_summary
@@ -48,12 +46,7 @@ geo_n_geometries <- function(x) {
 
 #' @export
 geo_n_geometries.default <- function(x) {
-  geo_n_geometries(as_geovctr(x))
-}
-
-#' @export
-geo_n_geometries.geovctr <- function(x) {
-  geovctrs_cpp_n_geometries(x)
+  geo_summary(x)$n_geometries
 }
 
 #' @rdname geo_summary
@@ -64,12 +57,7 @@ geo_n_coordinates <- function(x) {
 
 #' @export
 geo_n_coordinates.default <- function(x) {
-  geo_n_coordinates(as_geovctr(x))
-}
-
-#' @export
-geo_n_coordinates.geovctr <- function(x) {
-  geovctrs_cpp_n_coordinates(x)
+  geo_summary(x)$n_coordinates
 }
 
 #' @rdname geo_summary
@@ -80,16 +68,7 @@ geo_geometry_type <- function(x) {
 
 #' @export
 geo_geometry_type.default <- function(x) {
-  geo_geometry_type(as_geovctr(x))
-}
-
-#' @export
-geo_geometry_type.geovctr <- function(x) {
-  c(
-    "point", "linestring", "linearring", "polygon",
-    "multipoint", "multilinestring", "multipolygon",
-    "geometrycollection"
-  )[geovctrs_cpp_geom_type_id(x) + 1]
+  geo_summary(x)$geometry_type
 }
 
 #' @rdname geo_summary
@@ -100,12 +79,7 @@ geo_coordinate_dimensions <- function(x) {
 
 #' @export
 geo_coordinate_dimensions.default <- function(x) {
-  geo_coordinate_dimensions(as_geovctr(x))
-}
-
-#' @export
-geo_coordinate_dimensions.geovctr <- function(x) {
-  geovctrs_cpp_coordinate_dimensions(x)
+  geo_summary(x)$coordinate_dimensions
 }
 
 #' @rdname geo_summary
@@ -116,10 +90,5 @@ geo_first_coordinate <- function(x) {
 
 #' @export
 geo_first_coordinate.default <- function(x) {
-  geo_first_coordinate(as_geovctr(x))
-}
-
-#' @export
-geo_first_coordinate.geovctr <- function(x) {
-  geovctrs_cpp_first_coordinate(x)
+  geo_summary(x)$first_coordinate
 }

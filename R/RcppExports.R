@@ -33,36 +33,12 @@ geovctrs_cpp_is_empty <- function(data) {
     .Call(`_geovctrs_geovctrs_cpp_is_empty`, data)
 }
 
-geovctrs_cpp_parse <- function(data) {
-    .Call(`_geovctrs_geovctrs_cpp_parse`, data)
-}
-
-geovctrs_cpp_get_srid <- function(x) {
-    .Call(`_geovctrs_geovctrs_cpp_get_srid`, x)
-}
-
 geovctrs_cpp_set_srid <- function(x, srid) {
     .Call(`_geovctrs_geovctrs_cpp_set_srid`, x, srid)
 }
 
-geovctrs_cpp_geom_type_id <- function(x) {
-    .Call(`_geovctrs_geovctrs_cpp_geom_type_id`, x)
-}
-
-geovctrs_cpp_n_geometries <- function(x) {
-    .Call(`_geovctrs_geovctrs_cpp_n_geometries`, x)
-}
-
-geovctrs_cpp_n_coordinates <- function(x) {
-    .Call(`_geovctrs_geovctrs_cpp_n_coordinates`, x)
-}
-
-geovctrs_cpp_coordinate_dimensions <- function(x) {
-    .Call(`_geovctrs_geovctrs_cpp_coordinate_dimensions`, x)
-}
-
-geovctrs_cpp_first_coordinate <- function(x) {
-    .Call(`_geovctrs_geovctrs_cpp_first_coordinate`, x)
+geovctrs_cpp_summary <- function(x) {
+    .Call(`_geovctrs_geovctrs_cpp_summary`, x)
 }
 
 geovctrs_cpp_geos_version_runtime <- function() {

@@ -101,7 +101,7 @@ geo_set_srid.geovctrs_xy <- function(x, srid) {
 
 #' @export
 geo_srid.geovctrs_wkb <- function(x) {
-  geovctrs_cpp_get_srid(x)
+  geovctrs_cpp_summary(x)$srid
 }
 
 #' @export

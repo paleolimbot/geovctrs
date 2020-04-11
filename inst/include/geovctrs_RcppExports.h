@@ -192,17 +192,17 @@ namespace geovctrs {
         return Rcpp::as<LogicalVector >(rcpp_result_gen);
     }
 
-    inline CharacterVector geovctrs_cpp_parse(SEXP data) {
-        typedef SEXP(*Ptr_geovctrs_cpp_parse)(SEXP);
-        static Ptr_geovctrs_cpp_parse p_geovctrs_cpp_parse = NULL;
-        if (p_geovctrs_cpp_parse == NULL) {
-            validateSignature("CharacterVector(*geovctrs_cpp_parse)(SEXP)");
-            p_geovctrs_cpp_parse = (Ptr_geovctrs_cpp_parse)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_parse");
+    inline List geovctrs_cpp_summary(SEXP x) {
+        typedef SEXP(*Ptr_geovctrs_cpp_summary)(SEXP);
+        static Ptr_geovctrs_cpp_summary p_geovctrs_cpp_summary = NULL;
+        if (p_geovctrs_cpp_summary == NULL) {
+            validateSignature("List(*geovctrs_cpp_summary)(SEXP)");
+            p_geovctrs_cpp_summary = (Ptr_geovctrs_cpp_summary)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_summary");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_geovctrs_cpp_parse(Shield<SEXP>(Rcpp::wrap(data)));
+            rcpp_result_gen = p_geovctrs_cpp_summary(Shield<SEXP>(Rcpp::wrap(x)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -210,154 +210,7 @@ namespace geovctrs {
             throw Rcpp::LongjumpException(rcpp_result_gen);
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<CharacterVector >(rcpp_result_gen);
-    }
-
-    inline IntegerVector geovctrs_cpp_get_srid(SEXP x) {
-        typedef SEXP(*Ptr_geovctrs_cpp_get_srid)(SEXP);
-        static Ptr_geovctrs_cpp_get_srid p_geovctrs_cpp_get_srid = NULL;
-        if (p_geovctrs_cpp_get_srid == NULL) {
-            validateSignature("IntegerVector(*geovctrs_cpp_get_srid)(SEXP)");
-            p_geovctrs_cpp_get_srid = (Ptr_geovctrs_cpp_get_srid)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_get_srid");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_geovctrs_cpp_get_srid(Shield<SEXP>(Rcpp::wrap(x)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<IntegerVector >(rcpp_result_gen);
-    }
-
-    inline SEXP geovctrs_cpp_set_srid(SEXP x, IntegerVector srid) {
-        typedef SEXP(*Ptr_geovctrs_cpp_set_srid)(SEXP,SEXP);
-        static Ptr_geovctrs_cpp_set_srid p_geovctrs_cpp_set_srid = NULL;
-        if (p_geovctrs_cpp_set_srid == NULL) {
-            validateSignature("SEXP(*geovctrs_cpp_set_srid)(SEXP,IntegerVector)");
-            p_geovctrs_cpp_set_srid = (Ptr_geovctrs_cpp_set_srid)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_set_srid");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_geovctrs_cpp_set_srid(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(srid)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<SEXP >(rcpp_result_gen);
-    }
-
-    inline IntegerVector geovctrs_cpp_geom_type_id(SEXP x) {
-        typedef SEXP(*Ptr_geovctrs_cpp_geom_type_id)(SEXP);
-        static Ptr_geovctrs_cpp_geom_type_id p_geovctrs_cpp_geom_type_id = NULL;
-        if (p_geovctrs_cpp_geom_type_id == NULL) {
-            validateSignature("IntegerVector(*geovctrs_cpp_geom_type_id)(SEXP)");
-            p_geovctrs_cpp_geom_type_id = (Ptr_geovctrs_cpp_geom_type_id)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_geom_type_id");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_geovctrs_cpp_geom_type_id(Shield<SEXP>(Rcpp::wrap(x)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<IntegerVector >(rcpp_result_gen);
-    }
-
-    inline IntegerVector geovctrs_cpp_n_geometries(SEXP x) {
-        typedef SEXP(*Ptr_geovctrs_cpp_n_geometries)(SEXP);
-        static Ptr_geovctrs_cpp_n_geometries p_geovctrs_cpp_n_geometries = NULL;
-        if (p_geovctrs_cpp_n_geometries == NULL) {
-            validateSignature("IntegerVector(*geovctrs_cpp_n_geometries)(SEXP)");
-            p_geovctrs_cpp_n_geometries = (Ptr_geovctrs_cpp_n_geometries)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_n_geometries");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_geovctrs_cpp_n_geometries(Shield<SEXP>(Rcpp::wrap(x)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<IntegerVector >(rcpp_result_gen);
-    }
-
-    inline IntegerVector geovctrs_cpp_n_coordinates(SEXP x) {
-        typedef SEXP(*Ptr_geovctrs_cpp_n_coordinates)(SEXP);
-        static Ptr_geovctrs_cpp_n_coordinates p_geovctrs_cpp_n_coordinates = NULL;
-        if (p_geovctrs_cpp_n_coordinates == NULL) {
-            validateSignature("IntegerVector(*geovctrs_cpp_n_coordinates)(SEXP)");
-            p_geovctrs_cpp_n_coordinates = (Ptr_geovctrs_cpp_n_coordinates)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_n_coordinates");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_geovctrs_cpp_n_coordinates(Shield<SEXP>(Rcpp::wrap(x)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<IntegerVector >(rcpp_result_gen);
-    }
-
-    inline IntegerVector geovctrs_cpp_coordinate_dimensions(SEXP x) {
-        typedef SEXP(*Ptr_geovctrs_cpp_coordinate_dimensions)(SEXP);
-        static Ptr_geovctrs_cpp_coordinate_dimensions p_geovctrs_cpp_coordinate_dimensions = NULL;
-        if (p_geovctrs_cpp_coordinate_dimensions == NULL) {
-            validateSignature("IntegerVector(*geovctrs_cpp_coordinate_dimensions)(SEXP)");
-            p_geovctrs_cpp_coordinate_dimensions = (Ptr_geovctrs_cpp_coordinate_dimensions)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_coordinate_dimensions");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_geovctrs_cpp_coordinate_dimensions(Shield<SEXP>(Rcpp::wrap(x)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<IntegerVector >(rcpp_result_gen);
-    }
-
-    inline SEXP geovctrs_cpp_first_coordinate(SEXP x) {
-        typedef SEXP(*Ptr_geovctrs_cpp_first_coordinate)(SEXP);
-        static Ptr_geovctrs_cpp_first_coordinate p_geovctrs_cpp_first_coordinate = NULL;
-        if (p_geovctrs_cpp_first_coordinate == NULL) {
-            validateSignature("SEXP(*geovctrs_cpp_first_coordinate)(SEXP)");
-            p_geovctrs_cpp_first_coordinate = (Ptr_geovctrs_cpp_first_coordinate)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_first_coordinate");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_geovctrs_cpp_first_coordinate(Shield<SEXP>(Rcpp::wrap(x)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<SEXP >(rcpp_result_gen);
+        return Rcpp::as<List >(rcpp_result_gen);
     }
 
 }

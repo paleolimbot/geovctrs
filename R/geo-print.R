@@ -115,7 +115,7 @@ geo_format_summary <- function(summary, class, short, col) {
   )
 
   ifelse(
-    is.na(summary$is_empty),
+    summary$is_missing,
     na,
     paste0(sym, n_sub_geom_str, " ", coord_str)
   )

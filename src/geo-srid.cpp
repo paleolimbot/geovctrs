@@ -2,25 +2,6 @@
 #include "geovctrs/operator.hpp"
 using namespace Rcpp;
 
-// [[Rcpp::interfaces(r, cpp)]]
-
-class GetSRIDOperator: public GeovctrsVectorOperator<IntegerVector, int> {
-  int operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
-    if (geometry == NULL) {
-      return NA_INTEGER;
-    } else {
-      return GEOSGetSRID_r(context, geometry);
-    }
-  }
-};
-
-// [[Rcpp::export]]
-IntegerVector geovctrs_cpp_get_srid(SEXP x) {
-  GetSRIDOperator op;
-  op.initProvider(x);
-  return op.operate();
-}
-
 class SetSRIDOperator: public GeovctrsGeometryOperator {
 public:
   IntegerVector srid;
