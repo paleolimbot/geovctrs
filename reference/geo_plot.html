@@ -131,7 +131,14 @@ plot call (geometries are promoted to mutli-geometries if needed)." />
 plot call (geometries are promoted to mutli-geometries if needed).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>geo_plot</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>asp</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>""</span>)
+    <pre class="usage"><span class='fu'>geo_plot</span>(
+  <span class='no'>x</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>asp</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>bbox</span> <span class='kw'>=</span> <span class='fu'><a href='geo_bbox.html'>geo_bbox</a></span>(<span class='no'>x</span>, <span class='kw'>finite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>),
+  <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>""</span>,
+  <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>""</span>
+)
 
 <span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
@@ -142,6 +149,9 @@ plot call (geometries are promoted to mutli-geometries if needed).</p>
 <span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for data.frame</span>
+<span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for `NULL`</span>
 <span class='fu'>geo_plot_add</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for geovctrs_xy</span>
@@ -175,8 +185,12 @@ and multilinestring geometries, and <code><a href='https://rdrr.io/r/graphics/po
 and multipolygon geometries.</p></td>
     </tr>
     <tr>
-      <th>asp, xlim, ylim, xlab, ylab</th>
+      <th>asp, xlab, ylab</th>
       <td><p>Passed to <code><a href='https://rdrr.io/r/graphics/plot.html'>graphics::plot()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>bbox</th>
+      <td><p>The limits of the plot. Defaults to <code><a href='geo_bbox.html'>geo_bbox(x, finite = TRUE)</a></code>.</p></td>
     </tr>
     </table>
 
