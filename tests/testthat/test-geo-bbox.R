@@ -37,6 +37,11 @@ test_that("envelope works with nested collections", {
     geo_envelope(geo_wkt("GEOMETRYCOLLECTION (LINESTRING (nan 0, 1 2, 6 4))"), na.rm = TRUE),
     geo_rect(1, 0, 6, 4)
   )
+
+  expect_identical(
+    geo_envelope(geo_wkt("GEOMETRYCOLLECTION (LINESTRING (nan 0, 1 2, 6 4))"), finite = TRUE),
+    geo_rect(1, 0, 6, 4)
+  )
 })
 
 test_that("envelope works with corner cases", {
@@ -47,7 +52,7 @@ test_that("envelope works with corner cases", {
   expect_identical(geo_envelope(geo_rect()), geo_rect())
   expect_identical(
     geo_envelope(geo_rect(NA, NA, NA, NA)),
-    geo_rect(NA, NA, NA, NA)
+    geo_rect(Inf, Inf, -Inf, -Inf)
   )
   expect_identical(
     geo_envelope(geo_rect(NA, NA, NA, NA), na.rm = TRUE),
@@ -57,7 +62,7 @@ test_that("envelope works with corner cases", {
   expect_identical(geo_envelope(geo_segment()), geo_rect())
   expect_identical(
     geo_envelope(geo_segment(geo_xy(NA, NA), geo_xy(NA, NA))),
-    geo_rect(NA, NA, NA, NA)
+    geo_rect(Inf, Inf, -Inf, -Inf)
   )
   expect_identical(
     geo_envelope(geo_segment(geo_xy(NA, NA), geo_xy(NA, NA)), na.rm = TRUE),
@@ -117,6 +122,16 @@ test_that("envelope works with corner cases", {
   )
 
   expect_equal(
+    geo_envelope("LINESTRING (nan 1, 5 6)", finite = TRUE),
+    geo_rect(5, 1, 5, 6)
+  )
+
+  expect_equal(
+    geo_envelope("LINESTRING (nan inf, 5 6)", finite = TRUE),
+    geo_rect(5, 6, 5, 6)
+  )
+
+  expect_equal(
     geo_envelope("LINESTRING (nan 1, nan 6)", na.rm = FALSE),
     geo_rect(NA, 1, NA, 6)
   )
@@ -126,7 +141,10 @@ test_that("envelope works with corner cases", {
     geo_rect(Inf, 1, -Inf, 6)
   )
 
-
+  expect_equal(
+    geo_envelope("LINESTRING (nan 1, nan 6)", finite = TRUE),
+    geo_rect(Inf, 1, -Inf, 6)
+  )
 })
 
 test_that("bbox works", {

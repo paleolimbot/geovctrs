@@ -87,17 +87,17 @@ namespace geovctrs {
         return Rcpp::as<NumericVector >(rcpp_result_gen);
     }
 
-    inline SEXP geovctrs_cpp_bbox(SEXP data, bool naRm) {
-        typedef SEXP(*Ptr_geovctrs_cpp_bbox)(SEXP,SEXP);
+    inline SEXP geovctrs_cpp_bbox(SEXP data, bool naRm, bool onlyFinite) {
+        typedef SEXP(*Ptr_geovctrs_cpp_bbox)(SEXP,SEXP,SEXP);
         static Ptr_geovctrs_cpp_bbox p_geovctrs_cpp_bbox = NULL;
         if (p_geovctrs_cpp_bbox == NULL) {
-            validateSignature("SEXP(*geovctrs_cpp_bbox)(SEXP,bool)");
+            validateSignature("SEXP(*geovctrs_cpp_bbox)(SEXP,bool,bool)");
             p_geovctrs_cpp_bbox = (Ptr_geovctrs_cpp_bbox)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_bbox");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_geovctrs_cpp_bbox(Shield<SEXP>(Rcpp::wrap(data)), Shield<SEXP>(Rcpp::wrap(naRm)));
+            rcpp_result_gen = p_geovctrs_cpp_bbox(Shield<SEXP>(Rcpp::wrap(data)), Shield<SEXP>(Rcpp::wrap(naRm)), Shield<SEXP>(Rcpp::wrap(onlyFinite)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -108,17 +108,17 @@ namespace geovctrs {
         return Rcpp::as<SEXP >(rcpp_result_gen);
     }
 
-    inline SEXP geovctrs_cpp_envelope(SEXP data, bool naRm) {
-        typedef SEXP(*Ptr_geovctrs_cpp_envelope)(SEXP,SEXP);
+    inline SEXP geovctrs_cpp_envelope(SEXP data, bool naRm, bool onlyFinite) {
+        typedef SEXP(*Ptr_geovctrs_cpp_envelope)(SEXP,SEXP,SEXP);
         static Ptr_geovctrs_cpp_envelope p_geovctrs_cpp_envelope = NULL;
         if (p_geovctrs_cpp_envelope == NULL) {
-            validateSignature("SEXP(*geovctrs_cpp_envelope)(SEXP,bool)");
+            validateSignature("SEXP(*geovctrs_cpp_envelope)(SEXP,bool,bool)");
             p_geovctrs_cpp_envelope = (Ptr_geovctrs_cpp_envelope)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_envelope");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_geovctrs_cpp_envelope(Shield<SEXP>(Rcpp::wrap(data)), Shield<SEXP>(Rcpp::wrap(naRm)));
+            rcpp_result_gen = p_geovctrs_cpp_envelope(Shield<SEXP>(Rcpp::wrap(data)), Shield<SEXP>(Rcpp::wrap(naRm)), Shield<SEXP>(Rcpp::wrap(onlyFinite)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

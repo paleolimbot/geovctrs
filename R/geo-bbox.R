@@ -12,32 +12,57 @@
 #'   coerced to a geometry-like object using [as_geovctr()].
 #' @param ... Unused
 #' @param na.rm Should NAs be removed?
+#' @param finite Should only finite values be considered? `TRUE`
+#'   implies `na.rm = TRUE`.
 #'
 #' @return A [geo_rect()] of length 1.
 #' @export
 #'
 #' @examples
 #' geo_bbox(geo_wkt(c("POINT (30 10)", "POINT EMPTY")))
+#' geo_envelope(geo_wkt(c("POINT (30 10)", "POINT EMPTY")))
 #'
-geo_bbox <- function(x, ..., na.rm = FALSE) {
+geo_bbox <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   UseMethod("geo_bbox")
+}
+
+#' @export
+geo_bbox.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_bbox(as_geovctr(x), ..., na.rm = na.rm, finite = finite)
+}
+
+#' @export
+geo_bbox.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geovctrs_cpp_bbox(x, na.rm, finite)
 }
 
 #' @rdname geo_bbox
 #' @export
-geo_envelope <- function(x, ..., na.rm = FALSE) {
+geo_envelope <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   UseMethod("geo_envelope")
 }
 
 #' @export
-geo_envelope.default <- function(x, ..., na.rm = FALSE) {
-  restore_geovctr(x, geovctrs_cpp_envelope(as_geovctr(x), na.rm))
+geo_envelope.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  restore_geovctr(x, geovctrs_cpp_envelope(as_geovctr(x), na.rm, finite))
 }
 
 #' @export
-geo_envelope.geovctrs_xy <- function(x, ..., na.rm = FALSE) {
+geo_envelope.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geovctrs_cpp_envelope(x, na.rm, finite)
+}
+
+#' @export
+geo_envelope.geovctrs_xy <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   xs <- field(x, "x")
   ys <- field(x, "y")
+
+  if (finite) {
+    xs[!is.finite(xs)] <- NA_real_
+    ys[!is.finite(ys)] <- NA_real_
+    na.rm <- TRUE
+  }
+
   xmin <- xs
   ymin <- ys
   xmax <- xs
@@ -51,64 +76,4 @@ geo_envelope.geovctrs_xy <- function(x, ..., na.rm = FALSE) {
   }
 
   geo_rect(xmin, ymin, xmax, ymax)
-}
-
-#' @export
-geo_envelope.geovctrs_segment <- function(x, ..., na.rm = FALSE) {
-  # *almost* the same, except a geo_rect might not have been constructed
-  # with bounds in the correct order
-  start <- field(x, "start")
-  end <- field(x, "end")
-  x1 <- field(start, "x")
-  y1 <- field(start, "y")
-  x2 <- field(end, "x")
-  y2 <- field(end, "y")
-
-  if (na.rm) {
-    xmin <- pmin2(x1, x2)
-    ymin <- pmin2(y1, y2)
-    xmax <- pmax2(x1, x2)
-    ymax <- pmax2(y1, y2)
-  } else {
-    xmin <- pmin(x1, x2, na.rm = FALSE)
-    ymin <- pmin(y1, y2, na.rm = FALSE)
-    xmax <- pmax(x1, x2, na.rm = FALSE)
-    ymax <- pmax(y1, y2, na.rm = FALSE)
-  }
-
-  geo_rect(xmin, ymin, xmax, ymax, srid = field(x, "srid"));
-}
-
-#' @export
-geo_envelope.geovctrs_rect <- function(x, ..., na.rm = FALSE) {
-  # *almost* the same, except a geo_rect might not have been constructed
-  # with bounds in the correct order
-  xmin <- field(x, "xmin")
-  ymin <- field(x, "ymin")
-  xmax <- field(x, "xmax")
-  ymax <- field(x, "ymax")
-
-  if (na.rm) {
-    xmin2 <- pmin2(xmin, xmax)
-    ymin2 <- pmin2(ymin, ymax)
-    xmax2 <- pmax2(xmin, xmax)
-    ymax2 <- pmax2(ymin, ymax)
-  } else {
-    xmin2 <- pmin(xmin, xmax, na.rm = FALSE)
-    ymin2 <- pmin(ymin, ymax, na.rm = FALSE)
-    xmax2 <- pmax(xmin, xmax, na.rm = FALSE)
-    ymax2 <- pmax(ymin, ymax, na.rm = FALSE)
-  }
-
-  geo_rect(xmin2, ymin2, xmax2, ymax2, srid = field(x, "srid"));
-}
-
-#' @export
-geo_bbox.default <- function(x, ..., na.rm = FALSE) {
-  geo_bbox(as_geovctr(x), na.rm = na.rm)
-}
-
-#' @export
-geo_bbox.geovctr <- function(x, ..., na.rm = FALSE) {
-  geovctrs_cpp_bbox(x, na.rm)
 }

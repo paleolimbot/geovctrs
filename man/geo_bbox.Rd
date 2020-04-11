@@ -5,9 +5,9 @@
 \alias{geo_envelope}
 \title{Bounding boxes and envelopes}
 \usage{
-geo_bbox(x, ..., na.rm = FALSE)
+geo_bbox(x, ..., na.rm = FALSE, finite = FALSE)
 
-geo_envelope(x, ..., na.rm = FALSE)
+geo_envelope(x, ..., na.rm = FALSE, finite = FALSE)
 }
 \arguments{
 \item{x}{A geometry-like object, or one that can be
@@ -16,6 +16,9 @@ coerced to a geometry-like object using \code{\link[=as_geovctr]{as_geovctr()}}.
 \item{...}{Unused}
 
 \item{na.rm}{Should NAs be removed?}
+
+\item{finite}{Should only finite values be considered? \code{TRUE}
+implies \code{na.rm = TRUE}.}
 }
 \value{
 A \code{\link[=geo_rect]{geo_rect()}} of length 1.
@@ -30,5 +33,6 @@ mean more \code{Inf} values than you expected).
 }
 \examples{
 geo_bbox(geo_wkt(c("POINT (30 10)", "POINT EMPTY")))
+geo_envelope(geo_wkt(c("POINT (30 10)", "POINT EMPTY")))
 
 }

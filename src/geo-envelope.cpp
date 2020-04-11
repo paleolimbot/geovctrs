@@ -54,6 +54,34 @@ double max_na_rm(double x1i, double x2i) {
   }
 }
 
+double min_finite(double x1i, double x2i) {
+  bool x1NA = NumericVector::is_na(x1i) || x1i == R_NegInf || x1i == R_PosInf;
+  bool x2NA = NumericVector::is_na(x2i) || x2i == R_NegInf || x2i == R_PosInf;
+  if (x1NA && x2NA) {
+    return R_PosInf;
+  } else if (x1NA) {
+    return x2i;
+  } else if (x2NA) {
+    return x1i;
+  } else {
+    return std::min(x1i, x2i);
+  }
+}
+
+double max_finite(double x1i, double x2i) {
+  bool x1NA = NumericVector::is_na(x1i) || x1i == R_NegInf || x1i == R_PosInf;
+  bool x2NA = NumericVector::is_na(x2i) || x2i == R_NegInf || x2i == R_PosInf;
+  if (x1NA && x2NA) {
+    return R_NegInf;
+  } else if (x1NA) {
+    return x2i;
+  } else if (x2NA) {
+    return x1i;
+  } else {
+    return std::max(x1i, x2i);
+  }
+}
+
 // [[Rcpp::export]]
 NumericVector pmin2(NumericVector x1, NumericVector x2)  {
   NumericVector out (x1.size());
@@ -79,6 +107,7 @@ NumericVector pmax2(NumericVector x1, NumericVector x2)  {
 class RangeOperator: public GeovctrsRecursiveOperator {
 public:
   bool naRm;
+  bool onlyFinite;
   double xmin;
   double ymin;
   double zmin;
@@ -86,8 +115,9 @@ public:
   double ymax;
   double zmax;
 
-  RangeOperator(bool naRm) {
+  RangeOperator(bool naRm, bool onlyFinite) {
     this->naRm = naRm;
+    this->onlyFinite = onlyFinite;
   }
 
   void reset() {
@@ -100,7 +130,14 @@ public:
   }
 
   void nextCoordinate(GEOSContextHandle_t context, double x, double y, double z) {
-    if (naRm) {
+    if (onlyFinite) {
+      this->xmin = min_finite(this->xmin, x);
+      this->ymin = min_finite(this->ymin, y);
+      this->zmin = min_finite(this->zmin, z);
+      this->xmax = max_finite(this->xmax, x);
+      this->ymax = max_finite(this->ymax, y);
+      this->zmax = max_finite(this->zmax, z);
+    } else if (naRm) {
       this->xmin = min_na_rm(this->xmin, x);
       this->ymin = min_na_rm(this->ymin, y);
       this->zmin = min_na_rm(this->zmin, z);
@@ -122,7 +159,7 @@ class BboxOperator: public RangeOperator {
 public:
   int srid;
 
-  BboxOperator(bool naRm): RangeOperator(naRm) {
+  BboxOperator(bool naRm, bool onlyFinite): RangeOperator(naRm, onlyFinite) {
     this->srid = NA_INTEGER;
     this->reset();
   }
@@ -152,11 +189,13 @@ public:
 
 
 // [[Rcpp::export]]
-SEXP geovctrs_cpp_bbox(SEXP data, bool naRm) {
-  BboxOperator op(naRm);
+SEXP geovctrs_cpp_bbox(SEXP data, bool naRm, bool onlyFinite) {
+  BboxOperator op(naRm, onlyFinite);
   op.initProvider(data);
   return op.operate();
 }
+
+
 
 class EnvelopeOperator: public RangeOperator {
 public:
@@ -166,7 +205,7 @@ public:
   NumericVector ymaxVec;
   IntegerVector sridVec;
 
-  EnvelopeOperator(bool naRm): RangeOperator(naRm) {
+  EnvelopeOperator(bool naRm, bool onlyFinite): RangeOperator(naRm, onlyFinite) {
     this->reset();
   }
 
@@ -223,8 +262,8 @@ public:
 };
 
 // [[Rcpp::export]]
-SEXP geovctrs_cpp_envelope(SEXP data, bool naRm) {
-  EnvelopeOperator op(naRm);
+SEXP geovctrs_cpp_envelope(SEXP data, bool naRm, bool onlyFinite) {
+  EnvelopeOperator op(naRm, onlyFinite);
   op.initProvider(data);
   return op.operate();
 }
