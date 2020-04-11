@@ -308,7 +308,10 @@ public:
     this->partId = 0;
     this->ringId = 0;
     this->recursionLevel = 0;
+    this->nextFeature(context, geometry, i);
+  }
 
+  virtual void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     if (geometry == NULL) {
       this->nextNULL(context);
       return;
@@ -318,6 +321,10 @@ public:
   }
 
   virtual void nextNULL(GEOSContextHandle_t context) {
+
+  }
+
+  virtual void nextError(GEOSContextHandle_t context, const char* message) {
 
   }
 

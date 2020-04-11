@@ -164,8 +164,8 @@ public:
     this->reset();
   }
 
-  virtual void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
-    GeovctrsRecursiveOperator::operateNext(context, geometry, i);
+  virtual void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+    GeovctrsRecursiveOperator::nextFeature(context, geometry, i);
     if (geometry != NULL) {
       int featureSRID = GEOSGetSRID_r(context, geometry);
       if (IntegerVector::is_na(this->srid)) {
@@ -222,7 +222,7 @@ public:
     this->sridVec = srid;
   }
 
-  void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+  void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     int featureSRID;
 
     if (geometry == NULL && this->naRm) {
