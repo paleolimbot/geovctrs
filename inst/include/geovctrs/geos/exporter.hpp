@@ -4,7 +4,7 @@
 
 #include <geos_c.h>
 #include "feature-factory.hpp"
-#include "../factory.hpp"
+#include "geovctrs/factory.hpp"
 #include <memory.h>
 #include <Rcpp.h>
 using namespace Rcpp;

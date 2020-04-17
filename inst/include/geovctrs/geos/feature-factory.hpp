@@ -2,7 +2,7 @@
 #ifndef GEOVCTRS_GEOS_FEATURE_FACTORY_HPP
 #define GEOVCTRS_GEOS_FEATURE_FACTORY_HPP
 
-#include "../factory.hpp"
+#include "geovctrs/factory.hpp"
 #include <geos_c.h>
 #include <Rcpp.h>
 using namespace Rcpp;
