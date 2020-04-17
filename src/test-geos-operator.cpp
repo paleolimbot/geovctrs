@@ -4,7 +4,7 @@
 using namespace Rcpp;
 
 
-class TestBufferOp: public GeovctrsGeometryOperator {
+class TestBufferOp: public GeovctrsGEOSGeometryOperator {
   GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
     // width, segments per quandrant
     return GEOSBuffer_r(context, geometry, 2, 30);

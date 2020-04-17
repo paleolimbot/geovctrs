@@ -103,7 +103,7 @@ NumericVector pmax2(NumericVector x1, NumericVector x2)  {
   return out;
 }
 
-class RangeOperator: public GeovctrsRecursiveOperator {
+class RangeOperator: public GeovctrsGEOSRecursiveOperator {
 public:
   bool naRm;
   bool onlyFinite;
@@ -164,7 +164,7 @@ public:
   }
 
   virtual void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
-    GeovctrsRecursiveOperator::nextFeature(context, geometry, i);
+    GeovctrsGEOSRecursiveOperator::nextFeature(context, geometry, i);
     if (geometry != NULL) {
       int featureSRID = GEOSGetSRID_r(context, geometry);
       if (IntegerVector::is_na(this->srid)) {

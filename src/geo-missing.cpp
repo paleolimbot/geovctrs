@@ -4,7 +4,7 @@ using namespace Rcpp;
 
 // [[Rcpp::interfaces(r, cpp)]]
 
-class BadCoordinateOperator: public GeovctrsRecursiveOperator {
+class BadCoordinateOperator: public GeovctrsGEOSRecursiveOperator {
 public:
   LogicalVector badCoordinate;
 
@@ -17,7 +17,7 @@ public:
       this->badCoordinate[i] = NA_LOGICAL;
     } else {
       try {
-        GeovctrsRecursiveOperator::nextFeature(context, geometry, i);
+        GeovctrsGEOSRecursiveOperator::nextFeature(context, geometry, i);
         this->badCoordinate[i] = false;
       } catch(NumericVector badCoordinates) {
         this->badCoordinate[i] = true;

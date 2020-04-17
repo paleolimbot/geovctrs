@@ -5,7 +5,7 @@ using namespace Rcpp;
 
 // [[Rcpp::interfaces(r, cpp)]]
 
-class SummaryOperator: public GeovctrsRecursiveOperator {
+class SummaryOperator: public GeovctrsGEOSRecursiveOperator {
 public:
   LogicalVector isEmpty;
   IntegerVector geometryTypeId;

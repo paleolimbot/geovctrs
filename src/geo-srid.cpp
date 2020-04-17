@@ -2,7 +2,7 @@
 #include "geovctrs/geos/operator.hpp"
 using namespace Rcpp;
 
-class SetSRIDOperator: public GeovctrsGeometryOperator {
+class SetSRIDOperator: public GeovctrsGEOSGeometryOperator {
 public:
   IntegerVector srid;
 

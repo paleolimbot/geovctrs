@@ -1,6 +1,6 @@
 
-#ifndef GEOVCTRS_OPERATOR_HPP
-#define GEOVCTRS_OPERATOR_HPP
+#ifndef GEOVCTRS_GEOS_OPERATOR_HPP
+#define GEOVCTRS_GEOS_OPERATOR_HPP
 
 #include "handler.hpp"
 #include "provider.hpp"
@@ -60,10 +60,10 @@ public:
 
 // ------------ base class ------------
 
-class GeovctrsBaseOperator {
+class GeovctrsGEOSBaseOperator {
 public:
 
-  GeovctrsBaseOperator() {
+  GeovctrsGEOSBaseOperator() {
     this->provider = std::unique_ptr<GeovctrsGEOSProvider>(nullptr);
     this->geometry = NULL;
   }
@@ -129,7 +129,7 @@ protected:
   // to clean up memory...this deleter won't call
   // methods of subclasses
   // all deleters of the class heiarchy get called
-  virtual ~GeovctrsBaseOperator() {
+  virtual ~GeovctrsGEOSBaseOperator() {
     if (this->provider) {
       this->provider->finish(this->handler.context);
     }
@@ -143,11 +143,11 @@ protected:
 private:
   void initOperator() {
     if (!this->provider) {
-      stop("GeovctrsBaseOperator.initProvider() was never called");
+      stop("GeovctrsGEOSBaseOperator.initProvider() was never called");
     }
 
     this->provider->init(this->handler.context);
-    this->commonSize = GeovctrsBaseOperator::recycledSize(this->maxParameterLength(), this->provider->size());
+    this->commonSize = GeovctrsGEOSBaseOperator::recycledSize(this->maxParameterLength(), this->provider->size());
   }
 
   SEXP finishOperator() {
@@ -166,7 +166,7 @@ private:
 
     for (size_t i=0; i < nonConstantSizes.size(); i++) {
       if (nonConstantSizes[i] != commonSize) {
-        stop("Providers/parameters with incompatible lengths passed to GeovctrsBaseOperator");
+        stop("Providers/parameters with incompatible lengths passed to GeovctrsGEOSBaseOperator");
       }
     }
 
@@ -184,7 +184,7 @@ private:
 
 // ------------- unary operators ----------------
 
-class GeovctrsOperator: public GeovctrsBaseOperator {
+class GeovctrsGEOSOperator: public GeovctrsGEOSBaseOperator {
 public:
 
   virtual void loopNext(GEOSContextHandle_t context, size_t i) {
@@ -195,12 +195,12 @@ public:
   virtual void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
 };
 
-class GeovctrsGeometryOperator: public GeovctrsBaseOperator {
+class GeovctrsGEOSGeometryOperator: public GeovctrsGEOSBaseOperator {
 public:
   std::unique_ptr<GeovctrsGEOSExporter> exporter;
   GEOSGeometry* result;
 
-  GeovctrsGeometryOperator() {
+  GeovctrsGEOSGeometryOperator() {
     std::unique_ptr<GeovctrsGEOSExporter> exporter = std::unique_ptr<GeovctrsGEOSExporter>(nullptr);
     this->result = NULL;
   }
@@ -211,7 +211,7 @@ public:
 
   void init(GEOSContextHandle_t context, size_t size) {
     if (!this->exporter) {
-      stop("GeovctrsGeometryOperator.initExporter() was never called");
+      stop("GeovctrsGEOSGeometryOperator.initExporter() was never called");
     }
     this->exporter->init(context, this->size());
   }
@@ -228,7 +228,7 @@ public:
     this->exporter->putNext(context, this->result, i);
 
     // Most of the time, the geometry is
-    // modified instead of copied, so GeovctrsBaseOperator::operate()
+    // modified instead of copied, so GeovctrsGEOSBaseOperator::operate()
     // will call GEOSGeom_destroy_r() (and any attempt to do so here
     // will segfault). Using `!=` to detect the case where copying
     // occurred.
@@ -244,7 +244,7 @@ public:
     return this->exporter->assemble(context);
   }
 
-  ~GeovctrsGeometryOperator() {
+  ~GeovctrsGEOSGeometryOperator() {
     if (this->exporter) {
       this->exporter->finish(this->handler.context);
     }
@@ -263,7 +263,7 @@ public:
 };
 
 template <class VectorType, class ScalarType>
-class GeovctrsVectorOperator: public GeovctrsBaseOperator {
+class GeovctrsGEOSVectorOperator: public GeovctrsGEOSBaseOperator {
 public:
   VectorType data;
 
@@ -295,7 +295,7 @@ public:
   }
 };
 
-class GeovctrsRecursiveOperator: public GeovctrsBaseOperator {
+class GeovctrsGEOSRecursiveOperator: public GeovctrsGEOSBaseOperator {
 public:
   size_t featureId;
   int partId;
