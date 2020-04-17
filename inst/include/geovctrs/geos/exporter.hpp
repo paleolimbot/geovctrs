@@ -1,17 +1,17 @@
 
-#ifndef GEOVCTRS_EXPORTER_HPP
-#define GEOVCTRS_EXPORTER_HPP
+#ifndef GEOVCTRS_GEOS_EXPORTER_HPP
+#define GEOVCTRS_GEOS_EXPORTER_HPP
 
 #include <geos_c.h>
 #include "feature-factory.hpp"
-#include "factory.hpp"
+#include "../factory.hpp"
 #include <memory.h>
 #include <Rcpp.h>
 using namespace Rcpp;
 
 
 
-class GeovctrsExporter {
+class GeovctrsGEOSExporter {
 public:
   virtual void init(GEOSContextHandle_t context, size_t size) {}
   virtual void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
@@ -19,10 +19,10 @@ public:
     return R_NilValue;
   }
   virtual void finish(GEOSContextHandle_t context) {}
-  virtual ~GeovctrsExporter() {}
+  virtual ~GeovctrsGEOSExporter() {}
 };
 
-class GeovctrsWKTExporter: public GeovctrsExporter {
+class GeovctrsGEOSWKTExporter: public GeovctrsGEOSExporter {
 public:
   CharacterVector data;
   bool trim;
@@ -30,7 +30,7 @@ public:
   int dimensions;
   GEOSWKTWriter *wktWriter;
 
-  GeovctrsWKTExporter(CharacterVector ptype) {
+  GeovctrsGEOSWKTExporter(CharacterVector ptype) {
     this->trim = ptype.attr("trim");
     this->precision = ptype.attr("precision");
     this->dimensions = ptype.attr("dimensions");
@@ -71,7 +71,7 @@ public:
 
 
 
-class GeovctrsWKBExporter: public GeovctrsExporter {
+class GeovctrsGEOSWKBExporter: public GeovctrsGEOSExporter {
 public:
   List data;
   GEOSWKBWriter *wkbWriter;
@@ -79,7 +79,7 @@ public:
   int dimensions;
   int endian;
 
-  GeovctrsWKBExporter(List ptype) {
+  GeovctrsGEOSWKBExporter(List ptype) {
     this->includeSRID = ptype.attr("include_srid");
     this->dimensions = ptype.attr("dimensions");
     this->endian = ptype.attr("endian");
@@ -156,7 +156,7 @@ public:
 
 
 
-class GeovctrsCollectionExporter: public GeovctrsExporter {
+class GeovctrsGEOSCollectionExporter: public GeovctrsGEOSExporter {
 public:
   List data;
   IntegerVector srid;
@@ -173,7 +173,7 @@ public:
       this->data[i] = R_NilValue;
       this->srid[i] = NA_INTEGER;
     } else {
-      this->data[i] = GeovctrsFeatureFactory::getFeature(context, geometry);
+      this->data[i] = GeovctrsGEOSFeatureFactory::getFeature(context, geometry);
       this->srid[i] = GEOSGetSRID_r(context, geometry);
     }
   }
@@ -185,7 +185,7 @@ public:
 
 
 
-class GeovctrsXYExporter: public GeovctrsExporter {
+class GeovctrsGEOSXYExporter: public GeovctrsGEOSExporter {
 public:
   NumericVector x;
   NumericVector y;
@@ -233,7 +233,7 @@ public:
 
 
 
-class GeovctrsSegmentExporter: public GeovctrsExporter {
+class GeovctrsGEOSSegmentExporter: public GeovctrsGEOSExporter {
 public:
   NumericVector x0;
   NumericVector y0;

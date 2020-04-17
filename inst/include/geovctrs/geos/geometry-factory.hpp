@@ -1,12 +1,12 @@
 
-#ifndef GEOVCTRS_GEOS_FEATURE_FACTORY_H
-#define GEOVCTRS_GEOS_FEATURE_FACTORY_H
+#ifndef GEOVCTRS_GEOS_GEOMETRY_FACTORY_H
+#define GEOVCTRS_GEOS_GEOMETRY_FACTORY_H
 
 #include <geos_c.h>
 #include <Rcpp.h>
 using namespace Rcpp;
 
-class GEOSFeatureFactory {
+class GeovctrsGEOSGeometryFactory {
 public:
 
   static GEOSGeometry* getFeature(GEOSContextHandle_t context, List feature) {

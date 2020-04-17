@@ -1,5 +1,5 @@
 
-#include "geovctrs/geos-handler.hpp"
+#include "geovctrs/geos/handler.hpp"
 #include <Rcpp.h>
 using namespace Rcpp;
 

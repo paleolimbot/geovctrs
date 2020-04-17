@@ -1,5 +1,5 @@
 
-#include "geovctrs/operator.hpp"
+#include "geovctrs/geos/operator.hpp"
 #include "geovctrs/factory.hpp"
 using namespace Rcpp;
 

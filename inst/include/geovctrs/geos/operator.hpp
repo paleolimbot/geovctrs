@@ -2,7 +2,7 @@
 #ifndef GEOVCTRS_OPERATOR_HPP
 #define GEOVCTRS_OPERATOR_HPP
 
-#include "geos-handler.hpp"
+#include "handler.hpp"
 #include "provider.hpp"
 #include "exporter.hpp"
 #include <Rcpp.h>
@@ -10,50 +10,50 @@ using namespace Rcpp;
 
 // ----- resolvers -----
 
-class GeovctrsProviderFactory {
+class GeovctrsGEOSProviderFactory {
 public:
-  static std::unique_ptr<GeovctrsProvider> get(SEXP data) {
-    std::unique_ptr<GeovctrsProvider> provider;
+  static std::unique_ptr<GeovctrsGEOSProvider> get(SEXP data) {
+    std::unique_ptr<GeovctrsGEOSProvider> provider;
 
     if (Rf_inherits(data, "geovctrs_wkt")) {
-      provider = std::unique_ptr<GeovctrsProvider> { new GeovctrsWKTProvider(data) };
+      provider = std::unique_ptr<GeovctrsGEOSProvider> { new GeovctrsGEOSWKTProvider(data) };
     } else if(Rf_inherits(data, "geovctrs_wkb")) {
-      provider = std::unique_ptr<GeovctrsProvider> { new GeovctrsWKBProvider(data) };
+      provider = std::unique_ptr<GeovctrsGEOSProvider> { new GeovctrsGEOSWKBProvider(data) };
     } else if(Rf_inherits(data, "geovctrs_xy")) {
-      provider = std::unique_ptr<GeovctrsProvider> { new GeovctrsXYProvider(data) };
+      provider = std::unique_ptr<GeovctrsGEOSProvider> { new GeovctrsGEOSXYProvider(data) };
     } else if(Rf_inherits(data, "geovctrs_segment")) {
-      provider = std::unique_ptr<GeovctrsProvider> { new GeovctrsSegmentProvider(data) };
+      provider = std::unique_ptr<GeovctrsGEOSProvider> { new GeovctrsGEOSSegmentProvider(data) };
     } else if(Rf_inherits(data, "geovctrs_rect")) {
-      provider = std::unique_ptr<GeovctrsProvider> { new GeovctrsRectProvider(data) };
+      provider = std::unique_ptr<GeovctrsGEOSProvider> { new GeovctrsGEOSRectProvider(data) };
     } else if(Rf_inherits(data, "geovctrs_collection")) {
-      provider = std::unique_ptr<GeovctrsProvider> { new GeovctrsCollectionProvider(data) };
+      provider = std::unique_ptr<GeovctrsGEOSProvider> { new GeovctrsGEOSCollectionProvider(data) };
     } else {
-      stop("Can't resolve GeovctrsProvider");
+      stop("Can't resolve GeovctrsGEOSProvider");
     }
 
     if (provider->size() == 1) {
-      return std::unique_ptr<GeovctrsProvider> { new GeovctrsConstantProvider(provider.release()) };
+      return std::unique_ptr<GeovctrsGEOSProvider> { new GeovctrsGEOSConstantProvider(provider.release()) };
     } else {
       return provider;
     }
   }
 };
 
-class GeovctrsExporterFactory {
+class GeovctrsGEOSExporterFactory {
 public:
-  static std::unique_ptr<GeovctrsExporter> get(SEXP ptype) {
+  static std::unique_ptr<GeovctrsGEOSExporter> get(SEXP ptype) {
     if (Rf_inherits(ptype, "geovctrs_wkt")) {
-      return std::unique_ptr<GeovctrsExporter> { new GeovctrsWKTExporter(ptype) };
+      return std::unique_ptr<GeovctrsGEOSExporter> { new GeovctrsGEOSWKTExporter(ptype) };
     } else if(Rf_inherits(ptype, "geovctrs_wkb")) {
-      return std::unique_ptr<GeovctrsExporter> { new GeovctrsWKBExporter(ptype) };
+      return std::unique_ptr<GeovctrsGEOSExporter> { new GeovctrsGEOSWKBExporter(ptype) };
     } else if(Rf_inherits(ptype, "geovctrs_collection")) {
-      return std::unique_ptr<GeovctrsExporter> { new GeovctrsCollectionExporter() };
+      return std::unique_ptr<GeovctrsGEOSExporter> { new GeovctrsGEOSCollectionExporter() };
     } else if(Rf_inherits(ptype, "geovctrs_xy")) {
-      return std::unique_ptr<GeovctrsExporter> { new GeovctrsXYExporter() };
+      return std::unique_ptr<GeovctrsGEOSExporter> { new GeovctrsGEOSXYExporter() };
     } else if(Rf_inherits(ptype, "geovctrs_segment")) {
-      return std::unique_ptr<GeovctrsExporter> { new GeovctrsSegmentExporter() };
+      return std::unique_ptr<GeovctrsGEOSExporter> { new GeovctrsGEOSSegmentExporter() };
     } else {
-      stop("Can't resolve GeovctrsExporter");
+      stop("Can't resolve GeovctrsGEOSExporter");
     }
   }
 };
@@ -64,12 +64,12 @@ class GeovctrsBaseOperator {
 public:
 
   GeovctrsBaseOperator() {
-    this->provider = std::unique_ptr<GeovctrsProvider>(nullptr);
+    this->provider = std::unique_ptr<GeovctrsGEOSProvider>(nullptr);
     this->geometry = NULL;
   }
 
   virtual void initProvider(SEXP data) {
-    this->provider = GeovctrsProviderFactory::get(data);
+    this->provider = GeovctrsGEOSProviderFactory::get(data);
   }
 
   virtual SEXP operate() {
@@ -77,7 +77,7 @@ public:
     this->init(this->handler.context, this->size());
 
     for (size_t i=0; i < this->size(); i++) {
-      if ((i + 1) % 1000 == 0) {
+      if ((i + 1) % 10 == 0) {
         checkUserInterrupt();
       }
 
@@ -104,7 +104,7 @@ protected:
   // ...because C++ is nuts
   GeovctrsGEOSHandler handler;
   size_t commonSize;
-  std::unique_ptr<GeovctrsProvider> provider;
+  std::unique_ptr<GeovctrsGEOSProvider> provider;
   GEOSGeometry* geometry = NULL;
 
   // these are the functions that may be overridden by individual
@@ -197,16 +197,16 @@ public:
 
 class GeovctrsGeometryOperator: public GeovctrsBaseOperator {
 public:
-  std::unique_ptr<GeovctrsExporter> exporter;
+  std::unique_ptr<GeovctrsGEOSExporter> exporter;
   GEOSGeometry* result;
 
   GeovctrsGeometryOperator() {
-    std::unique_ptr<GeovctrsExporter> exporter = std::unique_ptr<GeovctrsExporter>(nullptr);
+    std::unique_ptr<GeovctrsGEOSExporter> exporter = std::unique_ptr<GeovctrsGEOSExporter>(nullptr);
     this->result = NULL;
   }
 
   virtual void initExporter(SEXP ptype) {
-    this->exporter = GeovctrsExporterFactory::get(ptype);
+    this->exporter = GeovctrsGEOSExporterFactory::get(ptype);
   }
 
   void init(GEOSContextHandle_t context, size_t size) {

@@ -1,5 +1,5 @@
 
-#include "geovctrs/operator.hpp"
+#include "geovctrs/geos/operator.hpp"
 using namespace Rcpp;
 
 class SetSRIDOperator: public GeovctrsGeometryOperator {

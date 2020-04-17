@@ -1,13 +1,13 @@
 
-#ifndef GEOVCTRS_FEATURE_FACTORY_HPP
-#define GEOVCTRS_FEATURE_FACTORY_HPP
+#ifndef GEOVCTRS_GEOS_FEATURE_FACTORY_HPP
+#define GEOVCTRS_GEOS_FEATURE_FACTORY_HPP
 
-#include "factory.hpp"
+#include "../factory.hpp"
 #include <geos_c.h>
 #include <Rcpp.h>
 using namespace Rcpp;
 
-class GeovctrsFeatureFactory {
+class GeovctrsGEOSFeatureFactory {
 public:
 
   static List getFeature(GEOSContextHandle_t context, GEOSGeometry* geometry) {
@@ -35,7 +35,7 @@ public:
       return getGeometrycollection(context, geometry);
 
     } else {
-      stop("GeovctrsFeatureFactory::getFeature(): Unrecognized geometry type");
+      stop("GeovctrsGEOSFeatureFactory::getFeature(): Unrecognized geometry type");
     }
   }
 
