@@ -31,5 +31,3 @@ geo_coalesce <- function(...) {
 
   out
 }
-
-
