@@ -67,12 +67,22 @@ private:
     IntegerVector ringId(nCoordinates);
 
     unsigned int offset = 0;
+    unsigned int size;
+
     const GEOSGeometry* exterior = GEOSGetExteriorRing_r(context, geometry);
-    offset += writeCoordinates(context, exterior, x, y, ringId, 1, offset);
+
+    size = writeCoordinates(context, exterior, x, y, offset);
+    writeValue(ringId, 1, offset, size);
+
+    offset += size;
 
     for(int i=0; i < nInteriorRings; i++) {
       const GEOSGeometry* ring = GEOSGetInteriorRingN_r(context, geometry, i);
-      offset += writeCoordinates(context, ring, x, y, ringId, 2 + i, offset);
+
+      size = writeCoordinates(context, ring, x, y, offset);
+      writeValue(ringId, i + 2, offset, size);
+
+      offset += size;
     }
 
     return GeovctrsFactory::newPolygon(x, y, ringId);
@@ -104,10 +114,13 @@ private:
     IntegerVector partId(nCoordinates);
 
     unsigned int offset = 0;
+    unsigned int size;
 
     for(int i=0; i < nParts; i++) {
       const GEOSGeometry* part = GEOSGetGeometryN_r(context, geometry, i);
-      offset += writeCoordinates(context, part, x, y, partId, i+1, offset);
+      size = writeCoordinates(context, part, x, y, offset);
+      writeValue(partId, i + 1, offset, size);
+      offset += size;
     }
 
     return GeovctrsFactory::newMultilinestring(x, y, partId);
@@ -123,29 +136,29 @@ private:
     IntegerVector ringId(nCoordinates);
 
     unsigned int offset = 0;
+    unsigned int size;
 
     for(int i=0; i < nParts; i++) {
       const GEOSGeometry* part = GEOSGetGeometryN_r(context, geometry, i);
       int nInteriorRings = GEOSGetNumInteriorRings_r(context, part);
 
       const GEOSGeometry* exterior = GEOSGetExteriorRing_r(context, part);
-      offset += writeCoordinates(
-        context, exterior,
-        x, y,
-        partId, i + 1,
-        ringId, 1,
-        offset
-      );
+
+      size = writeCoordinates(context, exterior, x, y, offset);
+      writeValue(partId, i + 1, offset, size);
+      writeValue(ringId, 1, offset, size);
+
+      offset += size;
 
       for(int j=0; j < nInteriorRings; j++) {
         const GEOSGeometry* ring = GEOSGetInteriorRingN_r(context, part, j);
-        offset += writeCoordinates(
-          context, ring,
-          x, y,
-          partId, i + 1,
-          ringId, 2 + j,
-          offset
-        );
+
+        size = writeCoordinates(context, ring, x, y, offset);
+        writeValue(partId, i + 1, offset, size);
+        writeValue(ringId, j + 2, offset, size);
+
+        offset += size;
+
       }
     }
 
@@ -173,6 +186,28 @@ private:
   }
 
   static unsigned int writeCoordinates(GEOSContextHandle_t context, const GEOSGeometry* geometry,
+                                       NumericVector x, NumericVector y, NumericVector z, int offset) {
+    const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq_r(context, geometry);
+    unsigned int size;
+    GEOSCoordSeq_getSize_r(context, seq, &size);
+
+    double xi;
+    double yi;
+    double zi;
+
+    for (unsigned int i=0; i < size; i++) {
+      GEOSCoordSeq_getX_r(context, seq, i, &xi);
+      GEOSCoordSeq_getY_r(context, seq, i, &yi);
+      GEOSCoordSeq_getZ_r(context, seq, i, &zi);
+      x[offset + i] = xi;
+      y[offset + i] = yi;
+      z[offset + i] = zi;
+    }
+
+    return size;
+  }
+
+  static unsigned int writeCoordinates(GEOSContextHandle_t context, const GEOSGeometry* geometry,
                                        NumericVector x, NumericVector y, int offset) {
     const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq_r(context, geometry);
     unsigned int size;
@@ -191,25 +226,10 @@ private:
     return size;
   }
 
-  static unsigned int writeCoordinates(GEOSContextHandle_t context, const GEOSGeometry* geometry,
-                                       NumericVector x, NumericVector y, IntegerVector part,
-                                       int partId, int offset) {
-    unsigned int size = writeCoordinates(context, geometry, x, y, offset);
+  static void writeValue(IntegerVector vector, int value, unsigned int offset, unsigned int size) {
     for(unsigned int i=0; i < size; i++) {
-      part[offset + i] = partId;
+      vector[offset + i] = value;
     }
-    return size;
-  }
-
-  static unsigned int writeCoordinates(GEOSContextHandle_t context, const GEOSGeometry* geometry,
-                                       NumericVector x, NumericVector y, IntegerVector part,
-                                       int partId, IntegerVector ring, int ringId, int offset) {
-    unsigned int size = writeCoordinates(context, geometry, x, y, offset);
-    for(unsigned int i=0; i < size; i++) {
-      part[offset + i] = partId;
-      ring[offset + i] = ringId;
-    }
-    return size;
   }
 };
 

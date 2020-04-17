@@ -189,19 +189,25 @@ class GeovctrsGEOSXYExporter: public GeovctrsGEOSExporter {
 public:
   NumericVector x;
   NumericVector y;
+  NumericVector z;
+  bool hasZ;
+
+  GeovctrsGEOSXYExporter(bool hasZ) {
+    this->hasZ = hasZ;
+  }
 
   void init(GEOSContextHandle_t context, size_t size) {
-    NumericVector x(size);
-    NumericVector y(size);
-    this->x = x;
-    this->y = y;
+    this->x = NumericVector(size);
+    this->y = NumericVector(size);
+    this->z = NumericVector(size);
   }
 
   void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
-    double x, y;
+    double x, y, z;
     if (geometry == NULL) {
       x = NA_REAL;
       y = NA_REAL;
+      z = NA_REAL;
     } else {
       if (GEOSGeomTypeId_r(context, geometry) != GEOSGeomTypes::GEOS_POINT) {
         stop("Can't represent a non-point as a geo_xy()");
@@ -212,22 +218,34 @@ public:
         warning("Dropping SRID in cast to geo_xy()");
       }
 
-      // geos doesn't differentiate between POINT (nan, nan) and POINT EMPTY
+      // geos doesn't differentiate between POINT (nan nan) and POINT EMPTY
       if (GEOSisEmpty_r(context, geometry)) {
         x = NA_REAL;
         y = NA_REAL;
+        z = NA_REAL;
+      } else if (GEOSHasZ_r(context, geometry)) {
+        GEOSGeomGetX_r(context, geometry, &x);
+        GEOSGeomGetY_r(context, geometry, &y);
+        GEOSGeomGetZ_r(context, geometry, &z);
+        this->hasZ = true;
       } else {
         GEOSGeomGetX_r(context, geometry, &x);
         GEOSGeomGetY_r(context, geometry, &y);
+        z = NA_REAL;
       }
     }
 
     this->x[i] = x;
     this->y[i] = y;
+    this->z[i] = z;
   }
 
   SEXP assemble(GEOSContextHandle_t context) {
-    return GeovctrsFactory::newXY(this->x, this->y);
+    if (this->hasZ) {
+      return GeovctrsFactory::newXYZ(this->x, this->y, this->z);
+    } else {
+      return GeovctrsFactory::newXY(this->x, this->y);
+    }
   }
 };
 
@@ -273,7 +291,9 @@ public:
         stop("linestrings must have exactly two points to be represented as a geo_segment()");
       }
 
-
+      if (!GEOSisEmpty_r(context, geometry) && GEOSGeom_getCoordinateDimension_r(context, geometry) > 2) {
+        stop("Can't represent 3D segments using a geo_segment()");
+      }
 
       if (GEOSisEmpty_r(context, geometry)) {
         x0 = NA_REAL;

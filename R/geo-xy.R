@@ -6,13 +6,16 @@
 #' an "empty" point rather than a "missing" point (see [geo_is_missing()]
 #' and [geo_is_empty()]).
 #'
-#' @param x,y x and y coordinates
+#' @param x,y,z x, y, and z coordinate vectors
 #'
 #' @return A [new_geovctrs_xy()]
 #' @export
 #'
 #' @examples
+#' geo_xy(0:5, 1:6)
 #' geo_plot(geo_xy(0:5, 1:6))
+#'
+#' geo_xyz(0:5, 1:6, 3)
 #'
 geo_xy <- function(x = double(), y = double()) {
   new_geovctrs_xy(vec_recycle_common(x = vec_cast(x, double()), y = vec_cast(y, double())))
@@ -117,6 +120,15 @@ vec_cast.geovctrs_xy.geovctrs_xy <- function(x, to, ...) {
   x
 }
 
+#' @method vec_cast.geovctrs_xy geovctrs_xyz
+#' @export
+vec_cast.geovctrs_xy.geovctrs_xyz <- function(x, to, ...) {
+  x_data <- vec_data(x)
+  result <- new_geovctrs_xy(list(x = x_data$x, y = x_data$y))
+  maybe_lossy_cast(result, x, to, lossy = !is.na(x_data$z))
+  result
+}
+
 #' @method vec_cast.geovctrs_xy geovctrs_wkt
 #' @export
 vec_cast.geovctrs_xy.geovctrs_wkt <- function(x, to, ...) {
@@ -155,6 +167,12 @@ vec_ptype2.geovctrs_xy.default <- function(x, y, ..., x_arg = "x", y_arg = "y") 
 #' @export
 vec_ptype2.geovctrs_xy.geovctrs_xy <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_xy()
+}
+
+#' @method vec_ptype2.geovctrs_xy geovctrs_xyz
+#' @export
+vec_ptype2.geovctrs_xy.geovctrs_xyz <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  geo_xyz()
 }
 
 #' @method vec_ptype2.geovctrs_xy geovctrs_wkt

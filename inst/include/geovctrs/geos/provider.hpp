@@ -199,6 +199,34 @@ public:
 };
 
 
+class GeovctrsGEOSXYZProvider: public GeovctrsGEOSXYProvider {
+public:
+  NumericVector z;
+
+  GeovctrsGEOSXYZProvider(List xy): GeovctrsGEOSXYProvider(xy) {
+    this->z = xy["z"];
+  }
+
+  GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
+    GEOSGeometry* geometry;
+
+    if (NumericVector::is_na(this->x[i]) &&
+        NumericVector::is_na(this->y[i]) &&
+        NumericVector::is_na(this->z[i])) {
+      geometry = GEOSGeom_createEmptyPoint_r(context);
+    } else {
+      GEOSCoordSequence* seq = GEOSCoordSeq_create_r(context, 1, 3);
+      GEOSCoordSeq_setX_r(context, seq, 0, this->x[i]);
+      GEOSCoordSeq_setY_r(context, seq, 0, this->y[i]);
+      GEOSCoordSeq_setZ_r(context, seq, 0, this->z[i]);
+
+      geometry = GEOSGeom_createPoint_r(context, seq);
+    }
+
+    return geometry;
+  }
+};
+
 
 class GeovctrsGEOSSegmentProvider: public GeovctrsGEOSProvider {
 public:

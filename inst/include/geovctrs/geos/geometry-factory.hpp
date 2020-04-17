@@ -232,13 +232,28 @@ private:
 
   static GEOSCoordSequence* getCoordSequence(GEOSContextHandle_t context,
                                              List xy, int offset, size_t size) {
-    NumericVector x = xy["x"];
-    NumericVector y = xy["y"];
+    GEOSCoordSequence* seq;
 
-    GEOSCoordSequence* seq = GEOSCoordSeq_create_r(context, size, 2);
-    for (size_t i=0; i<size; i++) {
-      GEOSCoordSeq_setX_r(context, seq, i, x[offset + i]);
-      GEOSCoordSeq_setY_r(context, seq, i, y[offset + i]);
+    if (Rf_inherits(xy, "geovctrs_xyz")) {
+      NumericVector x = xy["x"];
+      NumericVector y = xy["y"];
+      NumericVector z = xy["z"];
+
+      seq = GEOSCoordSeq_create_r(context, size, 3);
+      for (size_t i=0; i<size; i++) {
+        GEOSCoordSeq_setX_r(context, seq, i, x[offset + i]);
+        GEOSCoordSeq_setY_r(context, seq, i, y[offset + i]);
+        GEOSCoordSeq_setZ_r(context, seq, i, z[offset + i]);
+      }
+    } else {
+      NumericVector x = xy["x"];
+      NumericVector y = xy["y"];
+
+      seq = GEOSCoordSeq_create_r(context, size, 2);
+      for (size_t i=0; i<size; i++) {
+        GEOSCoordSeq_setX_r(context, seq, i, x[offset + i]);
+        GEOSCoordSeq_setY_r(context, seq, i, y[offset + i]);
+      }
     }
 
     return seq;

@@ -43,6 +43,15 @@ public:
     return xy;
   }
 
+  static List newXYZ(NumericVector x, NumericVector y, NumericVector z) {
+    List xyz = List::create(_["x"] = x, _["y"] = y, _["z"] = z);
+    xyz.attr("class") = CharacterVector::create(
+      "geovctrs_xyz", "geovctrs_xy",
+      "geovctr", "vctrs_rcrd", "vctrs_vctr"
+    );
+    return xyz;
+  }
+
   static List newSegment(NumericVector x0, NumericVector y0,
                          NumericVector x1, NumericVector y1,
                          IntegerVector srid) {

@@ -19,6 +19,8 @@ public:
       provider = std::unique_ptr<GeovctrsGEOSProvider> { new GeovctrsGEOSWKTProvider(data) };
     } else if(Rf_inherits(data, "geovctrs_wkb")) {
       provider = std::unique_ptr<GeovctrsGEOSProvider> { new GeovctrsGEOSWKBProvider(data) };
+    } else if(Rf_inherits(data, "geovctrs_xyz")) {
+      provider = std::unique_ptr<GeovctrsGEOSProvider> { new GeovctrsGEOSXYZProvider(data) };
     } else if(Rf_inherits(data, "geovctrs_xy")) {
       provider = std::unique_ptr<GeovctrsGEOSProvider> { new GeovctrsGEOSXYProvider(data) };
     } else if(Rf_inherits(data, "geovctrs_segment")) {
@@ -48,8 +50,10 @@ public:
       return std::unique_ptr<GeovctrsGEOSExporter> { new GeovctrsGEOSWKBExporter(ptype) };
     } else if(Rf_inherits(ptype, "geovctrs_collection")) {
       return std::unique_ptr<GeovctrsGEOSExporter> { new GeovctrsGEOSCollectionExporter() };
+    } else if(Rf_inherits(ptype, "geovctrs_xyz")) {
+      return std::unique_ptr<GeovctrsGEOSExporter> { new GeovctrsGEOSXYExporter(true) };
     } else if(Rf_inherits(ptype, "geovctrs_xy")) {
-      return std::unique_ptr<GeovctrsGEOSExporter> { new GeovctrsGEOSXYExporter() };
+      return std::unique_ptr<GeovctrsGEOSExporter> { new GeovctrsGEOSXYExporter(false) };
     } else if(Rf_inherits(ptype, "geovctrs_segment")) {
       return std::unique_ptr<GeovctrsGEOSExporter> { new GeovctrsGEOSSegmentExporter() };
     } else {

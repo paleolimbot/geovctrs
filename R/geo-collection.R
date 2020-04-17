@@ -80,7 +80,7 @@ geo_collection <- function(feature = list(), srid = 0) {
 #' @rdname geo_collection
 #' @export
 geo_point <- function(xy, srid = 0)  {
-  xy <- vec_cast(xy, geo_xy())
+  xy <- cast_xy_or_xyz(xy)
   stopifnot(vec_size(srid) == 1)
 
   point <- new_geovctrs_point(list(xy = xy))
@@ -89,7 +89,7 @@ geo_point <- function(xy, srid = 0)  {
 }
 
 new_geovctrs_point <- function(x) {
-  vec_assert(x$xy, geo_xy())
+  assert_has_xy_or_xyz(x)
   structure(x, class = "geovctrs_point")
 }
 
@@ -101,7 +101,7 @@ validate_geovctrs_point <-function(x) {
 #' @rdname geo_collection
 #' @export
 geo_linestring <- function(xy, srid = 0)  {
-  xy <- vec_cast(xy, geo_xy())
+  xy <- cast_xy_or_xyz(xy)
   stopifnot(vec_size(srid) == 1)
 
   feat <- new_geovctrs_linestring(list(xy = xy))
@@ -110,7 +110,7 @@ geo_linestring <- function(xy, srid = 0)  {
 }
 
 new_geovctrs_linestring <- function(x) {
-  vec_assert(x$xy, geo_xy())
+  assert_has_xy_or_xyz(x)
   structure(x, class = "geovctrs_linestring")
 }
 
@@ -122,7 +122,7 @@ validate_geovctrs_linestring <-function(x) {
 #' @rdname geo_collection
 #' @export
 geo_polygon <- function(xy, ring = 1L, srid = 0)  {
-  xy <- vec_cast(xy, geo_xy())
+  xy <- cast_xy_or_xyz(xy)
   stopifnot(vec_size(srid) == 1)
 
   feat <- new_geovctrs_polygon(as_part_identifier(xy, ring = ring))
@@ -131,7 +131,7 @@ geo_polygon <- function(xy, ring = 1L, srid = 0)  {
 }
 
 new_geovctrs_polygon <- function(x) {
-  vec_assert(x$xy, geo_xy())
+  assert_has_xy_or_xyz(x)
   vec_assert(x$ring, integer())
   structure(x, class = "geovctrs_polygon")
 }
@@ -166,7 +166,7 @@ geo_multipoint <- function(feature, srid = 0) {
 }
 
 new_geovctrs_multipoint <- function(x) {
-  vec_assert(x$xy, geo_xy())
+  assert_has_xy_or_xyz(x)
   structure(x, class = "geovctrs_multipoint")
 }
 
@@ -195,7 +195,7 @@ geo_multilinestring <- function(feature, srid = 0) {
 }
 
 new_geovctrs_multilinestring <- function(x) {
-  vec_assert(x$xy, geo_xy())
+  assert_has_xy_or_xyz(x)
   vec_assert(x$part, integer())
   structure(x, class = "geovctrs_multilinestring")
 }
@@ -227,7 +227,7 @@ geo_multipolygon <- function(feature, srid = 0) {
 }
 
 new_geovctrs_multipolygon <- function(x) {
-  vec_assert(x$xy, geo_xy())
+  assert_has_xy_or_xyz(x)
   vec_assert(x$part, integer())
   vec_assert(x$ring, integer())
   structure(x, class = "geovctrs_multipolygon")
@@ -394,3 +394,24 @@ vec_ptype2.geovctrs_collection.geovctrs_segment <- function(x, y, ..., x_arg = "
 vec_ptype2.geovctrs_collection.geovctrs_rect <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_collection()
 }
+
+# utils just for collections
+cast_xy_or_xyz <- function(x) {
+  if (is_geovctrs_xy(x)) {
+    x
+  } else if (is_geovctr(x)) {
+    # this particular conversion should give an XYZ to avoid data loss
+    geovctrs_cpp_convert(x, geo_xy())
+  } else {
+    vec_cast(x, geo_xy())
+  }
+}
+
+assert_has_xy_or_xyz <- function(x) {
+  if (!inherits(x$xy, "geovctrs_xy")) {
+    abort("`xy` must be a `geo_xy()` or a `geo_xyz()`")
+  }
+  invisible(x)
+}
+
+
