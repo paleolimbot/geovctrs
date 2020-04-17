@@ -38,6 +38,8 @@ test_that("sf/sfc works with as_geovctr()", {
 })
 
 test_that("casting and c() work with sfc", {
+  skip_if_not_installed("sf")
+
   wkt <- geo_wkt("POINT (30 10)")
   wkb <- as_geo_wkb(wkt)
   col <- as_geo_collection(wkt)
