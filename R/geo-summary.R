@@ -5,7 +5,7 @@
 #'
 #' @return A [tibble::tibble()] with columns `is_empty`, `geometry_type`,
 #'   `n_geometries`, `n_coordinates`, `srid`, `coordinate_dimensions`,
-#'   `first_coordinate`, `problems`, and `is_missing`.
+#'   `has_z`, `first_coordinate`, `problems`, and `is_missing`.
 #' @export
 #'
 #' @examples
