@@ -41,6 +41,10 @@ geovctrs_cpp_set_z <- function(x, z) {
     .Call(`_geovctrs_geovctrs_cpp_set_z`, x, z)
 }
 
+geovctrs_cpp_drop_z <- function(x, to) {
+    .Call(`_geovctrs_geovctrs_cpp_drop_z`, x, to)
+}
+
 geovctrs_cpp_geos_version_runtime <- function() {
     .Call(`_geovctrs_geovctrs_cpp_geos_version_runtime`)
 }

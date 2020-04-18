@@ -311,6 +311,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// geovctrs_cpp_drop_z
+SEXP geovctrs_cpp_drop_z(SEXP x, SEXP to);
+RcppExport SEXP _geovctrs_geovctrs_cpp_drop_z(SEXP xSEXP, SEXP toSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type to(toSEXP);
+    rcpp_result_gen = Rcpp::wrap(geovctrs_cpp_drop_z(x, to));
+    return rcpp_result_gen;
+END_RCPP
+}
 // geovctrs_cpp_geos_version_runtime
 std::string geovctrs_cpp_geos_version_runtime();
 RcppExport SEXP _geovctrs_geovctrs_cpp_geos_version_runtime() {
@@ -409,6 +421,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_geovctrs_cpp_set_srid", (DL_FUNC) &_geovctrs_geovctrs_cpp_set_srid, 2},
     {"_geovctrs_geovctrs_cpp_summary", (DL_FUNC) &_geovctrs_geovctrs_cpp_summary, 1},
     {"_geovctrs_geovctrs_cpp_set_z", (DL_FUNC) &_geovctrs_geovctrs_cpp_set_z, 2},
+    {"_geovctrs_geovctrs_cpp_drop_z", (DL_FUNC) &_geovctrs_geovctrs_cpp_drop_z, 2},
     {"_geovctrs_geovctrs_cpp_geos_version_runtime", (DL_FUNC) &_geovctrs_geovctrs_cpp_geos_version_runtime, 0},
     {"_geovctrs_geovctrs_cpp_geos_version_build", (DL_FUNC) &_geovctrs_geovctrs_cpp_geos_version_build, 0},
     {"_geovctrs_geovctrs_cpp_test_buffer2", (DL_FUNC) &_geovctrs_geovctrs_cpp_test_buffer2, 2},
