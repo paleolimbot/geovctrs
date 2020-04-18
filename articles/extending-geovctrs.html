@@ -113,12 +113,12 @@
 <span class="fu"><a href="../reference/geo_summary.html">geo_geometry_type</a></span>(<span class="no">geometries</span>)
 <span class="co">#&gt; [1] "point"      "linestring" "polygon"</span>
 <span class="fu"><a href="../reference/geo_summary.html">geo_summary</a></span>(<span class="no">geometries</span>)
-<span class="co">#&gt; # A tibble: 3 x 9</span>
-<span class="co">#&gt;   is_empty geometry_type n_geometries n_coordinates  srid coordinate_dime…</span>
-<span class="co">#&gt;   &lt;lgl&gt;    &lt;chr&gt;                &lt;int&gt;         &lt;int&gt; &lt;int&gt;            &lt;int&gt;</span>
-<span class="co">#&gt; 1 FALSE    point                    1             1     0                2</span>
-<span class="co">#&gt; 2 FALSE    linestring               1             2     0                2</span>
-<span class="co">#&gt; 3 FALSE    polygon                  1             5     0                2</span>
+<span class="co">#&gt; # A tibble: 3 x 10</span>
+<span class="co">#&gt;   is_empty geometry_type n_geometries n_coordinates  srid coordinate_dime… has_z</span>
+<span class="co">#&gt;   &lt;lgl&gt;    &lt;chr&gt;                &lt;int&gt;         &lt;int&gt; &lt;int&gt;            &lt;int&gt; &lt;lgl&gt;</span>
+<span class="co">#&gt; 1 FALSE    point                    1             1     0                2 FALSE</span>
+<span class="co">#&gt; 2 FALSE    linestring               1             2     0                2 FALSE</span>
+<span class="co">#&gt; 3 FALSE    polygon                  1             5     0                2 FALSE</span>
 <span class="co">#&gt; # … with 3 more variables: first_coordinate &lt;xy&gt;, problems &lt;chr&gt;,</span>
 <span class="co">#&gt; #   is_missing &lt;lgl&gt;</span></pre></body></html></div>
 <p>All of these functions work with a variety of data types: it doesn’t matter whether you have a character vector, a geovctr, or a data frame with a geometry column, the function knows to coerce the input to a geovctr by default:</p>
