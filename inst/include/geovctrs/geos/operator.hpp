@@ -199,7 +199,7 @@ public:
   virtual void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
 };
 
-class GeovctrsGEOSGeometryOperator: public GeovctrsGEOSBaseOperator {
+class GeovctrsGEOSGeometryOperator: virtual public GeovctrsGEOSBaseOperator {
 public:
   std::unique_ptr<GeovctrsGEOSExporter> exporter;
   GEOSGeometry* result;
@@ -230,7 +230,10 @@ public:
     }
 
     this->exporter->putNext(context, this->result, i);
+    this->cleanNextGeometry(context);
+  }
 
+  void cleanNextGeometry(GEOSContextHandle_t context) {
     // Most of the time, the geometry is
     // modified instead of copied, so GeovctrsGEOSBaseOperator::operate()
     // will call GEOSGeom_destroy_r() (and any attempt to do so here
@@ -299,7 +302,7 @@ public:
   }
 };
 
-class GeovctrsGEOSRecursiveOperator: public GeovctrsGEOSBaseOperator {
+class GeovctrsGEOSRecursiveOperator: virtual public GeovctrsGEOSBaseOperator {
 public:
   size_t featureId;
   int partId;
@@ -459,6 +462,197 @@ public:
 
   virtual void nextCoordinate(GEOSContextHandle_t context, double x, double y, double z) {
 
+  }
+};
+
+class GeovctrsGEOSRecursiveGeometryOperator: public GeovctrsGEOSGeometryOperator {
+public:
+  size_t featureId;
+  int partId;
+  int ringId;
+  unsigned int coordinateId;
+  int recursionLevel;
+
+  void loopNext(GEOSContextHandle_t context, size_t i) {
+    this->featureId = i;
+    this->partId = 0;
+    this->ringId = 0;
+    this->recursionLevel = 0;
+
+    try {
+      // assign geometry so that Operator destroys it
+      this->geometry = this->provider->getNext(context, i);
+      this->result = this->nextFeature(context, geometry, i);
+    } catch(Rcpp::exception e) {
+      this->result = this->nextError(context, e.what(), i);
+    } catch(std::exception e) {
+      provider->finish(context);
+      throw e;
+    }
+
+    this->exporter->putNext(context, this->result, i);
+    this->cleanNextGeometry(context);
+  }
+
+  virtual GEOSGeometry* nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+    if (geometry == NULL) {
+      return this->nextNULL(context, i);
+    } else {
+      return this->nextGeometry(context, geometry);
+    }
+  }
+
+  virtual GEOSGeometry* nextNULL(GEOSContextHandle_t context, size_t i) {
+    return NULL;
+  }
+
+  virtual GEOSGeometry* nextError(GEOSContextHandle_t context, const char* message, size_t i) {
+    stop(message);
+  }
+
+  virtual GEOSGeometry* nextGeometry(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    switch(GEOSGeomTypeId_r(context, geometry)) {
+    case GEOSGeomTypes::GEOS_POINT:
+      return this->nextPoint(context, geometry);
+    case GEOSGeomTypes::GEOS_LINESTRING:
+      return this->nextLinestring(context, geometry);
+    case GEOSGeomTypes::GEOS_LINEARRING:
+      return this->nextLinearring(context, geometry);
+    case GEOSGeomTypes::GEOS_POLYGON:
+      return this->nextPolygon(context, geometry);
+    case GEOSGeomTypes::GEOS_MULTIPOINT:
+      return this->nextMultipoint(context, geometry);
+    case GEOSGeomTypes::GEOS_MULTILINESTRING:
+      return this->nextMultilinestring(context, geometry);
+    case GEOSGeomTypes::GEOS_MULTIPOLYGON:
+      return this->nextMultipolygon(context, geometry);
+    case GEOSGeomTypes::GEOS_GEOMETRYCOLLECTION:
+      return this->nextGeometrycollection(context, geometry);
+    }
+
+    stop("Unrecognized geometry type");
+  }
+
+  virtual GEOSGeometry* nextPoint(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    GEOSCoordSequence* seq = this->nextGeometryDefault(context, geometry);
+    return GEOSGeom_createPoint_r(context, seq);
+  }
+
+  virtual GEOSGeometry* nextLinestring(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    GEOSCoordSequence* seq = this->nextGeometryDefault(context, geometry);
+    return  GEOSGeom_createLineString_r(context, seq);
+  }
+
+  virtual GEOSGeometry* nextPolygon(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    GEOSGeometry* newShell = this->nextLinearring(context, GEOSGetExteriorRing_r(context, geometry));
+
+    int nInteriorRings = GEOSGetNumInteriorRings_r(context, geometry);
+    GEOSGeometry* newHoles[nInteriorRings];
+    for(int i=0; i < nInteriorRings; i++) {
+      newHoles[i] = this->nextLinearring(context, GEOSGetInteriorRingN_r(context, geometry, i));
+    }
+
+    return GEOSGeom_createPolygon_r(context, newShell, newHoles, nInteriorRings);
+  }
+
+  virtual GEOSGeometry* nextLinearring(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    this->ringId++;
+    GEOSCoordSequence* seq = this->nextGeometryDefault(context, geometry);
+    return GEOSGeom_createLinearRing_r(context, seq);
+  }
+
+  virtual GEOSGeometry* nextMultipoint(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    return this->nextMultiGeometryDefault(context, geometry);
+  }
+
+  virtual GEOSGeometry* nextMultilinestring(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    return this->nextMultiGeometryDefault(context, geometry);
+  }
+
+  virtual GEOSGeometry* nextMultipolygon(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    return this->nextMultiGeometryDefault(context, geometry);
+  }
+
+  virtual GEOSGeometry* nextGeometrycollection(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    this->recursionLevel++;
+    GEOSGeometry* result = this->nextMultiGeometryDefault(context, geometry);
+    this->recursionLevel--;
+    return result;
+  }
+
+  virtual GEOSGeometry* nextMultiGeometryDefault(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    int nParts = GEOSGetNumGeometries_r(context, geometry);
+    GEOSGeometry* newParts[nParts];
+
+    for (int i=0; i < nParts; i++) {
+      this->partId = i;
+      newParts[i] = this->nextGeometry(context, GEOSGetGeometryN_r(context, geometry, i));
+    }
+
+    return GEOSGeom_createCollection_r(context, GEOSGeomTypeId_r(context, geometry), newParts, nParts);
+  }
+
+  virtual GEOSCoordSequence* nextGeometryDefault(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    const GEOSCoordSequence* originalSeq = GEOSGeom_getCoordSeq_r(context, geometry);
+    return this->nextCoordinateSequence(context, geometry, originalSeq);
+  }
+
+  virtual GEOSCoordSequence* nextCoordinateSequence(GEOSContextHandle_t context,
+                                                    const GEOSGeometry* geometry,
+                                                    const GEOSCoordSequence* seq) {
+    // need the geometry here because while GEOS doesn't do M
+    // it may eventually, and this would be with the geom, not the
+    // coord seq
+    unsigned int size;
+    GEOSCoordSeq_getSize_r(context, seq, &size);
+    GEOSCoordSequence* newSeq = GEOSCoordSeq_clone_r(context, seq);
+    int ndim = GEOSGeom_getCoordinateDimension_r(context, geometry);
+
+    double xi, yi, zi;
+
+    if (ndim == 3) {
+      for (unsigned int i=0; i < size; i++) {
+        this->coordinateId = i;
+        GEOSCoordSeq_getX_r(context, newSeq, i, &xi);
+        GEOSCoordSeq_getY_r(context, newSeq, i, &yi);
+        GEOSCoordSeq_getZ_r(context, newSeq, i, &zi);
+
+        this->nextCoordinate(context, &xi, &yi, &zi);
+
+        GEOSCoordSeq_setX_r(context, newSeq, i, xi);
+        GEOSCoordSeq_setY_r(context, newSeq, i, yi);
+        GEOSCoordSeq_setZ_r(context, newSeq, i, zi);
+      }
+    } else {
+      for (unsigned int i=0; i < size; i++) {
+        this->coordinateId = i;
+        GEOSCoordSeq_getX_r(context, newSeq, i, &xi);
+        GEOSCoordSeq_getY_r(context, newSeq, i, &yi);
+
+        this->nextCoordinate(context, &xi, &yi);
+
+        GEOSCoordSeq_setX_r(context, newSeq, i, xi);
+        GEOSCoordSeq_setY_r(context, newSeq, i, yi);
+      }
+    }
+
+    return newSeq;
+  }
+
+  virtual void nextCoordinate(GEOSContextHandle_t context, double* x, double* y) {
+
+  }
+
+  virtual void nextCoordinate(GEOSContextHandle_t context, double* x, double* y, double* z) {
+    this->nextCoordinate(context, x, y);
+  }
+
+  // not used here, so make sure they aren't overridden
+  GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+    stop("GeovctrsGEOSRecursiveGeometryOperator::operateNext() is not relevant.");
+  }
+  GEOSGeometry* operateNextNULL(GEOSContextHandle_t context, size_t i) {
+    stop("GeovctrsGEOSRecursiveGeometryOperator::operateNextNULL() is not relevant.");
   }
 };
 
