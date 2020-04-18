@@ -93,6 +93,21 @@ test_that("coersion and casting works for wkt types", {
   expect_identical(as_geo_wkt(wkb), wkt_roundtrip)
 
   expect_identical(
+    vec_cast(geo_wkt("POINT (1 2)"), geo_xy()),
+    geo_xy(1, 2)
+  )
+
+  expect_identical(
+    vec_cast(geo_wkt("POINT (1 2 3)"), geo_xy()),
+    geo_xyz(1, 2, 3)
+  )
+
+  expect_identical(
+    vec_cast(geo_wkt("POINT (1 2 3)"), geo_xyz()),
+    geo_xyz(1, 2, 3)
+  )
+
+  expect_identical(
     vec_cast(geo_segment(geo_xy(0, 1), geo_xy(10, 11)), geo_wkt()),
     as_geo_wkt(geo_segment(geo_xy(0, 1), geo_xy(10, 11)), geo_wkt())
   )
@@ -105,5 +120,10 @@ test_that("coersion and casting works for wkt types", {
   expect_identical(
     vec_cast(geo_point(geo_xy(1, 2)), geo_wkt()),
     as_geo_wkt(geo_point(geo_xy(1, 2)), geo_wkt())
+  )
+
+  expect_identical(
+    vec_cast(geo_point(geo_xyz(1, 2, 3)), geo_wkt()),
+    as_geo_wkt(geo_point(geo_xyz(1, 2, 3)), geo_wkt())
   )
 })

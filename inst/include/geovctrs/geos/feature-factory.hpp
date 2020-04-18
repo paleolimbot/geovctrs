@@ -41,29 +41,24 @@ public:
 
 private:
   static List getPoint(GEOSContextHandle_t context, GEOSGeometry* geometry) {
-    int nCoordinates = GEOSGetNumCoordinates_r(context, geometry);
-    NumericVector x(nCoordinates);
-    NumericVector y(nCoordinates);
-    writeCoordinates(context, geometry, x, y, 0);
+    List xy = getGeometryXY(context, geometry);
+    writeCoordinates(context, geometry, xy, 0);
 
-    return GeovctrsFactory::newPoint(x, y);
+    return GeovctrsFactory::newPoint(xy);
   }
 
   static List getLinestring(GEOSContextHandle_t context, GEOSGeometry* geometry) {
-    int nCoordinates = GEOSGetNumCoordinates_r(context, geometry);
-    NumericVector x(nCoordinates);
-    NumericVector y(nCoordinates);
-    writeCoordinates(context, geometry, x, y, 0);
+    List xy = getGeometryXY(context, geometry);
+    writeCoordinates(context, geometry, xy, 0);
 
-    return GeovctrsFactory::newLinestring(x, y);
+    return GeovctrsFactory::newLinestring(xy);
   }
 
   static List getPolygon(GEOSContextHandle_t context, GEOSGeometry* geometry) {
     int nInteriorRings = GEOSGetNumInteriorRings_r(context, geometry);
     int nCoordinates = GEOSGetNumCoordinates_r(context, geometry);
 
-    NumericVector x(nCoordinates);
-    NumericVector y(nCoordinates);
+    List xy = getGeometryXY(context, geometry);
     IntegerVector ringId(nCoordinates);
 
     unsigned int offset = 0;
@@ -71,7 +66,7 @@ private:
 
     const GEOSGeometry* exterior = GEOSGetExteriorRing_r(context, geometry);
 
-    size = writeCoordinates(context, exterior, x, y, offset);
+    size = writeCoordinates(context, exterior, xy, offset);
     writeValue(ringId, 1, offset, size);
 
     offset += size;
@@ -79,38 +74,35 @@ private:
     for(int i=0; i < nInteriorRings; i++) {
       const GEOSGeometry* ring = GEOSGetInteriorRingN_r(context, geometry, i);
 
-      size = writeCoordinates(context, ring, x, y, offset);
+      size = writeCoordinates(context, ring, xy, offset);
       writeValue(ringId, i + 2, offset, size);
 
       offset += size;
     }
 
-    return GeovctrsFactory::newPolygon(x, y, ringId);
+    return GeovctrsFactory::newPolygon(xy, ringId);
   }
 
   static List getMultipoint(GEOSContextHandle_t context, GEOSGeometry* geometry) {
     int nParts = GEOSGetNumGeometries_r(context, geometry);
-    int nCoordinates = GEOSGetNumCoordinates_r(context, geometry);
 
-    NumericVector x(nCoordinates);
-    NumericVector y(nCoordinates);
+    List xy = getGeometryXY(context, geometry);
 
     unsigned int offset = 0;
 
     for(int i=0; i < nParts; i++) {
       const GEOSGeometry* part = GEOSGetGeometryN_r(context, geometry, i);
-      offset += writeCoordinates(context, part, x, y, offset);
+      offset += writeCoordinates(context, part, xy, offset);
     }
 
-    return GeovctrsFactory::newMultipoint(x, y);
+    return GeovctrsFactory::newMultipoint(xy);
   }
 
   static List getMultilinestring(GEOSContextHandle_t context, GEOSGeometry* geometry) {
     int nParts = GEOSGetNumGeometries_r(context, geometry);
     int nCoordinates = GEOSGetNumCoordinates_r(context, geometry);
 
-    NumericVector x(nCoordinates);
-    NumericVector y(nCoordinates);
+    List xy = getGeometryXY(context, geometry);
     IntegerVector partId(nCoordinates);
 
     unsigned int offset = 0;
@@ -118,20 +110,19 @@ private:
 
     for(int i=0; i < nParts; i++) {
       const GEOSGeometry* part = GEOSGetGeometryN_r(context, geometry, i);
-      size = writeCoordinates(context, part, x, y, offset);
+      size = writeCoordinates(context, part, xy, offset);
       writeValue(partId, i + 1, offset, size);
       offset += size;
     }
 
-    return GeovctrsFactory::newMultilinestring(x, y, partId);
+    return GeovctrsFactory::newMultilinestring(xy, partId);
   }
 
   static List getMultipolygon(GEOSContextHandle_t context, GEOSGeometry* geometry) {
-    int nParts = GEOSGetNumGeometries_r(context, geometry);
     int nCoordinates = GEOSGetNumCoordinates_r(context, geometry);
+    int nParts = GEOSGetNumGeometries_r(context, geometry);
 
-    NumericVector x(nCoordinates);
-    NumericVector y(nCoordinates);
+    List xy = getGeometryXY(context, geometry);
     IntegerVector partId(nCoordinates);
     IntegerVector ringId(nCoordinates);
 
@@ -144,7 +135,7 @@ private:
 
       const GEOSGeometry* exterior = GEOSGetExteriorRing_r(context, part);
 
-      size = writeCoordinates(context, exterior, x, y, offset);
+      size = writeCoordinates(context, exterior, xy, offset);
       writeValue(partId, i + 1, offset, size);
       writeValue(ringId, 1, offset, size);
 
@@ -153,7 +144,7 @@ private:
       for(int j=0; j < nInteriorRings; j++) {
         const GEOSGeometry* ring = GEOSGetInteriorRingN_r(context, part, j);
 
-        size = writeCoordinates(context, ring, x, y, offset);
+        size = writeCoordinates(context, ring, xy, offset);
         writeValue(partId, i + 1, offset, size);
         writeValue(ringId, j + 2, offset, size);
 
@@ -162,7 +153,7 @@ private:
       }
     }
 
-    return GeovctrsFactory::newMultipolygon(x, y, partId, ringId);
+    return GeovctrsFactory::newMultipolygon(xy, partId, ringId);
   }
 
   static List getGeometrycollection(GEOSContextHandle_t context, GEOSGeometry* geometry) {
@@ -185,42 +176,52 @@ private:
     return GeovctrsFactory::newCollection(features, srid);
   }
 
-  static unsigned int writeCoordinates(GEOSContextHandle_t context, const GEOSGeometry* geometry,
-                                       NumericVector x, NumericVector y, NumericVector z, int offset) {
-    const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq_r(context, geometry);
-    unsigned int size;
-    GEOSCoordSeq_getSize_r(context, seq, &size);
+  static List getGeometryXY(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    int nCoordinates = GEOSGetNumCoordinates_r(context, geometry);
 
-    double xi;
-    double yi;
-    double zi;
-
-    for (unsigned int i=0; i < size; i++) {
-      GEOSCoordSeq_getX_r(context, seq, i, &xi);
-      GEOSCoordSeq_getY_r(context, seq, i, &yi);
-      GEOSCoordSeq_getZ_r(context, seq, i, &zi);
-      x[offset + i] = xi;
-      y[offset + i] = yi;
-      z[offset + i] = zi;
+    if (GEOSHasZ_r(context, geometry)) {
+      return GeovctrsFactory::newXYZ(
+        NumericVector(nCoordinates),
+        NumericVector(nCoordinates),
+        NumericVector(nCoordinates)
+      );
+    } else {
+      return GeovctrsFactory::newXY(
+        NumericVector(nCoordinates),
+        NumericVector(nCoordinates)
+      );
     }
-
-    return size;
   }
 
   static unsigned int writeCoordinates(GEOSContextHandle_t context, const GEOSGeometry* geometry,
-                                       NumericVector x, NumericVector y, int offset) {
+                                       List xy, int offset) {
     const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq_r(context, geometry);
     unsigned int size;
     GEOSCoordSeq_getSize_r(context, seq, &size);
 
-    double xi;
-    double yi;
+    NumericVector x = xy["x"];
+    NumericVector y = xy["y"];
 
-    for (unsigned int i=0; i < size; i++) {
-      GEOSCoordSeq_getX_r(context, seq, i, &xi);
-      GEOSCoordSeq_getY_r(context, seq, i, &yi);
-      x[offset + i] = xi;
-      y[offset + i] = yi;
+    if (GEOSHasZ_r(context, geometry)) {
+      NumericVector z = xy["z"];
+      double xi, yi, zi;
+      for (unsigned int i=0; i < size; i++) {
+        GEOSCoordSeq_getX_r(context, seq, i, &xi);
+        GEOSCoordSeq_getY_r(context, seq, i, &yi);
+        GEOSCoordSeq_getZ_r(context, seq, i, &zi);
+        x[offset + i] = xi;
+        y[offset + i] = yi;
+        z[offset + i] = zi;
+      }
+    } else {
+      double xi, yi;
+
+      for (unsigned int i=0; i < size; i++) {
+        GEOSCoordSeq_getX_r(context, seq, i, &xi);
+        GEOSCoordSeq_getY_r(context, seq, i, &yi);
+        x[offset + i] = xi;
+        y[offset + i] = yi;
+      }
     }
 
     return size;

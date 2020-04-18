@@ -82,39 +82,39 @@ public:
     return result;
   }
 
-  static List newPoint(NumericVector x, NumericVector y) {
-    List point = List::create(_["xy"] = newXY(x, y));
+  static List newPoint(List xy) {
+    List point = List::create(_["xy"] = xy);
     point.attr("class") = CharacterVector::create("geovctrs_point");
     return point;
   }
 
-  static List newLinestring(NumericVector x, NumericVector y) {
-    List point = List::create(_["xy"] = newXY(x, y));
+  static List newLinestring(List xy) {
+    List point = List::create(_["xy"] = xy);
     point.attr("class") = CharacterVector::create("geovctrs_linestring");
     return point;
   }
 
-  static List newPolygon(NumericVector x, NumericVector y, IntegerVector ring) {
-    List point = List::create(_["xy"] = newXY(x, y), _["ring"] = ring);
+  static List newPolygon(List xy, IntegerVector ring) {
+    List point = List::create(_["xy"] = xy, _["ring"] = ring);
     point.attr("class") = CharacterVector::create("geovctrs_polygon");
     return point;
   }
 
-  static List newMultipoint(NumericVector x, NumericVector y) {
-    List point = List::create(_["xy"] = newXY(x, y));
+  static List newMultipoint(List xy) {
+    List point = List::create(_["xy"] = xy);
     point.attr("class") = CharacterVector::create("geovctrs_multipoint");
     return point;
   }
 
-  static List newMultilinestring(NumericVector x, NumericVector y, IntegerVector part) {
-    List point = List::create(_["xy"] = newXY(x, y), _["part"] = part);
+  static List newMultilinestring(List xy, IntegerVector part) {
+    List point = List::create(_["xy"] = xy, _["part"] = part);
     point.attr("class") = CharacterVector::create("geovctrs_multilinestring");
     return point;
   }
 
-  static List newMultipolygon(NumericVector x, NumericVector y, IntegerVector part,
+  static List newMultipolygon(List xy, IntegerVector part,
                               IntegerVector ring) {
-    List point = List::create(_["xy"] = newXY(x, y),  _["part"] = part, _["ring"] = ring);
+    List point = List::create(_["xy"] = xy,  _["part"] = part, _["ring"] = ring);
     point.attr("class") = CharacterVector::create("geovctrs_multipolygon");
     return point;
   }

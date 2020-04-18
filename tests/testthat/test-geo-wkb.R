@@ -112,6 +112,21 @@ test_that("wkb casting and coersion works", {
   expect_identical(as_geo_wkb(wkt), wkb)
 
   expect_identical(
+    vec_cast(as_geo_wkb(geo_wkt("POINT (1 2)")), geo_xy()),
+    geo_xy(1, 2)
+  )
+
+  expect_identical(
+    vec_cast(as_geo_wkb(geo_wkt("POINT (1 2 3)")), geo_xy()),
+    geo_xyz(1, 2, 3)
+  )
+
+  expect_identical(
+    vec_cast(as_geo_wkb(geo_wkt("POINT (1 2 3)")), geo_xyz()),
+    geo_xyz(1, 2, 3)
+  )
+
+  expect_identical(
     vec_cast(geo_segment(geo_xy(0, 1), geo_xy(10, 11)), geo_wkb()),
     as_geo_wkb(geo_segment(geo_xy(0, 1), geo_xy(10, 11)), geo_wkb())
   )

@@ -31,6 +31,17 @@ test_that("geo_xy c() works", {
 })
 
 test_that("coersion to xy works", {
+  # cast to- and from xy
+  expect_identical(vec_cast(geo_xyz(), geo_xy()), geo_xy())
+  expect_identical(as_geo_xy(geo_xyz()), geo_xy())
+  expect_identical(vec_cast(geo_xy(), geo_xyz()), geo_xyz())
+  expect_identical(as_geo_xyz(geo_xy()), geo_xyz())
+
+  expect_identical(vec_cast(geo_xyz(1, 2, NA), geo_xy()), geo_xy(1, 2))
+  expect_identical(as_geo_xy(geo_xyz(1, 2, NA)), geo_xy(1, 2))
+  expect_identical(vec_cast(geo_xy(1, 2), geo_xyz()), geo_xyz(1, 2, NA))
+  expect_identical(as_geo_xyz(geo_xy(1, 2)), geo_xyz(1, 2, NA))
+
   # self-cast
   expect_identical(vec_cast(geo_xy(), geo_xy()), geo_xy())
   expect_identical(as_geo_xy(geo_xy()), geo_xy())
