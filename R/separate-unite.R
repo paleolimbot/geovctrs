@@ -9,7 +9,7 @@
 #' @param data A [tibble::tibble()] or data frame
 #' @param col A column name for the united object
 #' @param into Column names for the separated vectors
-#' @param x,y,xmin,ymin,xmax,ymax,start,end Column specifications for x and y coordinate
+#' @param x,y,z,xmin,ymin,xmax,ymax,start,end Column specifications for x and y coordinate
 #'   columns, respectively. Use [dplyr::select()] syntax. These correspond
 #'   to the arguments in [geo_xy()], [geo_segment()], and [geo_rect()].
 #' @param remove Use `remove = FALSE` to keep the source columns
@@ -23,6 +23,9 @@
 #'
 #' (united <- unite_xy(tbl, "xy", a, b))
 #' separate_xy(united, xy)
+#'
+#' (united <- unite_xyz(tbl, "xyz", a, b, c))
+#' separate_xyz(united, xyz)
 #'
 #' (united <- unite_rect(tbl, "rect", a, b, c, d))
 #' separate_rect(united, rect)
@@ -44,6 +47,24 @@ separate_xy <- function(data, col, into = c("x", "y"), remove = TRUE) {
     remove = remove,
     ptype = geo_xy(),
     fields = c("x", "y")
+  )
+}
+
+#' @rdname unite_xy
+#' @export
+unite_xyz <- function(data, col, x, y, z, remove = TRUE) {
+  unite_rcrd(data, col, {{ x }}, {{ y }}, {{ z }}, remove = remove, constructor = geo_xyz)
+}
+
+#' @rdname unite_xy
+#' @export
+separate_xyz <- function(data, col, into = c("x", "y", "z"), remove = TRUE) {
+  separate_vctrs_rcrd(
+    data, {{ col }},
+    into = into,
+    remove = remove,
+    ptype = geo_xyz(),
+    fields = c("x", "y", "z")
   )
 }
 

@@ -3,6 +3,8 @@
 \name{unite_xy}
 \alias{unite_xy}
 \alias{separate_xy}
+\alias{unite_xyz}
+\alias{separate_xyz}
 \alias{unite_segment}
 \alias{separate_segment}
 \alias{unite_rect}
@@ -12,6 +14,10 @@
 unite_xy(data, col, x, y, remove = TRUE)
 
 separate_xy(data, col, into = c("x", "y"), remove = TRUE)
+
+unite_xyz(data, col, x, y, z, remove = TRUE)
+
+separate_xyz(data, col, into = c("x", "y", "z"), remove = TRUE)
 
 unite_segment(data, col, start, end, remove = TRUE)
 
@@ -31,7 +37,7 @@ separate_rect(
 
 \item{col}{A column name for the united object}
 
-\item{x, y, xmin, ymin, xmax, ymax, start, end}{Column specifications for x and y coordinate
+\item{x, y, z, xmin, ymin, xmax, ymax, start, end}{Column specifications for x and y coordinate
 columns, respectively. Use \code{\link[dplyr:select]{dplyr::select()}} syntax. These correspond
 to the arguments in \code{\link[=geo_xy]{geo_xy()}}, \code{\link[=geo_segment]{geo_segment()}}, and \code{\link[=geo_rect]{geo_rect()}}.}
 
@@ -54,6 +60,9 @@ tbl <- tibble(a = 1, b = 2, c = 3, d = 4)
 
 (united <- unite_xy(tbl, "xy", a, b))
 separate_xy(united, xy)
+
+(united <- unite_xyz(tbl, "xyz", a, b, c))
+separate_xyz(united, xyz)
 
 (united <- unite_rect(tbl, "rect", a, b, c, d))
 separate_rect(united, rect)

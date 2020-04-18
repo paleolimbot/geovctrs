@@ -23,6 +23,30 @@ test_that("unite_xy() works", {
   )
 })
 
+test_that("unite_xyz() works", {
+  tbl <- tibble(x = 1, y = 2, z = 3)
+  expect_identical(
+    unite_xyz(tbl, "xy", x, y, z, remove = TRUE),
+    tibble(xy = geo_xyz(1, 2, 3))
+  )
+
+  expect_identical(
+    unite_xyz(tbl, "xy", x, y, z, remove = FALSE),
+    tibble(xy = geo_xyz(1, 2, 3), x = 1, y = 2, z = 3)
+  )
+
+  tbl2 <- tibble(a = "unrelated", x = 1, y = 2, z = 3)
+  expect_identical(
+    unite_xyz(tbl2, "xy", x, y, z, remove = TRUE),
+    tibble(a = "unrelated", xy = geo_xyz(1, 2, 3))
+  )
+
+  expect_identical(
+    unite_xyz(tbl2, "xy", x, y, z, remove = FALSE),
+    tibble(a = "unrelated", xy = geo_xyz(1, 2, 3), x = 1, y = 2, z = 3)
+  )
+})
+
 test_that("separate_xy() works", {
   tbl <- tibble(xy = geo_xy(1, 2))
   expect_identical(separate_xy(tbl, xy, remove = TRUE), tibble(x = 1, y = 2))
