@@ -146,9 +146,11 @@ separate_vctrs_rcrd <- function(data, col, into, remove, ptype, fields) {
 insert_column <- function(data, df, source_cols, remove) {
   out <- vec_cbind(data, df, .ptype = vec_ptype(data), .name_repair = "check_unique")
 
-  out_names <- insert_vector(names(data), names(df), min(source_cols))
   if (remove) {
+    out_names <- insert_vector(names(data), names(df), min(source_cols))
     out_names <- setdiff(out_names, names(data)[source_cols])
+  } else {
+    out_names <- insert_vector(names(data), names(df), min(source_cols) + 1)
   }
 
   out[out_names]
