@@ -219,8 +219,10 @@ class EnvelopeOperator: public RangeOperator {
 public:
   NumericVector xminVec;
   NumericVector yminVec;
+  NumericVector zminVec;
   NumericVector xmaxVec;
   NumericVector ymaxVec;
+  NumericVector zmaxVec;
   IntegerVector sridVec;
 
   EnvelopeOperator(bool naRm, bool onlyFinite): RangeOperator(naRm, onlyFinite) {
@@ -228,16 +230,13 @@ public:
   }
 
   void init(GEOSContextHandle_t context, size_t size) {
-    NumericVector xmin(size);
-    NumericVector ymin(size);
-    NumericVector xmax(size);
-    NumericVector ymax(size);
-    IntegerVector srid(size);
-    this->xminVec = xmin;
-    this->yminVec = ymin;
-    this->xmaxVec = xmax;
-    this->ymaxVec = ymax;
-    this->sridVec = srid;
+    this->xminVec = NumericVector(size);
+    this->yminVec = NumericVector(size);
+    this->zminVec = NumericVector(size);
+    this->xmaxVec = NumericVector(size);
+    this->ymaxVec = NumericVector(size);
+    this->zmaxVec = NumericVector(size);
+    this->sridVec = IntegerVector(size);
   }
 
   void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
@@ -246,14 +245,18 @@ public:
     if (geometry == NULL && this->naRm) {
       this->xmin = R_PosInf;
       this->ymin = R_PosInf;
+      this->zmin = R_PosInf;
       this->xmax = R_NegInf;
       this->ymax = R_NegInf;
+      this->zmax = R_NegInf;
       featureSRID = NA_INTEGER;
     } else if(geometry == NULL) {
       this->xmin = NA_REAL;
       this->ymin = NA_REAL;
+      this->zmin = NA_REAL;
       this->xmax = NA_REAL;
       this->ymax = NA_REAL;
+      this->zmax = NA_REAL;
       featureSRID = NA_INTEGER;
     } else {
       this->reset();
@@ -263,8 +266,10 @@ public:
 
     this->xminVec[i] = this->xmin;
     this->yminVec[i] = this->ymin;
+    this->zminVec[i] = this->zmin;
     this->xmaxVec[i] = this->xmax;
     this->ymaxVec[i] = this->ymax;
+    this->zmaxVec[i] = this->zmax;
     this->sridVec[i] = featureSRID;
   }
 
@@ -282,6 +287,23 @@ public:
 // [[Rcpp::export]]
 SEXP geovctrs_cpp_envelope(SEXP data, bool naRm, bool onlyFinite) {
   EnvelopeOperator op(naRm, onlyFinite);
+  op.initProvider(data);
+  return op.operate();
+}
+
+
+class ZEnvelopeOperator: public EnvelopeOperator {
+public:
+  ZEnvelopeOperator(bool naRm, bool onlyFinite): EnvelopeOperator(naRm, onlyFinite) {}
+
+  SEXP assemble(GEOSContextHandle_t context) {
+    return GeovctrsFactory::newLim(this->zminVec, this->zmaxVec);
+  }
+};
+
+// [[Rcpp::export]]
+SEXP geovctrs_cpp_z_envelope(SEXP data, bool naRm, bool onlyFinite) {
+  ZEnvelopeOperator op(naRm, onlyFinite);
   op.initProvider(data);
   return op.operate();
 }

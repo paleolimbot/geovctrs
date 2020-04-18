@@ -15,7 +15,10 @@
 #' @param finite Should only finite values be considered? `TRUE`
 #'   implies `na.rm = TRUE`.
 #'
-#' @return A [geo_rect()] of length 1.
+#' @return [geo_bbox()] returns a [geo_rect()] of length 1,
+#'   [geo_envelope()] returns a [geo_rect()] with the same length as `x`,
+#'   `geo_(x|y)_range()` returns a [geo_lim()] of length 1, and
+#'   `geo_(x|y)_envelope()` returns a [geo_lim()] with the same length as `x`.
 #' @export
 #'
 #' @examples
@@ -100,4 +103,28 @@ geo_envelope.geovctrs_xy <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   }
 
   geo_rect(xmin, ymin, xmax, ymax)
+}
+
+#' @rdname geo_bbox
+#' @export
+geo_x_envelope <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  UseMethod("geo_x_envelope")
+}
+
+#' @export
+geo_x_envelope.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  bbox <- vec_data(geo_envelope(x, ..., na.rm  = na.rm, finite = finite))
+  new_geovctrs_lim(list(lower = bbox$xmin, upper = bbox$xmax))
+}
+
+#' @rdname geo_bbox
+#' @export
+geo_y_envelope <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  UseMethod("geo_y_envelope")
+}
+
+#' @export
+geo_y_envelope.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  bbox <- vec_data(geo_envelope(x, ..., na.rm  = na.rm, finite = finite))
+  new_geovctrs_lim(list(lower = bbox$ymin, upper = bbox$ymax))
 }

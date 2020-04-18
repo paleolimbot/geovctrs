@@ -254,4 +254,6 @@ test_that("lim functions work", {
   expect_identical(geo_x_range("POINT (30 10)"), geo_lim(30, 30))
   expect_identical(geo_y_range("POINT (30 10)"), geo_lim(10, 10))
   expect_identical(geo_z_range("POINT Z (30 10 20)"), geo_lim(20, 20))
+  expect_identical(geo_z_range(c("POINT Z (30 10 20)", "POINT Z (30 10 80)")), geo_lim(20, 80))
+  expect_identical(geo_z_envelope(c("POINT Z (30 10 20)", "POINT Z (30 10 80)")), geo_lim(c(20, 80), c(20, 80)))
 })

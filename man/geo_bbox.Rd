@@ -5,6 +5,8 @@
 \alias{geo_x_range}
 \alias{geo_y_range}
 \alias{geo_envelope}
+\alias{geo_x_envelope}
+\alias{geo_y_envelope}
 \title{Bounding boxes and envelopes}
 \usage{
 geo_bbox(x, ..., na.rm = FALSE, finite = FALSE)
@@ -14,6 +16,10 @@ geo_x_range(x, ..., na.rm = FALSE, finite = FALSE)
 geo_y_range(x, ..., na.rm = FALSE, finite = FALSE)
 
 geo_envelope(x, ..., na.rm = FALSE, finite = FALSE)
+
+geo_x_envelope(x, ..., na.rm = FALSE, finite = FALSE)
+
+geo_y_envelope(x, ..., na.rm = FALSE, finite = FALSE)
 }
 \arguments{
 \item{x}{A geometry-like object, or one that can be
@@ -27,7 +33,10 @@ coerced to a geometry-like object using \code{\link[=as_geovctr]{as_geovctr()}}.
 implies \code{na.rm = TRUE}.}
 }
 \value{
-A \code{\link[=geo_rect]{geo_rect()}} of length 1.
+\code{\link[=geo_bbox]{geo_bbox()}} returns a \code{\link[=geo_rect]{geo_rect()}} of length 1,
+\code{\link[=geo_envelope]{geo_envelope()}} returns a \code{\link[=geo_rect]{geo_rect()}} with the same length as \code{x},
+\verb{geo_(x|y)_range()} returns a \code{\link[=geo_lim]{geo_lim()}} of length 1, and
+\verb{geo_(x|y)_envelope()} returns a \code{\link[=geo_lim]{geo_lim()}} with the same length as \code{x}.
 }
 \description{
 Whereas a \code{\link[=geo_bbox]{geo_bbox()}} of a \link[=is_geovctr]{geovctr} is always

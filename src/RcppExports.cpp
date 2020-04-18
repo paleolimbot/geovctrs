@@ -186,6 +186,42 @@ RcppExport SEXP _geovctrs_geovctrs_cpp_envelope(SEXP dataSEXP, SEXP naRmSEXP, SE
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// geovctrs_cpp_z_envelope
+SEXP geovctrs_cpp_z_envelope(SEXP data, bool naRm, bool onlyFinite);
+static SEXP _geovctrs_geovctrs_cpp_z_envelope_try(SEXP dataSEXP, SEXP naRmSEXP, SEXP onlyFiniteSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< bool >::type naRm(naRmSEXP);
+    Rcpp::traits::input_parameter< bool >::type onlyFinite(onlyFiniteSEXP);
+    rcpp_result_gen = Rcpp::wrap(geovctrs_cpp_z_envelope(data, naRm, onlyFinite));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _geovctrs_geovctrs_cpp_z_envelope(SEXP dataSEXP, SEXP naRmSEXP, SEXP onlyFiniteSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_geovctrs_geovctrs_cpp_z_envelope_try(dataSEXP, naRmSEXP, onlyFiniteSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // geovctrs_cpp_convert
 SEXP geovctrs_cpp_convert(SEXP data, SEXP ptype);
 static SEXP _geovctrs_geovctrs_cpp_convert_try(SEXP dataSEXP, SEXP ptypeSEXP) {
@@ -425,6 +461,7 @@ static int _geovctrs_RcppExport_validate(const char* sig) {
         signatures.insert("SEXP(*geovctrs_cpp_bbox)(SEXP,bool,bool)");
         signatures.insert("SEXP(*geovctrs_cpp_z_range)(SEXP,bool,bool)");
         signatures.insert("SEXP(*geovctrs_cpp_envelope)(SEXP,bool,bool)");
+        signatures.insert("SEXP(*geovctrs_cpp_z_envelope)(SEXP,bool,bool)");
         signatures.insert("SEXP(*geovctrs_cpp_convert)(SEXP,SEXP)");
         signatures.insert("LogicalVector(*geovctrs_cpp_has_missing)(SEXP)");
         signatures.insert("LogicalVector(*geovctrs_cpp_has_missing_or_infinite)(SEXP)");
@@ -440,6 +477,7 @@ RcppExport SEXP _geovctrs_RcppExport_registerCCallable() {
     R_RegisterCCallable("geovctrs", "_geovctrs_geovctrs_cpp_bbox", (DL_FUNC)_geovctrs_geovctrs_cpp_bbox_try);
     R_RegisterCCallable("geovctrs", "_geovctrs_geovctrs_cpp_z_range", (DL_FUNC)_geovctrs_geovctrs_cpp_z_range_try);
     R_RegisterCCallable("geovctrs", "_geovctrs_geovctrs_cpp_envelope", (DL_FUNC)_geovctrs_geovctrs_cpp_envelope_try);
+    R_RegisterCCallable("geovctrs", "_geovctrs_geovctrs_cpp_z_envelope", (DL_FUNC)_geovctrs_geovctrs_cpp_z_envelope_try);
     R_RegisterCCallable("geovctrs", "_geovctrs_geovctrs_cpp_convert", (DL_FUNC)_geovctrs_geovctrs_cpp_convert_try);
     R_RegisterCCallable("geovctrs", "_geovctrs_geovctrs_cpp_has_missing", (DL_FUNC)_geovctrs_geovctrs_cpp_has_missing_try);
     R_RegisterCCallable("geovctrs", "_geovctrs_geovctrs_cpp_has_missing_or_infinite", (DL_FUNC)_geovctrs_geovctrs_cpp_has_missing_or_infinite_try);
@@ -454,6 +492,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_geovctrs_cpp_bbox", (DL_FUNC) &_geovctrs_geovctrs_cpp_bbox, 3},
     {"_geovctrs_geovctrs_cpp_z_range", (DL_FUNC) &_geovctrs_geovctrs_cpp_z_range, 3},
     {"_geovctrs_geovctrs_cpp_envelope", (DL_FUNC) &_geovctrs_geovctrs_cpp_envelope, 3},
+    {"_geovctrs_geovctrs_cpp_z_envelope", (DL_FUNC) &_geovctrs_geovctrs_cpp_z_envelope, 3},
     {"_geovctrs_geovctrs_cpp_convert", (DL_FUNC) &_geovctrs_geovctrs_cpp_convert, 2},
     {"_geovctrs_geovctrs_cpp_has_missing", (DL_FUNC) &_geovctrs_geovctrs_cpp_has_missing, 1},
     {"_geovctrs_geovctrs_cpp_has_missing_or_infinite", (DL_FUNC) &_geovctrs_geovctrs_cpp_has_missing_or_infinite, 1},

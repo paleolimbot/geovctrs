@@ -30,3 +30,23 @@ test_that("geo_lim c() works", {
   expect_is(c(geo_lim(), geo_lim()), "geovctrs_lim")
   expect_error(c(geo_lim(), 5), class = "vctrs_error_incompatible_type")
 })
+
+test_that("geo_range() works", {
+
+  # mostly making sure the na.rm and finite args were propogated
+  expect_identical(geo_range(1:5), geo_lim(1, 5))
+  expect_identical(geo_range(c(1, NA)), geo_lim(NA, NA))
+  expect_identical(geo_range(c(1, NA), na.rm = TRUE), geo_lim(1, 1))
+  expect_identical(geo_range(c(1, Inf)), geo_lim(1, Inf))
+  expect_identical(geo_range(c(1, Inf), finite = TRUE), geo_lim(1, 1))
+
+  expect_identical(geo_range(c(geo_lim(81, Inf), geo_lim(-100, 12))), geo_lim(-100, Inf))
+  expect_identical(
+    geo_range(c(geo_lim(81, Inf), geo_lim(-100, 12)), finite = TRUE),
+    geo_lim(-100, 81)
+  )
+  expect_identical(
+    geo_range(c(geo_lim(81, NA), geo_lim(-100, 12)), na.rm = TRUE),
+    geo_lim(-100, 81)
+  )
+})

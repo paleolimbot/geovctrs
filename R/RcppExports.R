@@ -21,6 +21,10 @@ geovctrs_cpp_envelope <- function(data, naRm, onlyFinite) {
     .Call(`_geovctrs_geovctrs_cpp_envelope`, data, naRm, onlyFinite)
 }
 
+geovctrs_cpp_z_envelope <- function(data, naRm, onlyFinite) {
+    .Call(`_geovctrs_geovctrs_cpp_z_envelope`, data, naRm, onlyFinite)
+}
+
 geovctrs_cpp_convert <- function(data, ptype) {
     .Call(`_geovctrs_geovctrs_cpp_convert`, data, ptype)
 }

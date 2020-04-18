@@ -5,6 +5,7 @@
 \alias{geo_drop_z}
 \alias{geo_has_z}
 \alias{geo_z_range}
+\alias{geo_z_envelope}
 \title{Work with Z values}
 \usage{
 geo_set_z(x, z)
@@ -14,12 +15,14 @@ geo_drop_z(x)
 geo_has_z(x)
 
 geo_z_range(x, ..., na.rm = FALSE, finite = FALSE)
+
+geo_z_envelope(x, ..., na.rm = FALSE, finite = FALSE)
 }
 \arguments{
 \item{x}{A geometry-like object, or one that can be
 coerced to a geometry-like object using \code{\link[=as_geovctr]{as_geovctr()}}.}
 
-\item{z}{A z value}
+\item{z}{A vector of z coordinate values.}
 
 \item{...}{Unused}
 
@@ -38,5 +41,8 @@ set, and drop Z values.
 \examples{
 geo_set_z("POINT (2 3)", 4)
 geo_drop_z("POINT Z (2 3 4)")
+geo_has_z(c("POINT (2 3)", "POINT Z (2 3 4)"))
+geo_z_range(c("POINT (2 3)", "POINT Z (2 3 4)"), na.rm = TRUE)
+geo_z_envelope(c("POINT (2 3)", "POINT Z (2 3 4)"), na.rm = TRUE)
 
 }

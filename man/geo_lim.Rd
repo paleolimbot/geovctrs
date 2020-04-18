@@ -2,21 +2,44 @@
 % Please edit documentation in R/geo-lim.R
 \name{geo_lim}
 \alias{geo_lim}
-\title{One-dimensional limits}
+\alias{geo_range}
+\alias{geo_range.default}
+\alias{geo_range.geovctrs_lim}
+\title{Vectorized one-dimensional limits}
 \usage{
 geo_lim(lower = double(), upper = double())
+
+geo_range(x, na.rm = FALSE, finite = FALSE)
+
+\method{geo_range}{default}(x, na.rm = FALSE, finite = FALSE)
+
+\method{geo_range}{geovctrs_lim}(x, na.rm = FALSE, finite = FALSE)
 }
 \arguments{
 \item{lower, upper}{The lower and upper bounds of the one-dimensional rage.}
+
+\item{x}{A vector of numbers or \code{\link[=geo_lim]{geo_lim()}}s.}
+
+\item{na.rm}{Should NAs be removed?}
+
+\item{finite}{Should only finite values be considered? \code{TRUE}
+implies \code{na.rm = TRUE}.}
 }
 \value{
-A \code{\link[=new_geovctrs_lim]{new_geovctrs_lim()}}
+A \code{\link[=new_geovctrs_lim]{new_geovctrs_lim()}}.
 }
 \description{
-Vectorized version of \code{range()} to support \code{\link[=geo_x_range]{geo_x_range()}},
-\code{\link[=geo_y_range]{geo_y_range()}}, and \code{\link[=geo_z_range]{geo_z_range()}}.
+Vectorized version of \code{\link[=range]{range()}} to support \code{\link[=geo_x_range]{geo_x_range()}},
+\code{\link[=geo_y_range]{geo_y_range()}}, and \code{\link[=geo_z_range]{geo_z_range()}}. The \code{\link[=geo_range]{geo_range()}} function
+works like \code{\link[=range]{range()}}, but also works with \code{\link[=geo_lim]{geo_lim()}} vectors.
 }
 \examples{
 geo_lim(3, 4)
+
+# works like range() but returns a geo_lim()
+geo_range(1:100)
+
+# you can also pass geo_lim() vectors to geo_range()
+geo_range(c(geo_lim(81, Inf), geo_lim(-100, 12)))
 
 }

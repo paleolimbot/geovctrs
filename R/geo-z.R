@@ -5,7 +5,7 @@
 #' set, and drop Z values.
 #'
 #' @inheritParams geo_bbox
-#' @param z A z value
+#' @param z A vector of z coordinate values.
 #'
 #' @return A modified version of `x`.
 #' @export
@@ -13,6 +13,9 @@
 #' @examples
 #' geo_set_z("POINT (2 3)", 4)
 #' geo_drop_z("POINT Z (2 3 4)")
+#' geo_has_z(c("POINT (2 3)", "POINT Z (2 3 4)"))
+#' geo_z_range(c("POINT (2 3)", "POINT Z (2 3 4)"), na.rm = TRUE)
+#' geo_z_envelope(c("POINT (2 3)", "POINT Z (2 3 4)"), na.rm = TRUE)
 #'
 geo_set_z <- function(x, z) {
   UseMethod("geo_set_z")
@@ -81,4 +84,20 @@ geo_z_range.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 #' @export
 geo_z_range.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   geovctrs_cpp_z_range(x, na.rm, finite)
+}
+
+#' @rdname geo_set_z
+#' @export
+geo_z_envelope <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  UseMethod("geo_z_envelope")
+}
+
+#' @export
+geo_z_envelope.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_z_envelope(as_geovctr(x), ..., na.rm = na.rm, finite = finite)
+}
+
+#' @export
+geo_z_envelope.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geovctrs_cpp_z_envelope(x, na.rm, finite)
 }

@@ -1,16 +1,25 @@
 
-#' One-dimensional limits
+#' Vectorized one-dimensional limits
 #'
-#' Vectorized version of `range()` to support [geo_x_range()],
-#' [geo_y_range()], and [geo_z_range()].
+#' Vectorized version of [range()] to support [geo_x_range()],
+#' [geo_y_range()], and [geo_z_range()]. The [geo_range()] function
+#' works like [range()], but also works with [geo_lim()] vectors.
 #'
 #' @param lower,upper The lower and upper bounds of the one-dimensional rage.
+#' @param x A vector of numbers or [geo_lim()]s.
+#' @inheritParams geo_bbox
 #'
-#' @return A [new_geovctrs_lim()]
+#' @return A [new_geovctrs_lim()].
 #' @export
 #'
 #' @examples
 #' geo_lim(3, 4)
+#'
+#' # works like range() but returns a geo_lim()
+#' geo_range(1:100)
+#'
+#' # you can also pass geo_lim() vectors to geo_range()
+#' geo_range(c(geo_lim(81, Inf), geo_lim(-100, 12)))
 #'
 geo_lim <- function(lower = double(), upper = double()) {
   new_geovctrs_lim(
@@ -19,6 +28,31 @@ geo_lim <- function(lower = double(), upper = double()) {
       upper = vec_cast(upper, double())
     )
   )
+}
+
+#' @rdname geo_lim
+#' @export
+geo_range <- function(x, na.rm = FALSE, finite = FALSE) {
+  UseMethod("geo_range")
+}
+
+#' @rdname geo_lim
+#' @export
+geo_range.default <- function(x, na.rm = FALSE, finite = FALSE) {
+  lim_range <- range(x, na.rm = na.rm, finite = finite)
+  geo_lim(lim_range[1], lim_range[2])
+}
+
+#' @rdname geo_lim
+#' @export
+geo_range.geovctrs_lim <- function(x, na.rm = FALSE, finite = FALSE) {
+  lim_range <- range(
+    c(field(x, "lower"), field(x, "upper")),
+    na.rm = na.rm,
+    finite = finite
+  )
+
+  geo_lim(lim_range[1], lim_range[2])
 }
 
 #' S3 details for geovctrs_lim
