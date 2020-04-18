@@ -13,8 +13,8 @@ geo_lim(lower = double(), upper = double())
 A \code{\link[=new_geovctrs_lim]{new_geovctrs_lim()}}
 }
 \description{
-Vectorized version of \code{range()} to support \code{\link[=geo_xlim]{geo_xlim()}},
-\code{\link[=geo_ylim]{geo_ylim()}}, and \code{\link[=geo_zlim]{geo_zlim()}}.
+Vectorized version of \code{range()} to support \code{\link[=geo_x_range]{geo_x_range()}},
+\code{\link[=geo_y_range]{geo_y_range()}}, and \code{\link[=geo_z_range]{geo_z_range()}}.
 }
 \examples{
 geo_lim(3, 4)

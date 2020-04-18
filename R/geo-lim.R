@@ -1,8 +1,8 @@
 
 #' One-dimensional limits
 #'
-#' Vectorized version of `range()` to support [geo_xlim()],
-#' [geo_ylim()], and [geo_zlim()].
+#' Vectorized version of `range()` to support [geo_x_range()],
+#' [geo_y_range()], and [geo_z_range()].
 #'
 #' @param lower,upper The lower and upper bounds of the one-dimensional rage.
 #'

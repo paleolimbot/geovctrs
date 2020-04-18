@@ -38,24 +38,24 @@ geo_bbox.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 
 #' @rdname geo_bbox
 #' @export
-geo_xlim <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  UseMethod("geo_xlim")
+geo_x_range <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  UseMethod("geo_x_range")
 }
 
 #' @export
-geo_xlim.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+geo_x_range.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   bbox <- vec_data(geo_bbox(x, ..., na.rm  = na.rm, finite = finite))
   new_geovctrs_lim(list(lower = bbox$xmin, upper = bbox$xmax))
 }
 
 #' @rdname geo_bbox
 #' @export
-geo_ylim <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  UseMethod("geo_ylim")
+geo_y_range <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  UseMethod("geo_y_range")
 }
 
 #' @export
-geo_ylim.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+geo_y_range.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   bbox <- vec_data(geo_bbox(x, ..., na.rm  = na.rm, finite = finite))
   new_geovctrs_lim(list(lower = bbox$ymin, upper = bbox$ymax))
 }

@@ -4,7 +4,7 @@
 \alias{geo_set_z}
 \alias{geo_drop_z}
 \alias{geo_has_z}
-\alias{geo_zlim}
+\alias{geo_z_range}
 \title{Work with Z values}
 \usage{
 geo_set_z(x, z)
@@ -13,7 +13,7 @@ geo_drop_z(x)
 
 geo_has_z(x)
 
-geo_zlim(x, ..., na.rm = FALSE, finite = FALSE)
+geo_z_range(x, ..., na.rm = FALSE, finite = FALSE)
 }
 \arguments{
 \item{x}{A geometry-like object, or one that can be

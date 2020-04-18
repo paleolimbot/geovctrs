@@ -208,7 +208,7 @@ public:
 };
 
 // [[Rcpp::export]]
-SEXP geovctrs_cpp_zlim(SEXP data, bool naRm, bool onlyFinite) {
+SEXP geovctrs_cpp_z_range(SEXP data, bool naRm, bool onlyFinite) {
   ZLimOperator op(naRm, onlyFinite);
   op.initProvider(data);
   return op.operate();

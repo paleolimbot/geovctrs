@@ -251,7 +251,7 @@ test_that("misssing values have the correct bounding boxes", {
 })
 
 test_that("lim functions work", {
-  expect_identical(geo_xlim("POINT (30 10)"), geo_lim(30, 30))
-  expect_identical(geo_ylim("POINT (30 10)"), geo_lim(10, 10))
-  expect_identical(geo_zlim("POINT Z (30 10 20)"), geo_lim(20, 20))
+  expect_identical(geo_x_range("POINT (30 10)"), geo_lim(30, 30))
+  expect_identical(geo_y_range("POINT (30 10)"), geo_lim(10, 10))
+  expect_identical(geo_z_range("POINT Z (30 10 20)"), geo_lim(20, 20))
 })
