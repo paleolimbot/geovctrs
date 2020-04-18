@@ -31,13 +31,13 @@ public:
 };
 
 class HasMissingOperator: public BadCoordinateOperator {
-  void nextCoordinate(GEOSContextHandle_t context, double x, double y) {
+  void nextXY(GEOSContextHandle_t context, double x, double y) {
     if (NumericVector::is_na(x) || NumericVector::is_na(y)) {
       throw NumericVector::create(x, y);
     }
   }
 
-  void nextCoordinate(GEOSContextHandle_t context, double x, double y, double z) {
+  void nextXYZ(GEOSContextHandle_t context, double x, double y, double z) {
     if (NumericVector::is_na(x) || NumericVector::is_na(y) || NumericVector::is_na(z)) {
       throw NumericVector::create(x, y, z);
     }
@@ -52,7 +52,7 @@ LogicalVector geovctrs_cpp_has_missing(SEXP x) {
 }
 
 class HasMissingOrInfiniteOperator: public BadCoordinateOperator {
-  void nextCoordinate(GEOSContextHandle_t context, double x, double y) {
+  void nextXY(GEOSContextHandle_t context, double x, double y) {
     if (NumericVector::is_na(x) ||
         NumericVector::is_na(y) ||
         x == R_PosInf || x == R_NegInf ||
@@ -61,7 +61,7 @@ class HasMissingOrInfiniteOperator: public BadCoordinateOperator {
     }
   }
 
-  void nextCoordinate(GEOSContextHandle_t context, double x, double y, double z) {
+  void nextXYZ(GEOSContextHandle_t context, double x, double y, double z) {
     if (NumericVector::is_na(x) ||
         NumericVector::is_na(y) ||
         x == R_PosInf || x == R_NegInf ||

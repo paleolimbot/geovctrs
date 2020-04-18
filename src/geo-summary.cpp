@@ -71,11 +71,11 @@ public:
     this->setRowNULL(i);
   }
 
-  void nextCoordinate(GEOSContextHandle_t context, double x, double y) {
+  void nextXY(GEOSContextHandle_t context, double x, double y) {
     throw NumericVector::create(x, y, NA_REAL);
   }
 
-  void nextCoordinate(GEOSContextHandle_t context, double x, double y, double z) {
+  void nextXYZ(GEOSContextHandle_t context, double x, double y, double z) {
     this->anyHasZ = true;
     throw NumericVector::create(x, y, z);
   }

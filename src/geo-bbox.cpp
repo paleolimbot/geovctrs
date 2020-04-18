@@ -128,7 +128,7 @@ public:
     this->zmax = R_NegInf;
   }
 
-  void nextCoordinate(GEOSContextHandle_t context, double x, double y, double z) {
+  void nextXYZ(GEOSContextHandle_t context, double x, double y, double z) {
     if (onlyFinite) {
       this->xmin = min_finite(this->xmin, x);
       this->ymin = min_finite(this->ymin, y);

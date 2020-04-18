@@ -444,23 +444,23 @@ public:
         GEOSCoordSeq_getX_r(context, seq, i, &xi);
         GEOSCoordSeq_getY_r(context, seq, i, &yi);
         GEOSCoordSeq_getZ_r(context, seq, i, &zi);
-        this->nextCoordinate(context, xi, yi, zi);
+        this->nextXYZ(context, xi, yi, zi);
       }
     } else {
       for (unsigned int i=0; i < size; i++) {
         this->coordinateId = i;
         GEOSCoordSeq_getX_r(context, seq, i, &xi);
         GEOSCoordSeq_getY_r(context, seq, i, &yi);
-        this->nextCoordinate(context, xi, yi);
+        this->nextXY(context, xi, yi);
       }
     }
   }
 
-  virtual void nextCoordinate(GEOSContextHandle_t context, double x, double y) {
-    this->nextCoordinate(context, x, y, NA_REAL);
+  virtual void nextXY(GEOSContextHandle_t context, double x, double y) {
+    this->nextXYZ(context, x, y, NA_REAL);
   }
 
-  virtual void nextCoordinate(GEOSContextHandle_t context, double x, double y, double z) {
+  virtual void nextXYZ(GEOSContextHandle_t context, double x, double y, double z) {
 
   }
 };
@@ -627,7 +627,7 @@ public:
         GEOSCoordSeq_getY_r(context, newSeq, i, &yi);
         GEOSCoordSeq_getZ_r(context, newSeq, i, &zi);
 
-        this->nextCoordinate(context, &xi, &yi, &zi);
+        this->nextXYZ(context, &xi, &yi, &zi);
 
         GEOSCoordSeq_setX_r(context, newSeq, i, xi);
         GEOSCoordSeq_setY_r(context, newSeq, i, yi);
@@ -639,7 +639,7 @@ public:
         GEOSCoordSeq_getX_r(context, newSeq, i, &xi);
         GEOSCoordSeq_getY_r(context, newSeq, i, &yi);
 
-        this->nextCoordinate(context, &xi, &yi);
+        this->nextXY(context, &xi, &yi);
 
         GEOSCoordSeq_setX_r(context, newSeq, i, xi);
         GEOSCoordSeq_setY_r(context, newSeq, i, yi);
@@ -649,12 +649,12 @@ public:
     return newSeq;
   }
 
-  virtual void nextCoordinate(GEOSContextHandle_t context, double* x, double* y) {
+  virtual void nextXY(GEOSContextHandle_t context, double* x, double* y) {
 
   }
 
-  virtual void nextCoordinate(GEOSContextHandle_t context, double* x, double* y, double* z) {
-    this->nextCoordinate(context, x, y);
+  virtual void nextXYZ(GEOSContextHandle_t context, double* x, double* y, double* z) {
+    this->nextXY(context, x, y);
   }
 
   // not used here, so make sure they aren't overridden
