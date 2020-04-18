@@ -129,7 +129,6 @@ unite_rcrd <- function(data, col, ..., remove, constructor)  {
 }
 
 separate_vctrs_rcrd <- function(data, col, into, remove, ptype, fields) {
-  data <- tibble::as_tibble(data)
   ptype_data <- vec_data(ptype)
   rcrd_col <- tidyselect::eval_select(enquo(col), data, strict = TRUE)
 
@@ -159,22 +158,17 @@ separate_vctrs_rcrd <- function(data, col, into, remove, ptype, fields) {
 }
 
 insert_column <- function(data, col, value, source_cols, remove) {
-  source_cols <- sort(source_cols)
+  df <- tibble(!!col := value)
+  out <- vec_cbind(data, df, .name_repair = "check_unique")
 
+  out_names <- insert_vector(names(data), names(df), min(source_cols))
   if (remove) {
-    data[[source_cols[1]]] = value
-    names(data)[source_cols[1]] <- col
-    if (length(source_cols) > 1) {
-      data <- data[-source_cols[-1]]
-    }
-
-    data
-  } else {
-    before <- source_cols[1]
-    vec_cbind(
-      data[seq_len(before - 1)],
-      tibble(!!col := value),
-      data[before:ncol(data)]
-    )
+    out_names <- setdiff(out_names, names(data)[source_cols])
   }
+
+  out[out_names]
+}
+
+insert_vector <- function(x, y, pos) {
+  c(x[seq_len(pos - 1)], y, x[pos - 1 + seq_len(length(x) - pos + 1)])
 }

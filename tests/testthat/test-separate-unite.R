@@ -122,3 +122,44 @@ test_that("separate_rect() works", {
     tibble(a = "unrelated", xmin = 0, ymin = 1, xmax = 2, ymax = 3)
   )
 })
+
+test_that("insert_column() works", {
+  tbl <- tibble(a = 1:2, b = 3:4)
+
+  expect_identical(
+    insert_column(tbl, "fish", NA, 1, remove = TRUE),
+    tibble(fish = c(NA, NA), b = 3:4)
+  )
+
+  expect_identical(
+    insert_column(tbl, "fish", NA, 1, remove = FALSE),
+    tibble(fish = c(NA, NA), a = 1:2, b = 3:4)
+  )
+})
+
+test_that("insert_vector() works", {
+  expect_identical(
+    insert_vector(c("one", "two", "three"), "XXX", 1),
+    c("XXX", "one", "two", "three")
+  )
+
+  expect_identical(
+    insert_vector(c("one", "two", "three"), "XXX", 2),
+    c("one", "XXX", "two", "three")
+  )
+
+  expect_identical(
+    insert_vector(c("one", "two", "three"), "XXX", 4),
+    c("one", "two", "three", "XXX")
+  )
+
+  expect_identical(
+    insert_vector(c("one", "two", "three"), c("XXX1", "XXX2"), 1),
+    c("XXX1", "XXX2", "one", "two", "three")
+  )
+
+  expect_identical(
+    insert_vector(c("one", "two", "three"), c("XXX1", "XXX2"), 4),
+    c("one", "two", "three", "XXX1", "XXX2")
+  )
+})
