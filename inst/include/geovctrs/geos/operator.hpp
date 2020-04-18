@@ -384,9 +384,9 @@ public:
 
   virtual void nextPolygon(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
     int nInteriorRings = GEOSGetNumInteriorRings_r(context, geometry);
-    this->nextGeometryDefault(context, GEOSGetExteriorRing_r(context, geometry));
+    this->nextLinearring(context, GEOSGetExteriorRing_r(context, geometry));
     for(int i=0; i < nInteriorRings; i++) {
-      this->nextGeometry(context, GEOSGetInteriorRingN_r(context, geometry, i));
+      this->nextLinearring(context, GEOSGetInteriorRingN_r(context, geometry, i));
     }
   }
 
