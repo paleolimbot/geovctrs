@@ -175,7 +175,7 @@ public:
     }
   }
 
-  SEXP assemble(GEOSContextHandle_t context) {
+  virtual SEXP assemble(GEOSContextHandle_t context) {
     return GeovctrsFactory::newRect(
       NumericVector::create(this->xmin),
       NumericVector::create(this->ymin),
@@ -194,6 +194,25 @@ SEXP geovctrs_cpp_bbox(SEXP data, bool naRm, bool onlyFinite) {
   return op.operate();
 }
 
+
+class ZLimOperator: public BboxOperator {
+public:
+  ZLimOperator(bool naRm, bool onlyFinite): BboxOperator(naRm, onlyFinite) {}
+
+  SEXP assemble(GEOSContextHandle_t context) {
+    return GeovctrsFactory::newLim(
+      NumericVector::create(this->zmin),
+      NumericVector::create(this->zmax)
+    );
+  }
+};
+
+// [[Rcpp::export]]
+SEXP geovctrs_cpp_zlim(SEXP data, bool naRm, bool onlyFinite) {
+  ZLimOperator op(naRm, onlyFinite);
+  op.initProvider(data);
+  return op.operate();
+}
 
 
 class EnvelopeOperator: public RangeOperator {

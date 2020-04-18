@@ -87,6 +87,27 @@ namespace geovctrs {
         return Rcpp::as<SEXP >(rcpp_result_gen);
     }
 
+    inline SEXP geovctrs_cpp_zlim(SEXP data, bool naRm, bool onlyFinite) {
+        typedef SEXP(*Ptr_geovctrs_cpp_zlim)(SEXP,SEXP,SEXP);
+        static Ptr_geovctrs_cpp_zlim p_geovctrs_cpp_zlim = NULL;
+        if (p_geovctrs_cpp_zlim == NULL) {
+            validateSignature("SEXP(*geovctrs_cpp_zlim)(SEXP,bool,bool)");
+            p_geovctrs_cpp_zlim = (Ptr_geovctrs_cpp_zlim)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_zlim");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_geovctrs_cpp_zlim(Shield<SEXP>(Rcpp::wrap(data)), Shield<SEXP>(Rcpp::wrap(naRm)), Shield<SEXP>(Rcpp::wrap(onlyFinite)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<SEXP >(rcpp_result_gen);
+    }
+
     inline SEXP geovctrs_cpp_envelope(SEXP data, bool naRm, bool onlyFinite) {
         typedef SEXP(*Ptr_geovctrs_cpp_envelope)(SEXP,SEXP,SEXP);
         static Ptr_geovctrs_cpp_envelope p_geovctrs_cpp_envelope = NULL;

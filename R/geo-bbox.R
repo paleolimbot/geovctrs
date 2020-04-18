@@ -38,6 +38,30 @@ geo_bbox.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 
 #' @rdname geo_bbox
 #' @export
+geo_xlim <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  UseMethod("geo_xlim")
+}
+
+#' @export
+geo_xlim.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  bbox <- vec_data(geo_bbox(x, ..., na.rm  = na.rm, finite = finite))
+  new_geovctrs_lim(list(lower = bbox$xmin, upper = bbox$xmax))
+}
+
+#' @rdname geo_bbox
+#' @export
+geo_ylim <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  UseMethod("geo_ylim")
+}
+
+#' @export
+geo_ylim.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  bbox <- vec_data(geo_bbox(x, ..., na.rm  = na.rm, finite = finite))
+  new_geovctrs_lim(list(lower = bbox$ymin, upper = bbox$ymax))
+}
+
+#' @rdname geo_bbox
+#' @export
 geo_envelope <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   UseMethod("geo_envelope")
 }

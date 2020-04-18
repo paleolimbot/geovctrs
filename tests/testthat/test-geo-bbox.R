@@ -249,3 +249,9 @@ test_that("misssing values have the correct bounding boxes", {
   expect_identical(geo_bbox(NA_segment_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_bbox(NA_rect_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
 })
+
+test_that("lim functions work", {
+  expect_identical(geo_xlim("POINT (30 10)"), geo_lim(30, 30))
+  expect_identical(geo_ylim("POINT (30 10)"), geo_lim(10, 10))
+  expect_identical(geo_zlim("POINT Z (30 10 20)"), geo_lim(20, 20))
+})

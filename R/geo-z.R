@@ -66,3 +66,19 @@ geo_has_z <- function(x) {
 geo_has_z.default <- function(x) {
   geo_summary(x)$has_z
 }
+
+#' @rdname geo_set_z
+#' @export
+geo_zlim <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  UseMethod("geo_zlim")
+}
+
+#' @export
+geo_zlim.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_zlim(as_geovctr(x), ..., na.rm = na.rm, finite = finite)
+}
+
+#' @export
+geo_zlim.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geovctrs_cpp_zlim(x, na.rm, finite)
+}

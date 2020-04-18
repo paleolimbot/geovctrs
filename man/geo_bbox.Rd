@@ -2,10 +2,16 @@
 % Please edit documentation in R/geo-bbox.R
 \name{geo_bbox}
 \alias{geo_bbox}
+\alias{geo_xlim}
+\alias{geo_ylim}
 \alias{geo_envelope}
 \title{Bounding boxes and envelopes}
 \usage{
 geo_bbox(x, ..., na.rm = FALSE, finite = FALSE)
+
+geo_xlim(x, ..., na.rm = FALSE, finite = FALSE)
+
+geo_ylim(x, ..., na.rm = FALSE, finite = FALSE)
 
 geo_envelope(x, ..., na.rm = FALSE, finite = FALSE)
 }

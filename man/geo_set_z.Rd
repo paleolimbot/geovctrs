@@ -4,6 +4,7 @@
 \alias{geo_set_z}
 \alias{geo_drop_z}
 \alias{geo_has_z}
+\alias{geo_zlim}
 \title{Work with Z values}
 \usage{
 geo_set_z(x, z)
@@ -11,12 +12,21 @@ geo_set_z(x, z)
 geo_drop_z(x)
 
 geo_has_z(x)
+
+geo_zlim(x, ..., na.rm = FALSE, finite = FALSE)
 }
 \arguments{
 \item{x}{A geometry-like object, or one that can be
 coerced to a geometry-like object using \code{\link[=as_geovctr]{as_geovctr()}}.}
 
 \item{z}{A z value}
+
+\item{...}{Unused}
+
+\item{na.rm}{Should NAs be removed?}
+
+\item{finite}{Should only finite values be considered? \code{TRUE}
+implies \code{na.rm = TRUE}.}
 }
 \value{
 A modified version of \code{x}.

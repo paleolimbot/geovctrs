@@ -82,6 +82,17 @@ public:
     return result;
   }
 
+  static List newLim(NumericVector lower, NumericVector upper) {
+    List result = List::create(
+      _["lower"] = lower,
+      _["upper"] = upper
+    );
+    result.attr("class") = CharacterVector::create(
+      "geovctrs_lim", "vctrs_rcrd", "vctrs_vctr"
+    );
+    return result;
+  }
+
   static List newPoint(List xy) {
     List point = List::create(_["xy"] = xy);
     point.attr("class") = CharacterVector::create("geovctrs_point");

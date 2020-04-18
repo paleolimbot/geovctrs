@@ -13,6 +13,10 @@ geovctrs_cpp_bbox <- function(data, naRm, onlyFinite) {
     .Call(`_geovctrs_geovctrs_cpp_bbox`, data, naRm, onlyFinite)
 }
 
+geovctrs_cpp_zlim <- function(data, naRm, onlyFinite) {
+    .Call(`_geovctrs_geovctrs_cpp_zlim`, data, naRm, onlyFinite)
+}
+
 geovctrs_cpp_envelope <- function(data, naRm, onlyFinite) {
     .Call(`_geovctrs_geovctrs_cpp_envelope`, data, naRm, onlyFinite)
 }
