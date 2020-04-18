@@ -224,9 +224,11 @@ public:
         y = NA_REAL;
         z = NA_REAL;
       } else if (GEOSHasZ_r(context, geometry)) {
-        GEOSGeomGetX_r(context, geometry, &x);
-        GEOSGeomGetY_r(context, geometry, &y);
-        GEOSGeomGetZ_r(context, geometry, &z);
+        // GEOSGeomGetZ_r() doesn't exist in GEOS 3.5.0
+        const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq_r(context, geometry);
+        GEOSCoordSeq_getX_r(context, seq, 0, &x);
+        GEOSCoordSeq_getY_r(context, seq, 0, &y);
+        GEOSCoordSeq_getZ_r(context, seq, 0, &z);
         this->hasZ = true;
       } else {
         GEOSGeomGetX_r(context, geometry, &x);
