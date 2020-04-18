@@ -84,10 +84,16 @@ geo_format_summary <- function(summary, class, short, col) {
   sym <- maybe_grey(
     geometry_type_symbol(
       summary$geometry_type,
-      (summary$coordinate_dimensions == 3) & !summary$is_empty,
+      summary$has_z,
       short = short
     ),
     col = col
+  )
+
+  first_coord <- ifelse(
+    summary$has_z,
+    format.geovctrs_xyz(summary$first_coordinate),
+    format.geovctrs_xy(summary$first_coordinate)
   )
 
   coord_str <- ifelse(
@@ -98,9 +104,9 @@ geo_format_summary <- function(summary, class, short, col) {
       "",
       ifelse(
         summary$geometry_type == "point",
-        maybe_blue(format(summary$first_coordinate), col = col),
+        maybe_blue(first_coord, col = col),
         paste0(
-          maybe_blue(format(summary$first_coordinate), col = col),
+          maybe_blue(first_coord, col = col),
           maybe_grey(cli::symbol$ellipsis, "+", summary$n_coordinates - 1, col = col)
         )
       )

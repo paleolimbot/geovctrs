@@ -56,3 +56,13 @@ geo_drop_z.geovctrs_xy <- function(x) {
   x
 }
 
+#' @rdname geo_set_z
+#' @export
+geo_has_z <- function(x) {
+  UseMethod("geo_has_z")
+}
+
+#' @export
+geo_has_z.default <- function(x) {
+  geo_summary(x)$has_z
+}

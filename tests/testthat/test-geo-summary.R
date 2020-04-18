@@ -37,6 +37,7 @@ test_that("geo_summary components methods work", {
     n_coordinates = geo_n_coordinates(x),
     srid = geo_srid(x),
     coordinate_dimensions = geo_coordinate_dimensions(x),
+    has_z = geo_has_z(x),
     first_coordinate = geo_first_coordinate(x),
     problems = NA_character_,
     is_missing = geo_is_missing(x)

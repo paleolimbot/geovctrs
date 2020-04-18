@@ -13,11 +13,14 @@ public:
   IntegerVector nCoordinates;
   IntegerVector srid;
   IntegerVector coordinateDimensions;
+  LogicalVector hasZ;
   NumericVector firstX;
   NumericVector firstY;
   NumericVector firstZ;
   CharacterVector problems;
   LogicalVector isMissing;
+
+  bool anyHasZ;
 
   void init(GEOSContextHandle_t context, size_t size) {
     this->isEmpty = LogicalVector(size);
@@ -26,11 +29,14 @@ public:
     this->nCoordinates = IntegerVector(size);
     this->srid = IntegerVector(size);
     this->coordinateDimensions = IntegerVector(size);
+    this->hasZ = LogicalVector(size);
     this->firstX = NumericVector(size);
     this->firstY = NumericVector(size);
     this->firstZ = NumericVector(size);
     this->problems = CharacterVector(size);
     this->isMissing = LogicalVector(size);
+
+    anyHasZ = false;
   }
 
   void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
@@ -46,6 +52,7 @@ public:
       this->nCoordinates[i] = GEOSGetNumCoordinates_r(context, geometry);
       this->srid[i] = GEOSGetSRID_r(context, geometry);
       this->coordinateDimensions[i] = GEOSGeom_getCoordinateDimension_r(context, geometry);
+      this->hasZ[i] = GEOSHasZ_r(context, geometry);
       this->firstX[i] = NA_REAL;
       this->firstY[i] = NA_REAL;
       this->firstZ[i] = NA_REAL;
@@ -64,7 +71,12 @@ public:
     this->setRowNULL(i);
   }
 
+  void nextCoordinate(GEOSContextHandle_t context, double x, double y) {
+    throw NumericVector::create(x, y, NA_REAL);
+  }
+
   void nextCoordinate(GEOSContextHandle_t context, double x, double y, double z) {
+    this->anyHasZ = true;
     throw NumericVector::create(x, y, z);
   }
 
@@ -76,12 +88,20 @@ public:
     this->nCoordinates[i] = NA_INTEGER;
     this->srid[i] = NA_INTEGER;
     this->coordinateDimensions[i] = NA_INTEGER;
+    this->hasZ[i] = NA_LOGICAL;
     this->firstX[i] = NA_REAL;
     this->firstY[i] = NA_REAL;
     this->firstZ[i] = NA_REAL;
   }
 
   SEXP assemble(GEOSContextHandle_t context) {
+    List firstCoord;
+    if (this->anyHasZ) {
+      firstCoord = GeovctrsFactory::newXYZ(this->firstX, this->firstY, this->firstZ);
+    } else {
+      firstCoord = GeovctrsFactory::newXY(this->firstX, this->firstY);
+    }
+
     return List::create(
       _["is_empty"] = this->isEmpty,
       _["geometry_type"] = this->geometryTypeId,
@@ -89,7 +109,8 @@ public:
       _["n_coordinates"] = this->nCoordinates,
       _["srid"] = this->srid,
       _["coordinate_dimensions"] = this->coordinateDimensions,
-      _["first_coordinate"] = GeovctrsFactory::newXY(this->firstX, this->firstY),
+      _["has_z"] = this->hasZ,
+      _["first_coordinate"] = firstCoord,
       _["problems"] = this->problems,
       _["is_missing"] = this->isMissing
     );

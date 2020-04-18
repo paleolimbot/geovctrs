@@ -3,11 +3,14 @@
 \name{geo_set_z}
 \alias{geo_set_z}
 \alias{geo_drop_z}
+\alias{geo_has_z}
 \title{Work with Z values}
 \usage{
 geo_set_z(x, z)
 
 geo_drop_z(x)
+
+geo_has_z(x)
 }
 \arguments{
 \item{x}{A geometry-like object, or one that can be
