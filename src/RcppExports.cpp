@@ -451,6 +451,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// geovctrs_cpp_test_recursive_identity
+SEXP geovctrs_cpp_test_recursive_identity(SEXP data, SEXP ptype);
+RcppExport SEXP _geovctrs_geovctrs_cpp_test_recursive_identity(SEXP dataSEXP, SEXP ptypeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type ptype(ptypeSEXP);
+    rcpp_result_gen = Rcpp::wrap(geovctrs_cpp_test_recursive_identity(data, ptype));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _geovctrs_RcppExport_validate(const char* sig) { 
@@ -505,6 +517,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_geovctrs_cpp_test_buffer2", (DL_FUNC) &_geovctrs_geovctrs_cpp_test_buffer2, 2},
     {"_geovctrs_geovctrs_cpp_test_buffer2_bad_provider", (DL_FUNC) &_geovctrs_geovctrs_cpp_test_buffer2_bad_provider, 2},
     {"_geovctrs_geovctrs_cpp_test_buffer2_bad_exporter", (DL_FUNC) &_geovctrs_geovctrs_cpp_test_buffer2_bad_exporter, 2},
+    {"_geovctrs_geovctrs_cpp_test_recursive_identity", (DL_FUNC) &_geovctrs_geovctrs_cpp_test_recursive_identity, 2},
     {"_geovctrs_RcppExport_registerCCallable", (DL_FUNC) &_geovctrs_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };

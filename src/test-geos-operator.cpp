@@ -32,3 +32,15 @@ SEXP geovctrs_cpp_test_buffer2_bad_exporter(SEXP data, SEXP ptype) {
   op.initProvider(data);
   return op.operate();
 }
+
+class TestRecursiveIdentityOp: public GeovctrsGEOSRecursiveGeometryOperator {
+
+};
+
+// [[Rcpp::export]]
+SEXP geovctrs_cpp_test_recursive_identity(SEXP data, SEXP ptype) {
+  TestRecursiveIdentityOp op;
+  op.initProvider(data);
+  op.initExporter(ptype);
+  return op.operate();
+}

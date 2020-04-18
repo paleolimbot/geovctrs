@@ -14,3 +14,10 @@ test_that("test buffer operator fails without segfault", {
     "initExporter"
   )
 })
+
+test_that("recursive operator recreates geometries perfectly by default", {
+  expect_identical(
+    geovctrs_cpp_test_recursive_identity(geo_example_wkt, geo_wkb()),
+    as_geo_wkb(geo_example_wkt)
+  )
+})

@@ -535,7 +535,17 @@ public:
 
   virtual GEOSGeometry* nextPoint(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
     GEOSCoordSequence* seq = this->nextGeometryDefault(context, geometry);
-    return GEOSGeom_createPoint_r(context, seq);
+
+    // creating points with an empty coord sequence is a recent
+    // GEOS feature...this bit makes things work for GEOS >=3.5 (at least)
+    unsigned int newSize;
+    GEOSCoordSeq_getSize_r(context, seq, &newSize);
+    if (newSize == 0) {
+      GEOSCoordSeq_destroy_r(context, seq);
+      return GEOSGeom_createEmptyPoint_r(context);
+    } else {
+      return GEOSGeom_createPoint_r(context, seq);
+    }
   }
 
   virtual GEOSGeometry* nextLinestring(GEOSContextHandle_t context, const GEOSGeometry* geometry) {

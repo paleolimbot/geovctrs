@@ -73,6 +73,10 @@ geovctrs_cpp_test_buffer2_bad_exporter <- function(data, ptype) {
     .Call(`_geovctrs_geovctrs_cpp_test_buffer2_bad_exporter`, data, ptype)
 }
 
+geovctrs_cpp_test_recursive_identity <- function(data, ptype) {
+    .Call(`_geovctrs_geovctrs_cpp_test_recursive_identity`, data, ptype)
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('_geovctrs_RcppExport_registerCCallable', PACKAGE = 'geovctrs')
