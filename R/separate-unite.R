@@ -125,7 +125,7 @@ unite_rcrd <- function(data, col, ..., remove, constructor)  {
 
   values <- lapply(cols, function(x) data[[x]])
   rcrd <- rlang::exec(constructor, !!!values)
-  insert_column(data, col, rcrd, unlist(cols), remove)
+  insert_column(data, tibble(!!col := rcrd), source_cols = unlist(cols), remove = remove)
 }
 
 separate_vctrs_rcrd <- function(data, col, into, remove, ptype, fields) {
@@ -140,26 +140,11 @@ separate_vctrs_rcrd <- function(data, col, into, remove, ptype, fields) {
 
   rcrd <- data[[rcrd_col]]
   vec_assert(rcrd, ptype)
-
-  # this is not the most stylish way to go about this
-  for (i in rev(seq_along(fields))) {
-    data <- insert_column(
-      data,
-      into[i],
-      field(rcrd, fields[i]),
-      rcrd_col,
-      remove = remove
-    )
-
-    remove <- FALSE
-  }
-
-  data
+  insert_column(data, as_tibble(rcrd)[fields], source_cols = rcrd_col, remove = remove)
 }
 
-insert_column <- function(data, col, value, source_cols, remove) {
-  df <- tibble(!!col := value)
-  out <- vec_cbind(data, df, .name_repair = "check_unique")
+insert_column <- function(data, df, source_cols, remove) {
+  out <- vec_cbind(data, df, .ptype = vec_ptype(data), .name_repair = "check_unique")
 
   out_names <- insert_vector(names(data), names(df), min(source_cols))
   if (remove) {
