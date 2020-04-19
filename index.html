@@ -85,22 +85,23 @@
 <a href="#geovctrs" class="anchor"></a>geovctrs</h1></div>
 <!-- badges: start -->
 
-<p>The goal of geovctrs is to provide a common set of classes and data structures to ensure that processing functions in the rapidly expanding R geospatial ecosystem are interchangable.</p>
+<p>The goal of geovctrs is to provide a common set of classes and data structures to ensure that processing functions in the rapidly expanding R geospatial ecosystem are interchangeable.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="r"><span class="co"># install.packages("remotes")</span>
 <span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"paleolimbot/geovctrs"</span>)</pre></div>
+<p>You’ll have to install GEOS to build this package yourself. There will come a day when this package won’t require GEOS, but in the words of <a href="https://en.wikipedia.org/wiki/Aragorn">Aragorn</a>, that day is not this day. On Windows this is taken care of through <a href="https://github.com/rwinlib">rwinlib</a>, on MacOS you can install <a href="https://brew.sh/">homebrew</a> and run <code>brew install geos</code>, and on Linux you can install GEOS from your favourite package manager (<code>apt-get install libgeos-dev</code> on Debian/Ubuntu).</p>
 <p>If you can load the package, you’re good to go!</p>
 <div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">geovctrs</span>)</pre></div>
 </div>
-<div id="example" class="section level2">
+<div id="geometry-vectors" class="section level2">
 <h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
-<p>This package has reasonable <code><a href="https://rdrr.io/pkg/sf/man/plot.html">plot()</a></code> and <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> methods for WKB and WKT types, and provides a <a href="https://vctrs.r-lib.org/">vctrs</a> implementation for these types so that they “just work” with <a href="https://tibble.tidyverse.org/">tibble</a>, <a href="https://tidyr.tidyverse.org/">tidyr</a>, and <a href="https://dplyr.tidyverse.org/">dplyr</a> (&gt;=1.0.0) (among others).</p>
+<a href="#geometry-vectors" class="anchor"></a>Geometry vectors</h2>
+<p>This package provides <a href="https://vctrs.r-lib.org/">vctrs</a> class definitions for <a href="https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary">well-known binary</a> (<code><a href="reference/geo_wkb.html">geo_wkb()</a></code>), <a href="https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry">well-known text</a> (<code><a href="reference/geo_wkt.html">geo_wkt()</a></code>), and several simple geometries that can be efficiently stored using column vectors (<code><a href="reference/geo_xy.html">geo_xy()</a></code>, <code><a href="reference/geo_segment.html">geo_segment()</a></code>, and <code><a href="reference/geo_rect.html">geo_rect()</a></code>). These classes are designed to work with <a href="https://dplyr.tidyverse.org/">dplyr</a>, <a href="https://tidyr.tidyverse.org/">tidyr</a>, and other <a href="https://tidyverse.org/">tidyverse</a> packages that use vctrs. In addition to providing default implementations of <a href="#generics">generics</a>, they have print, plot, and coercion, methods so that they “just work”:</p>
 <div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">geo_example_wkt</span>)
-<span class="co">#&gt; &lt;geo_wkt[6]&gt;</span>
+<span class="co">#&gt; &lt;geovctrs_wkt[6]&gt;</span>
 <span class="co">#&gt; [1] NA_wkt_                                </span>
 <span class="co">#&gt; [2] POINT (30 10)                          </span>
 <span class="co">#&gt; [3] POINT EMPTY                            </span>
@@ -108,53 +109,85 @@
 <span class="co">#&gt; [5] MULTIPOINT (10 40, 40 30, 20 20, 30 10)</span>
 <span class="co">#&gt; [6] MULTIPOINT EMPTY</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fu"><a href="reference/geo_wkb.html">as_geo_wkb</a></span>(<span class="no">geo_example_wkt</span>))
-<span class="co">#&gt; &lt;geo_wkb[6]&gt;</span>
+<span class="co">#&gt; &lt;geovctrs_wkb[6]&gt;</span>
 <span class="co">#&gt; [1] NA_wkb_                  POINT (30 10)           </span>
-<span class="co">#&gt; [3] POINT EMPTY              POINT Z (1 1)           </span>
+<span class="co">#&gt; [3] POINT EMPTY              POINT Z (1 1 5)         </span>
 <span class="co">#&gt; [5] MULTIPOINT[4] (10 40)…+3 MULTIPOINT EMPTY</span></pre></div>
-<p>Most methods work on anything that can be interpreted as geometry, including character vectors and data.frames containing exactly one geometry column.</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="reference/geo_plot.html">geo_plot</a></span>(<span class="st">"LINESTRING (30 10, 10 30, 40 40)"</span>)</pre></div>
-<p><img src="reference/figures/README-ex-plot-1.png" width="100%"></p>
-<p>Like any self-respecting geometry package, geovctrs contains a copy of the North Carolina dataset to play with:</p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span>(<span class="no">geo_nc</span>)
-<span class="co">#&gt; # A tibble: 100 x 12</span>
-<span class="co">#&gt;    geometry                       NWBIR79 SID79 BIR79 NWBIR74 SID74 BIR74</span>
-<span class="co">#&gt;    &lt;wkb&gt;                            &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 △▽[1] (-81.47276 36.23436)…+26      19     0  1364      10     1  1091</span>
-<span class="co">#&gt;  2 △▽[1] (-81.23989 36.36536)…+25      12     3   542      10     0   487</span>
-<span class="co">#&gt;  3 △▽[1] (-80.45634 36.24256)…+27     260     6  3616     208     5  3188</span>
-<span class="co">#&gt;  4 △▽[3] (-76.00897 36.31960)…+37     145     2   830     123     1   508</span>
-<span class="co">#&gt;  5 △▽[1] (-77.21767 36.24098)…+33    1197     3  1606    1066     9  1421</span>
-<span class="co">#&gt;  6 △▽[1] (-76.74506 36.23392)…+21    1237     5  1838     954     7  1452</span>
-<span class="co">#&gt;  7 △▽[1] (-76.00897 36.31960)…+23     139     2   350     115     0   286</span>
-<span class="co">#&gt;  8 △▽[1] (-76.56251 36.34057)…+16     371     2   594     254     0   420</span>
-<span class="co">#&gt;  9 △▽[1] (-78.30876 36.26004)…+13     844     2  1190     748     4   968</span>
-<span class="co">#&gt; 10 △▽[1] (-80.02567 36.25023)…+5      176     5  2038     160     1  1612</span>
-<span class="co">#&gt; # … with 90 more rows, and 5 more variables: CRESS_ID &lt;int&gt;, FIPSNO &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   FIPS &lt;chr&gt;, NAME &lt;chr&gt;, CNTY_ID &lt;dbl&gt;</span></pre></div>
 </div>
-<div id="sf-and-data-frame-support" class="section level2">
+<div id="constructing-and-destructing-geometries" class="section level2">
 <h2 class="hasAnchor">
-<a href="#sf-and-data-frame-support" class="anchor"></a>sf and data frame support</h2>
-<p>The geovctrs package has tentative sf and data frame support for all processing functions, following the principle that well-mannered transformation functions return the same type and shape as the input. For data frames with exactly one geovctr column, transformation functions replace the output column with another geovctr (this might be of a different type, but will be a geovctr).</p>
-<div class="sourceCode" id="cb6"><pre class="r"><span class="fu"><a href="reference/geo_bbox.html">geo_envelope</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span>(<span class="no">geo_nc</span>))
-<span class="co">#&gt; # A tibble: 100 x 12</span>
-<span class="co">#&gt;    geometry                  NWBIR79 SID79 BIR79 NWBIR74 SID74 BIR74</span>
-<span class="co">#&gt;    &lt;rect&gt;                      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 △ (-81.74107 36.23436)…+4      19     0  1364      10     1  1091</span>
-<span class="co">#&gt;  2 △ (-81.34754 36.36536)…+4      12     3   542      10     0   487</span>
-<span class="co">#&gt;  3 △ (-80.96577 36.23388)…+4     260     6  3616     208     5  3188</span>
-<span class="co">#&gt;  4 △ (-76.33025 36.07282)…+4     145     2   830     123     1   508</span>
-<span class="co">#&gt;  5 △ (-77.90121 36.16277)…+4    1197     3  1606    1066     9  1421</span>
-<span class="co">#&gt;  6 △ (-77.21767 36.23024)…+4    1237     5  1838     954     7  1452</span>
-<span class="co">#&gt;  7 △ (-76.56358 36.16973)…+4     139     2   350     115     0   286</span>
-<span class="co">#&gt;  8 △ (-76.95367 36.29452)…+4     371     2   594     254     0   420</span>
-<span class="co">#&gt;  9 △ (-78.32125 36.19595)…+4     844     2  1190     748     4   968</span>
-<span class="co">#&gt; 10 △ (-80.45301 36.25023)…+4     176     5  2038     160     1  1612</span>
-<span class="co">#&gt; # … with 90 more rows, and 5 more variables: CRESS_ID &lt;int&gt;, FIPSNO &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   FIPS &lt;chr&gt;, NAME &lt;chr&gt;, CNTY_ID &lt;dbl&gt;</span></pre></div>
-<p>For sf objects, this means that valid sf objects are returned:</p>
-<div class="sourceCode" id="cb7"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sf</span>)
+<a href="#constructing-and-destructing-geometries" class="anchor"></a>Constructing and destructing geometries</h2>
+<p>The geovctrs package provides functions to construct geometries from coordinates, and destruct geometries to extract their coordinates.</p>
+<div class="sourceCode" id="cb4"><pre class="r"><span class="co"># construct linestrings</span>
+<span class="no">linestrings</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(
+  <span class="fu"><a href="reference/geo_collection.html">geo_linestring</a></span>(<span class="fu"><a href="reference/geo_xy.html">geo_xy</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>))),
+  <span class="fu"><a href="reference/geo_collection.html">geo_linestring</a></span>(<span class="fu"><a href="reference/geo_xy.html">geo_xy</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">50</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">20</span>)))
+)
+
+<span class="no">linestrings</span>
+<span class="co">#&gt; &lt;geovctrs_collection[2]&gt;</span>
+<span class="co">#&gt; [1] LINESTRING (1 0)…+2  LINESTRING (10 0)…+2</span>
+
+<span class="co"># destruct to get coordinates</span>
+<span class="fu"><a href="reference/geo_coordinates.html">geo_coordinates</a></span>(<span class="no">linestrings</span>)
+<span class="co">#&gt; # A tibble: 6 x 2</span>
+<span class="co">#&gt;   feature xy       </span>
+<span class="co">#&gt;     &lt;int&gt; &lt;xy&gt;     </span>
+<span class="co">#&gt; 1       1 · (1 0)  </span>
+<span class="co">#&gt; 2       1 · (2 1)  </span>
+<span class="co">#&gt; 3       1 · (5 2)  </span>
+<span class="co">#&gt; 4       2 · (10 0) </span>
+<span class="co">#&gt; 5       2 · (20 10)</span>
+<span class="co">#&gt; 6       2 · (50 20)</span></pre></div>
+<p>You can use <code><a href="reference/unite_xy.html">separate_xy()</a></code> get the actual x and y values (and <code><a href="reference/unite_xy.html">unite_xy()</a></code> to create a <code><a href="reference/geo_xy.html">geo_xy()</a></code> column).</p>
+<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="reference/unite_xy.html">separate_xy</a></span>(<span class="fu"><a href="reference/geo_coordinates.html">geo_coordinates</a></span>(<span class="no">linestrings</span>), <span class="st">"xy"</span>)
+<span class="co">#&gt; # A tibble: 6 x 3</span>
+<span class="co">#&gt;   feature     x     y</span>
+<span class="co">#&gt;     &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1       1     1     0</span>
+<span class="co">#&gt; 2       1     2     1</span>
+<span class="co">#&gt; 3       1     5     2</span>
+<span class="co">#&gt; 4       2    10     0</span>
+<span class="co">#&gt; 5       2    20    10</span>
+<span class="co">#&gt; 6       2    50    20</span></pre></div>
+<p>In the <a href="https://www.tidyverse.org/blog/2020/03/dplyr-1-0-0-summarise/">upcoming release of dplyr</a>, this is useful in conjunction with <code>group_by()</code> and <code><a href="https://rdrr.io/pkg/sf/man/tidyverse.html">summarise()</a></code>.</p>
+<div class="sourceCode" id="cb6"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)
+<span class="fu"><a href="reference/geo_coordinates.html">geo_coordinates</a></span>(<span class="no">linestrings</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">group_by</span>(<span class="no">feature</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">summarise</span>(<span class="kw">geometry</span> <span class="kw">=</span> <span class="fu"><a href="reference/geo_collection.html">geo_linestring</a></span>(<span class="no">xy</span>))
+<span class="co">#&gt; # A tibble: 2 x 2</span>
+<span class="co">#&gt;   feature geometry   </span>
+<span class="co">#&gt; *   &lt;int&gt; &lt;clctn&gt;    </span>
+<span class="co">#&gt; 1       1 / (1 0)…+2 </span>
+<span class="co">#&gt; 2       2 / (10 0)…+2</span></pre></div>
+</div>
+<div id="generics" class="section level2">
+<h2 class="hasAnchor">
+<a href="#generics" class="anchor"></a>Generics</h2>
+<p>There are several concepts that show up on repeat in geometry packages. The geovctrs package provides these as generics with reasonable implementations for the bundled <a href="#geometry-vectors">geometry vector classes</a>. Notably, <code><a href="reference/geo_bbox.html">geo_bbox()</a></code> (returns a <code><a href="reference/geo_rect.html">geo_rect()</a></code>), <code><a href="reference/geo_plot.html">geo_plot()</a></code> (thin wrapper around <code><a href="https://rdrr.io/r/graphics/plot.html">graphics::plot()</a></code>), and <code><a href="reference/geo_summary.html">geo_summary()</a></code> (returns a <code><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble()</a></code> with basic information about each feature). These generics work on anything that can be interpreted as a geometry vector, including character vectors (interpreted as well-known text), data frames with exactly one geometry column (interpreted as the geometry column), and anything that implements <code><a href="reference/is_geovctr.html">as_geovctr()</a></code> (e.g., <a href="https://r-spatial.github.io/sf">sf</a> objects).</p>
+<div class="sourceCode" id="cb7"><pre class="r"><span class="fu"><a href="reference/geo_bbox.html">geo_bbox</a></span>(<span class="no">geo_nc</span>)
+<span class="co">#&gt; &lt;geovctrs_rect[1]&gt;</span>
+<span class="co">#&gt; [1] (-84.32385 33.88199↗-75.45698 36.58965)</span>
+<span class="fu"><a href="reference/geo_plot.html">geo_plot</a></span>(<span class="no">geo_nc</span>)</pre></div>
+<p><img src="reference/figures/README-ex-plot-1.png" width="100%"></p>
+<div class="sourceCode" id="cb8"><pre class="r"><span class="fu"><a href="reference/geo_summary.html">geo_summary</a></span>(<span class="no">geo_nc</span>)
+<span class="co">#&gt; # A tibble: 100 x 10</span>
+<span class="co">#&gt;    is_empty geometry_type n_geometries n_coordinates  srid coordinate_dime…</span>
+<span class="co">#&gt;    &lt;lgl&gt;    &lt;chr&gt;                &lt;int&gt;         &lt;int&gt; &lt;int&gt;            &lt;int&gt;</span>
+<span class="co">#&gt;  1 FALSE    multipolygon             1            27  4267                2</span>
+<span class="co">#&gt;  2 FALSE    multipolygon             1            26  4267                2</span>
+<span class="co">#&gt;  3 FALSE    multipolygon             1            28  4267                2</span>
+<span class="co">#&gt;  4 FALSE    multipolygon             3            38  4267                2</span>
+<span class="co">#&gt;  5 FALSE    multipolygon             1            34  4267                2</span>
+<span class="co">#&gt;  6 FALSE    multipolygon             1            22  4267                2</span>
+<span class="co">#&gt;  7 FALSE    multipolygon             1            24  4267                2</span>
+<span class="co">#&gt;  8 FALSE    multipolygon             1            17  4267                2</span>
+<span class="co">#&gt;  9 FALSE    multipolygon             1            14  4267                2</span>
+<span class="co">#&gt; 10 FALSE    multipolygon             1             6  4267                2</span>
+<span class="co">#&gt; # … with 90 more rows, and 4 more variables: has_z &lt;lgl&gt;,</span>
+<span class="co">#&gt; #   first_coordinate &lt;xy&gt;, problems &lt;chr&gt;, is_missing &lt;lgl&gt;</span></pre></div>
+<p>The geovctrs package also provides a framework for transformers, or functions that accept a vector of geometries and return a vector of geometries. These always return the same type as the input, as dictated by the implementations of <code><a href="reference/is_geovctr.html">as_geovctr()</a></code> and <code><a href="reference/is_geovctr.html">restore_geovctr()</a></code>. This enables transforming functions to work on a wide variety of input types, including sf objects:</p>
+<div class="sourceCode" id="cb9"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">sf</span>)
 <span class="co">#&gt; Linking to GEOS 3.7.2, GDAL 2.4.2, PROJ 5.2.0</span>
 <span class="no">sf_nc</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sf/man/st_read.html">read_sf</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"shape/nc.shp"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"sf"</span>))
 <span class="fu"><a href="reference/geo_bbox.html">geo_envelope</a></span>(<span class="no">sf_nc</span>)
@@ -179,15 +212,7 @@
 <span class="co">#&gt; 10 0.124      1.43  1837    1837 Stok… 37169  37169       85  1612     1</span>
 <span class="co">#&gt; # … with 90 more rows, and 5 more variables: NWBIR74 &lt;dbl&gt;, BIR79 &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   SID79 &lt;dbl&gt;, NWBIR79 &lt;dbl&gt;, geometry &lt;POLYGON [°]&gt;</span></pre></div>
-<p>Other functions that accept geometry as input will treat sf and data frame objects as vectors with the length of <code><a href="https://rdrr.io/r/base/nrow.html">nrow(x)</a></code>:</p>
-<div class="sourceCode" id="cb8"><pre class="r"><span class="fu"><a href="reference/geo_summary.html">geo_n_coordinates</a></span>(<span class="no">sf_nc</span>)
-<span class="co">#&gt;   [1] 27 26 28 38 34 22 24 17 14  6  7  7 17  6 13 53 20 47 23 12 17 28 24</span>
-<span class="co">#&gt;  [24] 20 22  6 10 45  9 18 23 34 28 27 33 37 27 30 19 29 17 31 34 18 16 35</span>
-<span class="co">#&gt;  [47]  7 27 19 18 45 14 45 27 39 24 36 44 23 24 33 29 22 21 11 36 29 31 14</span>
-<span class="co">#&gt;  [70] 24 32 35 27 31 22 19 16 29 40 20 27 29 31 18 27 14 31 30 36 17 39 17</span>
-<span class="co">#&gt;  [93] 19 25 30 31 34 33 23 27</span>
-<span class="fu"><a href="reference/geo_plot.html">geo_plot</a></span>(<span class="no">sf_nc</span>)</pre></div>
-<p><img src="reference/figures/README-sf-nc-plot-1.png" width="100%"></p>
+<p>See <code><a href="articles/extending-geovctrs.html">vignette("extending-geovctrs", package = "geovctrs")</a></code> for instructions on how to create a class that works with the geovctrs framework.</p>
 </div>
 </div>
   </div>
