@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 [![Codecov test coverage](https://codecov.io/gh/paleolimbot/geovctrs/branch/master/graph/badge.svg)](https://codecov.io/gh/paleolimbot/geovctrs?branch=master)
 <!-- badges: end -->
 
-The goal of geovctrs is to provide a common set of classes and data structures to ensure that processing functions in the rapidly expanding R geospatial ecosystem are interchangable.
+The goal of geovctrs is to provide a common set of classes and data structures to ensure that processing functions in the rapidly expanding R geospatial ecosystem are interchangeable.
 
 ## Installation
 
@@ -33,42 +33,71 @@ You can install the development version from [GitHub](https://github.com/) with:
 remotes::install_github("paleolimbot/geovctrs")
 ```
 
+You'll have to install GEOS to build this package yourself. There will come a day when this package won't require GEOS, but in the words of [Aragorn](https://en.wikipedia.org/wiki/Aragorn), that day is not this day. On Windows this is taken care of through [rwinlib](https://github.com/rwinlib), on MacOS you can install [homebrew](https://brew.sh/) and run `brew install geos`, and on Linux you can install GEOS from your favourite package manager (`apt-get install libgeos-dev` on Debian/Ubuntu).
+
 If you can load the package, you're good to go!
 
 ```{r example}
 library(geovctrs)
 ```
 
-## Example
+## Geometry vectors
 
-This package has reasonable `plot()` and `print()` methods for WKB and WKT types, and provides a [vctrs](https://vctrs.r-lib.org/) implementation for these types so that they "just work" with [tibble](https://tibble.tidyverse.org/), [tidyr](https://tidyr.tidyverse.org/), and [dplyr](https://dplyr.tidyverse.org/) (>=1.0.0) (among others).
+This package provides [vctrs](https://vctrs.r-lib.org/) class definitions for [well-known binary](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary) (`geo_wkb()`), [well-known text](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry) (`geo_wkt()`), and several simple geometries that can be efficiently stored using column vectors (`geo_xy()`, `geo_segment()`, and `geo_rect()`). These classes are designed to work with [dplyr](https://dplyr.tidyverse.org/), [tidyr](https://tidyr.tidyverse.org/), and other [tidyverse](https://tidyverse.org/) packages that use vctrs. In addition to providing default implementations of [ generics](#generics), they have print, plot, and coercion, methods so that they "just work":
 
 ```{r}
 head(geo_example_wkt)
 head(as_geo_wkb(geo_example_wkt))
 ```
 
-Most methods work on anything that can be interpreted as geometry, including character vectors and data.frames containing exactly one geometry column.
+## Constructing and destructing geometries
+
+The geovctrs package provides functions to construct geometries from coordinates, and destruct geometries to extract their coordinates.
+
+```{r}
+# construct linestrings
+linestrings <- c(
+  geo_linestring(geo_xy(c(1, 2, 5), c(0, 1, 2))),
+  geo_linestring(geo_xy(c(10, 20, 50), c(0, 10, 20)))
+)
+
+linestrings
+
+# destruct to get coordinates
+geo_coordinates(linestrings)
+```
+
+You can use `separate_xy()` get the actual x and y values (and `unite_xy()` to create a `geo_xy()` column).
+
+```{r}
+separate_xy(geo_coordinates(linestrings), "xy")
+```
+
+In the [upcoming release of dplyr](https://www.tidyverse.org/blog/2020/03/dplyr-1-0-0-summarise/), this is useful in conjunction with `group_by()` and `summarise()`.
+
+```{r, message=FALSE, warning=FALSE, eval =  FALSE}
+library(dplyr)
+geo_coordinates(linestrings) %>% 
+  group_by(feature) %>% 
+  summarise(geometry = geo_linestring(xy))
+#> # A tibble: 2 x 2
+#>   feature geometry   
+#> *   <int> <clctn>    
+#> 1       1 / (1 0)…+2 
+#> 2       2 / (10 0)…+2
+```
+
+## Generics
+
+There are several concepts that show up on repeat in geometry packages. The geovctrs package provides these as generics with reasonable implementations for the bundled [geometry vector classes](#geometry-vectors). Notably, `geo_bbox()` (returns a `geo_rect()`), `geo_plot()` (thin wrapper around `graphics::plot()`), and `geo_summary()` (returns a `tibble()` with basic information about each feature). These generics work on anything that can be interpreted as a geometry vector, including character vectors (interpreted as well-known text), data frames with exactly one geometry column (interpreted as the geometry column), and anything that implements `as_geovctr()` (e.g., [sf](https://r-spatial.github.io/sf) objects).
 
 ```{r ex-plot}
-geo_plot("LINESTRING (30 10, 10 30, 40 40)")
+geo_bbox(geo_nc)
+geo_plot(geo_nc)
+geo_summary(geo_nc)
 ```
 
-Like any self-respecting geometry package, geovctrs contains a copy of the North Carolina dataset to play with:
-
-```{r}
-rev(geo_nc)
-```
-
-## sf and data frame support
-
-The geovctrs package has tentative sf and data frame support for all processing functions, following the principle that well-mannered transformation functions return the same type and shape as the input. For data frames with exactly one geovctr column, transformation functions replace the output column with another geovctr (this might be of a different type, but will be a geovctr).
-
-```{r}
-geo_envelope(rev(geo_nc))
-```
-
-For sf objects, this means that valid sf objects are returned:
+The geovctrs package also provides a framework for transformers, or functions that accept a vector of geometries and return a vector of geometries. These always return the same type as the input, as dictated by the implementations of `as_geovctr()` and `restore_geovctr()`. This enables transforming functions to work on a wide variety of input types, including sf objects:
 
 ```{r}
 library(sf)
@@ -76,9 +105,4 @@ sf_nc <- read_sf(system.file("shape/nc.shp", package = "sf"))
 geo_envelope(sf_nc)
 ```
 
-Other functions that accept geometry as input will treat sf and data frame objects as vectors with the length of `nrow(x)`:
-
-```{r sf-nc-plot}
-geo_n_coordinates(sf_nc)
-geo_plot(sf_nc)
-```
+See `vignette("extending-geovctrs", package = "geovctrs")` for instructions on how to create a class that works with the geovctrs framework.

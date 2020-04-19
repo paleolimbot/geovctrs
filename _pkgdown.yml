@@ -13,7 +13,7 @@ reference:
   - geo_collection
 
 - title: Geometry operators
-  desc: Functions that take geometry vectors as input and produce a result
+  desc: Functions that take geometry vectors as input
   contents:
   - geo_bbox
   - geo_plot
@@ -21,6 +21,15 @@ reference:
   - geo_is_missing
   - geo_summary
   - geo_print
+  - geo_set_z
+  - geo_coordinates
+  - geo_coalesce
+
+- title: Utility functioons
+  desc: These might get moved to another package, but for now they live here
+  contents:
+  - unite_xy
+  - geo_range
 
 - title: Example data
   desc: Data for writing testing tests, vignettes, and examples

@@ -14,7 +14,7 @@ coverage](https://codecov.io/gh/paleolimbot/geovctrs/branch/master/graph/badge.s
 
 The goal of geovctrs is to provide a common set of classes and data
 structures to ensure that processing functions in the rapidly expanding
-R geospatial ecosystem are interchangable.
+R geospatial ecosystem are interchangeable.
 
 ## Installation
 
@@ -26,24 +26,40 @@ You can install the development version from
 remotes::install_github("paleolimbot/geovctrs")
 ```
 
+You’ll have to install GEOS to build this package yourself. There will
+come a day when this package won’t require GEOS, but in the words of
+[Aragorn](https://en.wikipedia.org/wiki/Aragorn), that day is not this
+day. On Windows this is taken care of through
+[rwinlib](https://github.com/rwinlib), on MacOS you can install
+[homebrew](https://brew.sh/) and run `brew install geos`, and on Linux
+you can install GEOS from your favourite package manager (`apt-get
+install libgeos-dev` on Debian/Ubuntu).
+
 If you can load the package, you’re good to go\!
 
 ``` r
 library(geovctrs)
 ```
 
-## Example
+## Geometry vectors
 
-This package has reasonable `plot()` and `print()` methods for WKB and
-WKT types, and provides a [vctrs](https://vctrs.r-lib.org/)
-implementation for these types so that they “just work” with
-[tibble](https://tibble.tidyverse.org/),
-[tidyr](https://tidyr.tidyverse.org/), and
-[dplyr](https://dplyr.tidyverse.org/) (\>=1.0.0) (among others).
+This package provides [vctrs](https://vctrs.r-lib.org/) class
+definitions for [well-known
+binary](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary)
+(`geo_wkb()`), [well-known
+text](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry)
+(`geo_wkt()`), and several simple geometries that can be efficiently
+stored using column vectors (`geo_xy()`, `geo_segment()`, and
+`geo_rect()`). These classes are designed to work with
+[dplyr](https://dplyr.tidyverse.org/),
+[tidyr](https://tidyr.tidyverse.org/), and other
+[tidyverse](https://tidyverse.org/) packages that use vctrs. In addition
+to providing default implementations of [generics](#generics), they have
+print, plot, and coercion, methods so that they “just work”:
 
 ``` r
 head(geo_example_wkt)
-#> <geo_wkt[6]>
+#> <geovctrs_wkt[6]>
 #> [1] NA_wkt_                                
 #> [2] POINT (30 10)                          
 #> [3] POINT EMPTY                            
@@ -51,73 +67,121 @@ head(geo_example_wkt)
 #> [5] MULTIPOINT (10 40, 40 30, 20 20, 30 10)
 #> [6] MULTIPOINT EMPTY
 head(as_geo_wkb(geo_example_wkt))
-#> <geo_wkb[6]>
+#> <geovctrs_wkb[6]>
 #> [1] NA_wkb_                  POINT (30 10)           
-#> [3] POINT EMPTY              POINT Z (1 1)           
+#> [3] POINT EMPTY              POINT Z (1 1 5)         
 #> [5] MULTIPOINT[4] (10 40)…+3 MULTIPOINT EMPTY
 ```
 
-Most methods work on anything that can be interpreted as geometry,
-including character vectors and data.frames containing exactly one
-geometry column.
+## Constructing and destructing geometries
+
+The geovctrs package provides functions to construct geometries from
+coordinates, and destruct geometries to extract their coordinates.
 
 ``` r
-geo_plot("LINESTRING (30 10, 10 30, 40 40)")
+# construct linestrings
+linestrings <- c(
+  geo_linestring(geo_xy(c(1, 2, 5), c(0, 1, 2))),
+  geo_linestring(geo_xy(c(10, 20, 50), c(0, 10, 20)))
+)
+
+linestrings
+#> <geovctrs_collection[2]>
+#> [1] LINESTRING (1 0)…+2  LINESTRING (10 0)…+2
+
+# destruct to get coordinates
+geo_coordinates(linestrings)
+#> # A tibble: 6 x 2
+#>   feature xy       
+#>     <int> <xy>     
+#> 1       1 · (1 0)  
+#> 2       1 · (2 1)  
+#> 3       1 · (5 2)  
+#> 4       2 · (10 0) 
+#> 5       2 · (20 10)
+#> 6       2 · (50 20)
+```
+
+You can use `separate_xy()` get the actual x and y values (and
+`unite_xy()` to create a `geo_xy()` column).
+
+``` r
+separate_xy(geo_coordinates(linestrings), "xy")
+#> # A tibble: 6 x 3
+#>   feature     x     y
+#>     <int> <dbl> <dbl>
+#> 1       1     1     0
+#> 2       1     2     1
+#> 3       1     5     2
+#> 4       2    10     0
+#> 5       2    20    10
+#> 6       2    50    20
+```
+
+In the [upcoming release of
+dplyr](https://www.tidyverse.org/blog/2020/03/dplyr-1-0-0-summarise/),
+this is useful in conjunction with `group_by()` and `summarise()`.
+
+``` r
+library(dplyr)
+geo_coordinates(linestrings) %>% 
+  group_by(feature) %>% 
+  summarise(geometry = geo_linestring(xy))
+#> # A tibble: 2 x 2
+#>   feature geometry   
+#> *   <int> <clctn>    
+#> 1       1 / (1 0)…+2 
+#> 2       2 / (10 0)…+2
+```
+
+## Generics
+
+There are several concepts that show up on repeat in geometry packages.
+The geovctrs package provides these as generics with reasonable
+implementations for the bundled [geometry vector
+classes](#geometry-vectors). Notably, `geo_bbox()` (returns a
+`geo_rect()`), `geo_plot()` (thin wrapper around `graphics::plot()`),
+and `geo_summary()` (returns a `tibble()` with basic information about
+each feature). These generics work on anything that can be interpreted
+as a geometry vector, including character vectors (interpreted as
+well-known text), data frames with exactly one geometry column
+(interpreted as the geometry column), and anything that implements
+`as_geovctr()` (e.g., [sf](https://r-spatial.github.io/sf) objects).
+
+``` r
+geo_bbox(geo_nc)
+#> <geovctrs_rect[1]>
+#> [1] (-84.32385 33.88199↗-75.45698 36.58965)
+geo_plot(geo_nc)
 ```
 
 <img src="man/figures/README-ex-plot-1.png" width="100%" />
 
-Like any self-respecting geometry package, geovctrs contains a copy of
-the North Carolina dataset to play with:
-
 ``` r
-rev(geo_nc)
-#> # A tibble: 100 x 12
-#>    geometry                       NWBIR79 SID79 BIR79 NWBIR74 SID74 BIR74
-#>    <wkb>                            <dbl> <dbl> <dbl>   <dbl> <dbl> <dbl>
-#>  1 △▽[1] (-81.47276 36.23436)…+26      19     0  1364      10     1  1091
-#>  2 △▽[1] (-81.23989 36.36536)…+25      12     3   542      10     0   487
-#>  3 △▽[1] (-80.45634 36.24256)…+27     260     6  3616     208     5  3188
-#>  4 △▽[3] (-76.00897 36.31960)…+37     145     2   830     123     1   508
-#>  5 △▽[1] (-77.21767 36.24098)…+33    1197     3  1606    1066     9  1421
-#>  6 △▽[1] (-76.74506 36.23392)…+21    1237     5  1838     954     7  1452
-#>  7 △▽[1] (-76.00897 36.31960)…+23     139     2   350     115     0   286
-#>  8 △▽[1] (-76.56251 36.34057)…+16     371     2   594     254     0   420
-#>  9 △▽[1] (-78.30876 36.26004)…+13     844     2  1190     748     4   968
-#> 10 △▽[1] (-80.02567 36.25023)…+5      176     5  2038     160     1  1612
-#> # … with 90 more rows, and 5 more variables: CRESS_ID <int>, FIPSNO <dbl>,
-#> #   FIPS <chr>, NAME <chr>, CNTY_ID <dbl>
+geo_summary(geo_nc)
+#> # A tibble: 100 x 10
+#>    is_empty geometry_type n_geometries n_coordinates  srid coordinate_dime…
+#>    <lgl>    <chr>                <int>         <int> <int>            <int>
+#>  1 FALSE    multipolygon             1            27  4267                2
+#>  2 FALSE    multipolygon             1            26  4267                2
+#>  3 FALSE    multipolygon             1            28  4267                2
+#>  4 FALSE    multipolygon             3            38  4267                2
+#>  5 FALSE    multipolygon             1            34  4267                2
+#>  6 FALSE    multipolygon             1            22  4267                2
+#>  7 FALSE    multipolygon             1            24  4267                2
+#>  8 FALSE    multipolygon             1            17  4267                2
+#>  9 FALSE    multipolygon             1            14  4267                2
+#> 10 FALSE    multipolygon             1             6  4267                2
+#> # … with 90 more rows, and 4 more variables: has_z <lgl>,
+#> #   first_coordinate <xy>, problems <chr>, is_missing <lgl>
 ```
 
-## sf and data frame support
-
-The geovctrs package has tentative sf and data frame support for all
-processing functions, following the principle that well-mannered
-transformation functions return the same type and shape as the input.
-For data frames with exactly one geovctr column, transformation
-functions replace the output column with another geovctr (this might be
-of a different type, but will be a geovctr).
-
-``` r
-geo_envelope(rev(geo_nc))
-#> # A tibble: 100 x 12
-#>    geometry                  NWBIR79 SID79 BIR79 NWBIR74 SID74 BIR74
-#>    <rect>                      <dbl> <dbl> <dbl>   <dbl> <dbl> <dbl>
-#>  1 △ (-81.74107 36.23436)…+4      19     0  1364      10     1  1091
-#>  2 △ (-81.34754 36.36536)…+4      12     3   542      10     0   487
-#>  3 △ (-80.96577 36.23388)…+4     260     6  3616     208     5  3188
-#>  4 △ (-76.33025 36.07282)…+4     145     2   830     123     1   508
-#>  5 △ (-77.90121 36.16277)…+4    1197     3  1606    1066     9  1421
-#>  6 △ (-77.21767 36.23024)…+4    1237     5  1838     954     7  1452
-#>  7 △ (-76.56358 36.16973)…+4     139     2   350     115     0   286
-#>  8 △ (-76.95367 36.29452)…+4     371     2   594     254     0   420
-#>  9 △ (-78.32125 36.19595)…+4     844     2  1190     748     4   968
-#> 10 △ (-80.45301 36.25023)…+4     176     5  2038     160     1  1612
-#> # … with 90 more rows, and 5 more variables: CRESS_ID <int>, FIPSNO <dbl>,
-#> #   FIPS <chr>, NAME <chr>, CNTY_ID <dbl>
-```
-
-For sf objects, this means that valid sf objects are returned:
+The geovctrs package also provides a framework for transformers, or
+functions that accept a vector of geometries and return a vector of
+geometries. These always return the same type as the input, as dictated
+by the implementations of `as_geovctr()` and `restore_geovctr()`. This
+enables transforming functions to work on a wide variety of input types,
+including sf objects:
 
 ``` r
 library(sf)
@@ -147,17 +211,6 @@ geo_envelope(sf_nc)
 #> #   SID79 <dbl>, NWBIR79 <dbl>, geometry <POLYGON [°]>
 ```
 
-Other functions that accept geometry as input will treat sf and data
-frame objects as vectors with the length of `nrow(x)`:
-
-``` r
-geo_n_coordinates(sf_nc)
-#>   [1] 27 26 28 38 34 22 24 17 14  6  7  7 17  6 13 53 20 47 23 12 17 28 24
-#>  [24] 20 22  6 10 45  9 18 23 34 28 27 33 37 27 30 19 29 17 31 34 18 16 35
-#>  [47]  7 27 19 18 45 14 45 27 39 24 36 44 23 24 33 29 22 21 11 36 29 31 14
-#>  [70] 24 32 35 27 31 22 19 16 29 40 20 27 29 31 18 27 14 31 30 36 17 39 17
-#>  [93] 19 25 30 31 34 33 23 27
-geo_plot(sf_nc)
-```
-
-<img src="man/figures/README-sf-nc-plot-1.png" width="100%" />
+See `vignette("extending-geovctrs", package = "geovctrs")` for
+instructions on how to create a class that works with the geovctrs
+framework.
