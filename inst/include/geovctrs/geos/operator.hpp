@@ -582,12 +582,14 @@ public:
     GEOSGeometry* newShell = this->nextLinearring(context, GEOSGetExteriorRing_r(context, geometry));
 
     int nInteriorRings = GEOSGetNumInteriorRings_r(context, geometry);
-    GEOSGeometry* newHoles[nInteriorRings];
+    GEOSGeometry** newHoles = new GEOSGeometry*[nInteriorRings];
     for(int i=0; i < nInteriorRings; i++) {
       newHoles[i] = this->nextLinearring(context, GEOSGetInteriorRingN_r(context, geometry, i));
     }
 
-    return GEOSGeom_createPolygon_r(context, newShell, newHoles, nInteriorRings);
+    GEOSGeometry* out = GEOSGeom_createPolygon_r(context, newShell, newHoles, nInteriorRings);
+    delete newHoles;
+    return out;
   }
 
   virtual GEOSGeometry* nextLinearring(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
@@ -617,14 +619,16 @@ public:
 
   virtual GEOSGeometry* nextMultiGeometryDefault(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
     int nParts = GEOSGetNumGeometries_r(context, geometry);
-    GEOSGeometry* newParts[nParts];
+    GEOSGeometry** newParts = new GEOSGeometry*[nParts];
 
     for (int i=0; i < nParts; i++) {
       this->partId = i;
       newParts[i] = this->nextGeometry(context, GEOSGetGeometryN_r(context, geometry, i));
     }
 
-    return GEOSGeom_createCollection_r(context, GEOSGeomTypeId_r(context, geometry), newParts, nParts);
+    GEOSGeometry* out = GEOSGeom_createCollection_r(context, GEOSGeomTypeId_r(context, geometry), newParts, nParts);
+    delete newParts;
+    return out;
   }
 
   virtual GEOSCoordSequence* nextGeometryDefault(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
