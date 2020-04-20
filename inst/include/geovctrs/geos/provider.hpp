@@ -14,9 +14,9 @@ using namespace Rcpp;
 class GeovctrsGEOSProvider {
 public:
   virtual void init(GEOSContextHandle_t context) {}
-  virtual GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) = 0;
+  virtual GEOSGeometry* getNext(GEOSContextHandle_t context, R_xlen_t i) = 0;
   virtual void finish(GEOSContextHandle_t context) {}
-  virtual size_t size() = 0;
+  virtual R_xlen_t size() = 0;
   virtual ~GeovctrsGEOSProvider() {}
 };
 
@@ -37,7 +37,7 @@ public:
     this->baseProvider->init(context);
   }
 
-  GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
+  GEOSGeometry* getNext(GEOSContextHandle_t context, R_xlen_t i) {
     if (!this->hasFirst) {
       this->geometry = this->baseProvider->getNext(context, i);
     }
@@ -48,7 +48,7 @@ public:
     this->baseProvider->finish(context);
   }
 
-  size_t size() {
+  R_xlen_t size() {
     return 1;
   }
 };
@@ -69,7 +69,7 @@ public:
     this->wktReader = GEOSWKTReader_create_r(context);
   }
 
-  GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
+  GEOSGeometry* getNext(GEOSContextHandle_t context, R_xlen_t i) {
     GEOSGeometry* geometry;
     if (CharacterVector::is_na(this->data[i])) {
       geometry = NULL;
@@ -91,7 +91,7 @@ public:
     }
   }
 
-  size_t size() {
+  R_xlen_t size() {
     return this->data.size();
   }
 };
@@ -112,7 +112,7 @@ public:
     this->wkbReader = GEOSWKBReader_create_r(context);
   }
 
-  GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
+  GEOSGeometry* getNext(GEOSContextHandle_t context, R_xlen_t i) {
     GEOSGeometry* geometry;
     if (this->data[i] == R_NilValue) {
       geometry = NULL;
@@ -131,7 +131,7 @@ public:
     }
   }
 
-  size_t size() {
+  R_xlen_t size() {
     return this->data.size();
   }
 };
@@ -148,7 +148,7 @@ public:
     this->srid = data["srid"];
   }
 
-  GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
+  GEOSGeometry* getNext(GEOSContextHandle_t context, R_xlen_t i) {
     GEOSGeometry* geometry;
     if (this->features[i] == R_NilValue) {
       geometry = NULL;
@@ -160,7 +160,7 @@ public:
     return geometry;
   }
 
-  size_t size() {
+  R_xlen_t size() {
     return this->features.size();
   }
 };
@@ -177,7 +177,7 @@ public:
     this->y = xy["y"];
   }
 
-  GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
+  GEOSGeometry* getNext(GEOSContextHandle_t context, R_xlen_t i) {
     GEOSGeometry* geometry;
 
     if (NumericVector::is_na(this->x[i]) && NumericVector::is_na(this->y[i])) {
@@ -193,7 +193,7 @@ public:
     return geometry;
   }
 
-  size_t size() {
+  R_xlen_t size() {
     return this->x.size();
   }
 };
@@ -207,7 +207,7 @@ public:
     this->z = xy["z"];
   }
 
-  GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
+  GEOSGeometry* getNext(GEOSContextHandle_t context, R_xlen_t i) {
     GEOSGeometry* geometry;
 
     if (NumericVector::is_na(this->x[i]) &&
@@ -246,7 +246,7 @@ public:
     this->srid = segment["srid"];
   }
 
-  GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
+  GEOSGeometry* getNext(GEOSContextHandle_t context, R_xlen_t i) {
     double x0, y0, x1, y1;
     int srid;
     GEOSGeometry* geometry;
@@ -287,7 +287,7 @@ public:
     return geometry;
   }
 
-  size_t size() {
+  R_xlen_t size() {
     return this->x0.size();
   }
 };
@@ -310,7 +310,7 @@ public:
     this->srid = rect["srid"];
   }
 
-  GEOSGeometry* getNext(GEOSContextHandle_t context, size_t i) {
+  GEOSGeometry* getNext(GEOSContextHandle_t context, R_xlen_t i) {
     double xmin1, ymin1, xmax1, ymax1;
     int srid;
     GEOSGeometry* geometry;
@@ -351,7 +351,7 @@ public:
     return geometry;
   }
 
-  size_t size() {
+  R_xlen_t size() {
     return this->xmin.size();
   }
 };

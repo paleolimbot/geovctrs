@@ -85,7 +85,7 @@ double max_finite(double x1i, double x2i) {
 NumericVector pmin2(NumericVector x1, NumericVector x2)  {
   NumericVector out (x1.size());
 
-  for (size_t i=0; i<out.size(); i++) {
+  for (R_xlen_t i=0; i<out.size(); i++) {
     out[i] = min_na_rm(x1[i], x2[i]);
   }
 
@@ -96,7 +96,7 @@ NumericVector pmin2(NumericVector x1, NumericVector x2)  {
 NumericVector pmax2(NumericVector x1, NumericVector x2)  {
   NumericVector out (x1.size());
 
-  for (size_t i=0; i<out.size(); i++) {
+  for (R_xlen_t i=0; i<out.size(); i++) {
     out[i] = max_na_rm(x1[i], x2[i]);
   }
 
@@ -163,7 +163,7 @@ public:
     this->reset();
   }
 
-  virtual void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+  virtual void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, R_xlen_t i) {
     GeovctrsGEOSRecursiveOperator::nextFeature(context, geometry, i);
     if (geometry != NULL) {
       int featureSRID = GEOSGetSRID_r(context, geometry);
@@ -229,7 +229,7 @@ public:
     this->reset();
   }
 
-  void init(GEOSContextHandle_t context, size_t size) {
+  void init(GEOSContextHandle_t context, R_xlen_t size) {
     this->xminVec = NumericVector(size);
     this->yminVec = NumericVector(size);
     this->zminVec = NumericVector(size);
@@ -239,7 +239,7 @@ public:
     this->sridVec = IntegerVector(size);
   }
 
-  void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+  void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, R_xlen_t i) {
     int featureSRID;
 
     if (geometry == NULL && this->naRm) {

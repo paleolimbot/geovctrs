@@ -73,7 +73,7 @@ public:
 
     // generate holes
     GEOSGeometry* holes[ringLengths.size() - 1];
-    size_t offset = ringLengths[0];
+    R_xlen_t offset = ringLengths[0];
     for (int i=1; i < ringLengths.size(); i++) {
       GEOSCoordSequence* holeSeq = getCoordSequence(context, xy, offset, ringLengths[i]);
       holes[i - 1] = GEOSGeom_createLinearRing_r(context, holeSeq);
@@ -93,7 +93,7 @@ public:
     }
 
     GEOSGeometry* parts[x.size()];
-    for (size_t i=0; i<x.size(); i++) {
+    for (R_xlen_t i=0; i<x.size(); i++) {
       GEOSCoordSequence* seq = getCoordSequence(context, xy, i, 1);
       parts[i] = GEOSGeom_createPoint_r(context, seq);
     }
@@ -117,7 +117,7 @@ public:
     IntegerVector partLengths = getLengths(part);
 
     GEOSGeometry* parts[partLengths.size()];
-    size_t offset = 0;
+    R_xlen_t offset = 0;
     for (int i=0; i < partLengths.size(); i++) {
       GEOSCoordSequence* lineSeq = getCoordSequence(context, xy, offset, partLengths[i]);
       parts[i] = GEOSGeom_createLineString_r(context, lineSeq);
@@ -145,7 +145,7 @@ public:
     IntegerVector partLengths = getLengths(part);
 
     GEOSGeometry* parts[partLengths.size()];
-    size_t offset = 0;
+    R_xlen_t offset = 0;
     for (int i=0; i < partLengths.size(); i++) {
       IntegerVector ringPart = ring[Range(offset, offset + partLengths[i] - 1)];
       IntegerVector ringLengths = getLengths(ringPart);
@@ -183,7 +183,7 @@ public:
     List feature = data["feature"];
     GEOSGeometry* parts[feature.size()];
 
-    for (size_t i=0; i < feature.size(); i++) {
+    for (R_xlen_t i=0; i < feature.size(); i++) {
       GEOSGeometry* geometry = getFeature(context, feature[i]);
       GEOSSetSRID_r(context, geometry, srid[i]);
 
@@ -208,7 +208,7 @@ private:
 
     // one pass through to find the number of rings
     int nGroups = 1;
-    for (size_t i=1; i < groups.size(); i++) {
+    for (R_xlen_t i=1; i < groups.size(); i++) {
       if (groups[i] != groups[i - 1]) {
         nGroups++;
       }
@@ -217,8 +217,8 @@ private:
     // one pass through to find their lengths
     IntegerVector groupLengths(nGroups);
     int iGroup = 0;
-    size_t lastGroup = 0;
-    for (size_t i=1; i < groups.size(); i++) {
+    R_xlen_t lastGroup = 0;
+    for (R_xlen_t i=1; i < groups.size(); i++) {
       if (groups[i] != groups[i - 1]) {
         groupLengths[iGroup] = i - lastGroup;
         lastGroup = i;
@@ -231,7 +231,7 @@ private:
   }
 
   static GEOSCoordSequence* getCoordSequence(GEOSContextHandle_t context,
-                                             List xy, int offset, size_t size) {
+                                             List xy, int offset, R_xlen_t size) {
     GEOSCoordSequence* seq;
 
     if (Rf_inherits(xy, "geovctrs_xyz")) {
@@ -240,7 +240,7 @@ private:
       NumericVector z = xy["z"];
 
       seq = GEOSCoordSeq_create_r(context, size, 3);
-      for (size_t i=0; i<size; i++) {
+      for (R_xlen_t i=0; i<size; i++) {
         GEOSCoordSeq_setX_r(context, seq, i, x[offset + i]);
         GEOSCoordSeq_setY_r(context, seq, i, y[offset + i]);
         GEOSCoordSeq_setZ_r(context, seq, i, z[offset + i]);
@@ -250,7 +250,7 @@ private:
       NumericVector y = xy["y"];
 
       seq = GEOSCoordSeq_create_r(context, size, 2);
-      for (size_t i=0; i<size; i++) {
+      for (R_xlen_t i=0; i<size; i++) {
         GEOSCoordSeq_setX_r(context, seq, i, x[offset + i]);
         GEOSCoordSeq_setY_r(context, seq, i, y[offset + i]);
       }

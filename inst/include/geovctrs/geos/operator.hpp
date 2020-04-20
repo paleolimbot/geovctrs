@@ -80,7 +80,7 @@ public:
     this->initOperator();
     this->init(this->handler.context, this->size());
 
-    for (size_t i=0; i < this->size(); i++) {
+    for (R_xlen_t i=0; i < this->size(); i++) {
       if ((i + 1) % 10 == 0) {
         checkUserInterrupt();
       }
@@ -96,7 +96,7 @@ public:
     return this->finishOperator();
   }
 
-  virtual size_t size() {
+  virtual R_xlen_t size() {
     return this->commonSize;
   }
 
@@ -107,7 +107,7 @@ protected:
   // created which causes errors
   // ...because C++ is nuts
   GeovctrsGEOSHandler handler;
-  size_t commonSize;
+  R_xlen_t commonSize;
   std::unique_ptr<GeovctrsGEOSProvider> provider;
   GEOSGeometry* geometry = NULL;
 
@@ -115,15 +115,15 @@ protected:
   // operator subclasses
   // loopNext() must be implemented
 
-  virtual size_t maxParameterLength() {
+  virtual R_xlen_t maxParameterLength() {
     return 1;
   }
 
-  virtual void init(GEOSContextHandle_t context, size_t size) {
+  virtual void init(GEOSContextHandle_t context, R_xlen_t size) {
 
   }
 
-  virtual void loopNext(GEOSContextHandle_t context, size_t i) = 0;
+  virtual void loopNext(GEOSContextHandle_t context, R_xlen_t i) = 0;
 
   virtual SEXP assemble(GEOSContextHandle_t context) {
     return R_NilValue;
@@ -159,8 +159,8 @@ private:
     return result;
   }
 
-  static size_t recycledSize(IntegerVector sizes) {
-    size_t commonSize;
+  static R_xlen_t recycledSize(IntegerVector sizes) {
+    R_xlen_t commonSize;
     IntegerVector nonConstantSizes = sizes[sizes != 1];
     if (nonConstantSizes.size() == 0) {
       commonSize = 1;
@@ -168,7 +168,7 @@ private:
        commonSize = nonConstantSizes[0];
     }
 
-    for (size_t i=0; i < nonConstantSizes.size(); i++) {
+    for (R_xlen_t i=0; i < nonConstantSizes.size(); i++) {
       if (nonConstantSizes[i] != commonSize) {
         stop("Providers/parameters with incompatible lengths passed to GeovctrsGEOSBaseOperator");
       }
@@ -177,11 +177,11 @@ private:
     return commonSize;
   }
 
-  static size_t recycledSize(size_t size1, size_t size2) {
+  static R_xlen_t recycledSize(R_xlen_t size1, R_xlen_t size2) {
     return recycledSize(IntegerVector::create(size1, size2));
   }
 
-  static size_t recycledSize(size_t size1, size_t size2, size_t size3) {
+  static R_xlen_t recycledSize(R_xlen_t size1, R_xlen_t size2, R_xlen_t size3) {
     return recycledSize(IntegerVector::create(size1, size2, size3));
   }
 };
@@ -191,12 +191,12 @@ private:
 class GeovctrsGEOSOperator: public GeovctrsGEOSBaseOperator {
 public:
 
-  virtual void loopNext(GEOSContextHandle_t context, size_t i) {
+  virtual void loopNext(GEOSContextHandle_t context, R_xlen_t i) {
     this->geometry = this->provider->getNext(context, i);
     this->operateNext(context, this->geometry, i);
   }
 
-  virtual void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
+  virtual void operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, R_xlen_t i) = 0;
 };
 
 class GeovctrsGEOSGeometryOperator: virtual public GeovctrsGEOSBaseOperator {
@@ -213,14 +213,14 @@ public:
     this->exporter = GeovctrsGEOSExporterFactory::get(ptype);
   }
 
-  void init(GEOSContextHandle_t context, size_t size) {
+  void init(GEOSContextHandle_t context, R_xlen_t size) {
     if (!this->exporter) {
       stop("GeovctrsGEOSGeometryOperator.initExporter() was never called");
     }
     this->exporter->init(context, this->size());
   }
 
-  void loopNext(GEOSContextHandle_t context, size_t i) {
+  void loopNext(GEOSContextHandle_t context, R_xlen_t i) {
     this->geometry = this->provider->getNext(context, i);
 
     if (this->geometry == NULL) {
@@ -263,8 +263,8 @@ public:
     }
   }
 
-  virtual GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
-  virtual GEOSGeometry* operateNextNULL(GEOSContextHandle_t context, size_t i) {
+  virtual GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, R_xlen_t i) = 0;
+  virtual GEOSGeometry* operateNextNULL(GEOSContextHandle_t context, R_xlen_t i) {
     return NULL;
   }
 };
@@ -274,12 +274,12 @@ class GeovctrsGEOSVectorOperator: public GeovctrsGEOSBaseOperator {
 public:
   VectorType data;
 
-  void init(GEOSContextHandle_t context, size_t size) {
+  void init(GEOSContextHandle_t context, R_xlen_t size) {
     VectorType data(size);
     this->data = data;
   }
 
-  void loopNext(GEOSContextHandle_t context, size_t i) {
+  void loopNext(GEOSContextHandle_t context, R_xlen_t i) {
     this->geometry = this->provider->getNext(context, i);
     ScalarType result;
 
@@ -296,21 +296,21 @@ public:
     return this->data;
   }
 
-  virtual ScalarType operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
-  virtual ScalarType operateNextNULL(GEOSContextHandle_t context, size_t i) {
+  virtual ScalarType operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, R_xlen_t i) = 0;
+  virtual ScalarType operateNextNULL(GEOSContextHandle_t context, R_xlen_t i) {
     return VectorType::get_na();
   }
 };
 
 class GeovctrsGEOSRecursiveOperator: virtual public GeovctrsGEOSBaseOperator {
 public:
-  size_t featureId;
+  R_xlen_t featureId;
   int partId;
   int ringId;
   unsigned int coordinateId;
   int recursionLevel;
 
-  void loopNext(GEOSContextHandle_t context, size_t i) {
+  void loopNext(GEOSContextHandle_t context, R_xlen_t i) {
     this->featureId = i;
     this->partId = 0;
     this->ringId = 0;
@@ -328,7 +328,7 @@ public:
     }
   }
 
-  virtual void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+  virtual void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, R_xlen_t i) {
     if (geometry == NULL) {
       this->nextNULL(context, i);
       return;
@@ -337,11 +337,11 @@ public:
     }
   }
 
-  virtual void nextNULL(GEOSContextHandle_t context, size_t i) {
+  virtual void nextNULL(GEOSContextHandle_t context, R_xlen_t i) {
 
   }
 
-  virtual void nextError(GEOSContextHandle_t context, const char* message, size_t i) {
+  virtual void nextError(GEOSContextHandle_t context, const char* message, R_xlen_t i) {
     stop(message);
   }
 
@@ -479,13 +479,13 @@ public:
 
 class GeovctrsGEOSRecursiveGeometryOperator: public GeovctrsGEOSGeometryOperator {
 public:
-  size_t featureId;
+  R_xlen_t featureId;
   int partId;
   int ringId;
   unsigned int coordinateId;
   int recursionLevel;
 
-  void loopNext(GEOSContextHandle_t context, size_t i) {
+  void loopNext(GEOSContextHandle_t context, R_xlen_t i) {
     this->featureId = i;
     this->partId = 0;
     this->ringId = 0;
@@ -506,7 +506,7 @@ public:
     this->cleanNextGeometry(context);
   }
 
-  virtual GEOSGeometry* nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+  virtual GEOSGeometry* nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, R_xlen_t i) {
     if (geometry == NULL) {
       return this->nextNULL(context, i);
     } else {
@@ -514,11 +514,11 @@ public:
     }
   }
 
-  virtual GEOSGeometry* nextNULL(GEOSContextHandle_t context, size_t i) {
+  virtual GEOSGeometry* nextNULL(GEOSContextHandle_t context, R_xlen_t i) {
     return NULL;
   }
 
-  virtual GEOSGeometry* nextError(GEOSContextHandle_t context, const char* message, size_t i) {
+  virtual GEOSGeometry* nextError(GEOSContextHandle_t context, const char* message, R_xlen_t i) {
     stop(message);
   }
 
@@ -683,10 +683,10 @@ public:
   }
 
   // not used here, so make sure they aren't overridden
-  GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+  GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, R_xlen_t i) {
     stop("GeovctrsGEOSRecursiveGeometryOperator::operateNext() is not relevant.");
   }
-  GEOSGeometry* operateNextNULL(GEOSContextHandle_t context, size_t i) {
+  GEOSGeometry* operateNextNULL(GEOSContextHandle_t context, R_xlen_t i) {
     stop("GeovctrsGEOSRecursiveGeometryOperator::operateNextNULL() is not relevant.");
   }
 };

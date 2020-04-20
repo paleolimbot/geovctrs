@@ -10,7 +10,7 @@ public:
     this->z = z;
   }
 
-  size_t getMaxParameterLength() {
+  R_xlen_t getMaxParameterLength() {
     return z.size();
   }
 

@@ -28,8 +28,8 @@ const unsigned char WKB_HACK_EMPTY_POINT_LITTLE_ENDIAN[] = {
 
 class GeovctrsGEOSExporter {
 public:
-  virtual void init(GEOSContextHandle_t context, size_t size) {}
-  virtual void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) = 0;
+  virtual void init(GEOSContextHandle_t context, R_xlen_t size) {}
+  virtual void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, R_xlen_t i) = 0;
   virtual SEXP assemble(GEOSContextHandle_t context) {
     return R_NilValue;
   }
@@ -52,7 +52,7 @@ public:
     this->wktWriter = NULL;
   }
 
-  void init(GEOSContextHandle_t context, size_t size) {
+  void init(GEOSContextHandle_t context, R_xlen_t size) {
     this->wktWriter = GEOSWKTWriter_create_r(context);
     GEOSWKTWriter_setTrim_r(context, this->wktWriter, this->trim);
     GEOSWKTWriter_setRoundingPrecision_r(context, this->wktWriter, this->precision);
@@ -62,7 +62,7 @@ public:
     this->data = data;
   }
 
-  void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+  void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, R_xlen_t i) {
     if (geometry == NULL) {
       this->data[i] = NA_STRING;
     } else {
@@ -101,7 +101,7 @@ public:
     this->wkbWriter = NULL;
   }
 
-  void init(GEOSContextHandle_t context, size_t size) {
+  void init(GEOSContextHandle_t context, R_xlen_t size) {
     this->wkbWriter = GEOSWKBWriter_create_r(context);
     if (!LogicalVector::is_na(this->includeSRID)) {
       GEOSWKBWriter_setIncludeSRID_r(context, this->wkbWriter, this->includeSRID);
@@ -115,7 +115,7 @@ public:
     this->data = data;
   }
 
-  void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+  void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, R_xlen_t i) {
     if (geometry == NULL) {
       this->data[i] = R_NilValue;
     } else {
@@ -165,14 +165,14 @@ public:
   List data;
   IntegerVector srid;
 
-  void init(GEOSContextHandle_t context, size_t size) {
+  void init(GEOSContextHandle_t context, R_xlen_t size) {
     NumericVector data(size);
     IntegerVector srid(size);
     this->data = data;
     this->srid = srid;
   }
 
-  void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+  void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, R_xlen_t i) {
     if (geometry == NULL) {
       this->data[i] = R_NilValue;
       this->srid[i] = NA_INTEGER;
@@ -200,13 +200,13 @@ public:
     this->hasZ = hasZ;
   }
 
-  void init(GEOSContextHandle_t context, size_t size) {
+  void init(GEOSContextHandle_t context, R_xlen_t size) {
     this->x = NumericVector(size);
     this->y = NumericVector(size);
     this->z = NumericVector(size);
   }
 
-  void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+  void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, R_xlen_t i) {
     double x, y, z;
     if (geometry == NULL) {
       x = NA_REAL;
@@ -265,7 +265,7 @@ public:
   NumericVector y1;
   IntegerVector srid;
 
-  void init(GEOSContextHandle_t context, size_t size) {
+  void init(GEOSContextHandle_t context, R_xlen_t size) {
     NumericVector x0(size);
     NumericVector y0(size);
     NumericVector x1(size);
@@ -278,7 +278,7 @@ public:
     this->srid = srid;
   }
 
-  void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+  void putNext(GEOSContextHandle_t context, GEOSGeometry* geometry, R_xlen_t i) {
     double x0, y0, x1, y1;
     int srid;
 

@@ -22,7 +22,7 @@ public:
 
   bool anyHasZ;
 
-  void init(GEOSContextHandle_t context, size_t size) {
+  void init(GEOSContextHandle_t context, R_xlen_t size) {
     this->isEmpty = LogicalVector(size);
     this->geometryTypeId = IntegerVector(size);
     this->nGeometries = IntegerVector(size);
@@ -39,7 +39,7 @@ public:
     anyHasZ = false;
   }
 
-  void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+  void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, R_xlen_t i) {
     this->problems[i] = NA_STRING;
 
     if (geometry == NULL) {
@@ -66,7 +66,7 @@ public:
     }
   }
 
-  void nextError(GEOSContextHandle_t context, const char* message, size_t i) {
+  void nextError(GEOSContextHandle_t context, const char* message, R_xlen_t i) {
     this->problems[i] = message;
     this->setRowNULL(i);
   }
@@ -80,7 +80,7 @@ public:
     throw NumericVector::create(x, y, z);
   }
 
-  void setRowNULL(size_t i) {
+  void setRowNULL(R_xlen_t i) {
     this->isMissing[i] = true;
     this->isEmpty[i] = true;
     this->geometryTypeId[i] = NA_INTEGER;

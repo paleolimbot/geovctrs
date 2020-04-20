@@ -10,11 +10,11 @@ public:
     this->srid = srid;
   }
 
-  size_t getMaxParameterLength() {
+  R_xlen_t getMaxParameterLength() {
     return srid.size();
   }
 
-  GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+  GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, R_xlen_t i) {
     if (geometry != NULL) {
       GEOSSetSRID_r(context, geometry, this->srid[i]);
     }

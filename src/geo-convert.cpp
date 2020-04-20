@@ -6,7 +6,7 @@ using namespace Rcpp;
 
 class IdentityOperator: public GeovctrsGEOSGeometryOperator {
 public:
-  GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+  GEOSGeometry* operateNext(GEOSContextHandle_t context, GEOSGeometry* geometry, R_xlen_t i) {
     return geometry;
   }
 };

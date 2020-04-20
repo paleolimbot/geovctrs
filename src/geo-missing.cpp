@@ -8,11 +8,11 @@ class BadCoordinateOperator: public GeovctrsGEOSRecursiveOperator {
 public:
   LogicalVector badCoordinate;
 
-  void init(GEOSContextHandle_t context, size_t size) {
+  void init(GEOSContextHandle_t context, R_xlen_t size) {
     badCoordinate = LogicalVector(size);
   }
 
-  void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, size_t i) {
+  void nextFeature(GEOSContextHandle_t context, GEOSGeometry* geometry, R_xlen_t i) {
     if (geometry == NULL) {
       this->badCoordinate[i] = NA_LOGICAL;
     } else {
