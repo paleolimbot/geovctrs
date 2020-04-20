@@ -75,7 +75,7 @@ jobs:
       - name: Install system dependencies (Linux)
         if: runner.os == 'Linux'
         run: |
-          sudo apt install libgeos-dev
+          sudo apt install libgeos-dev libcurl4-openssl-dev
 
       - name: Install dependencies
         run: |
