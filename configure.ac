@@ -1,4 +1,6 @@
 # dnl Process this file with autoconf to produce a configure script.
+# anything in this script that works is (c) Edzer Pebezma from sf
+# anything that does not is (c) Dewey Dunnington from geovctrs
 define([pkgversion], esyscmd([sh -c "grep Version: DESCRIPTION | cut -d' ' -f2 | tr -d '\n'"]))dnl
 AC_INIT(geovctrs, [pkgversion], dewey@fishandwhistle.net)
 AC_CONFIG_SRCDIR(src/geos-version.cpp)
@@ -22,8 +24,16 @@ RBIN="${R_HOME}/bin/R"
 AC_MSG_NOTICE([CC: ${CC}])
 AC_MSG_NOTICE([CXX: ${CXX}])
 
+INLIBS="${LIBS}"
+INCPPFLAGS="${CPPFLAGS}"
+INPKG_CPPFLAGS="${PKG_CPPFLAGS}"
+INPKG_LIBS="${PKG_LIBS}"
+
 AC_MSG_NOTICE([${PACKAGE_NAME}: ${PACKAGE_VERSION}])
 
+#
+# GEOS:
+#
 GEOS_CONFIG="geos-config"
 
 GEOS_CONFIG_SET="no"
@@ -61,48 +71,33 @@ else
   fi
 fi
 
-
 AC_MSG_CHECKING(geos-config usability)
-if test `${GEOS_CONFIG} --version`;
+if test `${GEOS_CONFIG} --version`
 then
-
-        GEOS_VER=`${GEOS_CONFIG} --version`
-        GEOS_VER_DOT=`echo $GEOS_VER | tr -d "." | cut -c1-3`
-	GEOS_CPPFLAGS=`${GEOS_CONFIG} --cflags`
-        if test ${GEOS_VER_DOT} -lt 370 ; then
-	    GEOS_LIBS=`${GEOS_CONFIG} --libs`
-        else
-	    GEOS_LIBS=`${GEOS_CONFIG} --cclibs`
-        fi
-        AC_MSG_RESULT(yes)
-
+  GEOS_CLIBS="`${GEOS_CONFIG} --clibs`"
+  #GEOS_DEP_CLIBS=`geos-config --static-clibs` -- this gives -m instead of -lm, which breaks clang
+  # fixed in 3.7.0 at https://github.com/libgeos/libgeos/pull/73#issuecomment-262208677
+  GEOS_DEP_CLIBS=`${GEOS_CONFIG} --static-clibs | sed 's/-m/-lm/g'`
+  GEOS_CPPFLAGS=`${GEOS_CONFIG} --cflags`
+  AC_MSG_RESULT(yes)
 else
-
-        AC_MSG_RESULT(no)
-        AC_MSG_ERROR([${GEOS_CONFIG} not usable])
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR([${GEOS_CONFIG} not usable])
 fi
 
-AC_MSG_NOTICE([GEOS version: ${GEOS_VER}])
-AC_MSG_CHECKING([geos version at least 3.2.0])
-if test ${GEOS_VER_DOT} -lt 320 ; then
-        AC_MSG_RESULT(no)
-        AC_MSG_ERROR([Upgrade GEOS to at least 3.2.0])
+GEOS_VERSION=`${GEOS_CONFIG} --version`
+AC_MSG_NOTICE([GEOS: ${GEOS_VERSION}])
+AC_MSG_CHECKING([GEOS version >= 3.4.0])
+GEOS_VER_DOT=`echo $GEOS_VERSION | tr -d ".[[:alpha:]]"`
+if test ${GEOS_VER_DOT} -lt 340 ; then
+  AC_MSG_RESULT(no)
+  AC_MSG_ERROR([upgrade GEOS to 3.4.0 or later])
 else
-        AC_MSG_RESULT(yes)
+  AC_MSG_RESULT(yes)
 fi
 
-AC_MSG_CHECKING(geos-config clibs)
-if test ${GEOS_VER_DOT} -lt 332 ; then
-        AC_MSG_RESULT(no)
-        GEOS_CLIBS="-lgeos_c"
-else
-        GEOS_CLIBS=`${GEOS_CONFIG} --clibs`
-        AC_MSG_RESULT(yes)
-fi
-
-
-AC_SUBST([PKG_CPPFLAGS],["${PKG_CPPFLAGS} ${GEOS_CPPFLAGS} -DHAVE_CONFIG_H -DR_USE_C99_IN_CXX"])
-AC_SUBST([PKG_LIBS],["${PKG_LIBS} ${GEOS_LIBS} ${GEOS_CLIBS}"])
+AC_SUBST([PKG_CPPFLAGS], ["${INPKG_CPPFLAGS} ${GEOS_CPPFLAGS}"])
+AC_SUBST([PKG_LIBS], ["${INPKG_LIBS}"])
 
 # honor PKG_xx overrides
 # for CPPFLAGS we will superfluously double R's flags
@@ -110,36 +105,13 @@ AC_SUBST([PKG_LIBS],["${PKG_LIBS} ${GEOS_LIBS} ${GEOS_CLIBS}"])
 CPPFLAGS="${CPPFLAGS} ${PKG_CPPFLAGS}"
 LIBS="${LIBS} ${PKG_LIBS}"
 
-#geosok=yes
-#AC_CHECK_HEADERS(geos_c.h,,geosok=no)
-#if test "${geosok}" = no; then
-#   AC_MSG_ERROR([geos_c.h not found in given locations.])
-#fi
-
-AC_MSG_CHECKING(geos_c.h  presence and usability)
-[cat > geos_test.c << _EOCONF
-#include <stdio.h>
-#include <geos_c.h>
-
-int main() {
-    printf("%d\n", GEOS_CAPI_VERSION);
-    exit(0);
-}
-_EOCONF]
-
-if test `${CC} ${CPPFLAGS} -o geos_test geos_test.c 2> /dev/null; echo $?` = 0; then
-  AC_MSG_RESULT(yes)
-else
-  AC_MSG_RESULT(no)
-  AC_MSG_ERROR([geos_c.h not found in standard or given locations.])
+geosok=yes
+AC_CHECK_HEADERS(geos_c.h,,geosok=no)
+if test "${geosok}" = no; then
+   AC_MSG_ERROR([geos_c.h not found in given locations.])
 fi
 
-rm -f geos_test geos_test.c
-
-
-#AC_CHECK_LIB(geos_c,initGEOS_r,,geosok=no)
-
-[cat > geos_test.cc <<_EOCONF
+[cat > geos_test.cpp <<_EOCONF
 #include <geos_c.h>
 #ifdef __cplusplus
 extern "C" {
@@ -159,110 +131,39 @@ int main() {
 #endif
 _EOCONF]
 
-#echo "${CXX} ${CPPFLAGS} -o geos_test geos_test.cc ${LIBS}"
-AC_MSG_CHECKING(geos: linking with libgeos_c)
-${CXX} ${CPPFLAGS} -o geos_test geos_test.cc ${LIBS} 2> errors.txt
+#echo "${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${LIBS}"
+AC_MSG_CHECKING(geos: linking with ${GEOS_CLIBS})
+${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${GEOS_CLIBS} 2> errors.txt
 if test `echo $?` -ne 0 ; then
-geosok=no
-AC_MSG_RESULT(no)
+ geosok=no
+ AC_MSG_RESULT(no)
 else
-AC_MSG_RESULT(yes)
+ AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${GEOS_CLIBS}"])
+ AC_MSG_RESULT(yes)
 fi
 
 if test "${geosok}" = no; then
-   cat errors.txt
-   AC_MSG_NOTICE([Install failure: compilation and/or linkage problems.])
-   AC_MSG_ERROR([initGEOS_r not found in libgeos_c.])
+  AC_MSG_CHECKING(geos: linking with ${GEOS_DEP_CLIBS})
+  ${CXX} ${CPPFLAGS} -o geos_test geos_test.cpp ${GEOS_DEP_CLIBS} 2> errors.txt
+  if test `echo $?` -ne 0 ; then
+    geosok=no
+    AC_MSG_RESULT(no)
+    cat errors.txt
+    AC_MSG_NOTICE([Install failure: compilation and/or linkage problems.])
+    AC_MSG_ERROR([initGEOS_r not found in libgeos_c.])
+  else
+    AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${GEOS_DEP_CLIBS}"])
+    AC_MSG_RESULT(yes)
+  fi
 fi
 
-rm -f geos_test errors.txt geos_test.cc
+rm -f geos_test errors.txt geos_test.cpp
 
+#
+# concluding substitution
+#
+AC_MSG_NOTICE([Package CPP flags: ${PKG_CPPFLAGS}])
+AC_MSG_NOTICE([Package LIBS: ${PKG_LIBS}])
 
-if test "${geosok}" = no; then
-   AC_MSG_ERROR([libgeos_c not found in given locations.])
-fi
-
-GEOSVERSION=`$GEOS_CONFIG --version`
-
-case ${GEOSVERSION} in
- 1* | 2* )
-  AC_MSG_ERROR([geos-config reports version $GEOSVERSION, need at least 3.0])
- ;;
- *) ;;
-esac
-
-
-GEOS_CFLAGS=`$GEOS_CONFIG --cflags`
-GEOS_LIBS=`$GEOS_CONFIG --prefix`
-GEOS_LIBS="-L${GEOS_LIBS}/lib -lgeos_c"
-
-AC_SUBST(GEOS_LIBS)
-AC_SUBST(GEOS_CFLAGS)
-
-# Checks for libraries.
-AC_CHECK_LIB([m], [sin])
-
-AC_CHECK_LIB(pthread, pthread_mutex_init,
-             THREAD_LIBS="-lpthread", THREAD_LIBS="none")
-
-WINLDFLAGS=""
-
-if test x${THREAD_LIBS} = xnone; then
-   OLD_LIBS=${LIBS}
-   LIBS="$LIBS -pthread"
-   AC_CHECK_FUNC(pthread_mutex_init, THREAD_LIBS="-pthread")
-
-   LIBS=${OLD_LIBS}
-
-   if test x${THREAD_LIBS} = xnone; then
-      AC_CHECK_HEADERS([windows.h], THREAD_LIBS="WINDOWS",
-                       AC_MSG_ERROR([pthread library (or windows.h) needed!]))
-   else
-      AC_DEFINE_UNQUOTED([_HAVE_PTHREAD_],[1],[Use posix-threads])
-   fi
-
-   if test x${THREAD_LIBS} = xWINDOWS; then
-     THREAD_LIBS=""
-     AC_DEFINE_UNQUOTED([_HAVE_WINDOWS_H_],[1],[Use threads from windows.h])
-     WINLDFLAGS="-Wl,--kill-at -no-undefined"
-   fi
-else
-   AC_DEFINE_UNQUOTED([_HAVE_PTHREAD_],[1],[Use posix-threads])
-fi
-
-
-AC_SUBST(THREAD_LIBS)
-AC_SUBST(WINLDFLAGS)
-
-
-
-
-# Checks for typedefs, structures, and compiler characteristics.
-AC_HEADER_STDBOOL
-AC_C_CONST
-AC_C_INLINE
-AC_TYPE_SIZE_T
-
-# Checks for library functions.
-AC_HEADER_STDC
-AC_HEADER_TIME
-AC_CHECK_FUNCS([memset pow sqrt])
-
-WARN_CFLAGS="-Wall -Wextra -Wunused-function"
-
-CFLAGS="$CFLAGS -g -O3 -fPIC $WARN_CFLAGS"
-
-AC_SUBST(VERSION)
-AC_SUBST(VERSION_MAJOR)
-AC_SUBST(VERSION_MINOR)
-AC_SUBST(VERSION_PATCH)
-
-
-
-AC_MSG_NOTICE([PKG_CPPFLAGS: ${PKG_CPPFLAGS}])
-AC_SUBST(PKG_CPPFLAGS)
-AC_MSG_NOTICE([PKG_LIBS: ${PKG_LIBS}])
-AC_SUBST(PKG_LIBS)
-
-AC_CONFIG_FILES([src/Makevars])
+AC_CONFIG_FILES(src/Makevars)
 AC_OUTPUT
