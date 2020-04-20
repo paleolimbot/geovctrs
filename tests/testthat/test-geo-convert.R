@@ -29,6 +29,19 @@ test_that("conversion prototype args are used", {
   )
 })
 
+test_that("roundtrip to- and from- geo_wkb() works", {
+  expect_identical(
+    geovctrs_cpp_convert(
+      geovctrs_cpp_convert(
+        geo_example_wkt,
+        geo_wkb()
+      ),
+      geo_collection()
+    ),
+    as_geo_collection(geo_example_wkt)
+  )
+})
+
 test_that("wkb conversion works", {
   wkb_raw <- as.raw(
     c(
@@ -89,6 +102,19 @@ test_that("wkb writer options are respected", {
 
   wkb <- as_geo_wkb(geo_wkt("POINT Z (1 2 3)"))
   expect_identical(geovctrs_cpp_convert(wkb, new_geovctrs_wkb(dimensions = 3)), wkb)
+})
+
+test_that("roundtrip to- and from- geo_collection() works", {
+  expect_identical(
+    geovctrs_cpp_convert(
+      geovctrs_cpp_convert(
+        geo_example_wkt,
+        geo_collection()
+      ),
+      geo_wkb()
+    ),
+    as_geo_wkb(geo_example_wkt)
+  )
 })
 
 test_that("geo_point conversion works", {

@@ -41,6 +41,17 @@ public:
 
 private:
   static List getPoint(GEOSContextHandle_t context, GEOSGeometry* geometry) {
+    // empty points might get converted to POINT (0 0) on GEOS 3.8 without
+    // this
+    if (GEOSisEmpty_r(context, geometry)) {
+      return GeovctrsFactory::newPoint(
+        GeovctrsFactory::newXY(
+          NumericVector::create(),
+          NumericVector::create()
+        )
+      );
+    }
+
     List xy = getGeometryXY(context, geometry);
     writeCoordinates(context, geometry, xy, 0);
 
