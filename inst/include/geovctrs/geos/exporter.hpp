@@ -9,6 +9,21 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+// WKB can't really represent an empty point, but this hack
+// works with the WKB reader in GEOS and sf.
+// other consumers of geo_wkb() objects might want to be careful
+// passing this on to external software
+const size_t WKB_HACK_EMPTY_POINT_SIZE = 21;
+const unsigned char WKB_HACK_EMPTY_POINT_LITTLE_ENDIAN[] = {
+  // little endian
+  0x01,
+  // geometry type: point 2D
+  0x01, 0x00, 0x00, 0x00,
+  // x coordinates (nan)
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf8, 0x7f,
+  // y coordinate (nan)
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf8, 0x7f
+};
 
 
 class GeovctrsGEOSExporter {
@@ -115,22 +130,11 @@ public:
       // TODO: handle SRID, multiple dimensions
       if (GEOSisEmpty_r(context, geometry) &&
           GEOSGeomTypeId_r(context, geometry) == GEOSGeomTypes::GEOS_POINT) {
-        size_t size = 21;
-        const unsigned char buf[] = {
-          // little endian
-          0x01,
-          // geometry type: point 2D
-          0x01, 0x00, 0x00, 0x00,
-          // x coordinate
-          0xa2, 0x07, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x7f,
-          // y coordinate
-          0xa2, 0x07, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x7f
-        };
+        size_t size = WKB_HACK_EMPTY_POINT_SIZE;
         RawVector raw(size);
-        memcpy(&(raw[0]), buf, size);
+        memcpy(&(raw[0]), WKB_HACK_EMPTY_POINT_LITTLE_ENDIAN, size);
         this->data[i] = raw;
       } else {
-
         size_t size;
         unsigned char *buf = GEOSWKBWriter_write_r(context, this->wkbWriter, geometry, &size);
         RawVector raw(size);

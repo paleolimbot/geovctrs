@@ -346,6 +346,14 @@ public:
   }
 
   virtual void nextGeometry(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    // there is some inconsistency around the handling of an empty point
+    // through the GEOS ages. This approach is intended to work for all
+    // GEOS versions.
+    if (GEOSisEmpty_r(context, geometry)) {
+      this->nextEmpty(context, geometry);
+      return;
+    }
+
     switch(GEOSGeomTypeId_r(context, geometry)) {
     case GEOSGeomTypes::GEOS_POINT:
       this->nextPoint(context, geometry);
@@ -372,6 +380,10 @@ public:
       this->nextGeometrycollection(context, geometry);
       break;
     }
+  }
+
+  virtual void nextEmpty(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+
   }
 
   virtual void nextPoint(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
@@ -511,6 +523,13 @@ public:
   }
 
   virtual GEOSGeometry* nextGeometry(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    // there is some inconsistency around the handling of an empty point
+    // through the GEOS ages. This approach is intended to work for all
+    // GEOS versions.
+    if (GEOSisEmpty_r(context, geometry)) {
+      return this->nextEmpty(context, geometry);
+    }
+
     switch(GEOSGeomTypeId_r(context, geometry)) {
     case GEOSGeomTypes::GEOS_POINT:
       return this->nextPoint(context, geometry);
@@ -533,11 +552,17 @@ public:
     stop("Unrecognized geometry type");
   }
 
+  virtual GEOSGeometry* nextEmpty(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
+    return GEOSGeom_clone_r(context, geometry);
+  }
+
   virtual GEOSGeometry* nextPoint(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
     GEOSCoordSequence* seq = this->nextGeometryDefault(context, geometry);
 
     // creating points with an empty coord sequence is a recent
     // GEOS feature...this bit makes things work for GEOS >=3.5 (at least)
+    // note also that getting the coord sequence of an empty point in GEOS 3.8
+    // will give you POINT (0 0) back!!! (hence the nextEmpty() approach)
     unsigned int newSize;
     GEOSCoordSeq_getSize_r(context, seq, &newSize);
     if (newSize == 0) {
