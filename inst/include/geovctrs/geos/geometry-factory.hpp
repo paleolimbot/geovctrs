@@ -72,7 +72,7 @@ public:
     GEOSGeometry* shell = GEOSGeom_createLinearRing_r(context, shellSeq);
 
     // generate holes
-    GEOSGeometry* holes[ringLengths.size() - 1];
+    GEOSGeometry** holes = new GEOSGeometry*[ringLengths.size() - 1];
     R_xlen_t offset = ringLengths[0];
     for (int i=1; i < ringLengths.size(); i++) {
       GEOSCoordSequence* holeSeq = getCoordSequence(context, xy, offset, ringLengths[i]);
@@ -82,6 +82,7 @@ public:
 
     // generate polygon
     GEOSGeometry* output = GEOSGeom_createPolygon_r(context, shell, holes, ringLengths.size() - 1);
+    delete holes;
     return output;
   }
 
@@ -92,7 +93,7 @@ public:
       return GEOSGeom_createEmptyCollection_r(context, GEOSGeomTypes::GEOS_MULTIPOINT);
     }
 
-    GEOSGeometry* parts[x.size()];
+    GEOSGeometry** parts = new GEOSGeometry*[x.size()];
     for (R_xlen_t i=0; i<x.size(); i++) {
       GEOSCoordSequence* seq = getCoordSequence(context, xy, i, 1);
       parts[i] = GEOSGeom_createPoint_r(context, seq);
@@ -104,6 +105,8 @@ public:
       parts,
       x.size()
     );
+
+    delete parts;
     return output;
   }
 
@@ -116,7 +119,7 @@ public:
     List xy = feature["xy"];
     IntegerVector partLengths = getLengths(part);
 
-    GEOSGeometry* parts[partLengths.size()];
+    GEOSGeometry** parts = new GEOSGeometry*[partLengths.size()];
     R_xlen_t offset = 0;
     for (int i=0; i < partLengths.size(); i++) {
       GEOSCoordSequence* lineSeq = getCoordSequence(context, xy, offset, partLengths[i]);
@@ -131,6 +134,7 @@ public:
       partLengths.size()
     );
 
+    delete parts;
     return output;
   }
 
@@ -144,7 +148,7 @@ public:
     IntegerVector ring = feature["ring"];
     IntegerVector partLengths = getLengths(part);
 
-    GEOSGeometry* parts[partLengths.size()];
+    GEOSGeometry** parts = new GEOSGeometry*[partLengths.size()];
     R_xlen_t offset = 0;
     for (int i=0; i < partLengths.size(); i++) {
       IntegerVector ringPart = ring[Range(offset, offset + partLengths[i] - 1)];
@@ -156,7 +160,7 @@ public:
       offset += ringLengths[0];
 
       // generate holes
-      GEOSGeometry* holes[ringLengths.size() - 1];
+      GEOSGeometry** holes = new GEOSGeometry*[ringLengths.size() - 1];
       for (int j=1; j < ringLengths.size(); j++) {
         GEOSCoordSequence* holeSeq = getCoordSequence(context, xy, offset, ringLengths[j]);
         holes[j - 1] = GEOSGeom_createLinearRing_r(context, holeSeq);
@@ -165,6 +169,7 @@ public:
 
       // generate polygon
       parts[i] = GEOSGeom_createPolygon_r(context, shell, holes, ringLengths.size() - 1);
+      delete holes;
     }
 
 
@@ -175,13 +180,14 @@ public:
       partLengths.size()
     );
 
+    delete parts;
     return output;
   }
 
   static GEOSGeometry* getCollection(GEOSContextHandle_t context, List data) {
     IntegerVector srid = data["srid"];
     List feature = data["feature"];
-    GEOSGeometry* parts[feature.size()];
+    GEOSGeometry** parts = new GEOSGeometry*[feature.size()];
 
     for (R_xlen_t i=0; i < feature.size(); i++) {
       GEOSGeometry* geometry = getFeature(context, feature[i]);
@@ -197,6 +203,7 @@ public:
       feature.size()
     );
 
+    delete parts;
     return output;
   }
 

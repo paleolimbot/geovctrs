@@ -343,8 +343,7 @@ public:
       GEOSCoordSeq_setX_r(context, seq, 4, xmin1); GEOSCoordSeq_setY_r(context, seq, 4, ymin1);
 
       GEOSGeometry* shell = GEOSGeom_createLinearRing_r(context, seq);
-      GEOSGeometry* holes[0];
-      geometry = GEOSGeom_createPolygon_r(context, shell, holes, 0);
+      geometry = GEOSGeom_createPolygon_r(context, shell, NULL, 0);
       GEOSSetSRID_r(context, geometry, srid);
     }
 
