@@ -583,13 +583,18 @@ public:
 
     int nInteriorRings = GEOSGetNumInteriorRings_r(context, geometry);
     GEOSGeometry** newHoles = new GEOSGeometry*[nInteriorRings];
-    for(int i=0; i < nInteriorRings; i++) {
-      newHoles[i] = this->nextLinearring(context, GEOSGetInteriorRingN_r(context, geometry, i));
-    }
+    try {
+      for(int i=0; i < nInteriorRings; i++) {
+        newHoles[i] = this->nextLinearring(context, GEOSGetInteriorRingN_r(context, geometry, i));
+      }
 
-    GEOSGeometry* out = GEOSGeom_createPolygon_r(context, newShell, newHoles, nInteriorRings);
-    delete[] newHoles;
-    return out;
+      GEOSGeometry* out = GEOSGeom_createPolygon_r(context, newShell, newHoles, nInteriorRings);
+      delete[] newHoles;
+      return out;
+    } catch (std::exception& e) {
+      delete[] newHoles;
+      throw e;
+    }
   }
 
   virtual GEOSGeometry* nextLinearring(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
@@ -619,16 +624,21 @@ public:
 
   virtual GEOSGeometry* nextMultiGeometryDefault(GEOSContextHandle_t context, const GEOSGeometry* geometry) {
     int nParts = GEOSGetNumGeometries_r(context, geometry);
+
     GEOSGeometry** newParts = new GEOSGeometry*[nParts];
+    try {
+      for (int i=0; i < nParts; i++) {
+        this->partId = i;
+        newParts[i] = this->nextGeometry(context, GEOSGetGeometryN_r(context, geometry, i));
+      }
 
-    for (int i=0; i < nParts; i++) {
-      this->partId = i;
-      newParts[i] = this->nextGeometry(context, GEOSGetGeometryN_r(context, geometry, i));
+      GEOSGeometry* out = GEOSGeom_createCollection_r(context, GEOSGeomTypeId_r(context, geometry), newParts, nParts);
+      delete[] newParts;
+      return out;
+    } catch (std::exception& e) {
+      delete[] newParts;
+      throw e;
     }
-
-    GEOSGeometry* out = GEOSGeom_createCollection_r(context, GEOSGeomTypeId_r(context, geometry), newParts, nParts);
-    delete[] newParts;
-    return out;
   }
 
   virtual GEOSCoordSequence* nextGeometryDefault(GEOSContextHandle_t context, const GEOSGeometry* geometry) {

@@ -73,17 +73,22 @@ public:
 
     // generate holes
     GEOSGeometry** holes = new GEOSGeometry*[ringLengths.size() - 1];
-    R_xlen_t offset = ringLengths[0];
-    for (int i=1; i < ringLengths.size(); i++) {
-      GEOSCoordSequence* holeSeq = getCoordSequence(context, xy, offset, ringLengths[i]);
-      holes[i - 1] = GEOSGeom_createLinearRing_r(context, holeSeq);
-      offset += ringLengths[i];
-    }
+    try {
+      R_xlen_t offset = ringLengths[0];
+      for (int i=1; i < ringLengths.size(); i++) {
+        GEOSCoordSequence* holeSeq = getCoordSequence(context, xy, offset, ringLengths[i]);
+        holes[i - 1] = GEOSGeom_createLinearRing_r(context, holeSeq);
+        offset += ringLengths[i];
+      }
 
-    // generate polygon
-    GEOSGeometry* output = GEOSGeom_createPolygon_r(context, shell, holes, ringLengths.size() - 1);
-    delete[] holes;
-    return output;
+      // generate polygon
+      GEOSGeometry* output = GEOSGeom_createPolygon_r(context, shell, holes, ringLengths.size() - 1);
+      delete[] holes;
+      return output;
+    } catch (std::exception& e) {
+      delete[] holes;
+      throw e;
+    }
   }
 
   static GEOSGeometry* getMultipoint(GEOSContextHandle_t context, List feature) {
@@ -94,20 +99,25 @@ public:
     }
 
     GEOSGeometry** parts = new GEOSGeometry*[x.size()];
-    for (R_xlen_t i=0; i<x.size(); i++) {
-      GEOSCoordSequence* seq = getCoordSequence(context, xy, i, 1);
-      parts[i] = GEOSGeom_createPoint_r(context, seq);
+    try {
+      for (R_xlen_t i=0; i<x.size(); i++) {
+        GEOSCoordSequence* seq = getCoordSequence(context, xy, i, 1);
+        parts[i] = GEOSGeom_createPoint_r(context, seq);
+      }
+
+      GEOSGeometry* output = GEOSGeom_createCollection_r(
+        context,
+        GEOSGeomTypes::GEOS_MULTIPOINT,
+        parts,
+        x.size()
+      );
+
+      delete[] parts;
+      return output;
+    } catch (std::exception& e) {
+      delete[] parts;
+      throw e;
     }
-
-    GEOSGeometry* output = GEOSGeom_createCollection_r(
-      context,
-      GEOSGeomTypes::GEOS_MULTIPOINT,
-      parts,
-      x.size()
-    );
-
-    delete[] parts;
-    return output;
   }
 
   static GEOSGeometry* getMultilinestring(GEOSContextHandle_t context, List feature) {
@@ -120,22 +130,27 @@ public:
     IntegerVector partLengths = getLengths(part);
 
     GEOSGeometry** parts = new GEOSGeometry*[partLengths.size()];
-    R_xlen_t offset = 0;
-    for (int i=0; i < partLengths.size(); i++) {
-      GEOSCoordSequence* lineSeq = getCoordSequence(context, xy, offset, partLengths[i]);
-      parts[i] = GEOSGeom_createLineString_r(context, lineSeq);
-      offset += partLengths[i];
+    try {
+      R_xlen_t offset = 0;
+      for (int i=0; i < partLengths.size(); i++) {
+        GEOSCoordSequence* lineSeq = getCoordSequence(context, xy, offset, partLengths[i]);
+        parts[i] = GEOSGeom_createLineString_r(context, lineSeq);
+        offset += partLengths[i];
+      }
+
+      GEOSGeometry* output = GEOSGeom_createCollection_r(
+        context,
+        GEOSGeomTypes::GEOS_MULTILINESTRING,
+        parts,
+        partLengths.size()
+      );
+
+      delete[] parts;
+      return output;
+    } catch (std::exception& e) {
+      delete[] parts;
+      throw e;
     }
-
-    GEOSGeometry* output = GEOSGeom_createCollection_r(
-      context,
-      GEOSGeomTypes::GEOS_MULTILINESTRING,
-      parts,
-      partLengths.size()
-    );
-
-    delete[] parts;
-    return output;
   }
 
   static GEOSGeometry* getMultipolygon(GEOSContextHandle_t context, List feature) {
@@ -149,62 +164,75 @@ public:
     IntegerVector partLengths = getLengths(part);
 
     GEOSGeometry** parts = new GEOSGeometry*[partLengths.size()];
-    R_xlen_t offset = 0;
-    for (int i=0; i < partLengths.size(); i++) {
-      IntegerVector ringPart = ring[Range(offset, offset + partLengths[i] - 1)];
-      IntegerVector ringLengths = getLengths(ringPart);
+    try {
+      R_xlen_t offset = 0;
+      for (int i=0; i < partLengths.size(); i++) {
+        IntegerVector ringPart = ring[Range(offset, offset + partLengths[i] - 1)];
+        IntegerVector ringLengths = getLengths(ringPart);
 
-      // generate outer shell
-      GEOSCoordSequence* shellSeq = getCoordSequence(context, xy, offset, ringLengths[0]);
-      GEOSGeometry* shell = GEOSGeom_createLinearRing_r(context, shellSeq);
-      offset += ringLengths[0];
+        // generate outer shell
+        GEOSCoordSequence* shellSeq = getCoordSequence(context, xy, offset, ringLengths[0]);
+        GEOSGeometry* shell = GEOSGeom_createLinearRing_r(context, shellSeq);
+        offset += ringLengths[0];
 
-      // generate holes
-      GEOSGeometry** holes = new GEOSGeometry*[ringLengths.size() - 1];
-      for (int j=1; j < ringLengths.size(); j++) {
-        GEOSCoordSequence* holeSeq = getCoordSequence(context, xy, offset, ringLengths[j]);
-        holes[j - 1] = GEOSGeom_createLinearRing_r(context, holeSeq);
-        offset += ringLengths[j];
+        // generate holes
+        GEOSGeometry** holes = new GEOSGeometry*[ringLengths.size() - 1];
+        try {
+          for (int j=1; j < ringLengths.size(); j++) {
+            GEOSCoordSequence* holeSeq = getCoordSequence(context, xy, offset, ringLengths[j]);
+            holes[j - 1] = GEOSGeom_createLinearRing_r(context, holeSeq);
+            offset += ringLengths[j];
+          }
+
+          // generate polygon
+          parts[i] = GEOSGeom_createPolygon_r(context, shell, holes, ringLengths.size() - 1);
+          delete[] holes;
+        } catch(std::exception& e) {
+          delete[] holes;
+          throw e;
+        }
       }
 
-      // generate polygon
-      parts[i] = GEOSGeom_createPolygon_r(context, shell, holes, ringLengths.size() - 1);
-      delete[] holes;
+      GEOSGeometry* output = GEOSGeom_createCollection_r(
+        context,
+        GEOSGeomTypes::GEOS_MULTIPOLYGON,
+        parts,
+        partLengths.size()
+      );
+
+      delete[] parts;
+      return output;
+    } catch (std::exception& e) {
+      throw e;
     }
-
-
-    GEOSGeometry* output = GEOSGeom_createCollection_r(
-      context,
-      GEOSGeomTypes::GEOS_MULTIPOLYGON,
-      parts,
-      partLengths.size()
-    );
-
-    delete[] parts;
-    return output;
   }
 
   static GEOSGeometry* getCollection(GEOSContextHandle_t context, List data) {
     IntegerVector srid = data["srid"];
     List feature = data["feature"];
+
     GEOSGeometry** parts = new GEOSGeometry*[feature.size()];
+    try {
+      for (R_xlen_t i=0; i < feature.size(); i++) {
+        GEOSGeometry* geometry = getFeature(context, feature[i]);
+        GEOSSetSRID_r(context, geometry, srid[i]);
 
-    for (R_xlen_t i=0; i < feature.size(); i++) {
-      GEOSGeometry* geometry = getFeature(context, feature[i]);
-      GEOSSetSRID_r(context, geometry, srid[i]);
+        parts[i] = geometry;
+      }
 
-      parts[i] = geometry;
+      GEOSGeometry* output = GEOSGeom_createCollection_r(
+        context,
+        GEOSGeomTypes::GEOS_GEOMETRYCOLLECTION,
+        parts,
+        feature.size()
+      );
+
+      delete[] parts;
+      return output;
+    } catch (std::exception& e) {
+      delete[] parts;
+      throw e;
     }
-
-    GEOSGeometry* output = GEOSGeom_createCollection_r(
-      context,
-      GEOSGeomTypes::GEOS_GEOMETRYCOLLECTION,
-      parts,
-      feature.size()
-    );
-
-    delete[] parts;
-    return output;
   }
 
 private:
