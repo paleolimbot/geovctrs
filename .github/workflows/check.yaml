@@ -21,7 +21,9 @@ jobs:
           - {os: windows-latest, r: '3.6'}
           - {os: macOS-latest, r: '3.6'}
           - {os: ubuntu-16.04, r: '3.6'}
+          - {os: ubuntu-16.04, r: '3.6', ubuntugis: true}
           - {os: ubuntu-18.04, r: '3.6'}
+          - {os: ubuntu-18.04, r: '3.6', ubuntugis: true}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -59,10 +61,14 @@ jobs:
           brew install cairo
           brew cask install xquartz
 
+      - name: Use ubuntugis ppa
+        if: config.ubuntugis
+        run: |
+          sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+          sudo apt update
+
       - name: Install system dependencies (Linux)
         if: runner.os == 'Linux'
-        env:
-          RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
         run: |
           sudo apt-get install libgeos-dev
 
