@@ -62,7 +62,7 @@ jobs:
           brew cask install xquartz
 
       - name: Use ubuntugis ppa
-        if: config.ubuntugis
+        if: matrix.config.ubuntugis
         run: |
           sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
           sudo apt update
