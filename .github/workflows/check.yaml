@@ -12,7 +12,7 @@ jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    name: ${{ matrix.config.os }} (${{ matrix.config.variant }}, R ${{ matrix.config.r }})
 
     strategy:
       fail-fast: false
@@ -20,10 +20,10 @@ jobs:
         config:
           - {os: windows-latest, r: '3.6'}
           - {os: macOS-latest, r: '3.6'}
-          - {os: ubuntu-16.04, r: '3.6'}
-          - {os: ubuntu-16.04, r: '3.6', ubuntugis: true}
-          - {os: ubuntu-18.04, r: '3.6'}
-          - {os: ubuntu-18.04, r: '3.6', ubuntugis: true}
+          - {os: ubuntu-16.04, r: '3.6', variant: 'regular'}
+          - {os: ubuntu-16.04, r: '3.6', variant: 'ubuntugis'}
+          - {os: ubuntu-18.04, r: '3.6', variant: 'regular'}
+          - {os: ubuntu-18.04, r: '3.6', variant: 'ubuntugis'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -49,8 +49,8 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
-          restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}-
+          key: ${{ matrix.config.os }}-${{ matrix.config.variant }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
+          restore-keys: ${{ matrix.config.os }}-${{ matrix.config.variant }}-r-${{ matrix.config.r }}-
 
       - name: Install system dependencies (MacOS)
         if: runner.os == 'MacOS'
@@ -62,15 +62,20 @@ jobs:
           brew cask install xquartz
 
       - name: Use ubuntugis ppa
-        if: matrix.config.ubuntugis
+        if: matrix.config.variant == 'ubuntugis'
         run: |
           sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
           sudo apt update
+          sudo apt install \
+            libudunits2-dev \
+            libgdal-dev \
+            libgeos-dev \
+            libproj-dev
 
       - name: Install system dependencies (Linux)
         if: runner.os == 'Linux'
         run: |
-          sudo apt-get install libgeos-dev
+          sudo apt install libgeos-dev
 
       - name: Install dependencies
         run: |
@@ -97,5 +102,5 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@master
         with:
-          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
+          name: ${{ matrix.config.os }}-${{ matrix.config.variant }}-r${{ matrix.config.r }}-results
           path: check
