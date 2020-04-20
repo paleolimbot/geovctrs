@@ -10,7 +10,7 @@ public:
     this->srid = srid;
   }
 
-  R_xlen_t getMaxParameterLength() {
+  R_xlen_t maxParameterLength() {
     return srid.size();
   }
 

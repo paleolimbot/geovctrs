@@ -10,8 +10,8 @@ public:
     this->z = z;
   }
 
-  R_xlen_t getMaxParameterLength() {
-    return z.size();
+  R_xlen_t maxParameterLength() {
+    return this->z.size();
   }
 
   GEOSCoordSequence* nextCoordinateSequence(GEOSContextHandle_t context,

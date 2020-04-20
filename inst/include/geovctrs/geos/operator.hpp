@@ -145,6 +145,7 @@ protected:
   }
 
 private:
+
   void initOperator() {
     if (!this->provider) {
       stop("GeovctrsGEOSBaseOperator.initProvider() was never called");
@@ -159,30 +160,20 @@ private:
     return result;
   }
 
-  static R_xlen_t recycledSize(IntegerVector sizes) {
-    R_xlen_t commonSize;
-    IntegerVector nonConstantSizes = sizes[sizes != 1];
-    if (nonConstantSizes.size() == 0) {
-      commonSize = 1;
-    } else {
-       commonSize = nonConstantSizes[0];
-    }
-
-    for (R_xlen_t i=0; i < nonConstantSizes.size(); i++) {
-      if (nonConstantSizes[i] != commonSize) {
-        stop("Providers/parameters with incompatible lengths passed to GeovctrsGEOSBaseOperator");
-      }
-    }
-
-    return commonSize;
-  }
-
   static R_xlen_t recycledSize(R_xlen_t size1, R_xlen_t size2) {
-    return recycledSize(IntegerVector::create(size1, size2));
+    if (size1 == 1) {
+      return size2;
+    } else if (size2 == 1) {
+      return size1;
+    } else if (size1 == size2) {
+      return size1;
+    } else {
+      stop("Incompatible lengths in GeovctrsOperator");
+    }
   }
 
   static R_xlen_t recycledSize(R_xlen_t size1, R_xlen_t size2, R_xlen_t size3) {
-    return recycledSize(IntegerVector::create(size1, size2, size3));
+    return recycledSize(recycledSize(size1, size2), size3);
   }
 };
 
