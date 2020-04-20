@@ -82,7 +82,7 @@ public:
 
     // generate polygon
     GEOSGeometry* output = GEOSGeom_createPolygon_r(context, shell, holes, ringLengths.size() - 1);
-    delete holes;
+    delete[] holes;
     return output;
   }
 
@@ -106,7 +106,7 @@ public:
       x.size()
     );
 
-    delete parts;
+    delete[] parts;
     return output;
   }
 
@@ -134,7 +134,7 @@ public:
       partLengths.size()
     );
 
-    delete parts;
+    delete[] parts;
     return output;
   }
 
@@ -169,7 +169,7 @@ public:
 
       // generate polygon
       parts[i] = GEOSGeom_createPolygon_r(context, shell, holes, ringLengths.size() - 1);
-      delete holes;
+      delete[] holes;
     }
 
 
@@ -180,7 +180,7 @@ public:
       partLengths.size()
     );
 
-    delete parts;
+    delete[] parts;
     return output;
   }
 
@@ -203,7 +203,7 @@ public:
       feature.size()
     );
 
-    delete parts;
+    delete[] parts;
     return output;
   }
 

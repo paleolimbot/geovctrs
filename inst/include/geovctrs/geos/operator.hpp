@@ -588,7 +588,7 @@ public:
     }
 
     GEOSGeometry* out = GEOSGeom_createPolygon_r(context, newShell, newHoles, nInteriorRings);
-    delete newHoles;
+    delete[] newHoles;
     return out;
   }
 
@@ -627,7 +627,7 @@ public:
     }
 
     GEOSGeometry* out = GEOSGeom_createCollection_r(context, GEOSGeomTypeId_r(context, geometry), newParts, nParts);
-    delete newParts;
+    delete[] newParts;
     return out;
   }
 
