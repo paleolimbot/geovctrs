@@ -133,13 +133,13 @@ element (rowwise). It is useful for replacing empty and missing values
 with a default.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>geo_coalesce</span>(<span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>geo_coalesce</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>...</th>
+      <th>x, ...</th>
       <td><p>Vectors that will be recycled to a common length. These don't
 necessarily need to be geovctrs, but do need methods for <code><a href='geo_is_missing.html'>geo_is_empty()</a></code>
 and must be castable to the type of the first argument.</p></td>
