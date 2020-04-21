@@ -15,6 +15,11 @@ class GeovctrsGEOSProvider {
 public:
   virtual void init(GEOSContextHandle_t context) {}
   virtual GEOSGeometry* getNext(GEOSContextHandle_t context, R_xlen_t i) = 0;
+  virtual void destroyNext(GEOSContextHandle_t context, GEOSGeometry* geometry) {
+    if (geometry != NULL) {
+      GEOSGeom_destroy_r(context, geometry);
+    }
+  }
   virtual void finish(GEOSContextHandle_t context) {}
   virtual R_xlen_t size() = 0;
   virtual ~GeovctrsGEOSProvider() {}
@@ -31,6 +36,7 @@ public:
   GeovctrsGEOSConstantProvider(GeovctrsGEOSProvider* baseProvider) {
     this->baseProvider = std::unique_ptr<GeovctrsGEOSProvider> { baseProvider };
     this->hasFirst = false;
+    this->geometry = NULL;
   }
 
   void init(GEOSContextHandle_t context) {
@@ -40,12 +46,21 @@ public:
   GEOSGeometry* getNext(GEOSContextHandle_t context, R_xlen_t i) {
     if (!this->hasFirst) {
       this->geometry = this->baseProvider->getNext(context, i);
+      this->hasFirst = true;
     }
     return this->geometry;
   }
 
+  void destroyNext(GEOSContextHandle_t context, GEOSGeometry* geometry) {
+    // this gets called at every iteration, but we need
+    // the geometry to exist for all of them!
+  }
+
   void finish(GEOSContextHandle_t context) {
-    this->baseProvider->finish(context);
+    if (this->baseProvider) {
+      this->baseProvider->destroyNext(context, this->geometry);
+      this->baseProvider->finish(context);
+    }
   }
 
   R_xlen_t size() {

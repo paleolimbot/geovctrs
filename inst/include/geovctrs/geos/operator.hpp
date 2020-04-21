@@ -83,14 +83,12 @@ public:
     for (R_xlen_t i=0; i < this->size(); i++) {
       if ((i + 1) % 10 == 0) {
         checkUserInterrupt();
+        this->publishProgress(i);
       }
 
       this->loopNext(this->handler.context, i);
-
-      if (this->geometry != NULL) {
-        GEOSGeom_destroy_r(this->handler.context, this->geometry);
-        this->geometry = NULL;
-      }
+      this->provider->destroyNext(this->handler.context, this->geometry);
+      this->geometry = NULL;
     }
 
     return this->finishOperator();
@@ -129,18 +127,18 @@ protected:
     return R_NilValue;
   }
 
+  virtual void publishProgress(R_xlen_t i) {
+
+  }
+
   // subclasses must implement their own deleters if they need
   // to clean up memory...this deleter won't call
   // methods of subclasses
   // all deleters of the class heiarchy get called
   virtual ~GeovctrsGEOSBaseOperator() {
     if (this->provider) {
+      this->provider->destroyNext(this->handler.context, this->geometry);
       this->provider->finish(this->handler.context);
-    }
-
-    if (this->geometry != NULL) {
-      GEOSGeom_destroy_r(this->handler.context, this->geometry);
-      this->geometry = NULL;
     }
   }
 
@@ -152,7 +150,10 @@ private:
     }
 
     this->provider->init(this->handler.context);
-    this->commonSize = GeovctrsGEOSBaseOperator::recycledSize(this->maxParameterLength(), this->provider->size());
+    this->commonSize = GeovctrsGEOSBaseOperator::recycledSize(
+      this->maxParameterLength(),
+      this->provider->size()
+    );
   }
 
   SEXP finishOperator() {
@@ -623,7 +624,12 @@ public:
         newParts[i] = this->nextGeometry(context, GEOSGetGeometryN_r(context, geometry, i));
       }
 
-      GEOSGeometry* out = GEOSGeom_createCollection_r(context, GEOSGeomTypeId_r(context, geometry), newParts, nParts);
+      GEOSGeometry* out = GEOSGeom_createCollection_r(
+        context,
+        GEOSGeomTypeId_r(context, geometry),
+        newParts,
+        nParts
+      );
       delete[] newParts;
       return out;
     } catch (std::exception& e) {

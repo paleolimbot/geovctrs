@@ -127,7 +127,10 @@ test_that("geo_point conversion works", {
   expect_identical(geovctrs_cpp_convert(wkt, geo_collection()), collection)
 
   expect_identical(geovctrs_cpp_convert(collection_empty, geo_wkt()), wkt_empty)
-  expect_identical(geovctrs_cpp_convert(geovctrs_cpp_convert(collection, geo_wkt()), geo_collection()), collection)
+  expect_identical(
+    geovctrs_cpp_convert(geovctrs_cpp_convert(collection, geo_wkt()), geo_collection()),
+    collection
+  )
 })
 
 test_that("geo_linestring conversion works", {
@@ -140,7 +143,10 @@ test_that("geo_linestring conversion works", {
   expect_identical(geovctrs_cpp_convert(wkt, geo_collection()), collection)
 
   expect_identical(geovctrs_cpp_convert(collection_empty, geo_wkt()), wkt_empty)
-  expect_identical(geovctrs_cpp_convert(geovctrs_cpp_convert(collection, geo_wkt()), geo_collection()), collection)
+  expect_identical(
+    geovctrs_cpp_convert(geovctrs_cpp_convert(collection, geo_wkt()), geo_collection()),
+    collection
+  )
 })
 
 test_that("geo_multipoint conversion works", {
@@ -181,7 +187,10 @@ test_that("geo_multilinestring conversion works", {
   expect_identical(geovctrs_cpp_convert(wkt, geo_collection()), collection)
 
   expect_identical(geovctrs_cpp_convert(collection_empty, geo_wkt()), wkt_empty)
-  expect_identical(geovctrs_cpp_convert(geovctrs_cpp_convert(collection, geo_wkt()), geo_collection()), collection)
+  expect_identical(
+    geovctrs_cpp_convert(geovctrs_cpp_convert(collection, geo_wkt()), geo_collection()),
+    collection
+  )
 })
 
 test_that("geo_polygon conversion works", {
@@ -206,8 +215,14 @@ test_that("geo_polygon conversion works", {
   expect_identical(geovctrs_cpp_convert(wkt_hole, geo_collection()), collection_hole)
 
   expect_identical(geovctrs_cpp_convert(collection_empty, geo_wkt()), wkt_empty)
-  expect_identical(geovctrs_cpp_convert(geovctrs_cpp_convert(collection, geo_wkt()), geo_collection()), collection)
-  expect_identical(geovctrs_cpp_convert(geovctrs_cpp_convert(collection_hole, geo_wkt()), geo_collection()), collection_hole)
+  expect_identical(
+    geovctrs_cpp_convert(geovctrs_cpp_convert(collection, geo_wkt()), geo_collection()),
+    collection
+  )
+  expect_identical(
+    geovctrs_cpp_convert(geovctrs_cpp_convert(collection_hole, geo_wkt()), geo_collection()),
+    collection_hole
+  )
 })
 
 test_that("geo_multipolygon conversion works", {
@@ -268,7 +283,10 @@ test_that("geo_collection() conversion works", {
   expect_identical(geovctrs_cpp_convert(wkt, geo_collection()), collection)
 
   expect_identical(geovctrs_cpp_convert(collection_empty, geo_wkt()), wkt_empty)
-  expect_identical(geovctrs_cpp_convert(geovctrs_cpp_convert(collection, geo_wkt()), geo_collection()), collection)
+  expect_identical(
+    geovctrs_cpp_convert(geovctrs_cpp_convert(collection, geo_wkt()), geo_collection()),
+    collection
+  )
 })
 
 test_that("geo_collection() conversion propogates SRIDs", {
@@ -334,8 +352,10 @@ test_that("segment conversion works", {
 
   # errors: non linestring, more than two points
   expect_error(geovctrs_cpp_convert(geo_wkt("POINT (10 30)"), geo_segment()), "non-linestring")
-  expect_error(geovctrs_cpp_convert(geo_wkt("LINESTRING (10 30, 0 0, 10 4)"), geo_segment()), "exactly two points")
-
+  expect_error(geovctrs_cpp_convert(
+    geo_wkt("LINESTRING (10 30, 0 0, 10 4)"), geo_segment()),
+    "exactly two points"
+  )
 })
 
 test_that("missings are propogated through conversions between wkt, wkb, and collection", {
