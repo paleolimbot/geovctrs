@@ -30,6 +30,7 @@ restore_geovctr.sfc <- function(x, result, ...) {
 #' @rdname is_geovctr
 #' @export
 restore_geovctr.sf <- function(x, result, ...) {
+  x <- vec_recycle(x, vec_size(result))
   x[[attr(x, "sf_column")]] <- restore_geovctr(x[[attr(x, "sf_column")]], result, ...)
   x
 }

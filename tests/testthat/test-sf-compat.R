@@ -25,6 +25,12 @@ test_that("sf/sfc works with as_geovctr()", {
   sfc_tiny <- sf::st_sfc(sf::st_point(c(30, 10)))
   sf_tiny <- sf::st_as_sf(tibble(geom = sfc_tiny))
 
+  # check with vectorized parameters
+  expect_identical(
+    nrow(geo_set_z(sf_nc[1, ], 4:6)),
+    3L
+  )
+
   # check with plot
   vdiffr::expect_doppelganger(
     "sfc plot",

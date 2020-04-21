@@ -29,4 +29,12 @@ test_that("data.frame works with as_geovctr()", {
   # check with transformation functions
   expect_is(geo_envelope(geo_nc), "data.frame")
   expect_is(geo_set_srid(geo_nc, 26920), "data.frame")
+
+  # check with vectorization
+  expect_identical(
+    geo_set_z(geo_nc[1, ], 4:6),
+    geo_set_z(geo_nc[c(1, 1, 1), ], 4:6)
+  )
 })
+
+

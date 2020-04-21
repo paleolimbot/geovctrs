@@ -114,6 +114,7 @@ restore_geovctr.default <- function(x, result, ...) {
 #' @rdname is_geovctr
 #' @export
 restore_geovctr.data.frame <- function(x, result, ...) {
+  x <- vec_recycle(x, vec_size(result))
   x[[find_geovctr_column(x)]] <- result
   x
 }
