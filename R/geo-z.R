@@ -28,7 +28,8 @@ geo_set_z.default <- function(x, z) {
 
 #' @export
 geo_set_z.geovctr <- function(x, z) {
-  geovctrs_cpp_set_z(x, vec_recycle(vec_cast(z, double()), vec_size(x)))
+  params <- recycle_parameter(x, z = vec_cast(z, double()))
+  geovctrs_cpp_set_z(x, params$z)
 }
 
 #' @rdname geo_set_z

@@ -106,8 +106,8 @@ geo_srid.geovctrs_wkb <- function(x) {
 
 #' @export
 geo_set_srid.geovctrs_wkb <- function(x, srid) {
-  srid <- vec_recycle(srid, vec_size(x))
-  geovctrs_cpp_set_srid(x, srid)
+  params <- recycle_parameter(x, srid = as_geo_srid(srid))
+  geovctrs_cpp_set_srid(x, params$srid)
 }
 
 #' @export

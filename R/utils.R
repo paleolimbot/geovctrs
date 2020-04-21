@@ -112,3 +112,11 @@ grepl_na <- function(pattern, x, ...) {
   result
 }
 
+recycle_parameter <- function(x, ...) {
+  if (vec_size(x) == 1) {
+    vec_recycle_common(...)
+  } else {
+    vec_recycle_common(..., .size = vec_size(x))
+  }
+}
+

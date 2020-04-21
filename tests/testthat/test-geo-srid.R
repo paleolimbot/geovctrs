@@ -44,6 +44,23 @@ test_that("SRID extraction works", {
   expect_identical(geo_srid("POINT EMPTY"), 0L)
 })
 
+test_that("geo_set_srid() is vectorized along x and srid", {
+  expect_identical(
+    geo_srid(geo_set_srid(as_geo_wkb("POINT (10 20)"), 4:6)),
+    4:6
+  )
+
+  expect_identical(
+    geo_srid(geo_set_srid(as_geo_wkb("POINT (10 20)"), integer())),
+    integer()
+  )
+
+  expect_identical(
+    geo_srid(geo_set_srid(geo_wkb(), 1)),
+    integer()
+  )
+})
+
 test_that("misssing values have missing SRIDs", {
   expect_identical(geo_srid(NA_wkt_), NA_integer_)
   expect_identical(geo_srid(NA_wkb_), NA_integer_)

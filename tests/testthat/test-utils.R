@@ -46,3 +46,23 @@ test_that("grepl_na works", {
   expect_identical(grepl_na("something", "something"), TRUE)
   expect_identical(grepl_na("something", "nothing"), FALSE)
 })
+
+test_that("parameter recycler works", {
+  expect_length(recycle_parameter(double(), a = 1)$a, 0)
+  expect_length(recycle_parameter(1, a = 1)$a, 1)
+  expect_length(recycle_parameter(1:2, a = 1)$a, 2)
+  expect_length(recycle_parameter(1:2, a = 1, b = 1:2)$a, 2)
+
+  expect_length(recycle_parameter(1, a = 1:2)$a, 2)
+  expect_length(recycle_parameter(1:2, a = 1:2)$a, 2)
+  expect_length(recycle_parameter(1:2, a = 1:2, b = 1:2)$a, 2)
+
+  expect_error(
+    recycle_parameter(double(), a = 1:2)$a,
+    class = "vctrs_error_recycle_incompatible_size"
+  )
+  expect_error(
+    recycle_parameter(1, a = 1:2, b = 1:3)$a,
+    class = "vctrs_error_incompatible_size"
+  )
+})

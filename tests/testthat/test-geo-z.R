@@ -12,6 +12,23 @@ test_that("set_z works", {
   expect_identical(geo_is_empty(example_z), geo_is_empty(geo_example_wkt))
 })
 
+test_that("set_z is vectorized along x and z", {
+  expect_identical(
+    geo_set_z(geo_wkt("POINT Z (10 20 30)"), 4:6),
+    geo_wkt(c("POINT Z (10 20 4)", "POINT Z (10 20 5)", "POINT Z (10 20 6)"))
+  )
+
+  expect_identical(
+    geo_set_z(geo_wkt("POINT Z (10 20 30)"), double()),
+    geo_wkt()
+  )
+
+  expect_identical(
+    geo_set_z(geo_wkt(), 1),
+    geo_wkt()
+  )
+})
+
 test_that("drop_z works", {
   expect_identical(geo_drop_z("POINT Z (2 3 10)"), geo_wkt("POINT (2 3)"))
   expect_identical(geo_drop_z("POINT (2 3)"), geo_wkt("POINT (2 3)"))
