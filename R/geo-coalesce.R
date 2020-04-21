@@ -5,7 +5,7 @@
 #' element (rowwise). It is useful for replacing empty and missing values
 #' with a default.
 #'
-#' @param ... Vectors that will be recycled to a common length. These don't
+#' @param x,... Vectors that will be recycled to a common length. These don't
 #'   necessarily need to be geovctrs, but do need methods for [geo_is_empty()]
 #'   and must be castable to the type of the first argument.
 #'
@@ -16,12 +16,18 @@
 #' wkt <- geo_wkt(c("POINT (30 10)", "POINT EMPTY", NA))
 #' geo_coalesce(wkt, geo_wkt("POINT (0 0)"))
 #'
-geo_coalesce <- function(...) {
-  values <- vec_recycle_common(...)
+geo_coalesce <- function(x, ...) {
+  UseMethod("geo_coalesce")
+}
 
-  if (length(values) == 0) {
-    abort("At least one value is required")
-  }
+#' @export
+geo_coalesce.default <- function(x, ...) {
+  restore_geovctr(x, geo_coalesce(as_geovctr(x), ...))
+}
+
+#' @export
+geo_coalesce.geovctr <- function(x, ...) {
+  values <- vec_recycle_common(x, ...)
 
   out <- values[[1]]
   for (x in values[-1]) {

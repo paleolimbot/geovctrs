@@ -4,10 +4,10 @@
 \alias{geo_coalesce}
 \title{Find first non-empty feature}
 \usage{
-geo_coalesce(...)
+geo_coalesce(x, ...)
 }
 \arguments{
-\item{...}{Vectors that will be recycled to a common length. These don't
+\item{x, ...}{Vectors that will be recycled to a common length. These don't
 necessarily need to be geovctrs, but do need methods for \code{\link[=geo_is_empty]{geo_is_empty()}}
 and must be castable to the type of the first argument.}
 }

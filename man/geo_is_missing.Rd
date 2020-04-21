@@ -13,7 +13,19 @@
 \alias{NA_segment_}
 \alias{NA_rect_}
 \title{Missing, empty, and non-finite geometries}
-\format{An object of class \code{geovctrs_wkt} (inherits from \code{geovctr}, \code{vctrs_vctr}) of length 1.}
+\format{
+An object of class \code{geovctrs_wkt} (inherits from \code{geovctr}, \code{vctrs_vctr}) of length 1.
+
+An object of class \code{geovctrs_wkb} (inherits from \code{geovctr}, \code{vctrs_vctr}) of length 1.
+
+An object of class \code{geovctrs_collection} (inherits from \code{geovctr}, \code{vctrs_rcrd}, \code{vctrs_vctr}) of length 1.
+
+An object of class \code{geovctrs_xy} (inherits from \code{geovctr}, \code{vctrs_rcrd}, \code{vctrs_vctr}) of length 1.
+
+An object of class \code{geovctrs_segment} (inherits from \code{geovctr}, \code{vctrs_rcrd}, \code{vctrs_vctr}) of length 1.
+
+An object of class \code{geovctrs_rect} (inherits from \code{geovctr}, \code{vctrs_rcrd}, \code{vctrs_vctr}) of length 1.
+}
 \usage{
 geo_is_missing(x)
 

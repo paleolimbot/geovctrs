@@ -4,7 +4,9 @@
 \name{geo_example_wkt}
 \alias{geo_example_wkt}
 \title{Example well-known text}
-\format{An object of class \code{geovctrs_wkt} (inherits from \code{geovctr}, \code{vctrs_vctr}) of length 17.}
+\format{
+An object of class \code{geovctrs_wkt} (inherits from \code{geovctr}, \code{vctrs_vctr}) of length 17.
+}
 \source{
 \href{https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry}{Wikipedia's well-known text page}
 }

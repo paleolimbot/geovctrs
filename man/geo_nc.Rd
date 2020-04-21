@@ -4,7 +4,9 @@
 \name{geo_nc}
 \alias{geo_nc}
 \title{North Carolina dataset}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 100 rows and 12 columns.}
+\format{
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 100 rows and 12 columns.
+}
 \source{
 The \link[sf:sf]{sf package}.
 }
