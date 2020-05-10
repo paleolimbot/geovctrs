@@ -209,20 +209,16 @@ test_that("bbox works with corner cases", {
 })
 
 test_that("misssing values have missing envelopes", {
-  expect_identical(geo_envelope(NA_wkt_), NA_rect_)
-  expect_identical(geo_envelope(NA_wkb_), NA_rect_)
-  expect_identical(geo_envelope(NA_collection_), NA_rect_)
-  # tricky corner case...POINT EMPTY is the same in GEOS as POINT (nan nan)
-  # for safety, don't drop SRID
+  expect_identical(geo_envelope(NA_wkt_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
+  expect_identical(geo_envelope(NA_wkb_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
+  expect_identical(geo_envelope(NA_collection_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_envelope(NA_xy_), geo_rect(NA, NA, NA, NA, srid = 0))
-  expect_identical(geo_envelope(NA_segment_), NA_rect_)
-  expect_identical(geo_envelope(NA_rect_), NA_rect_)
+  expect_identical(geo_envelope(NA_segment_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
+  expect_identical(geo_envelope(NA_rect_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
 
   expect_identical(geo_envelope(NA_wkt_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_envelope(NA_wkb_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_envelope(NA_collection_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
-  # tricky corner case...POINT EMPTY is the same in GEOS as POINT (nan nan)
-  # for safety, don't drop SRID
   expect_identical(geo_envelope(NA_xy_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
   expect_identical(geo_envelope(NA_segment_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_envelope(NA_rect_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
