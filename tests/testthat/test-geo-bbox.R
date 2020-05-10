@@ -184,7 +184,7 @@ test_that("bbox works with corner cases", {
   # empty geometries always have an inf bbox, regardless of na.rm!
 
   expect_identical(geo_bbox(geo_xy()), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
-  expect_identical(geo_bbox(geo_xy(NA, NA), na.rm = FALSE), geo_rect(Inf, Inf, -Inf, -Inf))
+  expect_identical(geo_bbox(geo_xy(NA, NA), na.rm = FALSE), geo_rect(NA, NA, NA, NA))
   expect_identical(geo_bbox(geo_xy(NA, NA), na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf))
 
   expect_identical(geo_bbox(geo_rect()), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
@@ -234,17 +234,13 @@ test_that("misssing values have the correct bounding boxes", {
   expect_identical(geo_bbox(NA_wkt_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_bbox(NA_wkb_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_bbox(NA_collection_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
-  # tricky corner case...POINT EMPTY is the same in GEOS as POINT (nan nan)
-  # for safety, don't drop SRID
-  expect_identical(geo_bbox(NA_xy_), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
+  expect_identical(geo_bbox(NA_xy_), geo_rect(NA, NA, NA, NA, srid = 0))
   expect_identical(geo_bbox(NA_segment_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_bbox(NA_rect_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
 
   expect_identical(geo_bbox(NA_wkt_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_bbox(NA_wkb_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_bbox(NA_collection_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
-  # tricky corner case...POINT EMPTY is the same in GEOS as POINT (nan nan)
-  # for safety, don't drop SRID
   expect_identical(geo_bbox(NA_xy_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
   expect_identical(geo_bbox(NA_segment_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_bbox(NA_rect_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))

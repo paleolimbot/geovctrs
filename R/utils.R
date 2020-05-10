@@ -91,7 +91,8 @@ as_part_identifier <- function(xy, ...) {
 }
 
 summarise_srids <- function(srids) {
-  srid <- unique(srids)
+  # NA here means "safe to inherit"
+  srid <- setdiff(unique(srids), NA_integer_)
   final_srid <- srid[1]
   if (length(srid) > 1) {
     rlang::warn(
