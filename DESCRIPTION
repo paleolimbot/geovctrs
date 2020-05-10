@@ -32,10 +32,11 @@ Imports:
     vctrs,
     Rcpp,
     cli,
-    crayon
+    crayon,
+    wk
 SystemRequirements: GEOS (>= 3.4.0)
 URL: https://paleolimbot.github.io/geovctrs, https://github.com/paleolimbot/geovctrs
 BugReports: https://github.com/paleolimbot/geovctrs/issues
 LinkingTo: 
-    Rcpp
+    Rcpp, wk
 VignetteBuilder: knitr
