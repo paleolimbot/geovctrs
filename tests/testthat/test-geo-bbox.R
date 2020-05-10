@@ -89,12 +89,9 @@ test_that("envelope works with corner cases", {
     geo_rect(Inf, Inf, -Inf, -Inf)
   )
 
-  # GEOS reads these as identical to empty points
-  # so they have slightly different bounding box behaviour
-  # than XYs
   expect_identical(
     geo_envelope("POINT (nan nan)", na.rm = FALSE),
-    geo_rect(Inf, Inf, -Inf, -Inf)
+    geo_rect(NA, NA, NA, NA)
   )
   expect_identical(
     geo_envelope("POINT (nan nan)", na.rm = TRUE),
@@ -104,7 +101,7 @@ test_that("envelope works with corner cases", {
   # even multipoints are funky
   expect_identical(
     geo_envelope("MULTIPOINT (nan nan)", na.rm = FALSE),
-    geo_rect(Inf, Inf, -Inf, -Inf)
+    geo_rect(NA, NA, NA, NA)
   )
   expect_identical(
     geo_envelope("MULTIPOINT (nan nan)", na.rm = TRUE),

@@ -83,8 +83,20 @@ geo_z_range.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 }
 
 #' @export
+geo_z_range.geovctrs_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  ranges <- wk::wkb_ranges(x, na.rm, finite)
+  new_geovctrs_lim(list(lower = ranges$zmin, upper = ranges$zmax))
+}
+
+#' @export
+geo_z_range.geovctrs_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  ranges <- wk::wkt_ranges(x, na.rm, finite)
+  new_geovctrs_lim(list(lower = ranges$zmin, upper = ranges$zmax))
+}
+
+#' @export
 geo_z_range.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  geovctrs_cpp_z_range(x, na.rm, finite)
+  geo_z_range.geovctrs_wkb(as_geo_wkb(x), na.rm = na.rm, finite = finite)
 }
 
 #' @rdname geo_set_z
@@ -99,6 +111,18 @@ geo_z_envelope.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 }
 
 #' @export
+geo_z_envelope.geovctrs_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  ranges <- wk::wkb_feature_ranges(x, na.rm, finite)
+  new_geovctrs_lim(list(lower = ranges$zmin, upper = ranges$zmax))
+}
+
+#' @export
+geo_z_envelope.geovctrs_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  ranges <- wk::wkt_feature_ranges(x, na.rm, finite)
+  new_geovctrs_lim(list(lower = ranges$zmin, upper = ranges$zmax))
+}
+
+#' @export
 geo_z_envelope.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  geovctrs_cpp_z_envelope(x, na.rm, finite)
+  geo_z_envelope.geovctrs_wkb(as_geo_wkb(x), na.rm = na.rm, finite = finite)
 }

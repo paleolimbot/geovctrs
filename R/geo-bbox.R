@@ -85,7 +85,7 @@ geo_envelope <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 
 #' @export
 geo_envelope.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  restore_geovctr(x, geovctrs_cpp_envelope(as_geovctr(x), na.rm, finite))
+  restore_geovctr(x, geo_envelope(as_geovctr(x), na.rm = na.rm, finite = finite))
 }
 
 #' @export
