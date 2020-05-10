@@ -87,27 +87,6 @@ namespace geovctrs {
         return Rcpp::as<LogicalVector >(rcpp_result_gen);
     }
 
-    inline List geovctrs_cpp_summary(SEXP x) {
-        typedef SEXP(*Ptr_geovctrs_cpp_summary)(SEXP);
-        static Ptr_geovctrs_cpp_summary p_geovctrs_cpp_summary = NULL;
-        if (p_geovctrs_cpp_summary == NULL) {
-            validateSignature("List(*geovctrs_cpp_summary)(SEXP)");
-            p_geovctrs_cpp_summary = (Ptr_geovctrs_cpp_summary)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_summary");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_geovctrs_cpp_summary(Shield<SEXP>(Rcpp::wrap(x)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<List >(rcpp_result_gen);
-    }
-
 }
 
 #endif // RCPP_geovctrs_RCPPEXPORTS_H_GEN_

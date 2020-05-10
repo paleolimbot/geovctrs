@@ -37,7 +37,7 @@ geo_wkt <- function(x = character()) {
 #' @rdname geo_wkt
 parse_wkt <- function(x) {
   x <- vec_cast(x, character())
-  validate_provider(new_geovctrs_wkt(x))
+  validate_provider(new_geovctrs_wkt(x), wk::wkt_problems(x))
 }
 
 #' @rdname geo_wkt
@@ -93,7 +93,7 @@ is_geovctrs_wkt <- function(x) {
 #' @rdname new_geovctrs_wkt
 #' @export
 validate_geovctrs_wkt <- function(x) {
-  stop_for_non_parseable(validate_provider(x))
+  stop_for_non_parseable(validate_provider(x, wk::wkt_problems(x)))
   invisible(x)
 }
 

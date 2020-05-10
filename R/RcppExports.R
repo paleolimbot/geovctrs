@@ -17,10 +17,6 @@ geovctrs_cpp_set_srid <- function(x, srid) {
     .Call(`_geovctrs_geovctrs_cpp_set_srid`, x, srid)
 }
 
-geovctrs_cpp_summary <- function(x) {
-    .Call(`_geovctrs_geovctrs_cpp_summary`, x)
-}
-
 geovctrs_cpp_set_z <- function(x, z) {
     .Call(`_geovctrs_geovctrs_cpp_set_z`, x, z)
 }

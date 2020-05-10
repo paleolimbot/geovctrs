@@ -46,7 +46,7 @@ geo_wkb <- function(x = list()) {
 #' @export
 #' @rdname geo_wkb
 parse_wkb <- function(x) {
-  validate_provider(new_geovctrs_wkb(x))
+  validate_provider(new_geovctrs_wkb(x), wk::wkb_problems(x))
 }
 
 #' @export
@@ -106,7 +106,7 @@ is_geovctrs_wkb <- function(x) {
 #' @rdname new_geovctrs_wkb
 #' @export
 validate_geovctrs_wkb <- function(x) {
-  stop_for_non_parseable(validate_provider(x))
+  stop_for_non_parseable(validate_provider(x, wk::wkb_problems(x)))
   invisible(x)
 }
 

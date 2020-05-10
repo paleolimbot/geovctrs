@@ -87,12 +87,12 @@ test_that("coersion and casting works for wkt types", {
   )
 
   expect_identical(
-    vec_cast(geo_wkt("POINT (1 2 3)"), geo_xy()),
+    vec_cast(geo_wkt("POINT Z (1 2 3)"), geo_xy()),
     geo_xyz(1, 2, 3)
   )
 
   expect_identical(
-    vec_cast(geo_wkt("POINT (1 2 3)"), geo_xyz()),
+    vec_cast(geo_wkt("POINT Z (1 2 3)"), geo_xyz()),
     geo_xyz(1, 2, 3)
   )
 
