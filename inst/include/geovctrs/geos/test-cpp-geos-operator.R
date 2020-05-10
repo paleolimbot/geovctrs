@@ -24,6 +24,8 @@ test_that("recursive operator recreates geometries perfectly by default", {
 })
 
 test_that("recycling a constant provider won't segfault from deleting the geometry", {
+  skip("don't test providers")
+
   expect_identical(
     geovctrs_cpp_set_z(geo_wkt("POINT Z (10 20 30)"), 4:6),
     geo_wkt(c("POINT Z (10 20 4)", "POINT Z (10 20 5)", "POINT Z (10 20 6)"))

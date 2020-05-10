@@ -5,48 +5,12 @@ geovctrs_cpp_convert <- function(data, ptype) {
     .Call(`_geovctrs_geovctrs_cpp_convert`, data, ptype)
 }
 
-geovctrs_cpp_has_missing <- function(x) {
-    .Call(`_geovctrs_geovctrs_cpp_has_missing`, x)
-}
-
-geovctrs_cpp_has_missing_or_infinite <- function(x) {
-    .Call(`_geovctrs_geovctrs_cpp_has_missing_or_infinite`, x)
-}
-
-geovctrs_cpp_set_srid <- function(x, srid) {
-    .Call(`_geovctrs_geovctrs_cpp_set_srid`, x, srid)
-}
-
-geovctrs_cpp_set_z <- function(x, z) {
-    .Call(`_geovctrs_geovctrs_cpp_set_z`, x, z)
-}
-
-geovctrs_cpp_drop_z <- function(x, to) {
-    .Call(`_geovctrs_geovctrs_cpp_drop_z`, x, to)
-}
-
 geovctrs_cpp_geos_version_runtime <- function() {
     .Call(`_geovctrs_geovctrs_cpp_geos_version_runtime`)
 }
 
 geovctrs_cpp_geos_version_build <- function() {
     .Call(`_geovctrs_geovctrs_cpp_geos_version_build`)
-}
-
-geovctrs_cpp_test_buffer2 <- function(data, ptype) {
-    .Call(`_geovctrs_geovctrs_cpp_test_buffer2`, data, ptype)
-}
-
-geovctrs_cpp_test_buffer2_bad_provider <- function(data, ptype) {
-    .Call(`_geovctrs_geovctrs_cpp_test_buffer2_bad_provider`, data, ptype)
-}
-
-geovctrs_cpp_test_buffer2_bad_exporter <- function(data, ptype) {
-    .Call(`_geovctrs_geovctrs_cpp_test_buffer2_bad_exporter`, data, ptype)
-}
-
-geovctrs_cpp_test_recursive_identity <- function(data, ptype) {
-    .Call(`_geovctrs_geovctrs_cpp_test_recursive_identity`, data, ptype)
 }
 
 # Register entry points for exported C++ functions

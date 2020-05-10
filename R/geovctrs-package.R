@@ -7,6 +7,7 @@
 #' @import vctrs
 #' @importFrom rlang abort %||% enquo :=
 #' @importFrom tibble tibble as_tibble
+#' @importFrom wk as_wkt as_wkb wkt wkb
 #' @useDynLib geovctrs, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 ## usethis namespace: end

@@ -110,8 +110,7 @@ geo_srid.geovctrs_wkb <- function(x) {
 
 #' @export
 geo_set_srid.geovctrs_wkb <- function(x, srid) {
-  params <- recycle_parameter(x, srid = as_geo_srid(srid))
-  geovctrs_cpp_set_srid(x, params$srid)
+  abort("not implemented")
 }
 
 #' @export

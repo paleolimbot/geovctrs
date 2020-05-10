@@ -1,5 +1,6 @@
 
 test_that("SRID extraction works", {
+  skip("srid extraction requires srid mods, which aren't implemented")
 
   geometries <- c(
     geo_point(geo_xy(259473, 4876249), srid = 26920),
@@ -45,6 +46,8 @@ test_that("SRID extraction works", {
 })
 
 test_that("geo_set_srid() is vectorized along x and srid", {
+  skip("set_srid for wkb not implemented")
+
   expect_identical(
     geo_srid(geo_set_srid(as_geo_wkb("POINT (10 20)"), 4:6)),
     4:6

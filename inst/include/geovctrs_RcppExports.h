@@ -45,48 +45,6 @@ namespace geovctrs {
         return Rcpp::as<SEXP >(rcpp_result_gen);
     }
 
-    inline LogicalVector geovctrs_cpp_has_missing(SEXP x) {
-        typedef SEXP(*Ptr_geovctrs_cpp_has_missing)(SEXP);
-        static Ptr_geovctrs_cpp_has_missing p_geovctrs_cpp_has_missing = NULL;
-        if (p_geovctrs_cpp_has_missing == NULL) {
-            validateSignature("LogicalVector(*geovctrs_cpp_has_missing)(SEXP)");
-            p_geovctrs_cpp_has_missing = (Ptr_geovctrs_cpp_has_missing)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_has_missing");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_geovctrs_cpp_has_missing(Shield<SEXP>(Rcpp::wrap(x)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<LogicalVector >(rcpp_result_gen);
-    }
-
-    inline LogicalVector geovctrs_cpp_has_missing_or_infinite(SEXP x) {
-        typedef SEXP(*Ptr_geovctrs_cpp_has_missing_or_infinite)(SEXP);
-        static Ptr_geovctrs_cpp_has_missing_or_infinite p_geovctrs_cpp_has_missing_or_infinite = NULL;
-        if (p_geovctrs_cpp_has_missing_or_infinite == NULL) {
-            validateSignature("LogicalVector(*geovctrs_cpp_has_missing_or_infinite)(SEXP)");
-            p_geovctrs_cpp_has_missing_or_infinite = (Ptr_geovctrs_cpp_has_missing_or_infinite)R_GetCCallable("geovctrs", "_geovctrs_geovctrs_cpp_has_missing_or_infinite");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_geovctrs_cpp_has_missing_or_infinite(Shield<SEXP>(Rcpp::wrap(x)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<LogicalVector >(rcpp_result_gen);
-    }
-
 }
 
 #endif // RCPP_geovctrs_RCPPEXPORTS_H_GEN_

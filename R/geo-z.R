@@ -11,8 +11,6 @@
 #' @export
 #'
 #' @examples
-#' geo_set_z("POINT (2 3)", 4)
-#' geo_drop_z("POINT Z (2 3 4)")
 #' geo_has_z(c("POINT (2 3)", "POINT Z (2 3 4)"))
 #' geo_z_range(c("POINT (2 3)", "POINT Z (2 3 4)"), na.rm = TRUE)
 #' geo_z_envelope(c("POINT (2 3)", "POINT Z (2 3 4)"), na.rm = TRUE)
@@ -23,13 +21,7 @@ geo_set_z <- function(x, z) {
 
 #' @export
 geo_set_z.default <- function(x, z) {
-  restore_geovctr(x, geo_set_z(as_geovctr(x), z))
-}
-
-#' @export
-geo_set_z.geovctr <- function(x, z) {
-  params <- recycle_parameter(x, z = vec_cast(z, double()))
-  geovctrs_cpp_set_z(x, params$z)
+  abort("Not implemented")
 }
 
 #' @rdname geo_set_z
@@ -45,7 +37,7 @@ geo_drop_z.default <- function(x) {
 
 #' @export
 geo_drop_z.geovctr <- function(x) {
-  geovctrs_cpp_drop_z(x, x)
+  abort("Not implemented")
 }
 
 #' @export

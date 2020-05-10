@@ -39,8 +39,6 @@ Currently, geovctrs supports X, Y, and Z coordinates. These functions help extra
 set, and drop Z values.
 }
 \examples{
-geo_set_z("POINT (2 3)", 4)
-geo_drop_z("POINT Z (2 3 4)")
 geo_has_z(c("POINT (2 3)", "POINT Z (2 3 4)"))
 geo_z_range(c("POINT (2 3)", "POINT Z (2 3 4)"), na.rm = TRUE)
 geo_z_envelope(c("POINT (2 3)", "POINT Z (2 3 4)"), na.rm = TRUE)

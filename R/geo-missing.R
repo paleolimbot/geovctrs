@@ -21,41 +21,41 @@
 #'
 #' @examples
 #' geo_is_missing(NA_wkt_)
-#' geo_has_missing(NA_wkt_)
-#' geo_is_finite(NA_wkt_)
+#' # geo_has_missing(NA_wkt_)
+#' # geo_is_finite(NA_wkt_)
 #' geo_is_empty(NA_wkt_)
 #'
 #' geo_is_missing(geo_wkt("LINESTRING (10 inf, nan 2)"))
-#' geo_has_missing(geo_wkt("LINESTRING (10 inf, nan 2)"))
-#' geo_is_finite(geo_wkt("LINESTRING (10 inf, nan 2)"))
+#' # geo_has_missing(geo_wkt("LINESTRING (10 inf, nan 2)"))
+#' # geo_is_finite(geo_wkt("LINESTRING (10 inf, nan 2)"))
 #' geo_is_empty(geo_wkt("LINESTRING (10 inf, nan 2)"))
 #'
 #' geo_is_missing(geo_wkt("LINESTRING (10 inf, 1 2)"))
-#' geo_has_missing(geo_wkt("LINESTRING (10 inf, 1 2)"))
-#' geo_is_finite(geo_wkt("LINESTRING (10 inf, 1 2)"))
+#' # geo_has_missing(geo_wkt("LINESTRING (10 inf, 1 2)"))
+#' # geo_is_finite(geo_wkt("LINESTRING (10 inf, 1 2)"))
 #' geo_is_empty(geo_wkt("LINESTRING (10 inf, 1 2)"))
 #'
 #' # EMPTY geometries are considered finite and non-missing
 #' geo_is_missing(geo_wkt("LINESTRING EMPTY"))
-#' geo_has_missing(geo_wkt("LINESTRING EMPTY"))
-#' geo_is_finite(geo_wkt("LINESTRING EMPTY"))
+#' # geo_has_missing(geo_wkt("LINESTRING EMPTY"))
+#' # geo_is_finite(geo_wkt("LINESTRING EMPTY"))
 #' geo_is_empty(geo_wkt("LINESTRING EMPTY"))
 #'
 #' # POINT EMPTY, POINT (nan nan), and geo_xy(NA, NA)
 #' # are all empty points
 #' geo_is_missing(geo_wkt("POINT EMPTY"))
-#' geo_has_missing(geo_wkt("POINT EMPTY"))
-#' geo_is_finite(geo_wkt("POINT EMPTY"))
+#' # geo_has_missing(geo_wkt("POINT EMPTY"))
+#' # geo_is_finite(geo_wkt("POINT EMPTY"))
 #' geo_is_empty(geo_wkt("POINT EMPTY"))
 #'
 #' geo_is_missing(geo_wkt("POINT (nan nan)"))
-#' geo_has_missing(geo_wkt("POINT (nan nan)"))
-#' geo_is_finite(geo_wkt("POINT (nan nan)"))
+#' # geo_has_missing(geo_wkt("POINT (nan nan)"))
+#' # geo_is_finite(geo_wkt("POINT (nan nan)"))
 #' geo_is_empty(geo_wkt("POINT (nan nan)"))
 #'
 #' geo_is_missing(geo_xy(NA, NA))
-#' geo_has_missing(geo_xy(NA, NA))
-#' geo_is_finite(geo_xy(NA, NA))
+#' # geo_has_missing(geo_xy(NA, NA))
+#' # geo_is_finite(geo_xy(NA, NA))
 #' geo_is_empty(geo_xy(NA, NA))
 #'
 geo_is_missing <- function(x) {
@@ -80,7 +80,7 @@ geo_has_missing.default <- function(x) {
 
 #' @export
 geo_has_missing.geovctr <- function(x) {
-  geovctrs_cpp_has_missing(x)
+  abort("Not implemented")
 }
 
 #' @export
@@ -123,13 +123,13 @@ geo_is_finite.default <- function(x) {
 
 #' @export
 geo_is_finite.geovctr <- function(x) {
-  !geovctrs_cpp_has_missing_or_infinite(x)
+  abort("Not implemented")
 }
 
 #' @export
 geo_is_finite.geovctrs_xy <- function(x) {
   is.finite(field(x, "x")) &
-  is.finite(field(x, "y"))
+    is.finite(field(x, "y"))
 }
 
 #' @export
