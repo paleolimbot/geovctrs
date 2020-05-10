@@ -14,35 +14,37 @@
 #' geo_format(head(geo_nc))
 #' geo_print(head(geo_nc))
 #'
-geo_print <- function(x, ..., short = FALSE, col = TRUE) {
+geo_print <- function(x, ..., col = TRUE) {
   UseMethod("geo_print")
 }
 
 #' @export
-geo_print.default <- function(x, ..., short = FALSE, col = TRUE) {
+geo_print.default <- function(x, ..., col = TRUE) {
   geovctr <- as_geovctr(x)
   geo_print(
     as_geovctr(x),
     ...,
     classes = paste0(class(x)[1], "...", class(geovctr)[1]),
-    short = short,
     col = col
   )
   invisible(x)
 }
 
 #' @export
-geo_print.geovctr <- function(x, ..., classes = class(x), short = FALSE, col = TRUE) {
+geo_print.geovctr <- function(x, ..., classes = class(x), col = TRUE) {
   cat(paste0("<", classes[1], "[", vec_size(x), "]>\n"))
+
+  if (length(x)  == 0) {
+    return(invisible(x))
+  }
 
   if (rlang::is_named(x) || !col) {
     out <- stats::setNames(geo_format(x, ..., short = short, col = FALSE), names(x))
     print(out, quote = FALSE)
   } else {
-    summary <- geo_summary(x)
     print_default_colour(
-      geo_format_summary(summary, class(x), short = short, col = FALSE),
-      geo_format_summary(summary, class(x), short = short, col = TRUE),
+      geo_format(x, ..., col = FALSE),
+      geo_format(x, ..., col = TRUE),
       ...
     )
   }
@@ -52,94 +54,34 @@ geo_print.geovctr <- function(x, ..., classes = class(x), short = FALSE, col = T
 
 #' @rdname geo_print
 #' @export
-geo_format <- function(x, ..., short = FALSE, col = FALSE) {
+geo_format <- function(x, ..., col = FALSE) {
   UseMethod("geo_format")
 }
 
 #' @export
-geo_format.default <- function(x, ..., short = FALSE, col = FALSE) {
+geo_format.default <- function(x, ..., col = FALSE) {
   geo_format(as_geovctr(x), ..., short = short, col = col)
 }
 
 #' @export
-geo_format.geovctr <- function(x, ..., short = FALSE, col = FALSE) {
-  if (vec_size(x) == 0) {
-    return(character(0))
-  }
-
-  summary <- geo_summary(x)
-  geo_format_summary(summary, class(x), short = short, col = col)
+geo_format.geovctr <- function(x, ..., col = FALSE) {
+  format(x, col = col)
 }
 
 #' @export
 as.character.geovctr <- function(x, ...) {
-  # this gives a better summary in the viewer than
-  # well-known text, and will eventually be very fast
+  # this gives a fast summary in the viewer for non-WKT types
   format(x, ...)
-}
-
-
-geo_format_summary <- function(summary, class, short, col) {
-  na <- format_na_type(class, col = col)
-  sym <- maybe_grey(
-    geometry_type_symbol(
-      summary$geometry_type,
-      summary$has_z,
-      short = short
-    ),
-    col = col
-  )
-
-  first_coord <- ifelse(
-    summary$has_z,
-    format.geovctrs_xyz(summary$first_coordinate),
-    format.geovctrs_xy(summary$first_coordinate)
-  )
-
-  coord_str <- ifelse(
-    summary$is_empty,
-    maybe_grey("EMPTY", col = col),
-    ifelse(
-      summary$geometry_type == "geometrycollection",
-      "",
-      ifelse(
-        summary$geometry_type == "point",
-        maybe_blue(first_coord, col = col),
-        paste0(
-          maybe_blue(first_coord, col = col),
-          maybe_grey(cli::symbol$ellipsis, "+", summary$n_coordinates - 1, col = col)
-        )
-      )
-    )
-  )
-
-  n_sub_geom_str <- ifelse(
-    (summary$geometry_type == "geometrycollection")  |
-    (is_multi_geometry_type(summary$geometry_type) & !summary$is_empty),
-    maybe_grey(paste0("[", summary$n_geometries, "]"), col = col),
-    ""
-  )
-
-  max_prob_length <- if (short) 20 else 50
-
-  ifelse(
-    !is.na(summary$problems),
-    maybe_red(paste0("!!! ", substr(summary$problems, 1, max_prob_length)), col = col),
-    ifelse(
-      summary$is_missing,
-      na,
-      paste0(sym, n_sub_geom_str, " ", coord_str)
-    )
-  )
 }
 
 # dymamically exported...see zzz.R
 pillar_shaft.geovctr <- function(x, ...) {
-  pillar::new_pillar_shaft_simple(geo_format(x, short = TRUE, col = TRUE))
+  formatted <- format(x, ..., col = TRUE, bracket = FALSE)
+  pillar::new_pillar_shaft_simple(formatted)
 }
 
 
-print_default_colour <- function(x_no_col, x_col, width = getOption("width")) {
+print_default_colour <- function(x_no_col, x_col, ..., width = getOption("width")) {
   if (length(x_no_col) == 0) {
     return()
   }

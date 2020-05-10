@@ -5,12 +5,10 @@ test_that("geo_format works", {
 
   wkts <- geo_example_wkt
 
-  formatted_long <- geo_format(wkts, short = FALSE, col = FALSE)
-  formatted_short <- geo_format(wkts, short = TRUE, col = FALSE)
+  formatted_long <- geo_format(wkts, col = FALSE)
 
   expect_match(formatted_long[is.na(wkts)], "^NA_wkt_$")
   expect_match(formatted_long[!is.na(wkts) & geo_is_empty(wkts)], "EMPTY")
-  expect_match(formatted_short[!is.na(wkts) & geo_is_empty(wkts)], "EMPTY")
   expect_match(formatted_long[!is.na(wkts) & geo_geometry_type(wkts) == "point"], "POINT")
 
   expect_output(geo_print(as_geo_wkb(as_geo_wkt(wkts))), "POINT")
@@ -31,27 +29,21 @@ test_that("geo_format works", {
 })
 
 test_that("printing works without unicode/colour support", {
-  withr::with_options(list(crayon.enabled = FALSE, cli.unicode =  FALSE), {
+  withr::with_options(list(crayon.enabled = FALSE, cli.unicode = FALSE), {
     expect_output(geo_print(geo_nc, col = TRUE), "MULTIPOLYGON")
-    expect_output(geo_print(geo_nc, short = TRUE), "mply")
     expect_output(print(geo_rect(1, 2, 3, 4)), "...")
     expect_output(print(geo_segment(geo_xy(1, 2), geo_xy(3, 4))), "---")
   })
 })
 
 test_that("geo_format() and geo_print() don't error for non-parsable geometries", {
-  expect_warning(geo_format(new_geovctrs_wkt("POINT ENTPY")), "1 geometry failed to parse")
-  expect_output(
-    expect_warning(geo_print(new_geovctrs_wkt("POINT ENTPY")), "1 geometry failed to parse"),
-    "ParseException"
-  )
-  expect_output(
-    expect_warning(
-      print(tibble(new_geovctrs_wkt("POINT ENTPY"))),
-      "1 geometry failed to parse"
-    ),
-    "ParseException"
-  )
+  bad_wkb <- wk::wkt_translate_wkb("POINT (30 10)", endian = 1)
+  bad_wkb[[1]][2] <- as.raw(0xff)
+  bad_wkb <- new_geovctrs_wkb(bad_wkb)
+
+  expect_match(geo_format(bad_wkb), "invalid type")
+  expect_output(geo_print(bad_wkb), "invalid type")
+  expect_output(print(tibble(bad_wkb)), "invalid type")
 })
 
 test_that("all geovctrs work in the RStudio viewer", {

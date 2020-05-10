@@ -5,9 +5,9 @@
 \alias{geo_format}
 \title{Format and print geovctrs}
 \usage{
-geo_print(x, ..., short = FALSE, col = TRUE)
+geo_print(x, ..., col = TRUE)
 
-geo_format(x, ..., short = FALSE, col = FALSE)
+geo_format(x, ..., col = FALSE)
 }
 \arguments{
 \item{x}{A geometry-like object, or one that can be
@@ -15,9 +15,9 @@ coerced to a geometry-like object using \code{\link[=as_geovctr]{as_geovctr()}}.
 
 \item{...}{Passed to \code{\link[=geo_format]{geo_format()}}}
 
-\item{short}{Use to print a shorter summary}
-
 \item{col}{Use to colourize the output}
+
+\item{short}{Use to print a shorter summary}
 }
 \description{
 Format and prints the \code{\link[=geo_summary]{geo_summary()}} of an geovctr.

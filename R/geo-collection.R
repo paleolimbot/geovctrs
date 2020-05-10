@@ -268,13 +268,29 @@ vec_ptype_abbr.geovctrs_collection <- function(x, ...) {
 }
 
 #' @export
-format.geovctrs_collection <- function(x, ...) {
-  geo_format(x, ...)
+format.geovctrs_collection <- function(x, ..., trunc_width = 40, max_coords = 5, col = FALSE) {
+  formatted_wkt <- format.geovctrs_wkt(
+    wk::wkb_format(as_geo_wkb(x), max_coords = max_coords),
+    trunc_width = trunc_width,
+    col = col
+  )
+
+  paste0("<", formatted_wkt, ">")
 }
 
 #' @export
-print.geovctrs_collection <- function(x, ...) {
-  geo_print(x, ...)
+obj_print_data.geovctrs_collection <- function(x, ...) {
+  if (length(x) == 0) {
+    return()
+  }
+
+  print_default_colour(
+    format(x, col = FALSE),
+    format(x, col = TRUE),
+    ...
+  )
+
+  invisible(x)
 }
 
 #' @rdname new_geovctrs_collection

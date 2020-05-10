@@ -116,13 +116,29 @@ vec_ptype_abbr.geovctrs_wkb <- function(x, ...) {
 }
 
 #' @export
-format.geovctrs_wkb <- function(x, ...) {
-  geo_format(x, ...)
+format.geovctrs_wkb <- function(x, ..., trunc_width = 40, max_coords = 5, col = FALSE) {
+  formatted_wkt <- format.geovctrs_wkt(
+    wk::wkb_format(x, max_coords = max_coords),
+    trunc_width = trunc_width,
+    col = col
+  )
+
+  paste0("<", formatted_wkt, ">")
 }
 
 #' @export
-print.geovctrs_wkb <- function(x, ...) {
-  geo_print(x, ...)
+obj_print_data.geovctrs_wkb <- function(x, ...) {
+  if (length(x) == 0) {
+    return()
+  }
+
+  print_default_colour(
+    format(x, col = FALSE),
+    format(x, col = TRUE),
+    ...
+  )
+
+  invisible(x)
 }
 
 #' @method vec_cast geovctrs_wkb
