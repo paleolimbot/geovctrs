@@ -74,12 +74,16 @@ as.character.geovctr <- function(x, ...) {
   format(x, ...)
 }
 
+#' @export
+print.geovctr <- function(x, ...) {
+  geo_print(x, ...)
+}
+
 # dymamically exported...see zzz.R
 pillar_shaft.geovctr <- function(x, ...) {
   formatted <- format(x, ..., col = TRUE, bracket = FALSE)
   pillar::new_pillar_shaft_simple(formatted)
 }
-
 
 print_default_colour <- function(x_no_col, x_col, ..., width = getOption("width")) {
   if (length(x_no_col) == 0) {
@@ -109,6 +113,38 @@ print_default_colour <- function(x_no_col, x_col, ..., width = getOption("width"
       )
     )
   }
+}
+
+format_wkt_summary <- function(x, ..., trunc_width = 40, col = FALSE) {
+  # collapse whitespace, remove leading whitespace
+  x <- gsub("\\s+", " ", gsub("^\\s*", "", gsub("\\s*$", "", x)))
+  trunc <- substr(x, 1, trunc_width - 1)
+  width <- nchar(x)
+
+  abbreved <- ifelse(
+    width > (trunc_width - nchar(cli::symbol$ellipsis)),
+    paste0(trunc, cli::symbol$ellipsis),
+    x
+  )
+
+  geom_type_match <- regexpr("[A-Z ]+", abbreved)
+  geom_type_start <- as.integer(geom_type_match)
+  geom_type_end <- geom_type_start + attr(geom_type_match, "match.length") - 1
+
+  formatted <- ifelse(
+    geom_type_match != -1,
+    paste0(
+      maybe_grey(substr(abbreved, geom_type_start, geom_type_end), col = col),
+      maybe_blue(substr(abbreved, geom_type_end + 1, trunc_width), col = col)
+    ),
+    maybe_blue(abbreved, col = col)
+  )
+
+  ifelse(
+    is.na(x),
+    maybe_red("NA_wkt_", col = col),
+    formatted
+  )
 }
 
 geometry_type_symbol <- function(type, use_z, short = FALSE) {

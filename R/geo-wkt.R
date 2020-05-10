@@ -104,50 +104,7 @@ vec_ptype_abbr.geovctrs_wkt <- function(x, ...) {
 
 #' @export
 format.geovctrs_wkt <- function(x, ..., trunc_width = 40, col = FALSE) {
-  # collapse whitespace, remove leading whitespace
-  x <- gsub("\\s+", " ", gsub("^\\s*", "", gsub("\\s*$", "", x)))
-  trunc <- substr(x, 1, trunc_width - 1)
-  width <- nchar(x)
-
-  abbreved <- ifelse(
-    width > (trunc_width - nchar(cli::symbol$ellipsis)),
-    paste0(trunc, cli::symbol$ellipsis),
-    x
-  )
-
-  geom_type_match <- regexpr("[A-Z ]+", abbreved)
-  geom_type_start <- as.integer(geom_type_match)
-  geom_type_end <- geom_type_start + attr(geom_type_match, "match.length") - 1
-
-  formatted <- ifelse(
-    geom_type_match != -1,
-    paste0(
-      maybe_grey(substr(abbreved, geom_type_start, geom_type_end), col = col),
-      maybe_blue(substr(abbreved, geom_type_end + 1, trunc_width), col = col)
-    ),
-    maybe_blue(abbreved, col = col)
-  )
-
-  ifelse(
-    is.na(x),
-    maybe_red("NA_wkt_", col = col),
-    formatted
-  )
-}
-
-#' @export
-obj_print_data.geovctrs_wkt <- function(x, ...) {
-  if (length(x) == 0) {
-    return()
-  }
-
-  print_default_colour(
-    format(x, col = FALSE),
-    format(x, col = TRUE),
-    ...
-  )
-
-  invisible(x)
+  format_wkt_summary(x, ..., trunc_width = trunc_width, col = col)
 }
 
 #' @method vec_cast geovctrs_wkt

@@ -20,8 +20,6 @@
 
   # register generics for soft dependencies
   register_s3_method("pillar", "pillar_shaft", "geovctr")
-  register_s3_method("pillar", "pillar_shaft", "geovctrs_rect")
-  register_s3_method("pillar", "pillar_shaft", "geovctrs_segment")
 
   # keep sf registrations together in sf-compat.R
   register_sf_compat()

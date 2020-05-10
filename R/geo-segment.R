@@ -85,19 +85,6 @@ format.geovctrs_segment <- function(x, ..., col = FALSE) {
 }
 
 #' @export
-print.geovctrs_segment <- function(x, ...) {
-  obj_print_header(x, ...)
-  print_default_colour(format(x, ..., col = FALSE), format(x, ..., col = TRUE))
-  obj_print_footer(x, ...)
-  invisible(x)
-}
-
-# dyamically exported in zzz.R
-pillar_shaft.geovctrs_segment <- function(x, ...) {
-  pillar::new_pillar_shaft_simple(format(x, col = TRUE))
-}
-
-#' @export
 #' @importFrom tibble as_tibble
 as_tibble.geovctrs_segment <- function(x, ...) {
   as_tibble(vec_data(x), ...)
