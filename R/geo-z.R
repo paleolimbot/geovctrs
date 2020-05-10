@@ -68,7 +68,22 @@ geo_has_z <- function(x) {
 
 #' @export
 geo_has_z.default <- function(x) {
-  geo_summary(x)$has_z
+  geo_has_z(as_geovctr(x))
+}
+
+#' @export
+geo_has_z.geovctr <- function(x) {
+  geo_has_z(as_geo_wkb(x))
+}
+
+#' @export
+geo_has_z.geovctrs_wkb <- function(x) {
+  wk::wkb_meta(x)$has_z
+}
+
+#' @export
+geo_has_z.geovctrs_wkt <- function(x) {
+  wk::wkt_meta(x)$has_z
 }
 
 #' @rdname geo_set_z

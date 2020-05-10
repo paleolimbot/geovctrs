@@ -5,7 +5,6 @@
 #'
 #' @inheritParams geo_bbox
 #' @param ... Passed to [geo_format()]
-#' @param short Use to print a shorter summary
 #' @param col Use to colourize the output
 #'
 #' @export
@@ -39,7 +38,7 @@ geo_print.geovctr <- function(x, ..., classes = class(x), col = TRUE) {
   }
 
   if (rlang::is_named(x) || !col) {
-    out <- stats::setNames(geo_format(x, ..., short = short, col = FALSE), names(x))
+    out <- stats::setNames(geo_format(x, ..., col = FALSE), names(x))
     print(out, quote = FALSE)
   } else {
     print_default_colour(
@@ -60,7 +59,7 @@ geo_format <- function(x, ..., col = FALSE) {
 
 #' @export
 geo_format.default <- function(x, ..., col = FALSE) {
-  geo_format(as_geovctr(x), ..., short = short, col = col)
+  geo_format(as_geovctr(x), ..., col = col)
 }
 
 #' @export

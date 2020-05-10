@@ -16,8 +16,6 @@ coerced to a geometry-like object using \code{\link[=as_geovctr]{as_geovctr()}}.
 \item{...}{Passed to \code{\link[=geo_format]{geo_format()}}}
 
 \item{col}{Use to colourize the output}
-
-\item{short}{Use to print a shorter summary}
 }
 \description{
 Format and prints a geovctr.

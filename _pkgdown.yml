@@ -19,7 +19,6 @@ reference:
   - geo_plot
   - geo_srid
   - geo_is_missing
-  - geo_summary
   - geo_print
   - geo_set_z
   - geo_coordinates

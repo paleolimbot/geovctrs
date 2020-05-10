@@ -35,20 +35,16 @@ geo_plot(geometries)
 
 ## Extracting functions
 
-Extracting functions take a vector of geometries and provide some kind of information for each feature. Examples from the geovctrs package include `geo_n_coordinates()`, `geo_geometry_type()`, and `geo_summary()`: all of these take a vector of geometries and return a vector of the same size as the input (note that the "size" of a data frame is the number of rows, after `vctrs::vec_size()`).
+Extracting functions take a vector of geometries and provide some kind of information for each feature. Examples from the geovctrs package include `geo_geometry_type()` and `geo_has_z()`: all of these take a vector of geometries and return a vector of the same size as the input (note that the "size" of a data frame is the number of rows, after `vctrs::vec_size()`).
 
 ```{r}
-geo_n_coordinates(geometries)
 geo_geometry_type(geometries)
-geo_summary(geometries)
 ```
 
 All of these functions work with a variety of data types: it doesn't matter whether you have a character vector, a geovctr, or a data frame with a geometry column, the function knows to coerce the input to a geovctr by default:
 
 ```{r}
-geo_n_coordinates(geo_wkt("POINT EMPTY"))
-geo_n_coordinates("POINT EMPTY")
-geo_n_coordinates(tibble(geom = geo_wkt("POINT EMPTY")))
+geo_geometry_type("POINT EMPTY")
 ```
 
 This magic happens because the geovctrs package provides `as_geovctr()` implementations for character vectors and data frames, and because the `geo_n_coordinates()` is a generic that calls `as_geovctr()` in its default implementation. Following this pattern, if you would like to make an extracting function that works on any geometry type, all you need to do is call `as_geovctr()` in your default implementation:
