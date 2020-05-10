@@ -186,17 +186,17 @@ or <code>NA</code> to use the default on your system.</p></td>
 )
 <span class='no'>wkb</span> <span class='kw'>&lt;-</span> <span class='fu'>geo_wkb</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>wkb_item</span>))
 <span class='no'>wkb</span></div><div class='output co'>#&gt; &lt;geovctrs_wkb[1]&gt;
-#&gt; [1] <span style='color: #555555;'>POINT</span><span> </span><span style='color: #0000BB;'>(30 10)</span><span></div><div class='input'>
+#&gt; [1] &lt;<span style='color: #555555;'>POINT </span><span style='color: #0000BB;'>(30 10)</span><span>&gt;</div><div class='input'>
 <span class='co'># use as_geo_wkb() to use conversion options</span>
 <span class='fu'>as_geo_wkb</span>(<span class='no'>wkb</span>, <span class='kw'>endian</span> <span class='kw'>=</span> <span class='fl'>0</span>)</div><div class='output co'>#&gt; &lt;geovctrs_wkb[1]&gt;
-#&gt; [1] </span><span style='color: #555555;'>POINT</span><span> </span><span style='color: #0000BB;'>(30 10)</span><span></div><div class='input'>
+#&gt; [1] &lt;</span><span style='color: #555555;'>POINT </span><span style='color: #0000BB;'>(30 10)</span><span>&gt;</div><div class='input'>
 <span class='co'># use parse_wkb() to identify parse errors</span>
 <span class='no'>wkb_item</span>[<span class='fl'>2</span>] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/raw.html'>as.raw</a></span>(<span class='fl'>0x11</span>)
 <span class='fu'>parse_wkb</span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>wkb_item</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: 1 parsing failure.</span>
-#&gt; <span class='warning'>row col expected     actual                                                                             error              </span>
-#&gt; <span class='warning'>1   --  geovctrs_wkb 01, 11, 00, 00, 00, 00, 00, 00, 00, 00, 00, 3e, 40, 00, 00, 00, 00, 00, 00, 24, 40 Unknown WKB type 17</span>
+#&gt; <span class='warning'>row col expected     actual                                                                             error                                                      </span>
+#&gt; <span class='warning'>1   --  geovctrs_wkb 01, 11, 00, 00, 00, 00, 00, 00, 00, 00, 00, 3e, 40, 00, 00, 00, 00, 00, 00, 24, 40 Unrecognized geometry type in WKBReader::readGeometry(): 17</span>
 #&gt; <span class='warning'>See attr(result, 'problems') for more details.</span></div><div class='output co'>#&gt; &lt;geovctrs_wkb[1]&gt;
-#&gt; [1] </span><span style='color: #BB0000;'>NA_wkb_</span><span></div><div class='input'>
+#&gt; [1] &lt;</span><span style='color: #BB0000;'>NA_wkt_</span><span>&gt;</div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

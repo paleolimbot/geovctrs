@@ -107,28 +107,13 @@
 <div id="extracting-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#extracting-functions" class="anchor"></a>Extracting functions</h2>
-<p>Extracting functions take a vector of geometries and provide some kind of information for each feature. Examples from the geovctrs package include <code><a href="../reference/geo_summary.html">geo_n_coordinates()</a></code>, <code><a href="../reference/geo_summary.html">geo_geometry_type()</a></code>, and <code><a href="../reference/geo_summary.html">geo_summary()</a></code>: all of these take a vector of geometries and return a vector of the same size as the input (note that the “size” of a data frame is the number of rows, after <code><a href="https://rdrr.io/pkg/vctrs/man/vec_size.html">vctrs::vec_size()</a></code>).</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="../reference/geo_summary.html">geo_n_coordinates</a></span>(<span class="no">geometries</span>)
-<span class="co">#&gt; [1] 1 2 5</span>
-<span class="fu"><a href="../reference/geo_summary.html">geo_geometry_type</a></span>(<span class="no">geometries</span>)
-<span class="co">#&gt; [1] "point"      "linestring" "polygon"</span>
-<span class="fu"><a href="../reference/geo_summary.html">geo_summary</a></span>(<span class="no">geometries</span>)
-<span class="co">#&gt; # A tibble: 3 x 10</span>
-<span class="co">#&gt;   is_empty geometry_type n_geometries n_coordinates  srid coordinate_dime… has_z</span>
-<span class="co">#&gt;   &lt;lgl&gt;    &lt;chr&gt;                &lt;int&gt;         &lt;int&gt; &lt;int&gt;            &lt;int&gt; &lt;lgl&gt;</span>
-<span class="co">#&gt; 1 FALSE    point                    1             1     0                2 FALSE</span>
-<span class="co">#&gt; 2 FALSE    linestring               1             2     0                2 FALSE</span>
-<span class="co">#&gt; 3 FALSE    polygon                  1             5     0                2 FALSE</span>
-<span class="co">#&gt; # … with 3 more variables: first_coordinate &lt;xy&gt;, problems &lt;chr&gt;,</span>
-<span class="co">#&gt; #   is_missing &lt;lgl&gt;</span></pre></body></html></div>
+<p>Extracting functions take a vector of geometries and provide some kind of information for each feature. Examples from the geovctrs package include <code><a href="../reference/geo_geometry_type.html">geo_geometry_type()</a></code> and <code><a href="../reference/geo_set_z.html">geo_has_z()</a></code>: all of these take a vector of geometries and return a vector of the same size as the input (note that the “size” of a data frame is the number of rows, after <code><a href="https://rdrr.io/pkg/vctrs/man/vec_size.html">vctrs::vec_size()</a></code>).</p>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="../reference/geo_geometry_type.html">geo_geometry_type</a></span>(<span class="no">geometries</span>)
+<span class="co">#&gt; [1] "point"      "linestring" "polygon"</span></pre></body></html></div>
 <p>All of these functions work with a variety of data types: it doesn’t matter whether you have a character vector, a geovctr, or a data frame with a geometry column, the function knows to coerce the input to a geovctr by default:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/geo_summary.html">geo_n_coordinates</a></span>(<span class="fu"><a href="../reference/geo_wkt.html">geo_wkt</a></span>(<span class="st">"POINT EMPTY"</span>))
-<span class="co">#&gt; [1] 0</span>
-<span class="fu"><a href="../reference/geo_summary.html">geo_n_coordinates</a></span>(<span class="st">"POINT EMPTY"</span>)
-<span class="co">#&gt; [1] 0</span>
-<span class="fu"><a href="../reference/geo_summary.html">geo_n_coordinates</a></span>(<span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="fu"><a href="../reference/geo_wkt.html">geo_wkt</a></span>(<span class="st">"POINT EMPTY"</span>)))
-<span class="co">#&gt; [1] 0</span></pre></body></html></div>
-<p>This magic happens because the geovctrs package provides <code><a href="../reference/is_geovctr.html">as_geovctr()</a></code> implementations for character vectors and data frames, and because the <code><a href="../reference/geo_summary.html">geo_n_coordinates()</a></code> is a generic that calls <code><a href="../reference/is_geovctr.html">as_geovctr()</a></code> in its default implementation. Following this pattern, if you would like to make an extracting function that works on any geometry type, all you need to do is call <code><a href="../reference/is_geovctr.html">as_geovctr()</a></code> in your default implementation:</p>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/geo_geometry_type.html">geo_geometry_type</a></span>(<span class="st">"POINT EMPTY"</span>)
+<span class="co">#&gt; [1] "point"</span></pre></body></html></div>
+<p>This magic happens because the geovctrs package provides <code><a href="../reference/is_geovctr.html">as_geovctr()</a></code> implementations for character vectors and data frames, and because the <code>geo_n_coordinates()</code> is a generic that calls <code><a href="../reference/is_geovctr.html">as_geovctr()</a></code> in its default implementation. Following this pattern, if you would like to make an extracting function that works on any geometry type, all you need to do is call <code><a href="../reference/is_geovctr.html">as_geovctr()</a></code> in your default implementation:</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">is_linestring</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
   <span class="fu"><a href="https://rdrr.io/r/base/UseMethod.html">UseMethod</a></span>(<span class="st">"is_linestring"</span>)
 }
@@ -138,7 +123,7 @@
 }
 
 <span class="no">is_linestring.geovctr</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>) {
-  <span class="fu"><a href="../reference/geo_summary.html">geo_geometry_type</a></span>(<span class="no">x</span>) <span class="kw">==</span> <span class="st">"linestring"</span>
+  <span class="fu"><a href="../reference/geo_geometry_type.html">geo_geometry_type</a></span>(<span class="no">x</span>) <span class="kw">==</span> <span class="st">"linestring"</span>
 }</pre></body></html></div>
 <p>Here, <code>is_linestring()</code> will work on all the types supported by <code><a href="../reference/is_geovctr.html">as_geovctr()</a></code>:</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu">is_linestring</span>(<span class="no">geometries</span>) <span class="co"># geovctr_wkt/geovctr</span>
@@ -178,7 +163,7 @@
 <div id="transforming-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#transforming-functions" class="anchor"></a>Transforming functions</h2>
-<p>Transforming functions take a geometry vector and return a geometry vector of the same size. Examples from the geovctrs package include <code><a href="../reference/geo_bbox.html">geo_envelope()</a></code> (which returns the feature-specific bounding box) and <code><a href="../reference/geo_summary.html">geo_first_coordinate()</a></code>. Similar to the extracting functions, both of these accept any object that can be coerced to a geovctr using <code><a href="../reference/is_geovctr.html">as_geovctr()</a></code>:</p>
+<p>Transforming functions take a geometry vector and return a geometry vector of the same size. Examples from the geovctrs package include <code><a href="../reference/geo_bbox.html">geo_envelope()</a></code> (which returns the feature-specific bounding box) and <code>geo_first_coordinate()</code>. Similar to the extracting functions, both of these accept any object that can be coerced to a geovctr using <code><a href="../reference/is_geovctr.html">as_geovctr()</a></code>:</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="../reference/geo_bbox.html">geo_envelope</a></span>(<span class="no">geometries</span>) <span class="co"># geovctr_wkt/geovctr</span>
 <span class="co">#&gt; &lt;geovctrs_rect[3]&gt;</span>
 <span class="co">#&gt; [1] (0 0…0 0)     (-11 2…10 12) (-5 -5…5 5)</span>
@@ -220,11 +205,11 @@
 <span class="co">#&gt; [1] (0.0 0)  (-0.5 7) (0.0 0)</span>
 <span class="fu">centroid</span>(<span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="no">geometries</span>)) <span class="co"># data.frame</span>
 <span class="co">#&gt; # A tibble: 3 x 1</span>
-<span class="co">#&gt;   geom       </span>
-<span class="co">#&gt;   &lt;xy&gt;       </span>
-<span class="co">#&gt; 1 pt (0.0 0) </span>
-<span class="co">#&gt; 2 pt (-0.5 7)</span>
-<span class="co">#&gt; 3 pt (0.0 0)</span></pre></body></html></div>
+<span class="co">#&gt;   geom    </span>
+<span class="co">#&gt;   &lt;xy&gt;    </span>
+<span class="co">#&gt; 1 (0.0 0) </span>
+<span class="co">#&gt; 2 (-0.5 7)</span>
+<span class="co">#&gt; 3 (0.0 0)</span></pre></body></html></div>
 </div>
 <div id="new-geometry-vector-classes" class="section level2">
 <h2 class="hasAnchor">
@@ -278,9 +263,9 @@
 
 <span class="fu">circle_coordinates</span>(<span class="fu"><a href="../reference/geo_xy.html">geo_xy</a></span>(<span class="fl">1</span>, <span class="fl">1</span>), <span class="fl">2</span>)
 <span class="co">#&gt; &lt;geovctrs_xy[50]&gt;</span>
-<span class="co">#&gt;  [1] (3.00000000 1.0000000)   (2.98358003 1.2557543)   (2.93458973 1.5073092)  </span>
-<span class="co">#&gt;  [4] (2.85383351 1.7505340)   (2.74263741 1.9814351)   (2.60282724 2.1962211)  </span>
-<span class="co">#&gt;  [7] (2.43669870 2.3913651)   (2.24697960 2.5636630)   (2.03678514 2.7102855)  </span>
+<span class="co">#&gt; [1]  (3.00000000 1.0000000)   (2.98358003 1.2557543)   (2.93458973 1.5073092)  </span>
+<span class="co">#&gt; [4]  (2.85383351 1.7505340)   (2.74263741 1.9814351)   (2.60282724 2.1962211)  </span>
+<span class="co">#&gt; [7]  (2.43669870 2.3913651)   (2.24697960 2.5636630)   (2.03678514 2.7102855)  </span>
 <span class="co">#&gt; [10] (1.80956669 2.8288252)   (1.56905517 2.9173357)   (1.31919979 2.9743636)  </span>
 <span class="co">#&gt; [13] (1.06410316 2.9989724)   (0.80795395 2.9907582)   (0.55495813 2.9498558)  </span>
 <span class="co">#&gt; [16] (0.30926989 2.8769368)   (0.07492342 2.7731986)   (-0.14423332 2.6403445) </span>
@@ -304,7 +289,7 @@
 
 <span class="fu">circle_polygon</span>(<span class="fu"><a href="../reference/geo_xy.html">geo_xy</a></span>(<span class="fl">1</span>, <span class="fl">1</span>), <span class="fl">2</span>)
 <span class="co">#&gt; &lt;geovctrs_collection[1]&gt;</span>
-<span class="co">#&gt; [1] POLYGON (3 1)…+50</span></pre></body></html></div>
+<span class="co">#&gt; [1] &lt;POLYGON ((3 1, 2.98358 1.25575, 2.93459…&gt;</span></pre></body></html></div>
 <p>To turn our vector of circles into a geovctr of the same length, we can implement <code><a href="../reference/is_geovctr.html">as_geovctr()</a></code>:</p>
 <div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">as_geovctr.circle</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>, <span class="no">...</span>) {
   <span class="no">x_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/vctrs/man/vec_data.html">vec_data</a></span>(<span class="no">x</span>)
@@ -323,7 +308,9 @@
 <span class="no">circles</span> <span class="kw">&lt;-</span> <span class="fu">circle</span>(<span class="fu"><a href="../reference/geo_xy.html">geo_xy</a></span>(<span class="fl">2</span>, <span class="fl">2</span>), <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">2</span>))
 <span class="fu"><a href="../reference/is_geovctr.html">as_geovctr</a></span>(<span class="no">circles</span>)
 <span class="co">#&gt; &lt;geovctrs_collection[3]&gt;</span>
-<span class="co">#&gt; [1] POLYGON (2.5 2)…+50 POLYGON (3.0 2)…+50 POLYGON (4.0 2)…+50</span></pre></body></html></div>
+<span class="co">#&gt; [1] &lt;POLYGON ((2.5 2, 2.4959 2.06394, 2.4836…&gt;</span>
+<span class="co">#&gt; [2] &lt;POLYGON ((3 2, 2.99179 2.12788, 2.96729…&gt;</span>
+<span class="co">#&gt; [3] &lt;POLYGON ((4 2, 3.98358 2.25575, 3.93459…&gt;</span></pre></body></html></div>
 <p>Now, the <code>circles</code> vector works with geovctrs functions!</p>
 <div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/geo_bbox.html">geo_envelope</a></span>(<span class="no">circles</span>)
 <span class="co">#&gt; &lt;geovctrs_rect[3]&gt;</span>

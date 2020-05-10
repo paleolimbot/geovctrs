@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Format and print geovctrs — geo_print" />
-<meta property="og:description" content="Format and prints the geo_summary() of an geovctr." />
+<meta property="og:description" content="Format and prints a geovctr." />
 
 
 
@@ -126,12 +126,12 @@
     </div>
 
     <div class="ref-description">
-    <p>Format and prints the <code><a href='geo_summary.html'>geo_summary()</a></code> of an geovctr.</p>
+    <p>Format and prints a geovctr.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>geo_print</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>short</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+    <pre class="usage"><span class='fu'>geo_print</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>geo_format</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>short</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>geo_format</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,10 +146,6 @@ coerced to a geometry-like object using <code><a href='is_geovctr.html'>as_geovc
       <td><p>Passed to <code>geo_format()</code></p></td>
     </tr>
     <tr>
-      <th>short</th>
-      <td><p>Use to print a shorter summary</p></td>
-    </tr>
-    <tr>
       <th>col</th>
       <td><p>Use to colourize the output</p></td>
     </tr>
@@ -157,18 +153,18 @@ coerced to a geometry-like object using <code><a href='is_geovctr.html'>as_geovc
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>geo_format</span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>geo_nc</span>))</div><div class='output co'>#&gt; [1] "MULTIPOLYGON[1] (-81.47276 36.23436)…+26"
-#&gt; [2] "MULTIPOLYGON[1] (-81.23989 36.36536)…+25"
-#&gt; [3] "MULTIPOLYGON[1] (-80.45634 36.24256)…+27"
-#&gt; [4] "MULTIPOLYGON[3] (-76.00897 36.31960)…+37"
-#&gt; [5] "MULTIPOLYGON[1] (-77.21767 36.24098)…+33"
-#&gt; [6] "MULTIPOLYGON[1] (-76.74506 36.23392)…+21"</div><div class='input'><span class='fu'>geo_print</span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>geo_nc</span>))</div><div class='output co'>#&gt; &lt;tbl_df...geovctrs_wkb[6]&gt;
-#&gt; [1] <span style='color: #555555;'>MULTIPOLYGON[1]</span><span> </span><span style='color: #0000BB;'>(-81.47276 36.23436)</span><span style='color: #555555;'>…+26</span><span>
-#&gt; [2] </span><span style='color: #555555;'>MULTIPOLYGON[1]</span><span> </span><span style='color: #0000BB;'>(-81.23989 36.36536)</span><span style='color: #555555;'>…+25</span><span>
-#&gt; [3] </span><span style='color: #555555;'>MULTIPOLYGON[1]</span><span> </span><span style='color: #0000BB;'>(-80.45634 36.24256)</span><span style='color: #555555;'>…+27</span><span>
-#&gt; [4] </span><span style='color: #555555;'>MULTIPOLYGON[3]</span><span> </span><span style='color: #0000BB;'>(-76.00897 36.31960)</span><span style='color: #555555;'>…+37</span><span>
-#&gt; [5] </span><span style='color: #555555;'>MULTIPOLYGON[1]</span><span> </span><span style='color: #0000BB;'>(-77.21767 36.24098)</span><span style='color: #555555;'>…+33</span><span>
-#&gt; [6] </span><span style='color: #555555;'>MULTIPOLYGON[1]</span><span> </span><span style='color: #0000BB;'>(-76.74506 36.23392)</span><span style='color: #555555;'>…+21</span><span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'>geo_format</span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>geo_nc</span>))</div><div class='output co'>#&gt; [1] "&lt;SRID=4267;MULTIPOLYGON (((-81.4728 36.2…&gt;"
+#&gt; [2] "&lt;SRID=4267;MULTIPOLYGON (((-81.2399 36.3…&gt;"
+#&gt; [3] "&lt;SRID=4267;MULTIPOLYGON (((-80.4563 36.2…&gt;"
+#&gt; [4] "&lt;SRID=4267;MULTIPOLYGON (((-76.009 36.31…&gt;"
+#&gt; [5] "&lt;SRID=4267;MULTIPOLYGON (((-77.2177 36.2…&gt;"
+#&gt; [6] "&lt;SRID=4267;MULTIPOLYGON (((-76.7451 36.2…&gt;"</div><div class='input'><span class='fu'>geo_print</span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>geo_nc</span>))</div><div class='output co'>#&gt; &lt;tbl_df...geovctrs_wkb[6]&gt;
+#&gt; [1] &lt;<span style='color: #555555;'>SRID</span><span style='color: #0000BB;'>=4267;MULTIPOLYGON (((-81.4728 36.2…</span><span>&gt;
+#&gt; [2] &lt;</span><span style='color: #555555;'>SRID</span><span style='color: #0000BB;'>=4267;MULTIPOLYGON (((-81.2399 36.3…</span><span>&gt;
+#&gt; [3] &lt;</span><span style='color: #555555;'>SRID</span><span style='color: #0000BB;'>=4267;MULTIPOLYGON (((-80.4563 36.2…</span><span>&gt;
+#&gt; [4] &lt;</span><span style='color: #555555;'>SRID</span><span style='color: #0000BB;'>=4267;MULTIPOLYGON (((-76.009 36.31…</span><span>&gt;
+#&gt; [5] &lt;</span><span style='color: #555555;'>SRID</span><span style='color: #0000BB;'>=4267;MULTIPOLYGON (((-77.2177 36.2…</span><span>&gt;
+#&gt; [6] &lt;</span><span style='color: #555555;'>SRID</span><span style='color: #0000BB;'>=4267;MULTIPOLYGON (((-76.7451 36.2…</span><span>&gt;</div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create and validate well-known text — geo_wkt • geovctrs</title>
+<title>Extract feature geometry type — geo_geometry_type • geovctrs</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,8 @@
 
 
 
-<meta property="og:title" content="Create and validate well-known text — geo_wkt" />
-<meta property="og:description" content="Like other geo types, geo_wkt() doesn't convert its input
-but does validate it using validate_geovctrs_wkt().
-To skip validation, use new_geovctrs_wkt()." />
+<meta property="og:title" content="Extract feature geometry type — geo_geometry_type" />
+<meta property="og:description" content="Extract feature geometry type" />
 
 
 
@@ -122,68 +120,46 @@ To skip validation, use new_geovctrs_wkt()." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create and validate well-known text</h1>
-    <small class="dont-index">Source: <a href='https://github.com/paleolimbot/geovctrs/blob/master/R/geo-wkt.R'><code>R/geo-wkt.R</code></a></small>
-    <div class="hidden name"><code>geo_wkt.Rd</code></div>
+    <h1>Extract feature geometry type</h1>
+    <small class="dont-index">Source: <a href='https://github.com/paleolimbot/geovctrs/blob/master/R/geo-geometry-type.R'><code>R/geo-geometry-type.R</code></a></small>
+    <div class="hidden name"><code>geo_geometry_type.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Like other geo types, <code>geo_wkt()</code> doesn't convert its input
-but does validate it using <code><a href='new_geovctrs_wkt.html'>validate_geovctrs_wkt()</a></code>.
-To skip validation, use <code><a href='new_geovctrs_wkt.html'>new_geovctrs_wkt()</a></code>.</p>
+    <p>Extract feature geometry type</p>
     </div>
 
-    <pre class="usage"><span class='fu'>geo_wkt</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>())
+    <pre class="usage"><span class='fu'>geo_geometry_type</span>(<span class='no'>x</span>)
 
-<span class='fu'>parse_wkt</span>(<span class='no'>x</span>)
+<span class='co'># S3 method for default</span>
+<span class='fu'>geo_geometry_type</span>(<span class='no'>x</span>)
 
-<span class='fu'>as_geo_wkt</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>trim</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>16</span>, <span class='kw'>dimensions</span> <span class='kw'>=</span> <span class='fl'>3</span>)</pre>
+<span class='co'># S3 method for geovctr</span>
+<span class='fu'>geo_geometry_type</span>(<span class='no'>x</span>)
+
+<span class='co'># S3 method for geovctrs_wkt</span>
+<span class='fu'>geo_geometry_type</span>(<span class='no'>x</span>)
+
+<span class='co'># S3 method for geovctrs_wkb</span>
+<span class='fu'>geo_geometry_type</span>(<span class='no'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A character vector containing well-known text</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Unused</p></td>
-    </tr>
-    <tr>
-      <th>trim</th>
-      <td><p>Trim unnecessary zeroes in the output?</p></td>
-    </tr>
-    <tr>
-      <th>precision</th>
-      <td><p>The rounding precision to use when writing
-(number of decimal places).</p></td>
-    </tr>
-    <tr>
-      <th>dimensions</th>
-      <td><p>The maximum number of dimensions to consider
-when generating text.</p></td>
+      <td><p>A geometry-like object, or one that can be
+coerced to a geometry-like object using <code><a href='is_geovctr.html'>as_geovctr()</a></code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code><a href='new_geovctrs_wkt.html'>new_geovctrs_wkt()</a></code></p>
+    <p>A character vector with lowercase geometry types</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># use geo_wkt() to "mark" a vector as well-known text</span>
-<span class='fu'>geo_wkt</span>(<span class='st'>"POINT (30 10)"</span>)</div><div class='output co'>#&gt; &lt;geovctrs_wkt[1]&gt;
-#&gt; [1] <span style='color: #555555;'>POINT </span><span style='color: #0000BB;'>(30 10)</span><span></div><div class='input'>
-<span class='co'># use as_geo_wkt() to use conversion options</span>
-<span class='fu'>as_geo_wkt</span>(<span class='st'>"POINT (30 10)"</span>, <span class='kw'>trim</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; &lt;geovctrs_wkt[1]&gt;
-#&gt; [1] </span><span style='color: #555555;'>POINT </span><span style='color: #0000BB;'>(30.00 10.00)</span><span></div><div class='input'>
-<span class='co'># use parse_wkt() to identify parsing failures</span>
-<span class='fu'>parse_wkt</span>(<span class='st'>"POINT EMTPY"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 1 parsing failure.</span>
-#&gt; <span class='warning'>row col expected     actual      error                                                        </span>
-#&gt; <span class='warning'>1   --  geovctrs_wkt POINT EMTPY Expected 'Z', 'M', 'ZM', 'EMPTY' or '(' but encountered EMTPY</span>
-#&gt; <span class='warning'>See attr(result, 'problems') for more details.</span></div><div class='output co'>#&gt; &lt;geovctrs_wkt[1]&gt;
-#&gt; [1] </span><span style='color: #BB0000;'>NA_wkt_</span><span></div><div class='input'>
-</div></span></pre>
+    <pre class="examples"><div class='input'><span class='fu'>geo_geometry_type</span>(<span class='st'>"POINT EMPTY"</span>)</div><div class='output co'>#&gt; [1] "point"</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
