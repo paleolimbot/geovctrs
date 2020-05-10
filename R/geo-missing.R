@@ -64,7 +64,7 @@ geo_is_missing <- function(x) {
 
 #' @export
 geo_is_missing.default <- function(x) {
-  geo_summary(x)$is_missing
+  is.na(x)
 }
 
 #' @rdname geo_is_missing
@@ -85,8 +85,7 @@ geo_has_missing.geovctr <- function(x) {
 
 #' @export
 geo_has_missing.geovctrs_xy <- function(x) {
-  # treat NA, NA as an empty point
-  !is.na(x) & (is.na(field(x, "x")) | is.na(field(x, "y")))
+  (is.na(field(x, "x")) | is.na(field(x, "y")))
 }
 
 #' @export
@@ -129,9 +128,8 @@ geo_is_finite.geovctr <- function(x) {
 
 #' @export
 geo_is_finite.geovctrs_xy <- function(x) {
-  is.na(x) |
-    is.finite(field(x, "x")) &
-    is.finite(field(x, "y"))
+  is.finite(field(x, "x")) &
+  is.finite(field(x, "y"))
 }
 
 #' @export
@@ -164,7 +162,23 @@ geo_is_empty <- function(x) {
 
 #' @export
 geo_is_empty.default <- function(x) {
-  geo_summary(x)$is_empty
+  geo_is_empty(as_geovctr(x))
+}
+
+#' @export
+geo_is_empty.geovctr <- function(x) {
+  # for now
+  geo_is_empty(as_geo_wkt(x))
+}
+
+#' @export
+geo_is_empty.geovctrs_wkt <- function(x) {
+  is.na(x) | wk::wkt_meta(x)$size == 0
+}
+
+#' @export
+geo_is_empty.geovctrs_wkb <- function(x) {
+  is.na(x) | wk::wkb_meta(x)$size == 0
 }
 
 # ----- missing values (assigned in .onLoad) --------

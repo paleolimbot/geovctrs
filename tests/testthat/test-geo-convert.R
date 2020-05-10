@@ -92,12 +92,12 @@ test_that("wkb writer options are respected", {
   )
 
   expect_identical(
-    geo_coordinate_dimensions(geovctrs_cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_geovctrs_wkb(dimensions = 2))),
-    2L
+    wk::wkb_meta(geovctrs_cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_geovctrs_wkb(dimensions = 2)))$has_z,
+    FALSE
   )
   expect_identical(
-    geo_coordinate_dimensions(geovctrs_cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_geovctrs_wkb(dimensions = 3))),
-    3L
+    wk::wkb_meta(geovctrs_cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_geovctrs_wkb(dimensions = 3)))$has_z,
+    TRUE
   )
 
   wkb <- as_geo_wkb(geo_wkt("POINT Z (1 2 3)"))

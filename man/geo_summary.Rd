@@ -2,24 +2,12 @@
 % Please edit documentation in R/geo-summary.R
 \name{geo_summary}
 \alias{geo_summary}
-\alias{geo_n_geometries}
-\alias{geo_n_coordinates}
 \alias{geo_geometry_type}
-\alias{geo_coordinate_dimensions}
-\alias{geo_first_coordinate}
 \title{Feature-level geometry summaries}
 \usage{
 geo_summary(x)
 
-geo_n_geometries(x)
-
-geo_n_coordinates(x)
-
 geo_geometry_type(x)
-
-geo_coordinate_dimensions(x)
-
-geo_first_coordinate(x)
 }
 \arguments{
 \item{x}{A geometry-like object, or one that can be

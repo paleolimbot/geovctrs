@@ -43,7 +43,6 @@ test_that("geo_wkb parse validation works", {
     ),
     "parsing failure"
   )
-  expect_identical(is.na(suppressWarnings(geo_summary(wkb)$problems)), c(TRUE, FALSE))
 
   expect_identical(validate_geovctrs_wkb(wkb[1]), wkb[1])
   expect_warning(
@@ -149,8 +148,8 @@ test_that("wkb casting and coersion works", {
 
 test_that("casting and coercion respects options", {
   wkb <- as_geo_wkb(geo_wkt("POINT Z (1 2 3)"))
-  expect_identical(geo_coordinate_dimensions(as_geo_wkb(wkb, dimensions = 3)), 3L)
-  expect_identical(geo_coordinate_dimensions(as_geo_wkb(wkb, dimensions = 2)), 2L)
+  expect_true(wk::wkb_meta(as_geo_wkb(wkb, dimensions = 3))$has_z)
+  expect_false(wk::wkb_meta(as_geo_wkb(wkb, dimensions = 2))$has_z)
   expect_identical(as.list(as_geo_wkb(wkb, endian = 0))[[1]][1], as.raw(0x00))
 })
 

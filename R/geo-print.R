@@ -1,7 +1,7 @@
 
 #' Format and print geovctrs
 #'
-#' Format and prints the [geo_summary()] of an geovctr.
+#' Format and prints a geovctr.
 #'
 #' @inheritParams geo_bbox
 #' @param ... Passed to [geo_format()]

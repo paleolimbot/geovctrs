@@ -32,47 +32,36 @@ geo_summary.default <- function(x) {
 
 #' @export
 geo_summary.geovctr <- function(x) {
-  cpp_summary <- geovctrs_cpp_summary(x)
-  cpp_summary$geometry_type <- c(
-    "point", "linestring", "linearring", "polygon",
-    "multipoint", "multilinestring", "multipolygon",
-    "geometrycollection"
-  )[cpp_summary$geometry_type + 1]
-
-  # don't error for problems, but be very noisy about them
-  if (any(!is.na(cpp_summary$problems))) {
-    n_probs <- sum(!is.na(cpp_summary$problems))
-    rlang::warn(
-      sprintf(
-        "%s geometr%s failed to parse. See geo_summary(x)$problems for details.",
-        n_probs, if (n_probs > 1) "ies" else "y"
-      )
-    )
-  }
-
-  as_tibble(cpp_summary)
-}
-
-#' @rdname geo_summary
-#' @export
-geo_n_geometries <- function(x) {
-  UseMethod("geo_n_geometries")
+  # for now...
+  geo_summary(as_geo_wkt(x))
 }
 
 #' @export
-geo_n_geometries.default <- function(x) {
-  geo_summary(x)$n_geometries
+geo_summary.geovctrs_wkt <- function(x) {
+  wk_summary <- wk::wkt_meta(x)
+
+  tibble(
+    is_empty = wk_summary$size > 0,
+    geometry_type = wk::wk_geometry_type(wk_summary$type_id),
+    size = wk_summary$size,
+    srid = wk_summary$srid,
+    has_z = wk_summary$has_z,
+    has_m = wk_summary$has_m
+  )
 }
 
-#' @rdname geo_summary
 #' @export
-geo_n_coordinates <- function(x) {
-  UseMethod("geo_n_coordinates")
-}
+geo_summary.geovctrs_wkb <- function(x) {
+  wk_summary <- wk::wkb_meta(x)
 
-#' @export
-geo_n_coordinates.default <- function(x) {
-  geo_summary(x)$n_coordinates
+  tibble(
+    is_empty = wk_summary$size > 0,
+    geometry_type = wk::wk_geometry_type(wk_summary$type_id),
+    size = wk_summary$size,
+    srid = wk_summary$srid,
+    has_z = wk_summary$has_z,
+    has_m = wk_summary$has_m
+  )
 }
 
 #' @rdname geo_summary
@@ -84,26 +73,4 @@ geo_geometry_type <- function(x) {
 #' @export
 geo_geometry_type.default <- function(x) {
   geo_summary(x)$geometry_type
-}
-
-#' @rdname geo_summary
-#' @export
-geo_coordinate_dimensions <- function(x) {
-  UseMethod("geo_coordinate_dimensions")
-}
-
-#' @export
-geo_coordinate_dimensions.default <- function(x) {
-  geo_summary(x)$coordinate_dimensions
-}
-
-#' @rdname geo_summary
-#' @export
-geo_first_coordinate <- function(x) {
-  UseMethod("geo_first_coordinate")
-}
-
-#' @export
-geo_first_coordinate.default <- function(x) {
-  geo_summary(x)$first_coordinate
 }
