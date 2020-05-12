@@ -152,9 +152,9 @@ vec_ptype2.geovctrs_rect.geovctrs_rect <- function(x, y, ..., x_arg = "x", y_arg
   geo_rect()
 }
 
-#' @method vec_ptype2.geovctrs_rect geovctrs_wkt
+#' @method vec_ptype2.geovctrs_rect wk_wkt
 #' @export
-vec_ptype2.geovctrs_rect.geovctrs_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.geovctrs_rect.wk_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_wkt()
 }
 

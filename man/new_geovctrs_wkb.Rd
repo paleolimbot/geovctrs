@@ -8,12 +8,7 @@
 \alias{vec_ptype2.geovctrs_wkb}
 \title{S3 details for geovctrs_wkb}
 \usage{
-new_geovctrs_wkb(
-  x = list(),
-  include_srid = NA,
-  dimensions = 3L,
-  endian = NA_integer_
-)
+new_geovctrs_wkb(x = list())
 
 is_geovctrs_wkb(x)
 
@@ -26,16 +21,6 @@ validate_geovctrs_wkb(x)
 \arguments{
 \item{x}{A \code{\link[=list]{list()}} of \code{\link[=raw]{raw()}} objects, each of which
 represent well-known binary}
-
-\item{include_srid}{Use \code{TRUE} to always include, \code{FALSE}
-to never include, or \code{NA} to only include if the SRID
-is non-zero.}
-
-\item{dimensions}{The maximum number of dimensions to consider
-when generating text.}
-
-\item{endian}{Use \code{0} for big endian, \code{1} for little endian
-or \code{NA} to use the default on your system.}
 
 \item{to}{A prototype to cast to. See \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} and
 \code{\link[vctrs:vec_ptype2]{vctrs::vec_ptype2()}}}

@@ -58,7 +58,7 @@ test_that("casting and c() work with sfc", {
   sfc_seg <- sf::st_sfc(sf::st_linestring(rbind(c(0, 0), c(30, 10))))
 
   expect_is(vec_cast(sfc, geo_wkb()), "geovctrs_wkb")
-  expect_is(vec_cast(sfc, geo_wkt()), "geovctrs_wkt")
+  expect_is(vec_cast(sfc, geo_wkt()), "wk_wkt")
   expect_is(vec_cast(sfc, geo_collection()), "geovctrs_collection")
   expect_is(vec_cast(sfc, geo_xy()), "geovctrs_xy")
   expect_is(vec_cast(sfc_seg, geo_segment()), "geovctrs_segment")

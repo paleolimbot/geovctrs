@@ -2,8 +2,8 @@
 #' Create and validate well-known text
 #'
 #' Like other geo types, [geo_wkt()] doesn't convert its input
-#' but does validate it using [validate_geovctrs_wkt()].
-#' To skip validation, use [new_geovctrs_wkt()].
+#' but does validate it using [wk::validate_wk_wkt()].
+#' To skip validation, use [wk::new_wk_wkt()].
 #'
 #' @param x A character vector containing well-known text
 #' @param trim Trim unnecessary zeroes in the output?
@@ -14,7 +14,7 @@
 #' @param ... Unused
 #'
 #'
-#' @return A [new_geovctrs_wkt()]
+#' @return A [wk::new_wk_wkt()]
 #' @export
 #'
 #' @examples
@@ -28,16 +28,14 @@
 #' parse_wkt("POINT EMTPY")
 #'
 geo_wkt <- function(x = character()) {
-  x <- vec_cast(x, character())
-  wkt <- validate_geovctrs_wkt(new_geovctrs_wkt(x))
-  wkt
+  wkt(x)
 }
 
 #' @export
 #' @rdname geo_wkt
 parse_wkt <- function(x) {
   x <- vec_cast(x, character())
-  validate_provider(new_geovctrs_wkt(x), wk::wkt_problems(x))
+  validate_provider(wk::new_wk_wkt(x), wk::wkt_problems(x))
 }
 
 #' @rdname geo_wkt
@@ -48,10 +46,10 @@ as_geo_wkt <- function(x, ..., trim = TRUE, precision = 16, dimensions = 3) {
 
 #' @export
 as_geo_wkt.default <- function(x, ..., trim = TRUE, precision = 16, dimensions = 3) {
-  vec_cast(x, new_geovctrs_wkt())
+  vec_cast(x, new_wk_wkt())
 }
 
-#' S3 details for geovctrs_wkt
+#' S3 details for wk_wkt
 #'
 #' @inheritParams geo_wkt
 #' @param y,to A prototype to cast to. See [vctrs::vec_cast()] and
@@ -61,175 +59,146 @@ as_geo_wkt.default <- function(x, ..., trim = TRUE, precision = 16, dimensions =
 #'
 #' @examples
 #' wkt <- geo_wkt("POINT (30 10)")
-#' is_geovctrs_wkt(wkt)
+#' is_wk_wkt(wkt)
 #'
-#' # use new_geovctrs_wkt() to skip parse validation if you know
-#' # your text is valid WKT
-#' new_geovctrs_wkt("POINT (30 10)")
-#'
-new_geovctrs_wkt <- function(x = character()) {
-  vec_assert(x, character())
-  new_vctr(x, class = c("geovctrs_wkt", "geovctr"))
-}
-
-#' @rdname new_geovctrs_wkt
-#' @export
-is_geovctrs_wkt <- function(x) {
-  inherits(x, "geovctrs_wkt")
-}
-
-#' @rdname new_geovctrs_wkt
-#' @export
-validate_geovctrs_wkt <- function(x) {
-  stop_for_non_parseable(validate_provider(x, wk::wkt_problems(x)))
-  invisible(x)
+is_wk_wkt <- function(x) {
+  inherits(x, "wk_wkt")
 }
 
 #' @export
-vec_ptype_abbr.geovctrs_wkt <- function(x, ...) {
-  "wkt"
+`[<-.wk_wkt` <- function(x, i, value) {
+  x <- unclass(x)
+  x[i] <- as_wkt(value)
+  new_wk_wkt(x)
 }
 
+# shim
 #' @export
-format.geovctrs_wkt <- function(x, ..., trunc_width = 40, col = FALSE) {
-  format_wkt_summary(x, ..., trunc_width = trunc_width, col = col)
+as_wkt.geovctrs_wkb <- function(x, ...) {
+  new_wk_wkt(wk::wkb_translate_wkt(x))
 }
 
-#' @method vec_cast geovctrs_wkt
+#' @method vec_cast wk_wkt
 #' @export
-#' @export vec_cast.geovctrs_wkt
-#' @rdname new_geovctrs_wkt
-vec_cast.geovctrs_wkt <- function(x, to, ...) {
-  UseMethod("vec_cast.geovctrs_wkt")
+#' @export vec_cast.wk_wkt
+#' @rdname is_wk_wkt
+vec_cast.wk_wkt <- function(x, to, ...) {
+  UseMethod("vec_cast.wk_wkt")
 }
 
-#' @method vec_cast.geovctrs_wkt default
+#' @method vec_cast.wk_wkt default
 #' @export
-vec_cast.geovctrs_wkt.default <- function(x, to, ...) {
+vec_cast.wk_wkt.default <- function(x, to, ...) {
   vec_default_cast(x, to)
 }
 
-#' @method vec_cast.geovctrs_wkt geovctrs_wkt
+#' @method vec_cast.wk_wkt wk_wkt
 #' @export
-vec_cast.geovctrs_wkt.geovctrs_wkt <- function(x, to, ...) {
-  if (identical(attributes(x), attributes(to))) {
-    x
-  } else {
-    geovctrs_cpp_convert(x, to)
-  }
+vec_cast.wk_wkt.wk_wkt <- function(x, to, ...) {
+  x
 }
 
-#' @method vec_cast.geovctrs_wkt character
+#' @method vec_cast.wk_wkt character
 #' @export
-vec_cast.geovctrs_wkt.character <- function(x, to, ...) {
-  # by default, normalize the input (user can skirt this by calling
-  # geo_wkt() instead of as_geo_wkt()
+vec_cast.wk_wkt.character <- function(x, to, ...) {
   geovctrs_cpp_convert(geo_wkt(x), to)
 }
 
+#' @method vec_cast.character wk_wkt
 #' @export
-as.character.geovctrs_wkt <- function(x, ...) {
-  # override default geovctr method, because this is more
-  # intuitive representation
-  vec_cast(x, character())
-}
-
-
-#' @method vec_cast.character geovctrs_wkt
-#' @export
-vec_cast.character.geovctrs_wkt <- function(x, to, ...) {
+vec_cast.character.wk_wkt <- function(x, to, ...) {
   vec_data(x)
 }
 
-#' @method vec_cast.geovctrs_wkt geovctrs_wkb
+#' @method vec_cast.wk_wkt geovctrs_wkb
 #' @export
-vec_cast.geovctrs_wkt.geovctrs_wkb <- function(x, to, ...) {
+vec_cast.wk_wkt.geovctrs_wkb <- function(x, to, ...) {
   geovctrs_cpp_convert(x, to)
 }
 
-#' @method vec_cast.geovctrs_wkt geovctrs_rect
+#' @method vec_cast.wk_wkt geovctrs_rect
 #' @export
-vec_cast.geovctrs_wkt.geovctrs_rect <- function(x, to, ...) {
+vec_cast.wk_wkt.geovctrs_rect <- function(x, to, ...) {
   geovctrs_cpp_convert(x, to)
 }
 
-#' @method vec_cast.geovctrs_wkt geovctrs_segment
+#' @method vec_cast.wk_wkt geovctrs_segment
 #' @export
-vec_cast.geovctrs_wkt.geovctrs_segment <- function(x, to, ...) {
+vec_cast.wk_wkt.geovctrs_segment <- function(x, to, ...) {
   geovctrs_cpp_convert(x, to)
 }
 
-#' @method vec_cast.geovctrs_wkt geovctrs_xy
+#' @method vec_cast.wk_wkt geovctrs_xy
 #' @export
-vec_cast.geovctrs_wkt.geovctrs_xy <- function(x, to, ...) {
+vec_cast.wk_wkt.geovctrs_xy <- function(x, to, ...) {
   geovctrs_cpp_convert(x, to)
 }
 
-#' @method vec_cast.geovctrs_wkt geovctrs_xyz
+#' @method vec_cast.wk_wkt geovctrs_xyz
 #' @export
-vec_cast.geovctrs_wkt.geovctrs_xyz <- function(x, to, ...) {
+vec_cast.wk_wkt.geovctrs_xyz <- function(x, to, ...) {
   geovctrs_cpp_convert(x, to)
 }
 
-#' @method vec_cast.geovctrs_wkt geovctrs_collection
+#' @method vec_cast.wk_wkt geovctrs_collection
 #' @export
-vec_cast.geovctrs_wkt.geovctrs_collection <- function(x, to, ...) {
+vec_cast.wk_wkt.geovctrs_collection <- function(x, to, ...) {
   geovctrs_cpp_convert(x, to)
 }
 
-#' @method vec_ptype2 geovctrs_wkt
+#' @method vec_ptype2 wk_wkt
 #' @export
-#' @export vec_ptype2.geovctrs_wkt
-#' @rdname new_geovctrs_wkt
-vec_ptype2.geovctrs_wkt <- function(x, y, ...) {
-  UseMethod("vec_ptype2.geovctrs_wkt", y)
+#' @export vec_ptype2.wk_wkt
+#' @rdname is_wk_wkt
+vec_ptype2.wk_wkt <- function(x, y, ...) {
+  UseMethod("vec_ptype2.wk_wkt", y)
 }
 
-#' @method vec_ptype2.geovctrs_wkt default
+#' @method vec_ptype2.wk_wkt default
 #' @export
-vec_ptype2.geovctrs_wkt.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.wk_wkt.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg) # nocov
 }
 
-#' @method vec_ptype2.geovctrs_wkt geovctrs_wkt
+#' @method vec_ptype2.wk_wkt wk_wkt
 #' @export
-vec_ptype2.geovctrs_wkt.geovctrs_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.wk_wkt.wk_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   # always use default conversion args when combining to avoid loosing data
   geo_wkt()
 }
 
-#' @method vec_ptype2.geovctrs_wkt geovctrs_wkb
+#' @method vec_ptype2.wk_wkt geovctrs_wkb
 #' @export
-vec_ptype2.geovctrs_wkt.geovctrs_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.wk_wkt.geovctrs_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_wkb()
 }
 
-#' @method vec_ptype2.geovctrs_wkt geovctrs_collection
+#' @method vec_ptype2.wk_wkt geovctrs_collection
 #' @export
-vec_ptype2.geovctrs_wkt.geovctrs_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.wk_wkt.geovctrs_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_wkt()
 }
 
-#' @method vec_ptype2.geovctrs_wkt geovctrs_xy
+#' @method vec_ptype2.wk_wkt geovctrs_xy
 #' @export
-vec_ptype2.geovctrs_wkt.geovctrs_xy <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.wk_wkt.geovctrs_xy <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_wkt()
 }
 
-#' @method vec_ptype2.geovctrs_wkt geovctrs_xyz
+#' @method vec_ptype2.wk_wkt geovctrs_xyz
 #' @export
-vec_ptype2.geovctrs_wkt.geovctrs_xyz <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.wk_wkt.geovctrs_xyz <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_wkt()
 }
 
-#' @method vec_ptype2.geovctrs_wkt geovctrs_segment
+#' @method vec_ptype2.wk_wkt geovctrs_segment
 #' @export
-vec_ptype2.geovctrs_wkt.geovctrs_segment <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.wk_wkt.geovctrs_segment <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_wkt()
 }
 
-#' @method vec_ptype2.geovctrs_wkt geovctrs_rect
+#' @method vec_ptype2.wk_wkt geovctrs_rect
 #' @export
-vec_ptype2.geovctrs_wkt.geovctrs_rect <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.wk_wkt.geovctrs_rect <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_wkt()
 }

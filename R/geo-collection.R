@@ -236,7 +236,7 @@ new_geovctrs_multipolygon <- function(x) {
 #' S3 Details for geovctrs_collection
 #'
 #' @param x A (possibly) [geo_collection()]
-#' @inheritParams new_geovctrs_wkt
+#' @inheritParams is_wk_wkt
 #'
 #' @export
 #'
@@ -269,28 +269,13 @@ vec_ptype_abbr.geovctrs_collection <- function(x, ...) {
 
 #' @export
 format.geovctrs_collection <- function(x, ..., trunc_width = 40, max_coords = 5, col = FALSE) {
-  formatted_wkt <- format.geovctrs_wkt(
+  formatted_wkt <- format_wkt_summary(
     wk::wkb_format(as_geo_wkb(x), max_coords = max_coords),
     trunc_width = trunc_width,
     col = col
   )
 
   paste0("<", formatted_wkt, ">")
-}
-
-#' @export
-obj_print_data.geovctrs_collection <- function(x, ...) {
-  if (length(x) == 0) {
-    return()
-  }
-
-  print_default_colour(
-    format(x, col = FALSE),
-    format(x, col = TRUE),
-    ...
-  )
-
-  invisible(x)
 }
 
 #' @rdname new_geovctrs_collection
@@ -355,9 +340,9 @@ vec_cast.geovctrs_collection.geovctrs_segment <- function(x, to, ...) {
   geovctrs_cpp_convert(x, to)
 }
 
-#' @method vec_cast.geovctrs_collection geovctrs_wkt
+#' @method vec_cast.geovctrs_collection wk_wkt
 #' @export
-vec_cast.geovctrs_collection.geovctrs_wkt <- function(x, to, ...) {
+vec_cast.geovctrs_collection.wk_wkt <- function(x, to, ...) {
   geovctrs_cpp_convert(x, to)
 }
 
@@ -387,9 +372,9 @@ vec_ptype2.geovctrs_collection.geovctrs_wkb <- function(x, y, ..., x_arg = "x", 
   geo_wkb()
 }
 
-#' @method vec_ptype2.geovctrs_collection geovctrs_wkt
+#' @method vec_ptype2.geovctrs_collection wk_wkt
 #' @export
-vec_ptype2.geovctrs_collection.geovctrs_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.geovctrs_collection.wk_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_wkt()
 }
 

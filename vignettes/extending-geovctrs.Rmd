@@ -94,7 +94,7 @@ is_linestring(geo_rect(0, 0, 1, 1))
 For well-known text, a regular expression can often be a fast approximation of the default method. Here, a linestring will always match the regular expression `^\s*LINESTRING` (a string starting with LINESTRING with an optional amount of whitespace at the beginning). Thus, we can implement a fast version of `is_linestring()` for well-known text:
 
 ```{r}
-is_linestring.geovctrs_wkt <- function(x) {
+is_linestring.wk_wkt <- function(x) {
   grepl("^\\s*LINESTRING", x)
 }
 

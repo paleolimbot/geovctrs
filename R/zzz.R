@@ -1,7 +1,7 @@
 
 # nocov start
 .onLoad <- function(...) {
-  NA_wkt_ <<- new_geovctrs_wkt()[NA_integer_]
+  NA_wkt_ <<- wk::new_wk_wkt(character())[NA_integer_]
   NA_wkb_ <<- new_geovctrs_wkb()[NA_integer_]
   NA_collection_ <<- geo_collection()[NA_integer_]
   NA_xy_ <<- geo_xy()[NA_integer_]

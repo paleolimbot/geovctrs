@@ -9,7 +9,7 @@ class GeovctrsFactory {
 public:
 
   static CharacterVector newWKT(CharacterVector data) {
-    data.attr("class") = CharacterVector::create("geovctrs_wkt", "geovctr", "vctrs_vctr");
+    data.attr("class") = CharacterVector::create("wk_wkt", "wk_vctr", "geovctr");
     return data;
   }
 

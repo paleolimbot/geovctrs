@@ -4,7 +4,7 @@
 \alias{geo_geometry_type}
 \alias{geo_geometry_type.default}
 \alias{geo_geometry_type.geovctr}
-\alias{geo_geometry_type.geovctrs_wkt}
+\alias{geo_geometry_type.wk_wkt}
 \alias{geo_geometry_type.geovctrs_wkb}
 \title{Extract feature geometry type}
 \usage{
@@ -14,7 +14,7 @@ geo_geometry_type(x)
 
 \method{geo_geometry_type}{geovctr}(x)
 
-\method{geo_geometry_type}{geovctrs_wkt}(x)
+\method{geo_geometry_type}{wk_wkt}(x)
 
 \method{geo_geometry_type}{geovctrs_wkb}(x)
 }

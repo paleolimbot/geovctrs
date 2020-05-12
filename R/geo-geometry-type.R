@@ -27,7 +27,7 @@ geo_geometry_type.geovctr <- function(x) {
 
 #' @rdname geo_geometry_type
 #' @export
-geo_geometry_type.geovctrs_wkt <- function(x) {
+geo_geometry_type.wk_wkt <- function(x) {
   wk::wk_geometry_type(wk::wkt_streamer_meta(x)$type_id)
 }
 

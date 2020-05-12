@@ -7,11 +7,11 @@ test_that("geo_format works", {
 
   formatted_long <- geo_format(wkts, col = FALSE)
 
-  expect_match(formatted_long[is.na(wkts)], "^NA_wkt_$")
+  expect_match(formatted_long[is.na(wkts)], "^<NA>$")
   expect_match(formatted_long[!is.na(wkts) & geo_is_empty(wkts)], "EMPTY")
   expect_match(formatted_long[!is.na(wkts) & geo_geometry_type(wkts) == "point"], "POINT")
 
-  expect_output(geo_print(as_geo_wkb(as_geo_wkt(wkts))), "POINT")
+  expect_output(geo_print(as_geo_wkb(wkts)), "POINT")
 
   expect_output(print(tibble(geom = wkts)), "tibble")
   expect_output(print(tibble(geom = as_geo_wkb(wkts))), "tibble")
@@ -25,7 +25,7 @@ test_that("geo_format works", {
 
   # zero len format +  print
   expect_length(geo_format(geo_wkt()), 0)
-  expect_output(geo_print(geo_wkt()), "geovctrs_wkt\\[0\\]")
+  expect_output(geo_print(geo_wkt()), "wk_wkt\\[0\\]")
 })
 
 test_that("printing works without unicode/colour support", {

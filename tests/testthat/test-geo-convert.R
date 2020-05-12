@@ -1,7 +1,7 @@
 
 test_that("wkt conversion works", {
   wkt <- geo_wkt(c("POINT (30 10)", "POINT (20 20)"))
-  wkt_roundtrip <- geovctrs_cpp_convert(wkt, new_geovctrs_wkt())
+  wkt_roundtrip <- geovctrs_cpp_convert(wkt, new_wk_wkt())
   expect_identical(wkt_roundtrip, wkt)
 })
 
@@ -9,12 +9,12 @@ test_that("conversion prototype args are used", {
   skip("not using  prototype args for now")
   wkt <- geo_wkt("POINT Z (10 11 12)")
   expect_identical(
-    geovctrs_cpp_convert(wkt, new_geovctrs_wkt(trim = FALSE, precision = 2L)),
+    geovctrs_cpp_convert(wkt, new_wk_wkt(trim = FALSE, precision = 2L)),
     geo_wkt("POINT Z (10.00 11.00 12.00)")
   )
 
   expect_identical(
-    geovctrs_cpp_convert(wkt, new_geovctrs_wkt(trim = FALSE, precision = 2L, dimensions = 2L)),
+    geovctrs_cpp_convert(wkt, new_wk_wkt(trim = FALSE, precision = 2L, dimensions = 2L)),
     geo_wkt("POINT (10.00 11.00)")
   )
 
@@ -395,7 +395,7 @@ test_that("missings are propogated through conversions between wkt, wkb, and col
 test_that("error occurs with unknown object in conversions", {
   # test WKT and WKB because the readers/writers both need to handle these cases
   # this is a mostly a test of the deleters and whether or not they cause segfaults
-  expect_error(geovctrs_cpp_convert(as.Date("2020-01-01"), new_geovctrs_wkt()), "Can't resolve")
+  expect_error(geovctrs_cpp_convert(as.Date("2020-01-01"), new_wk_wkt()), "Can't resolve")
   expect_error(geovctrs_cpp_convert(geo_wkt("POINT EMPTY"), as.Date("2020-01-01")), "Can't resolve")
 
   expect_error(geovctrs_cpp_convert(as.Date("2020-01-01"), new_geovctrs_wkb()), "Can't resolve")
@@ -415,6 +415,6 @@ test_that("error occurs with invalid objects", {
 
   # test WKT and WKB because the readers/writers both need to handle these cases
   # this is a mostly a test of the deleters and whether or not they cause segfaults
-  expect_error(geovctrs_cpp_convert(wkb, new_geovctrs_wkt()), "ParseException")
-  expect_error(geovctrs_cpp_convert(new_geovctrs_wkt("POINT NOPE"), geo_wkb()), "ParseException")
+  expect_error(geovctrs_cpp_convert(wkb, new_wk_wkt()), "ParseException")
+  expect_error(geovctrs_cpp_convert(new_wk_wkt("POINT NOPE"), geo_wkb()), "ParseException")
 })

@@ -53,14 +53,14 @@ register_sf_compat <- function() {
   register_s3_method("sf", "st_as_sf", "geovctr")
 
   register_s3_method("sf", "vec_cast.sfc", "geovctrs_wkb")
-  register_s3_method("sf", "vec_cast.sfc", "geovctrs_wkt")
+  register_s3_method("sf", "vec_cast.sfc", "wk_wkt")
   register_s3_method("sf", "vec_cast.sfc", "geovctrs_collection")
   register_s3_method("sf", "vec_cast.sfc", "geovctrs_xy")
   register_s3_method("sf", "vec_cast.sfc", "geovctrs_segment")
   register_s3_method("sf", "vec_cast.sfc", "geovctrs_rect")
 
   register_s3_method("sf", "vec_ptype2.sfc", "geovctrs_wkb")
-  register_s3_method("sf", "vec_ptype2.sfc", "geovctrs_wkt")
+  register_s3_method("sf", "vec_ptype2.sfc", "wk_wkt")
   register_s3_method("sf", "vec_ptype2.sfc", "geovctrs_collection")
   register_s3_method("sf", "vec_ptype2.sfc", "geovctrs_xy")
   register_s3_method("sf", "vec_ptype2.sfc", "geovctrs_segment")
@@ -95,24 +95,24 @@ vec_cast.sfc.geovctrs_wkb <- function(x, to, ...) {
 
 # ----- wkt ------
 
-#' @method vec_ptype2.geovctrs_wkt sfc
+#' @method vec_ptype2.wk_wkt sfc
 #' @export
-vec_ptype2.geovctrs_wkt.sfc <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.wk_wkt.sfc <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   sf::st_sfc()
 }
 
-vec_ptype2.sfc.geovctrs_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.sfc.wk_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   sf::st_sfc()
 }
 
-#' @method vec_cast.geovctrs_wkt sfc
+#' @method vec_cast.wk_wkt sfc
 #' @export
-vec_cast.geovctrs_wkt.sfc <- function(x, to, ...) {
+vec_cast.wk_wkt.sfc <- function(x, to, ...) {
   # way faster than sf::st_as_text() for anything other than point
   vec_cast(vec_cast(x, geo_wkb()), geo_wkt())
 }
 
-vec_cast.sfc.geovctrs_wkt <- function(x, to, ...) {
+vec_cast.sfc.wk_wkt <- function(x, to, ...) {
   # need to use this rather than sf::st_as_sfc() because missings
   # aren't handled by sf::st_as_sfc(), which uses OGR to parse
   vec_cast(vec_cast(x, geo_wkb()), sf::st_sfc())

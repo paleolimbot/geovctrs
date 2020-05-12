@@ -172,7 +172,7 @@ geo_is_empty.geovctr <- function(x) {
 }
 
 #' @export
-geo_is_empty.geovctrs_wkt <- function(x) {
+geo_is_empty.wk_wkt <- function(x) {
   is.na(x) | wk::wkt_meta(x)$size == 0
 }
 

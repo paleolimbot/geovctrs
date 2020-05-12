@@ -1,12 +1,12 @@
 
 test_that("geo_wkt class works", {
   wkt <- geo_wkt("POINT (30 10)")
-  expect_identical(expect_output(print(wkt), "geovctrs_wkt"), wkt)
-  expect_identical(expect_output(print(geo_wkt()), "geovctrs_wkt"), geo_wkt())
+  expect_identical(expect_output(print(wkt), "wk_wkt"), wkt)
+  expect_identical(expect_output(print(geo_wkt()), "wk_wkt"), geo_wkt())
   expect_match(format(wkt), "POINT")
   expect_output(print(tibble(wkt)), "wkt")
-  expect_is(wkt, "geovctrs_wkt")
-  expect_true(is_geovctrs_wkt(wkt))
+  expect_is(wkt, "wk_wkt")
+  expect_true(is_wk_wkt(wkt))
   expect_true(vec_is(wkt))
   expect_equal(vec_size(wkt), 1)
 })
@@ -21,24 +21,19 @@ test_that("parse problems for WKT are detected", {
   )
 
   expect_identical(
-    validate_geovctrs_wkt(new_geovctrs_wkt("POINT (30 10)")),
-    new_geovctrs_wkt("POINT (30 10)")
+    wk::validate_wk_wkt(new_wk_wkt("POINT (30 10)")),
+    new_wk_wkt("POINT (30 10)")
   )
 
-  expect_warning(
-    expect_error(
-      validate_geovctrs_wkt(new_geovctrs_wkt("POINT FISH")),
-      class = "parse_error"
-    ),
-    "parsing failure"
+
+  expect_error(
+    wk::validate_wk_wkt(new_wk_wkt("POINT FISH")),
+    "parse problem"
   )
 
-  expect_warning(
-    expect_error(
-      validate_geovctrs_wkt(rep(new_geovctrs_wkt("POINT FISH"), 21)),
-      class = "parse_error"
-    ),
-    "parsing failures"
+  expect_error(
+    wk::validate_wk_wkt(rep(new_wk_wkt("POINT FISH"), 21)),
+    "parse problems"
   )
 })
 
@@ -65,14 +60,9 @@ test_that("coersion and casting works for wkt types", {
   expect_identical(as.character(wkt), "POINT (30 10)")
   expect_error(as_geo_wkt(5), class = "vctrs_error_incompatible_cast")
 
-  expect_warning(
-    expect_error(as_geo_wkt("FISH"), class = "parse_error"),
-    "parsing failure"
-  )
-  expect_warning(
-    expect_error(vec_cast("FISH", geo_wkt()), class = "parse_error"),
-    "parsing failure"
-  )
+
+  expect_error(as_geo_wkt("FISH"), "parse problem")
+  expect_error(vec_cast("FISH", geo_wkt()), "parse problem")
 
   wkb <- vec_cast(wkt, geo_wkb())
   wkt_roundtrip <- vec_cast(wkb, geo_wkt())

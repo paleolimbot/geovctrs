@@ -26,12 +26,12 @@ as_geo_wkt(x, ..., trim = TRUE, precision = 16, dimensions = 3)
 when generating text.}
 }
 \value{
-A \code{\link[=new_geovctrs_wkt]{new_geovctrs_wkt()}}
+A \code{\link[wk:new_wk_wkt]{wk::new_wk_wkt()}}
 }
 \description{
 Like other geo types, \code{\link[=geo_wkt]{geo_wkt()}} doesn't convert its input
-but does validate it using \code{\link[=validate_geovctrs_wkt]{validate_geovctrs_wkt()}}.
-To skip validation, use \code{\link[=new_geovctrs_wkt]{new_geovctrs_wkt()}}.
+but does validate it using \code{\link[wk:validate_wk_wkt]{wk::validate_wk_wkt()}}.
+To skip validation, use \code{\link[wk:new_wk_wkt]{wk::new_wk_wkt()}}.
 }
 \examples{
 # use geo_wkt() to "mark" a vector as well-known text
