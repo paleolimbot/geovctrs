@@ -10,12 +10,6 @@ public:
 
   static CharacterVector newWKT(CharacterVector data) {
     data.attr("class") = CharacterVector::create("geovctrs_wkt", "geovctr", "vctrs_vctr");
-
-    // always give the default values (prevents unnecessary conversion)
-    data.attr("trim") = LogicalVector::create(true);
-    data.attr("precision") =  IntegerVector::create(16);
-    data.attr("dimensions") = IntegerVector::create(3);
-
     return data;
   }
 

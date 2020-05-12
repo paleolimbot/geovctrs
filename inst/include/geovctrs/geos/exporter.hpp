@@ -46,9 +46,9 @@ public:
   GEOSWKTWriter *wktWriter;
 
   GeovctrsGEOSWKTExporter(CharacterVector ptype) {
-    this->trim = ptype.attr("trim");
-    this->precision = ptype.attr("precision");
-    this->dimensions = ptype.attr("dimensions");
+    this->trim = true;
+    this->precision = 16;
+    this->dimensions = 3;
     this->wktWriter = NULL;
   }
 

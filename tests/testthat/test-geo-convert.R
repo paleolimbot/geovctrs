@@ -6,6 +6,7 @@ test_that("wkt conversion works", {
 })
 
 test_that("conversion prototype args are used", {
+  skip("not using  prototype args for now")
   wkt <- geo_wkt("POINT Z (10 11 12)")
   expect_identical(
     geovctrs_cpp_convert(wkt, new_geovctrs_wkt(trim = FALSE, precision = 2L)),

@@ -48,10 +48,7 @@ as_geo_wkt <- function(x, ..., trim = TRUE, precision = 16, dimensions = 3) {
 
 #' @export
 as_geo_wkt.default <- function(x, ..., trim = TRUE, precision = 16, dimensions = 3) {
-  trim <- vec_cast(trim, logical())
-  precision <- vec_cast(precision, integer())
-  dimensions <- vec_cast(dimensions, integer())
-  vec_cast(x, new_geovctrs_wkt(trim = trim, precision = precision, dimensions = dimensions))
+  vec_cast(x, new_geovctrs_wkt())
 }
 
 #' S3 details for geovctrs_wkt
@@ -70,18 +67,9 @@ as_geo_wkt.default <- function(x, ..., trim = TRUE, precision = 16, dimensions =
 #' # your text is valid WKT
 #' new_geovctrs_wkt("POINT (30 10)")
 #'
-new_geovctrs_wkt <- function(x = character(), trim = TRUE, precision = 16L, dimensions = 3L) {
+new_geovctrs_wkt <- function(x = character()) {
   vec_assert(x, character())
-  vec_assert(trim, logical())
-  vec_assert(precision, integer())
-  vec_assert(dimensions, integer())
-  new_vctr(
-    x,
-    class = c("geovctrs_wkt", "geovctr"),
-    trim = trim,
-    precision = precision,
-    dimensions = dimensions
-  )
+  new_vctr(x, class = c("geovctrs_wkt", "geovctr"))
 }
 
 #' @rdname new_geovctrs_wkt
