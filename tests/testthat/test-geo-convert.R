@@ -57,6 +57,7 @@ test_that("wkb conversion works", {
 })
 
 test_that("wkb writer options are respected", {
+  skip("not using wkb writer options for now")
   collection_empty <- geo_collection(list(geo_collection()), srid = 23)
   collection_wkb <- geovctrs_cpp_convert(collection_empty, geo_wkb())
   expect_identical(geovctrs_cpp_convert(collection_wkb, geo_collection()), collection_empty)

@@ -147,6 +147,7 @@ test_that("wkb casting and coersion works", {
 })
 
 test_that("casting and coercion respects options", {
+  skip("skipping wkb creation  options")
   wkb <- as_geo_wkb(geo_wkt("POINT Z (1 2 3)"))
   expect_true(wk::wkb_meta(as_geo_wkb(wkb, dimensions = 3))$has_z)
   expect_false(wk::wkb_meta(as_geo_wkb(wkb, dimensions = 2))$has_z)

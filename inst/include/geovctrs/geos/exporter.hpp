@@ -95,9 +95,9 @@ public:
   int endian;
 
   GeovctrsGEOSWKBExporter(List ptype) {
-    this->includeSRID = ptype.attr("include_srid");
-    this->dimensions = ptype.attr("dimensions");
-    this->endian = ptype.attr("endian");
+    this->includeSRID = NA_INTEGER;
+    this->dimensions = 3;
+    this->endian = NA_INTEGER;
     this->wkbWriter = NULL;
   }
 

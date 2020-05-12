@@ -20,12 +20,7 @@ public:
   }
 
   static List newWKB(List data) {
-    // always give the default values (prevents unnecessary conversion)
     data.attr("class") = CharacterVector::create("geovctrs_wkb", "geovctr", "vctrs_vctr");
-    data.attr("include_srid") = LogicalVector::create(LogicalVector::get_na());
-    data.attr("dimensions") = IntegerVector::create(3);
-    data.attr("endian") = IntegerVector::create(LogicalVector::get_na());
-
     return data;
   }
 

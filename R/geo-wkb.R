@@ -57,10 +57,7 @@ as_geo_wkb <- function(x, ..., include_srid = NA, dimensions = 3, endian = NA) {
 
 #' @export
 as_geo_wkb.default <- function(x, ..., include_srid = NA, dimensions = 3, endian = NA) {
-  include_srid <- vec_cast(include_srid, logical())
-  dimensions <- vec_cast(dimensions, integer())
-  endian <- vec_cast(endian, integer())
-  vec_cast(x, new_geovctrs_wkb(include_srid = include_srid, dimensions = dimensions, endian = endian))
+  vec_cast(x, new_geovctrs_wkb())
 }
 
 #' S3 details for geovctrs_wkb
@@ -85,16 +82,9 @@ as_geo_wkb.default <- function(x, ..., include_srid = NA, dimensions = 3, endian
 #' # valid, use new_geovctrs_wkb()
 #' new_geovctrs_wkb(list(wkb_raw))
 #'
-new_geovctrs_wkb <- function(x = list(),
-                        include_srid = NA, dimensions = 3L, endian = NA_integer_) {
+new_geovctrs_wkb <- function(x = list()) {
   vec_assert(x, list())
-  new_vctr(
-    x,
-    class = c("geovctrs_wkb", "geovctr"),
-    include_srid = include_srid,
-    dimensions = dimensions,
-    endian = endian
-  )
+  new_vctr(x, class = c("geovctrs_wkb", "geovctr"))
 }
 
 #' @rdname new_geovctrs_wkb
