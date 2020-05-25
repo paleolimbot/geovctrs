@@ -12,7 +12,7 @@ test_that("geo_rect class works", {
 test_that("geo_rect c() works", {
   rect <- geo_rect(xmin = 0:5, ymin = 0:5, xmax = 1:6, ymax = 1:6)
   expect_is(c(rect, geo_wkt("POINT (30 10)")), "wk_wkt")
-  expect_is(c(rect, as_geo_wkb(geo_wkt("POINT (30 10)"))), "geovctrs_wkb")
+  expect_is(c(rect, as_geo_wkb(geo_wkt("POINT (30 10)"))), "wk_wkb")
   expect_is(c(rect, rect), "geovctrs_rect")
   expect_error(vec_c(5, rect), class = "vctrs_error_incompatible_type")
 })

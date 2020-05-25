@@ -14,7 +14,7 @@ public:
   }
 
   static List newWKB(List data) {
-    data.attr("class") = CharacterVector::create("geovctrs_wkb", "geovctr", "vctrs_vctr");
+    data.attr("class") = CharacterVector::create("wk_wkb", "wk_vctr", "geovctr");
     return data;
   }
 

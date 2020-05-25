@@ -18,7 +18,7 @@ test_that("geo_format works", {
   expect_output(print(tibble(geom = as_geo_collection(wkts))), "tibble")
 
   # default method
-  expect_output(expect_identical(geo_print(geo_nc), geo_nc), "tbl_df...geovctrs_wkb")
+  expect_output(expect_identical(geo_print(geo_nc), geo_nc), "tbl_df...wk_wkb")
 
   # named
   expect_output(geo_print(setNames(geo_wkt("POINT (30 10)"), "a name")), "a name")
@@ -39,7 +39,7 @@ test_that("printing works without unicode/colour support", {
 test_that("geo_format() and geo_print() don't error for non-parsable geometries", {
   bad_wkb <- wk::wkt_translate_wkb("POINT (30 10)", endian = 1)
   bad_wkb[[1]][2] <- as.raw(0xff)
-  bad_wkb <- new_geovctrs_wkb(bad_wkb)
+  bad_wkb <- new_wk_wkb(bad_wkb)
 
   expect_match(geo_format(bad_wkb), "invalid type")
   expect_output(geo_print(bad_wkb), "invalid type")

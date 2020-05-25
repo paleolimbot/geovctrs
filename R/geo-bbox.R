@@ -35,7 +35,7 @@ geo_bbox.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 }
 
 #' @export
-geo_bbox.geovctrs_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+geo_bbox.wk_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   ranges <- unclass(wk::wkb_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
   ranges$srid <- summarise_srids(geo_srid(x))
   new_geovctrs_rect(ranges)
@@ -89,7 +89,7 @@ geo_envelope.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 }
 
 #' @export
-geo_envelope.geovctrs_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+geo_envelope.wk_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   ranges <- unclass(wk::wkb_feature_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
   ranges$srid <- geo_srid(x)
   new_geovctrs_rect(ranges)
@@ -104,7 +104,7 @@ geo_envelope.wk_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 
 #' @export
 geo_envelope.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  geo_envelope.geovctrs_wkb(as_geo_wkb(x), na.rm = na.rm, finite = finite)
+  geo_envelope.wk_wkb(as_geo_wkb(x), na.rm = na.rm, finite = finite)
 }
 
 #' @export

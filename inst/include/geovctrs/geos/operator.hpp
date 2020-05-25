@@ -19,7 +19,7 @@ public:
       provider = std::unique_ptr<GeovctrsGEOSProvider> { new GeovctrsGEOSWKTProvider(data) };
     } else if (Rf_inherits(data, "wk_wkt")) {
       provider = std::unique_ptr<GeovctrsGEOSProvider> { new GeovctrsGEOSWKTProvider(data) };
-    } else if(Rf_inherits(data, "geovctrs_wkb")) {
+    } else if(Rf_inherits(data, "wk_wkb")) {
       provider = std::unique_ptr<GeovctrsGEOSProvider> { new GeovctrsGEOSWKBProvider(data) };
     } else if(Rf_inherits(data, "wk_wkb")) {
       provider = std::unique_ptr<GeovctrsGEOSProvider> { new GeovctrsGEOSWKBProvider(data) };
@@ -52,7 +52,7 @@ public:
       return std::unique_ptr<GeovctrsGEOSExporter> { new GeovctrsGEOSWKTExporter(ptype) };
     } else if (Rf_inherits(ptype, "wk_wkt")) {
       return std::unique_ptr<GeovctrsGEOSExporter> { new GeovctrsGEOSWKTExporter(ptype) };
-    } else if(Rf_inherits(ptype, "geovctrs_wkb")) {
+    } else if(Rf_inherits(ptype, "wk_wkb")) {
       return std::unique_ptr<GeovctrsGEOSExporter> { new GeovctrsGEOSWKBExporter(ptype) };
     } else if(Rf_inherits(ptype, "wk_wkb")) {
       return std::unique_ptr<GeovctrsGEOSExporter> { new GeovctrsGEOSWKBExporter(ptype) };

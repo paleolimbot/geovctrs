@@ -136,9 +136,9 @@ vec_cast.geovctrs_segment.wk_wkt <- function(x, to, ...) {
   geovctrs_cpp_convert(x, to)
 }
 
-#' @method vec_cast.geovctrs_segment geovctrs_wkb
+#' @method vec_cast.geovctrs_segment wk_wkb
 #' @export
-vec_cast.geovctrs_segment.geovctrs_wkb <- function(x, to, ...) {
+vec_cast.geovctrs_segment.wk_wkb <- function(x, to, ...) {
   geovctrs_cpp_convert(x, to)
 }
 
@@ -176,9 +176,9 @@ vec_ptype2.geovctrs_segment.wk_wkt <- function(x, y, ..., x_arg = "x", y_arg = "
   geo_wkt()
 }
 
-#' @method vec_ptype2.geovctrs_segment geovctrs_wkb
+#' @method vec_ptype2.geovctrs_segment wk_wkb
 #' @export
-vec_ptype2.geovctrs_segment.geovctrs_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.geovctrs_segment.wk_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_wkb()
 }
 

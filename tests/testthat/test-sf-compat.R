@@ -7,7 +7,7 @@ test_that("sf/sfc works with as_geovctr()", {
   sf_nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
   sfc_nc <- sf_nc[[attr(sf_nc, "sf_column")]]
 
-  expect_is(as_geovctr(sf_nc), "geovctrs_wkb")
+  expect_is(as_geovctr(sf_nc), "wk_wkb")
   expect_length(as_geovctr(sf_nc), nrow(sf_nc))
   expect_identical(as_geovctr(sf_nc), as_geovctr(sfc_nc))
 
@@ -57,7 +57,7 @@ test_that("casting and c() work with sfc", {
   sfc <- sf::st_sfc(sf::st_point(c(30, 10)))
   sfc_seg <- sf::st_sfc(sf::st_linestring(rbind(c(0, 0), c(30, 10))))
 
-  expect_is(vec_cast(sfc, geo_wkb()), "geovctrs_wkb")
+  expect_is(vec_cast(sfc, geo_wkb()), "wk_wkb")
   expect_is(vec_cast(sfc, geo_wkt()), "wk_wkt")
   expect_is(vec_cast(sfc, geo_collection()), "geovctrs_collection")
   expect_is(vec_cast(sfc, geo_xy()), "geovctrs_xy")
@@ -70,14 +70,14 @@ test_that("casting and c() work with sfc", {
   expect_is(vec_cast(seg, sf::st_sfc()), "sfc")
   expect_is(vec_cast(rect, sf::st_sfc()), "sfc")
 
-  expect_is(vec_c(wkb, sfc), "geovctrs_wkb")
+  expect_is(vec_c(wkb, sfc), "wk_wkb")
   expect_is(vec_c(wkt, sfc), "sfc")
   expect_is(vec_c(col, sfc), "sfc")
   expect_is(vec_c(xy, sfc), "sfc")
   expect_is(vec_c(seg, sfc), "sfc")
   expect_is(vec_c(rect, sfc), "sfc")
 
-  expect_is(vec_c(sfc, wkb), "geovctrs_wkb")
+  expect_is(vec_c(sfc, wkb), "wk_wkb")
   expect_is(vec_c(sfc, wkt), "sfc")
   expect_is(vec_c(sfc, col), "sfc")
   expect_is(vec_c(sfc, xy), "sfc")

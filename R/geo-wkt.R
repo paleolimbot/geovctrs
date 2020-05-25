@@ -35,7 +35,7 @@ geo_wkt <- function(x = character()) {
 #' @rdname geo_wkt
 parse_wkt <- function(x) {
   x <- vec_cast(x, character())
-  validate_provider(wk::new_wk_wkt(x), wk::wkt_problems(x))
+  validate_provider(new_wk_wkt(x), wk::wkt_problems(x))
 }
 
 #' @rdname geo_wkt
@@ -72,12 +72,6 @@ is_wk_wkt <- function(x) {
   new_wk_wkt(x)
 }
 
-# shim
-#' @export
-as_wkt.geovctrs_wkb <- function(x, ...) {
-  new_wk_wkt(wk::wkb_translate_wkt(x))
-}
-
 #' @method vec_cast wk_wkt
 #' @export
 #' @export vec_cast.wk_wkt
@@ -110,9 +104,9 @@ vec_cast.character.wk_wkt <- function(x, to, ...) {
   vec_data(x)
 }
 
-#' @method vec_cast.wk_wkt geovctrs_wkb
+#' @method vec_cast.wk_wkt wk_wkb
 #' @export
-vec_cast.wk_wkt.geovctrs_wkb <- function(x, to, ...) {
+vec_cast.wk_wkt.wk_wkb <- function(x, to, ...) {
   geovctrs_cpp_convert(x, to)
 }
 
@@ -167,9 +161,9 @@ vec_ptype2.wk_wkt.wk_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_wkt()
 }
 
-#' @method vec_ptype2.wk_wkt geovctrs_wkb
+#' @method vec_ptype2.wk_wkt wk_wkb
 #' @export
-vec_ptype2.wk_wkt.geovctrs_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.wk_wkt.wk_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_wkb()
 }
 

@@ -53,7 +53,7 @@ test_that("wkb conversion works", {
   )
 
   wkb <- geo_wkb(list(wkb_raw))
-  wkb_roundtrip <- geovctrs_cpp_convert(wkb, new_geovctrs_wkb())
+  wkb_roundtrip <- geovctrs_cpp_convert(wkb, new_wk_wkb())
   expect_identical(wkb, wkb_roundtrip)
 })
 
@@ -89,21 +89,21 @@ test_that("wkb writer options are respected", {
   )
 
   expect_identical(
-    geo_srid(geovctrs_cpp_convert(collection_with_srid, new_geovctrs_wkb(include_srid = FALSE))),
+    geo_srid(geovctrs_cpp_convert(collection_with_srid, new_wk_wkb(include_srid = FALSE))),
     c(0L, 0L)
   )
 
   expect_identical(
-    wk::wkb_meta(geovctrs_cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_geovctrs_wkb(dimensions = 2)))$has_z,
+    wk::wkb_meta(geovctrs_cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_wk_wkb(dimensions = 2)))$has_z,
     FALSE
   )
   expect_identical(
-    wk::wkb_meta(geovctrs_cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_geovctrs_wkb(dimensions = 3)))$has_z,
+    wk::wkb_meta(geovctrs_cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_wk_wkb(dimensions = 3)))$has_z,
     TRUE
   )
 
   wkb <- as_geo_wkb(geo_wkt("POINT Z (1 2 3)"))
-  expect_identical(geovctrs_cpp_convert(wkb, new_geovctrs_wkb(dimensions = 3)), wkb)
+  expect_identical(geovctrs_cpp_convert(wkb, new_wk_wkb(dimensions = 3)), wkb)
 })
 
 test_that("roundtrip to- and from- geo_collection() works", {
@@ -398,7 +398,7 @@ test_that("error occurs with unknown object in conversions", {
   expect_error(geovctrs_cpp_convert(as.Date("2020-01-01"), new_wk_wkt()), "Can't resolve")
   expect_error(geovctrs_cpp_convert(geo_wkt("POINT EMPTY"), as.Date("2020-01-01")), "Can't resolve")
 
-  expect_error(geovctrs_cpp_convert(as.Date("2020-01-01"), new_geovctrs_wkb()), "Can't resolve")
+  expect_error(geovctrs_cpp_convert(as.Date("2020-01-01"), new_wk_wkb()), "Can't resolve")
   expect_error(geovctrs_cpp_convert(as_geo_wkb("POINT EMPTY"), as.Date("2020-01-01")), "Can't resolve")
 })
 
@@ -411,7 +411,7 @@ test_that("error occurs with invalid objects", {
     )
   )
 
-  wkb <- new_geovctrs_wkb(list(wkb_bad))
+  wkb <- new_wk_wkb(list(wkb_bad))
 
   # test WKT and WKB because the readers/writers both need to handle these cases
   # this is a mostly a test of the deleters and whether or not they cause segfaults

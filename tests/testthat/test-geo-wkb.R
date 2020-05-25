@@ -8,11 +8,11 @@ test_that("geo_wkb class works", {
     )
   )
   wkb <- geo_wkb(list(wkb_raw))
-  expect_output(print(wkb), "geovctrs_wkb")
+  expect_output(print(wkb), "wk_wkb")
   expect_match(format(wkb), "POINT")
   expect_output(print(tibble(wkb)), "wkb")
-  expect_is(wkb, "geovctrs_wkb")
-  expect_true(is_geovctrs_wkb(wkb))
+  expect_is(wkb, "wk_wkb")
+  expect_true(is_wk_wkb(wkb))
   expect_true(vec_is(wkb))
   expect_equal(vec_size(wkb), 1)
 })
@@ -35,7 +35,7 @@ test_that("geo_wkb parse validation works", {
     )
   )
 
-  wkb <- new_geovctrs_wkb(list(wkb_raw, wkb_bad))
+  wkb <- new_wk_wkb(list(wkb_raw, wkb_bad))
   expect_warning(
     expect_equivalent(
       parse_wkb(list(wkb_raw, wkb_bad)),
@@ -43,16 +43,10 @@ test_that("geo_wkb parse validation works", {
     ),
     "parsing failure"
   )
-
-  expect_identical(validate_geovctrs_wkb(wkb[1]), wkb[1])
-  expect_warning(
-    expect_error(validate_geovctrs_wkb(wkb), "1 geometry", class = "parse_error"),
-    "parsing failure"
-  )
 })
 
 test_that("c() works for wkb", {
-  expect_is(c(geo_wkb(), geo_wkb()), "geovctrs_wkb")
+  expect_is(c(geo_wkb(), geo_wkb()), "wk_wkb")
   expect_error(vec_c(geo_wkb(), 5), class = "vctrs_error_incompatible_type")
 })
 
@@ -90,17 +84,10 @@ test_that("wkb casting and coersion works", {
   expect_identical(vec_cast(list(wkb_raw), geo_wkb()), wkb)
 
   expect_identical(vec_cast(list(wkb_raw), geo_wkb()), as_geo_wkb(wkb))
-  expect_identical(vec_cast(wkb, list())[[1]], unclass(wkb)[[1]])
   expect_identical(as_geo_wkb(list(wkb_raw)), wkb)
 
-  expect_warning(
-    expect_error(as_geo_wkb(list(wkb_bad)), class = "parse_error"),
-    "parsing failure"
-  )
-  expect_warning(
-    expect_error(vec_cast(list(wkb_bad), geo_wkb()), class = "parse_error"),
-    "parsing failure"
-  )
+  expect_error(as_geo_wkb(list(wkb_bad)), "Unrecognized geometry")
+  expect_error(vec_cast(list(wkb_bad), geo_wkb()), "Unrecognized geometry")
 
   expect_error(as_geo_wkb(5), class = "vctrs_error_incompatible_cast")
 

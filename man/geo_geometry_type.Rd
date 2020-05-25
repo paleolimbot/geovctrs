@@ -5,7 +5,7 @@
 \alias{geo_geometry_type.default}
 \alias{geo_geometry_type.geovctr}
 \alias{geo_geometry_type.wk_wkt}
-\alias{geo_geometry_type.geovctrs_wkb}
+\alias{geo_geometry_type.wk_wkb}
 \title{Extract feature geometry type}
 \usage{
 geo_geometry_type(x)
@@ -16,7 +16,7 @@ geo_geometry_type(x)
 
 \method{geo_geometry_type}{wk_wkt}(x)
 
-\method{geo_geometry_type}{geovctrs_wkb}(x)
+\method{geo_geometry_type}{wk_wkb}(x)
 }
 \arguments{
 \item{x}{A geometry-like object, or one that can be

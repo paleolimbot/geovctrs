@@ -33,6 +33,6 @@ geo_geometry_type.wk_wkt <- function(x) {
 
 #' @rdname geo_geometry_type
 #' @export
-geo_geometry_type.geovctrs_wkb <- function(x) {
+geo_geometry_type.wk_wkb <- function(x) {
   wk::wk_geometry_type(wk::wkb_meta(x)$type_id)
 }

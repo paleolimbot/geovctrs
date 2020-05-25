@@ -52,14 +52,14 @@ register_sf_compat <- function() {
   register_s3_method("sf", "st_as_sfc", "geovctr")
   register_s3_method("sf", "st_as_sf", "geovctr")
 
-  register_s3_method("sf", "vec_cast.sfc", "geovctrs_wkb")
+  register_s3_method("sf", "vec_cast.sfc", "wk_wkb")
   register_s3_method("sf", "vec_cast.sfc", "wk_wkt")
   register_s3_method("sf", "vec_cast.sfc", "geovctrs_collection")
   register_s3_method("sf", "vec_cast.sfc", "geovctrs_xy")
   register_s3_method("sf", "vec_cast.sfc", "geovctrs_segment")
   register_s3_method("sf", "vec_cast.sfc", "geovctrs_rect")
 
-  register_s3_method("sf", "vec_ptype2.sfc", "geovctrs_wkb")
+  register_s3_method("sf", "vec_ptype2.sfc", "wk_wkb")
   register_s3_method("sf", "vec_ptype2.sfc", "wk_wkt")
   register_s3_method("sf", "vec_ptype2.sfc", "geovctrs_collection")
   register_s3_method("sf", "vec_ptype2.sfc", "geovctrs_xy")
@@ -69,24 +69,24 @@ register_sf_compat <- function() {
 
 # ----- wkb ------
 
-#' @method vec_ptype2.geovctrs_wkb sfc
+#' @method vec_ptype2.wk_wkb sfc
 #' @export
-vec_ptype2.geovctrs_wkb.sfc <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.wk_wkb.sfc <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_wkb()
 }
 
-vec_ptype2.sfc.geovctrs_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+vec_ptype2.sfc.wk_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   geo_wkb()
 }
 
-#' @method vec_cast.geovctrs_wkb sfc
+#' @method vec_cast.wk_wkb sfc
 #' @export
-vec_cast.geovctrs_wkb.sfc <- function(x, to, ...) {
+vec_cast.wk_wkb.sfc <- function(x, to, ...) {
   wkb_list <- unclass(sf::st_as_binary(x, ..., EWKB = TRUE))
-  new_geovctrs_wkb(wkb_list)
+  new_wk_wkb(wkb_list)
 }
 
-vec_cast.sfc.geovctrs_wkb <- function(x, to, ...) {
+vec_cast.sfc.wk_wkb <- function(x, to, ...) {
   wkb <- as_geo_wkb(x)
   wkb[is.na(wkb)] <- as_geo_wkb("GEOMETRYCOLLECTION EMPTY")
   class(wkb) <- "WKB"
