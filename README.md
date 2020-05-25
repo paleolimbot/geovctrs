@@ -55,22 +55,25 @@ stored using column vectors (`geo_xy()`, `geo_segment()`, and
 [tidyr](https://tidyr.tidyverse.org/), and other
 [tidyverse](https://tidyverse.org/) packages that use vctrs. In addition
 to providing default implementations of [generics](#generics), they have
-print, plot, and coercion, methods so that they “just work”:
+print, plot, and coercion, methods so that they “just work”.
 
 ``` r
 head(geo_example_wkt)
-#> <geovctrs_wkt[6]>
-#> [1] NA_wkt_                                
+#> <wk_wkt[6]>
+#> [1] <NA>                                   
 #> [2] POINT (30 10)                          
 #> [3] POINT EMPTY                            
 #> [4] POINT Z (1 1 5)                        
-#> [5] MULTIPOINT (10 40, 40 30, 20 20, 30 10)
+#> [5] MULTIPOINT ((10 40), (40 30), (20 20...
 #> [6] MULTIPOINT EMPTY
 head(as_geo_wkb(geo_example_wkt))
-#> <geovctrs_wkb[6]>
-#> [1] NA_wkb_                  POINT (30 10)           
-#> [3] POINT EMPTY              POINT Z (1 1 5)         
-#> [5] MULTIPOINT[4] (10 40)…+3 MULTIPOINT EMPTY
+#> <wk_wkb[6]>
+#> [1] <NA>                                     
+#> [2] <POINT (30 10)>                          
+#> [3] <POINT (nan nan)>                        
+#> [4] <POINT Z (1 1 5)>                        
+#> [5] <MULTIPOINT ((10 40), (40 30), (20 20...>
+#> [6] <MULTIPOINT EMPTY>
 ```
 
 ## Constructing and destructing geometries
@@ -87,19 +90,19 @@ linestrings <- c(
 
 linestrings
 #> <geovctrs_collection[2]>
-#> [1] LINESTRING (1 0)…+2  LINESTRING (10 0)…+2
+#> [1] <LINESTRING (1 0, 2 1, 5 2)>      <LINESTRING (10 0, 20 10, 50 20)>
 
 # destruct to get coordinates
 geo_coordinates(linestrings)
 #> # A tibble: 6 x 2
-#>   feature xy       
-#>     <int> <xy>     
-#> 1       1 · (1 0)  
-#> 2       1 · (2 1)  
-#> 3       1 · (5 2)  
-#> 4       2 · (10 0) 
-#> 5       2 · (20 10)
-#> 6       2 · (50 20)
+#>   feature xy     
+#>     <int> <xy>   
+#> 1       1 (1 0)  
+#> 2       1 (2 1)  
+#> 3       1 (5 2)  
+#> 4       2 (10 0) 
+#> 5       2 (20 10)
+#> 6       2 (50 20)
 ```
 
 You can use `separate_xy()` get the actual x and y values (and
@@ -156,25 +159,6 @@ geo_plot(geo_nc)
 ```
 
 <img src="man/figures/README-ex-plot-1.png" width="100%" />
-
-``` r
-geo_summary(geo_nc)
-#> # A tibble: 100 x 10
-#>    is_empty geometry_type n_geometries n_coordinates  srid coordinate_dime…
-#>    <lgl>    <chr>                <int>         <int> <int>            <int>
-#>  1 FALSE    multipolygon             1            27  4267                2
-#>  2 FALSE    multipolygon             1            26  4267                2
-#>  3 FALSE    multipolygon             1            28  4267                2
-#>  4 FALSE    multipolygon             3            38  4267                2
-#>  5 FALSE    multipolygon             1            34  4267                2
-#>  6 FALSE    multipolygon             1            22  4267                2
-#>  7 FALSE    multipolygon             1            24  4267                2
-#>  8 FALSE    multipolygon             1            17  4267                2
-#>  9 FALSE    multipolygon             1            14  4267                2
-#> 10 FALSE    multipolygon             1             6  4267                2
-#> # … with 90 more rows, and 4 more variables: has_z <lgl>,
-#> #   first_coordinate <xy>, problems <chr>, is_missing <lgl>
-```
 
 The geovctrs package also provides a framework for transformers, or
 functions that accept a vector of geometries and return a vector of
