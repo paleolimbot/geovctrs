@@ -11,7 +11,7 @@ using namespace Rcpp;
 
 // WKB can't really represent an empty point, but this hack
 // works with the WKB reader in GEOS and sf.
-// other consumers of geo_wkb() objects might want to be careful
+// other consumers of wkb() objects might want to be careful
 // passing this on to external software
 const size_t WKB_HACK_EMPTY_POINT_SIZE = 21;
 const unsigned char WKB_HACK_EMPTY_POINT_LITTLE_ENDIAN[] = {

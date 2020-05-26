@@ -16,13 +16,13 @@
 #' @export
 #'
 #' @examples
-#' geo_plot(geo_wkt("POINT (10 40)"))
-#' geo_plot(geo_wkt("LINESTRING (30 10, 10 30, 40 40)"))
-#' geo_plot(geo_wkt("MULTIPOINT ((10 40), (40 30))"))
-#' geo_plot(geo_wkt("MULTILINESTRING ((10 10, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))"))
-#' geo_plot(geo_wkt("POLYGON ((30 10, 10 30, 40 40, 30 10))"))
+#' geo_plot(wkt("POINT (10 40)"))
+#' geo_plot(wkt("LINESTRING (30 10, 10 30, 40 40)"))
+#' geo_plot(wkt("MULTIPOINT ((10 40), (40 30))"))
+#' geo_plot(wkt("MULTILINESTRING ((10 10, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))"))
+#' geo_plot(wkt("POLYGON ((30 10, 10 30, 40 40, 30 10))"))
 #' geo_plot(
-#'   geo_wkt(
+#'   wkt(
 #'     "MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),
 #'       ((20 35, 10 30, 10 10, 30 5, 45 20, 20 35), (30 20, 20 15, 20 25, 30 20)))"
 #'   ),

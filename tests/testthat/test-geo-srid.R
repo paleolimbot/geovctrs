@@ -7,7 +7,7 @@ test_that("SRID extraction works", {
     geo_point(geo_xy(-66, 44), srid = 0)
   )
 
-  geometries_wkt <- geo_wkt(c("POINT (259473 4876249)", "POINT (-66 44)"))
+  geometries_wkt <- wkt(c("POINT (259473 4876249)", "POINT (-66 44)"))
   geometries_wkb <- as_wkb(geometries)
 
   # collection
@@ -59,7 +59,7 @@ test_that("geo_set_srid() is vectorized along x and srid", {
   )
 
   expect_identical(
-    geo_srid(geo_set_srid(geo_wkb(), 1)),
+    geo_srid(geo_set_srid(wkb(), 1)),
     integer()
   )
 })

@@ -43,11 +43,11 @@ library(geovctrs)
 
 ## Geometry vectors
 
-This package provides [vctrs](https://vctrs.r-lib.org/) class definitions for [well-known binary](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary) (`geo_wkb()`), [well-known text](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry) (`geo_wkt()`), and several simple geometries that can be efficiently stored using column vectors (`geo_xy()`, `geo_segment()`, and `geo_rect()`). These classes are designed to work with [dplyr](https://dplyr.tidyverse.org/), [tidyr](https://tidyr.tidyverse.org/), and other [tidyverse](https://tidyverse.org/) packages that use vctrs. In addition to providing default implementations of [ generics](#generics), they have print, plot, and coercion, methods so that they "just work".
+This package provides [vctrs](https://vctrs.r-lib.org/) class definitions for [well-known binary](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary) (`wkb()`), [well-known text](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry) (`wkt()`), and several simple geometries that can be efficiently stored using column vectors (`geo_xy()`, `geo_segment()`, and `geo_rect()`). These classes are designed to work with [dplyr](https://dplyr.tidyverse.org/), [tidyr](https://tidyr.tidyverse.org/), and other [tidyverse](https://tidyverse.org/) packages that use vctrs. In addition to providing default implementations of [ generics](#generics), they have print, plot, and coercion, methods so that they "just work".
 
 ```{r}
 head(geo_example_wkt)
-head(as_geo_wkb(geo_example_wkt))
+head(as_wkb(geo_example_wkt))
 ```
 
 ## Constructing and destructing geometries

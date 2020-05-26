@@ -1,44 +1,17 @@
 
-#' Create and validate well-known text
-#'
-#' Like other geo types, [geo_wkt()] doesn't convert its input
-#' but does validate it using [wk::validate_wk_wkt()].
-#' To skip validation, use [wk::new_wk_wkt()].
-#'
-#' @param x A character vector containing well-known text
-#' @param trim Trim unnecessary zeroes in the output?
-#' @param precision The rounding precision to use when writing
-#'   (number of decimal places).
-#' @param dimensions The maximum number of dimensions to consider
-#'   when generating text.
-#' @param ... Unused
-#'
-#'
-#' @return A [wk::new_wk_wkt()]
+#' @importFrom wk as_wkt
 #' @export
-#'
-#' @examples
-#' # use geo_wkt() to "mark" a vector as well-known text
-#' geo_wkt("POINT (30 10)")
-#'
-#' # use as_wkt() to use conversion options
-#' as_wkt("POINT (30 10)", trim = FALSE, precision = 2)
-#'
-#' # use parse_wkt() to identify parsing failures
-#' parse_wkt("POINT EMTPY")
-#'
-geo_wkt <- function(x = character()) {
-  wkt(x)
-}
+wk::as_wkt
 
+#' @importFrom wk wkt
 #' @export
-#' @rdname geo_wkt
-parse_wkt <- function(x) {
-  x <- vec_cast(x, character())
-  validate_provider(new_wk_wkt(x), wk::wkt_problems(x))
-}
+wk::wkt
 
-#' @rdname geo_wkt
+#' @importFrom wk parse_wkt
+#' @export
+wk::parse_wkt
+
+#' @importFrom wk as_wkt
 #' @export
 as_wkt.geovctr <- function(x, ...) {
   vec_cast(x, new_wk_wkt())
@@ -80,29 +53,29 @@ vec_cast.wk_wkt.geovctrs_collection <- function(x, to, ...) {
 #' @method vec_ptype2.wk_wkt geovctrs_collection
 #' @export
 vec_ptype2.wk_wkt.geovctrs_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_wkt()
+  wkt()
 }
 
 #' @method vec_ptype2.wk_wkt geovctrs_xy
 #' @export
 vec_ptype2.wk_wkt.geovctrs_xy <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_wkt()
+  wkt()
 }
 
 #' @method vec_ptype2.wk_wkt geovctrs_xyz
 #' @export
 vec_ptype2.wk_wkt.geovctrs_xyz <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_wkt()
+  wkt()
 }
 
 #' @method vec_ptype2.wk_wkt geovctrs_segment
 #' @export
 vec_ptype2.wk_wkt.geovctrs_segment <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_wkt()
+  wkt()
 }
 
 #' @method vec_ptype2.wk_wkt geovctrs_rect
 #' @export
 vec_ptype2.wk_wkt.geovctrs_rect <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_wkt()
+  wkt()
 }

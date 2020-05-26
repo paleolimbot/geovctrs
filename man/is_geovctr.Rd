@@ -51,7 +51,7 @@ expect_geovctr(x)
 }
 \description{
 A geovctr is a geometry-like collection of objects. In the geovctrs
-package, \code{\link[=geo_wkt]{geo_wkt()}}, \code{\link[=geo_wkb]{geo_wkb()}}, \code{\link[=geo_collection]{geo_collection()}},
+package, \code{\link[=wkt]{wkt()}}, \code{\link[=wkb]{wkb()}}, \code{\link[=geo_collection]{geo_collection()}},
 \code{\link[=geo_xy]{geo_xy()}}, \code{\link[=geo_rect]{geo_rect()}}, and \code{\link[=geo_segment]{geo_segment()}} are all geovctrs.
 Extension packages can either use these types or
 implement the \code{\link[=as_geovctr]{as_geovctr()}} generic
@@ -76,15 +76,15 @@ work with \code{\link[tibble:tibble]{tibble::tibble()}} and other tidyverse func
 \code{\link[dplyr:summarise]{dplyr::summarise()}}.
 \item Inherit from \code{"geovctr"}. This makes it work automatically with
 functions like \code{\link[=geo_plot]{geo_plot()}} and \code{\link[=geo_bbox]{geo_bbox()}} that have a default
-implementation for something that can be coerced to \code{\link[=geo_wkt]{geo_wkt()}},
-\code{\link[=geo_wkb]{geo_wkb()}}, or \code{\link[=geo_collection]{geo_collection()}}.
-\item Have the ability to be casted to \code{\link[=geo_wkt]{geo_wkt()}}, \code{\link[=geo_wkb]{geo_wkb()}}, and \code{\link[=geo_collection]{geo_collection()}}
+implementation for something that can be coerced to \code{\link[=wkt]{wkt()}},
+\code{\link[=wkb]{wkb()}}, or \code{\link[=geo_collection]{geo_collection()}}.
+\item Have the ability to be casted to \code{\link[=wkt]{wkt()}}, \code{\link[=wkb]{wkb()}}, and \code{\link[=geo_collection]{geo_collection()}}
 using \code{\link[=vec_cast]{vec_cast()}}. These casts power the default implementations of
 functions like \code{\link[=geo_plot]{geo_plot()}} and \code{\link[=geo_bbox]{geo_bbox()}}, and allow geometries to
 be combined using \code{\link[vctrs:vec_c]{vctrs::vec_c()}} (which powers row-binding in
 tidyverse functions). This means implementing the appropriate
 \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} methods for a class.
-\item Have the ability to be combined with \code{\link[=geo_wkt]{geo_wkt()}}, \code{\link[=geo_wkb]{geo_wkb()}}, and \code{\link[=geo_collection]{geo_collection()}}
+\item Have the ability to be combined with \code{\link[=wkt]{wkt()}}, \code{\link[=wkb]{wkb()}}, and \code{\link[=geo_collection]{geo_collection()}}
 using \code{\link[=vec_c]{vec_c()}} in both directions. This helps support processing functions
 that return a class to be combined with the output of other functions.
 This might require a \code{\link[vctrs:vec_ptype]{vctrs::vec_ptype()}} implementation for
@@ -106,11 +106,11 @@ pass these objects anywhere you would pass a first-class
 geometry vector.
 }
 \examples{
-is_geovctr(geo_wkt())
+is_geovctr(wkt())
 is_geovctr(NULL)
 
-as_geovctr(geo_wkt("POINT (30 10)"))
+as_geovctr(wkt("POINT (30 10)"))
 as_geovctr("POINT (30 10)")
-as_geovctr(tibble::tibble(geometry = geo_wkt("POINT (30 10)")))
+as_geovctr(tibble::tibble(geometry = wkt("POINT (30 10)")))
 
 }

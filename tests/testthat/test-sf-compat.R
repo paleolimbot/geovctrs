@@ -48,7 +48,7 @@ test_that("sf/sfc works with as_geovctr()", {
 test_that("casting and c() work with sfc", {
   skip_if_not_installed("sf")
 
-  wkt <- geo_wkt("POINT (30 10)")
+  wkt <- wkt("POINT (30 10)")
   wkb <- as_wkb(wkt)
   col <- as_geo_collection(wkt)
   xy <- as_geo_xy(wkt)
@@ -57,8 +57,8 @@ test_that("casting and c() work with sfc", {
   sfc <- sf::st_sfc(sf::st_point(c(30, 10)))
   sfc_seg <- sf::st_sfc(sf::st_linestring(rbind(c(0, 0), c(30, 10))))
 
-  expect_is(vec_cast(sfc, geo_wkb()), "wk_wkb")
-  expect_is(vec_cast(sfc, geo_wkt()), "wk_wkt")
+  expect_is(vec_cast(sfc, wkb()), "wk_wkb")
+  expect_is(vec_cast(sfc, wkt()), "wk_wkt")
   expect_is(vec_cast(sfc, geo_collection()), "geovctrs_collection")
   expect_is(vec_cast(sfc, geo_xy()), "geovctrs_xy")
   expect_is(vec_cast(sfc_seg, geo_segment()), "geovctrs_segment")

@@ -7,7 +7,7 @@ test_that("envelope works", {
   )
 
   expect_identical(
-    geo_envelope(geo_wkt("LINESTRING (0 2, 10 11)")),
+    geo_envelope(wkt("LINESTRING (0 2, 10 11)")),
     geo_rect(0, 2, 10, 11)
   )
 
@@ -19,27 +19,27 @@ test_that("envelope works", {
 
 test_that("envelope works with nested collections", {
   expect_identical(
-    geo_envelope(geo_wkt("GEOMETRYCOLLECTION (GEOMETRYCOLLECTION EMPTY)")),
+    geo_envelope(wkt("GEOMETRYCOLLECTION (GEOMETRYCOLLECTION EMPTY)")),
     geo_rect(Inf, Inf, -Inf, -Inf)
   )
 
   expect_identical(
-    geo_envelope(geo_wkt("GEOMETRYCOLLECTION (LINESTRING (0 0, 1 2, 6 4))")),
+    geo_envelope(wkt("GEOMETRYCOLLECTION (LINESTRING (0 0, 1 2, 6 4))")),
     geo_rect(0, 0, 6, 4)
   )
 
   expect_identical(
-    geo_envelope(geo_wkt("GEOMETRYCOLLECTION (LINESTRING (nan 0, 1 2, 6 4))"), na.rm = FALSE),
+    geo_envelope(wkt("GEOMETRYCOLLECTION (LINESTRING (nan 0, 1 2, 6 4))"), na.rm = FALSE),
     geo_rect(NA, 0, NA, 4)
   )
 
   expect_identical(
-    geo_envelope(geo_wkt("GEOMETRYCOLLECTION (LINESTRING (nan 0, 1 2, 6 4))"), na.rm = TRUE),
+    geo_envelope(wkt("GEOMETRYCOLLECTION (LINESTRING (nan 0, 1 2, 6 4))"), na.rm = TRUE),
     geo_rect(1, 0, 6, 4)
   )
 
   expect_identical(
-    geo_envelope(geo_wkt("GEOMETRYCOLLECTION (LINESTRING (nan 0, 1 2, 6 4))"), finite = TRUE),
+    geo_envelope(wkt("GEOMETRYCOLLECTION (LINESTRING (nan 0, 1 2, 6 4))"), finite = TRUE),
     geo_rect(1, 0, 6, 4)
   )
 })
@@ -157,7 +157,7 @@ test_that("bbox works", {
   )
 
   expect_identical(
-    geo_bbox(geo_wkt("LINESTRING (0 2, 10 11)")),
+    geo_bbox(wkt("LINESTRING (0 2, 10 11)")),
     geo_rect(0, 2, 10, 11)
   )
 

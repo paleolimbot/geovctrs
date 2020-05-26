@@ -80,7 +80,7 @@ geo_srid.wk_wkt <- function(x) {
 #' @export
 geo_set_srid.wk_wkt <- function(x, srid) {
   if (any(srid != 0)) {
-    abort("Can't store SRID with a geo_wkt()")
+    abort("Can't store SRID with a wkt()")
   }
   x
 }

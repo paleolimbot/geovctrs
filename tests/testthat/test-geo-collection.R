@@ -19,9 +19,9 @@ test_that("geo_collection class works", {
 })
 
 test_that("basic casting and coersion work", {
-  expect_identical(vec_cast(geo_collection(), geo_wkt()), geo_wkt())
+  expect_identical(vec_cast(geo_collection(), wkt()), wkt())
   expect_identical(c(geo_collection(), geo_collection()), geo_collection())
-  expect_identical(c(geo_collection(), geo_wkt()), geo_wkt())
+  expect_identical(c(geo_collection(), wkt()), wkt())
 
   # erroring
   expect_error(vec_cast(5, geo_collection()), class = "vctrs_error_incompatible_type")

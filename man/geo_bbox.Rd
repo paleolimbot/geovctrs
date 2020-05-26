@@ -47,7 +47,7 @@ and \code{NA/NaN} values are removed if \code{na.rm = TRUE} (which might
 mean more \code{Inf} values than you expected).
 }
 \examples{
-geo_bbox(geo_wkt(c("POINT (30 10)", "POINT EMPTY")))
-geo_envelope(geo_wkt(c("POINT (30 10)", "POINT EMPTY")))
+geo_bbox(wkt(c("POINT (30 10)", "POINT EMPTY")))
+geo_envelope(wkt(c("POINT (30 10)", "POINT EMPTY")))
 
 }

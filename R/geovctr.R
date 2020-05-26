@@ -2,7 +2,7 @@
 #' Test for geovctrs
 #'
 #' A geovctr is a geometry-like collection of objects. In the geovctrs
-#' package, [geo_wkt()], [geo_wkb()], [geo_collection()],
+#' package, [wkt()], [wkb()], [geo_collection()],
 #' [geo_xy()], [geo_rect()], and [geo_segment()] are all geovctrs.
 #' Extension packages can either use these types or
 #' implement the [as_geovctr()] generic
@@ -27,17 +27,17 @@
 #'
 #' - Inherit from `"geovctr"`. This makes it work automatically with
 #'   functions like [geo_plot()] and [geo_bbox()] that have a default
-#'   implementation for something that can be coerced to [geo_wkt()],
-#'   [geo_wkb()], or [geo_collection()].
+#'   implementation for something that can be coerced to [wkt()],
+#'   [wkb()], or [geo_collection()].
 #'
-#' - Have the ability to be casted to [geo_wkt()], [geo_wkb()], and [geo_collection()]
+#' - Have the ability to be casted to [wkt()], [wkb()], and [geo_collection()]
 #'   using [vec_cast()]. These casts power the default implementations of
 #'   functions like [geo_plot()] and [geo_bbox()], and allow geometries to
 #'   be combined using [vctrs::vec_c()] (which powers row-binding in
 #'   tidyverse functions). This means implementing the appropriate
 #'   [vctrs::vec_cast()] methods for a class.
 #'
-#' - Have the ability to be combined with [geo_wkt()], [geo_wkb()], and [geo_collection()]
+#' - Have the ability to be combined with [wkt()], [wkb()], and [geo_collection()]
 #'   using [vec_c()] in both directions. This helps support processing functions
 #'   that return a class to be combined with the output of other functions.
 #'   This might require a [vctrs::vec_ptype()] implementation for
@@ -64,12 +64,12 @@
 #' @export
 #'
 #' @examples
-#' is_geovctr(geo_wkt())
+#' is_geovctr(wkt())
 #' is_geovctr(NULL)
 #'
-#' as_geovctr(geo_wkt("POINT (30 10)"))
+#' as_geovctr(wkt("POINT (30 10)"))
 #' as_geovctr("POINT (30 10)")
-#' as_geovctr(tibble::tibble(geometry = geo_wkt("POINT (30 10)")))
+#' as_geovctr(tibble::tibble(geometry = wkt("POINT (30 10)")))
 #'
 is_geovctr <- function(x) {
   inherits(x, "geovctr")
@@ -90,7 +90,7 @@ as_geovctr.geovctr <- function(x, ...) {
 #' @rdname is_geovctr
 #' @export
 as_geovctr.character <- function(x, ...) {
-  geo_wkt(x, ...)
+  wkt(x, ...)
 }
 
 #' @rdname is_geovctr
@@ -141,8 +141,8 @@ expect_geovctr <- function(x) {
   testthat::expect_true(is_geovctr(x))
 
   # must be castable to WKT, WKB, and collection
-  testthat::expect_is(vec_cast(x, geo_wkb()), "wk_wkb")
-  testthat::expect_is(vec_cast(x, geo_wkt()), "wk_wkt")
+  testthat::expect_is(vec_cast(x, wkb()), "wk_wkb")
+  testthat::expect_is(vec_cast(x, wkt()), "wk_wkt")
   testthat::expect_is(vec_cast(x, geo_collection()), "geovctrs_collection")
 
   # must have implementations for as_WKT, WKB, and collection
@@ -151,13 +151,13 @@ expect_geovctr <- function(x) {
   testthat::expect_is(as_geo_collection(x), "geovctrs_collection")
 
   # must be combinable with wkb, wkt, and  collection
-  testthat::expect_silent(vec_c(geo_wkb(), x))
-  testthat::expect_silent(vec_c(geo_wkt(), x))
+  testthat::expect_silent(vec_c(wkb(), x))
+  testthat::expect_silent(vec_c(wkt(), x))
   testthat::expect_silent(vec_c(geo_collection(), x))
 
   # must be reverse combinable with wkb, wkt, and  collection
-  testthat::expect_silent(vec_c(x, geo_wkb()))
-  testthat::expect_silent(vec_c(x, geo_wkt()))
+  testthat::expect_silent(vec_c(x, wkb()))
+  testthat::expect_silent(vec_c(x, wkt()))
   testthat::expect_silent(vec_c(x, geo_collection()))
 
   invisible(x)

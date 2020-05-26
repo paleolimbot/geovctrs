@@ -46,9 +46,9 @@ library(geovctrs)
 This package provides [vctrs](https://vctrs.r-lib.org/) class
 definitions for [well-known
 binary](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary)
-(`geo_wkb()`), [well-known
+(`wkb()`), [well-known
 text](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry)
-(`geo_wkt()`), and several simple geometries that can be efficiently
+(`wkt()`), and several simple geometries that can be efficiently
 stored using column vectors (`geo_xy()`, `geo_segment()`, and
 `geo_rect()`). These classes are designed to work with
 [dplyr](https://dplyr.tidyverse.org/),
@@ -66,7 +66,7 @@ head(geo_example_wkt)
 #> [4] POINT Z (1 1 5)                        
 #> [5] MULTIPOINT ((10 40), (40 30), (20 20...
 #> [6] MULTIPOINT EMPTY
-head(as_geo_wkb(geo_example_wkt))
+head(as_wkb(geo_example_wkt))
 #> <wk_wkb[6]>
 #> [1] <NA>                                     
 #> [2] <POINT (30 10)>                          

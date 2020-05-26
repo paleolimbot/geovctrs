@@ -22,8 +22,8 @@
 #' @export
 #'
 #' @examples
-#' geo_bbox(geo_wkt(c("POINT (30 10)", "POINT EMPTY")))
-#' geo_envelope(geo_wkt(c("POINT (30 10)", "POINT EMPTY")))
+#' geo_bbox(wkt(c("POINT (30 10)", "POINT EMPTY")))
+#' geo_envelope(wkt(c("POINT (30 10)", "POINT EMPTY")))
 #'
 geo_bbox <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   UseMethod("geo_bbox")

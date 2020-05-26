@@ -12,7 +12,7 @@ st_as_sfc.geovctr <- function(x, ...) {
 #' @rdname is_geovctr
 #' @export
 as_geovctr.sfc <- function(x, ...) {
-  vec_cast(x, geo_wkb())
+  vec_cast(x, wkb())
 }
 
 #' @rdname is_geovctr
@@ -72,11 +72,11 @@ register_sf_compat <- function() {
 #' @method vec_ptype2.wk_wkb sfc
 #' @export
 vec_ptype2.wk_wkb.sfc <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_wkb()
+  wkb()
 }
 
 vec_ptype2.sfc.wk_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_wkb()
+  wkb()
 }
 
 #' @method vec_cast.wk_wkb sfc
@@ -109,13 +109,13 @@ vec_ptype2.sfc.wk_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
 #' @export
 vec_cast.wk_wkt.sfc <- function(x, to, ...) {
   # way faster than sf::st_as_text() for anything other than point
-  vec_cast(vec_cast(x, geo_wkb()), geo_wkt())
+  vec_cast(vec_cast(x, wkb()), wkt())
 }
 
 vec_cast.sfc.wk_wkt <- function(x, to, ...) {
   # need to use this rather than sf::st_as_sfc() because missings
   # aren't handled by sf::st_as_sfc(), which uses OGR to parse
-  vec_cast(vec_cast(x, geo_wkb()), sf::st_sfc())
+  vec_cast(vec_cast(x, wkb()), sf::st_sfc())
 }
 
 # ----- collection ------
@@ -133,11 +133,11 @@ vec_ptype2.sfc.geovctrs_collection <- function(x, y, ..., x_arg = "x", y_arg = "
 #' @method vec_cast.geovctrs_collection sfc
 #' @export
 vec_cast.geovctrs_collection.sfc <- function(x, to, ...) {
-  vec_cast(vec_cast(x, geo_wkb()), geo_collection())
+  vec_cast(vec_cast(x, wkb()), geo_collection())
 }
 
 vec_cast.sfc.geovctrs_collection <- function(x, to, ...) {
-  vec_cast(vec_cast(x, geo_wkb()), sf::st_sfc())
+  vec_cast(vec_cast(x, wkb()), sf::st_sfc())
 }
 
 # ----- xy ------
@@ -155,11 +155,11 @@ vec_ptype2.sfc.geovctrs_xy <- function(x, y, ..., x_arg = "x", y_arg = "y") {
 #' @method vec_cast.geovctrs_xy sfc
 #' @export
 vec_cast.geovctrs_xy.sfc <- function(x, to, ...) {
-  vec_cast(vec_cast(x, geo_wkb()), geo_xy())
+  vec_cast(vec_cast(x, wkb()), geo_xy())
 }
 
 vec_cast.sfc.geovctrs_xy <- function(x, to, ...) {
-  vec_cast(vec_cast(x, geo_wkb()), sf::st_sfc())
+  vec_cast(vec_cast(x, wkb()), sf::st_sfc())
 }
 
 # ----- segment ------
@@ -177,11 +177,11 @@ vec_ptype2.sfc.geovctrs_segment <- function(x, y, ..., x_arg = "x", y_arg = "y")
 #' @method vec_cast.geovctrs_segment sfc
 #' @export
 vec_cast.geovctrs_segment.sfc <- function(x, to, ...) {
-  vec_cast(vec_cast(x, geo_wkb()), geo_segment())
+  vec_cast(vec_cast(x, wkb()), geo_segment())
 }
 
 vec_cast.sfc.geovctrs_segment <- function(x, to, ...) {
-  vec_cast(vec_cast(x, geo_wkb()), sf::st_sfc())
+  vec_cast(vec_cast(x, wkb()), sf::st_sfc())
 }
 
 # ----- rect ------
@@ -197,5 +197,5 @@ vec_ptype2.sfc.geovctrs_rect <- function(x, y, ..., x_arg = "x", y_arg = "y") {
 }
 
 vec_cast.sfc.geovctrs_rect <- function(x, to, ...) {
-  vec_cast(vec_cast(x, geo_wkb()), sf::st_sfc())
+  vec_cast(vec_cast(x, wkb()), sf::st_sfc())
 }

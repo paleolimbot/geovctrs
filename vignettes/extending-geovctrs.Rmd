@@ -22,7 +22,7 @@ To start, we'll load the package and define a vector of geometries to use as exa
 library(geovctrs)
 library(tibble)
 
-geometries <- geo_wkt(
+geometries <- wkt(
   c(
     "POINT (0 0)", 
     "LINESTRING (10 12, -11 2)",
@@ -148,7 +148,7 @@ centroid(tibble(geom = geometries)) # data.frame
 
 ## New geometry vector classes
 
-The geovctrs package provides three "generic" geometry vector classes (`geo_wkt()`, `geo_wkb()`, and `geo_collection()` can represent any feature) and three simple geometry vector classes (`geo_xy()`, `geo_segment()`, and `geo_rect()` are all efficient representations of specific features). To make a new type of vector work with geovctrs functions, you can either (1) implement `as_geovctr()` and (optionally) `restore_geovctr()`, or (2) go all-out and implement your class as a [vctrs](https://vctrs.r-lib.org/) class that inherits from `"geovctr"`.
+The geovctrs package provides three "generic" geometry vector classes (`wkt()`, `wkb()`, and `geo_collection()` can represent any feature) and three simple geometry vector classes (`geo_xy()`, `geo_segment()`, and `geo_rect()` are all efficient representations of specific features). To make a new type of vector work with geovctrs functions, you can either (1) implement `as_geovctr()` and (optionally) `restore_geovctr()`, or (2) go all-out and implement your class as a [vctrs](https://vctrs.r-lib.org/) class that inherits from `"geovctr"`.
 
 ### The easy way
 

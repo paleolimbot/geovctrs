@@ -21,11 +21,11 @@ test_that("geo_format works", {
   expect_output(expect_identical(geo_print(geo_nc), geo_nc), "tbl_df...wk_wkb")
 
   # named
-  expect_output(geo_print(setNames(geo_wkt("POINT (30 10)"), "a name")), "a name")
+  expect_output(geo_print(setNames(wkt("POINT (30 10)"), "a name")), "a name")
 
   # zero len format +  print
-  expect_length(geo_format(geo_wkt()), 0)
-  expect_output(geo_print(geo_wkt()), "wk_wkt\\[0\\]")
+  expect_length(geo_format(wkt()), 0)
+  expect_output(geo_print(wkt()), "wk_wkt\\[0\\]")
 })
 
 test_that("printing works without unicode/colour support", {

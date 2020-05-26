@@ -8,8 +8,8 @@ reference:
   - geo_xy
   - geo_rect
   - geo_segment
-  - geo_wkb
-  - geo_wkt
+  - wkb
+  - wkt
   - geo_collection
 
 - title: Geometry operators

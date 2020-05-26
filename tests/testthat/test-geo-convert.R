@@ -1,41 +1,41 @@
 
 test_that("wkt conversion works", {
-  wkt <- geo_wkt(c("POINT (30 10)", "POINT (20 20)"))
+  wkt <- wkt(c("POINT (30 10)", "POINT (20 20)"))
   wkt_roundtrip <- geovctrs_cpp_convert(wkt, new_wk_wkt())
   expect_identical(wkt_roundtrip, wkt)
 })
 
 test_that("conversion prototype args are used", {
   skip("not using  prototype args for now")
-  wkt <- geo_wkt("POINT Z (10 11 12)")
+  wkt <- wkt("POINT Z (10 11 12)")
   expect_identical(
     geovctrs_cpp_convert(wkt, new_wk_wkt(trim = FALSE, precision = 2L)),
-    geo_wkt("POINT Z (10.00 11.00 12.00)")
+    wkt("POINT Z (10.00 11.00 12.00)")
   )
 
   expect_identical(
     geovctrs_cpp_convert(wkt, new_wk_wkt(trim = FALSE, precision = 2L, dimensions = 2L)),
-    geo_wkt("POINT (10.00 11.00)")
+    wkt("POINT (10.00 11.00)")
   )
 
   # make sure casting applies args
   expect_identical(
     as_wkt(wkt, trim = FALSE, precision = 2, dimensions = 2),
-    geo_wkt("POINT (10.00 11.00)")
+    wkt("POINT (10.00 11.00)")
   )
 
   expect_identical(
     as_wkt(wkt, trim = FALSE, precision = 2, dimensions = 3),
-    geo_wkt("POINT Z (10.00 11.00 12.00)")
+    wkt("POINT Z (10.00 11.00 12.00)")
   )
 })
 
-test_that("roundtrip to- and from- geo_wkb() works", {
+test_that("roundtrip to- and from- wkb() works", {
   expect_identical(
     geovctrs_cpp_convert(
       geovctrs_cpp_convert(
         geo_example_wkt,
-        geo_wkb()
+        wkb()
       ),
       geo_collection()
     ),
@@ -52,7 +52,7 @@ test_that("wkb conversion works", {
     )
   )
 
-  wkb <- geo_wkb(list(wkb_raw))
+  wkb <- wkb(list(wkb_raw))
   wkb_roundtrip <- geovctrs_cpp_convert(wkb, new_wk_wkb())
   expect_identical(wkb, wkb_roundtrip)
 })
@@ -60,7 +60,7 @@ test_that("wkb conversion works", {
 test_that("wkb writer options are respected", {
   skip("not using wkb writer options for now")
   collection_empty <- geo_collection(list(geo_collection()), srid = 23)
-  collection_wkb <- geovctrs_cpp_convert(collection_empty, geo_wkb())
+  collection_wkb <- geovctrs_cpp_convert(collection_empty, wkb())
   expect_identical(geovctrs_cpp_convert(collection_wkb, geo_collection()), collection_empty)
 
   collection_with_srid <- c(
@@ -94,15 +94,15 @@ test_that("wkb writer options are respected", {
   )
 
   expect_identical(
-    wk::wkb_meta(geovctrs_cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_wk_wkb(dimensions = 2)))$has_z,
+    wk::wkb_meta(geovctrs_cpp_convert(wkt("POINT Z (1 2 3)"), new_wk_wkb(dimensions = 2)))$has_z,
     FALSE
   )
   expect_identical(
-    wk::wkb_meta(geovctrs_cpp_convert(geo_wkt("POINT Z (1 2 3)"), new_wk_wkb(dimensions = 3)))$has_z,
+    wk::wkb_meta(geovctrs_cpp_convert(wkt("POINT Z (1 2 3)"), new_wk_wkb(dimensions = 3)))$has_z,
     TRUE
   )
 
-  wkb <- as_wkb(geo_wkt("POINT Z (1 2 3)"))
+  wkb <- as_wkb(wkt("POINT Z (1 2 3)"))
   expect_identical(geovctrs_cpp_convert(wkb, new_wk_wkb(dimensions = 3)), wkb)
 })
 
@@ -114,61 +114,61 @@ test_that("roundtrip to- and from- geo_collection() works", {
         geo_example_wkt,
         geo_collection()
       ),
-      geo_wkb()
+      wkb()
     ),
     as_wkb(geo_example_wkt)
   )
 })
 
 test_that("geo_point conversion works", {
-  wkt_empty <- geo_wkt("POINT EMPTY")
+  wkt_empty <- wkt("POINT EMPTY")
   collection_empty <- geo_point(geo_xy())
-  wkt <- geo_wkt("POINT (10 40)")
+  wkt <- wkt("POINT (10 40)")
   collection <- geo_point(geo_xy(10, 40))
 
   expect_identical(geovctrs_cpp_convert(wkt_empty, geo_collection()), collection_empty)
   expect_identical(geovctrs_cpp_convert(wkt, geo_collection()), collection)
 
-  expect_identical(geovctrs_cpp_convert(collection_empty, geo_wkt()), wkt_empty)
+  expect_identical(geovctrs_cpp_convert(collection_empty, wkt()), wkt_empty)
   expect_identical(
-    geovctrs_cpp_convert(geovctrs_cpp_convert(collection, geo_wkt()), geo_collection()),
+    geovctrs_cpp_convert(geovctrs_cpp_convert(collection, wkt()), geo_collection()),
     collection
   )
 })
 
 test_that("geo_linestring conversion works", {
-  wkt_empty <- geo_wkt("LINESTRING EMPTY")
+  wkt_empty <- wkt("LINESTRING EMPTY")
   collection_empty <- geo_linestring(geo_xy())
-  wkt <- geo_wkt("LINESTRING (30 10, 10 30, 40 40)")
+  wkt <- wkt("LINESTRING (30 10, 10 30, 40 40)")
   collection <- geo_linestring(geo_xy(c(30, 10, 40), c(10, 30, 40)))
 
   expect_identical(geovctrs_cpp_convert(wkt_empty, geo_collection()), collection_empty)
   expect_identical(geovctrs_cpp_convert(wkt, geo_collection()), collection)
 
-  expect_identical(geovctrs_cpp_convert(collection_empty, geo_wkt()), wkt_empty)
+  expect_identical(geovctrs_cpp_convert(collection_empty, wkt()), wkt_empty)
   expect_identical(
-    geovctrs_cpp_convert(geovctrs_cpp_convert(collection, geo_wkt()), geo_collection()),
+    geovctrs_cpp_convert(geovctrs_cpp_convert(collection, wkt()), geo_collection()),
     collection
   )
 })
 
 test_that("geo_multipoint conversion works", {
-  wkt_empty <- geo_wkt("MULTIPOINT EMPTY")
+  wkt_empty <- wkt("MULTIPOINT EMPTY")
   collection_empty <- geo_multipoint(geo_collection())
-  wkt <- geo_wkt("MULTIPOINT ((10 40), (40 30))")
+  wkt <- wkt("MULTIPOINT ((10 40), (40 30))")
   collection <- geo_multipoint(geo_xy(c(10, 40), c(40, 30)))
 
   expect_identical(geovctrs_cpp_convert(wkt_empty, geo_collection()), collection_empty)
   expect_identical(geovctrs_cpp_convert(wkt, geo_collection()), collection)
 
-  expect_identical(geovctrs_cpp_convert(collection_empty, geo_wkt()), wkt_empty)
-  expect_identical(geovctrs_cpp_convert(geovctrs_cpp_convert(collection, geo_wkt()), geo_collection()), collection)
+  expect_identical(geovctrs_cpp_convert(collection_empty, wkt()), wkt_empty)
+  expect_identical(geovctrs_cpp_convert(geovctrs_cpp_convert(collection, wkt()), geo_collection()), collection)
 })
 
 test_that("geo_multilinestring conversion works", {
-  wkt_empty <- geo_wkt("MULTILINESTRING EMPTY")
+  wkt_empty <- wkt("MULTILINESTRING EMPTY")
   collection_empty <- geo_multilinestring(geo_collection())
-  wkt <- geo_wkt("MULTILINESTRING ((10 10, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))")
+  wkt <- wkt("MULTILINESTRING ((10 10, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))")
   collection <- geo_multilinestring(
     c(
       geo_linestring(
@@ -189,20 +189,20 @@ test_that("geo_multilinestring conversion works", {
   expect_identical(geovctrs_cpp_convert(wkt_empty, geo_collection()), collection_empty)
   expect_identical(geovctrs_cpp_convert(wkt, geo_collection()), collection)
 
-  expect_identical(geovctrs_cpp_convert(collection_empty, geo_wkt()), wkt_empty)
+  expect_identical(geovctrs_cpp_convert(collection_empty, wkt()), wkt_empty)
   expect_identical(
-    geovctrs_cpp_convert(geovctrs_cpp_convert(collection, geo_wkt()), geo_collection()),
+    geovctrs_cpp_convert(geovctrs_cpp_convert(collection, wkt()), geo_collection()),
     collection
   )
 })
 
 test_that("geo_polygon conversion works", {
-  wkt_empty <- geo_wkt("POLYGON EMPTY")
+  wkt_empty <- wkt("POLYGON EMPTY")
   collection_empty <- geo_polygon(geo_xy())
-  wkt <- geo_wkt("POLYGON ((30 10, 10 30, 40 40, 30 10))")
+  wkt <- wkt("POLYGON ((30 10, 10 30, 40 40, 30 10))")
   collection <- geo_polygon(geo_xy(c(30, 10, 40, 30), c(10, 30, 40, 10)))
 
-  wkt_hole <- geo_wkt(
+  wkt_hole <- wkt(
     "POLYGON ((35 10, 45 45, 15 40, 10 20, 35 10), (20 30, 35 35, 30 20, 20 30))"
   )
   collection_hole <- geo_polygon(
@@ -217,21 +217,21 @@ test_that("geo_polygon conversion works", {
   expect_identical(geovctrs_cpp_convert(wkt, geo_collection()), collection)
   expect_identical(geovctrs_cpp_convert(wkt_hole, geo_collection()), collection_hole)
 
-  expect_identical(geovctrs_cpp_convert(collection_empty, geo_wkt()), wkt_empty)
+  expect_identical(geovctrs_cpp_convert(collection_empty, wkt()), wkt_empty)
   expect_identical(
-    geovctrs_cpp_convert(geovctrs_cpp_convert(collection, geo_wkt()), geo_collection()),
+    geovctrs_cpp_convert(geovctrs_cpp_convert(collection, wkt()), geo_collection()),
     collection
   )
   expect_identical(
-    geovctrs_cpp_convert(geovctrs_cpp_convert(collection_hole, geo_wkt()), geo_collection()),
+    geovctrs_cpp_convert(geovctrs_cpp_convert(collection_hole, wkt()), geo_collection()),
     collection_hole
   )
 })
 
 test_that("geo_multipolygon conversion works", {
-  wkt_empty <- geo_wkt("MULTIPOLYGON EMPTY")
+  wkt_empty <- wkt("MULTIPOLYGON EMPTY")
   collection_empty <- geo_multipolygon(geo_collection())
-  wkt <- geo_wkt(
+  wkt <- wkt(
     "MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),
             ((20 35, 10 30, 10 10, 30 5, 45 20, 20 35), (30 20, 20 15, 20 25, 30 20)))
     ")
@@ -256,14 +256,14 @@ test_that("geo_multipolygon conversion works", {
   expect_identical(geovctrs_cpp_convert(wkt_empty, geo_collection()), collection_empty)
   expect_identical(geovctrs_cpp_convert(wkt, geo_collection()), collection)
 
-  expect_identical(geovctrs_cpp_convert(collection_empty, geo_wkt()), wkt_empty)
-  expect_identical(geovctrs_cpp_convert(geovctrs_cpp_convert(collection, geo_wkt()), geo_collection()), collection)
+  expect_identical(geovctrs_cpp_convert(collection_empty, wkt()), wkt_empty)
+  expect_identical(geovctrs_cpp_convert(geovctrs_cpp_convert(collection, wkt()), geo_collection()), collection)
 })
 
 test_that("geo_collection() conversion works", {
-  wkt_empty <- geo_wkt("GEOMETRYCOLLECTION EMPTY")
+  wkt_empty <- wkt("GEOMETRYCOLLECTION EMPTY")
   collection_empty <- geo_collection(list(geo_collection()))
-  wkt <- geo_wkt(
+  wkt <- wkt(
     "
     GEOMETRYCOLLECTION (
       POINT (40 10),
@@ -285,9 +285,9 @@ test_that("geo_collection() conversion works", {
   expect_identical(geovctrs_cpp_convert(wkt_empty, geo_collection()), collection_empty)
   expect_identical(geovctrs_cpp_convert(wkt, geo_collection()), collection)
 
-  expect_identical(geovctrs_cpp_convert(collection_empty, geo_wkt()), wkt_empty)
+  expect_identical(geovctrs_cpp_convert(collection_empty, wkt()), wkt_empty)
   expect_identical(
-    geovctrs_cpp_convert(geovctrs_cpp_convert(collection, geo_wkt()), geo_collection()),
+    geovctrs_cpp_convert(geovctrs_cpp_convert(collection, wkt()), geo_collection()),
     collection
   )
 })
@@ -323,14 +323,14 @@ test_that("xy conversion works", {
   expect_identical(geovctrs_cpp_convert(collection, geo_xy()), xy)
 
   # empty points are also NA points
-  expect_equal(geovctrs_cpp_convert(geo_xy(NA, NA), geo_wkt()), geo_wkt("POINT EMPTY"))
-  expect_equal(geovctrs_cpp_convert(geo_xy(-Inf, Inf), geo_wkt()), geo_wkt("POINT (-inf inf)"))
+  expect_equal(geovctrs_cpp_convert(geo_xy(NA, NA), wkt()), wkt("POINT EMPTY"))
+  expect_equal(geovctrs_cpp_convert(geo_xy(-Inf, Inf), wkt()), wkt("POINT (-inf inf)"))
 
-  expect_equal(geovctrs_cpp_convert(geo_wkt("POINT (nan nan)"), geo_xy()),  geo_xy(NA, NA))
-  expect_equal(geovctrs_cpp_convert(geo_xy(-Inf, Inf), geo_wkt()), geo_wkt("POINT (-inf inf)"))
+  expect_equal(geovctrs_cpp_convert(wkt("POINT (nan nan)"), geo_xy()),  geo_xy(NA, NA))
+  expect_equal(geovctrs_cpp_convert(geo_xy(-Inf, Inf), wkt()), wkt("POINT (-inf inf)"))
 
   # errors: linestring as XY, point with SRID
-  expect_error(geovctrs_cpp_convert(geo_wkt("LINESTRING EMPTY"), geo_xy()), "Can't represent")
+  expect_error(geovctrs_cpp_convert(wkt("LINESTRING EMPTY"), geo_xy()), "Can't represent")
   expect_warning(geovctrs_cpp_convert(geo_point(geo_xy(), srid = 1), geo_xy()), "Dropping SRID")
 })
 
@@ -338,57 +338,57 @@ test_that("segment conversion works", {
   segment <- geo_segment(geo_xy(0, 10), geo_xy(20, 30))
 
   expect_identical(
-    geovctrs_cpp_convert(geo_wkt("LINESTRING (0 10, 20 30)"), geo_segment()),
+    geovctrs_cpp_convert(wkt("LINESTRING (0 10, 20 30)"), geo_segment()),
     segment
   )
 
   expect_identical(
-    geovctrs_cpp_convert(geovctrs_cpp_convert(segment, geo_wkt()), geo_segment()),
+    geovctrs_cpp_convert(geovctrs_cpp_convert(segment, wkt()), geo_segment()),
     segment
   )
 
   # empty == all NAs
   expect_identical(
-    geovctrs_cpp_convert(geo_wkt("LINESTRING EMPTY"), geo_segment()),
+    geovctrs_cpp_convert(wkt("LINESTRING EMPTY"), geo_segment()),
     geo_segment(geo_xy(NA, NA), geo_xy(NA, NA))
   )
 
   # errors: non linestring, more than two points
-  expect_error(geovctrs_cpp_convert(geo_wkt("POINT (10 30)"), geo_segment()), "non-linestring")
+  expect_error(geovctrs_cpp_convert(wkt("POINT (10 30)"), geo_segment()), "non-linestring")
   expect_error(geovctrs_cpp_convert(
-    geo_wkt("LINESTRING (10 30, 0 0, 10 4)"), geo_segment()),
+    wkt("LINESTRING (10 30, 0 0, 10 4)"), geo_segment()),
     "exactly two points"
   )
 })
 
 test_that("missings are propogated through conversions between wkt, wkb, and collection", {
-  expect_identical(geovctrs_cpp_convert(NA_wkt_, geo_wkb()), NA_wkb_)
+  expect_identical(geovctrs_cpp_convert(NA_wkt_, wkb()), NA_wkb_)
   expect_identical(geovctrs_cpp_convert(NA_wkt_, geo_collection()), NA_collection_)
   expect_identical(geovctrs_cpp_convert(NA_wkt_, geo_xy()), NA_xy_)
   expect_identical(geovctrs_cpp_convert(NA_wkt_, geo_segment()), NA_segment_)
 
-  expect_identical(geovctrs_cpp_convert(NA_wkb_, geo_wkt()), NA_wkt_)
+  expect_identical(geovctrs_cpp_convert(NA_wkb_, wkt()), NA_wkt_)
   expect_identical(geovctrs_cpp_convert(NA_wkb_, geo_collection()), NA_collection_)
   expect_identical(geovctrs_cpp_convert(NA_wkb_, geo_xy()), NA_xy_)
   expect_identical(geovctrs_cpp_convert(NA_wkb_, geo_segment()), NA_segment_)
 
-  expect_identical(geovctrs_cpp_convert(NA_collection_, geo_wkt()), NA_wkt_)
-  expect_identical(geovctrs_cpp_convert(NA_collection_, geo_wkb()), NA_wkb_)
+  expect_identical(geovctrs_cpp_convert(NA_collection_, wkt()), NA_wkt_)
+  expect_identical(geovctrs_cpp_convert(NA_collection_, wkb()), NA_wkb_)
   expect_identical(geovctrs_cpp_convert(NA_collection_, geo_xy()), NA_xy_)
   expect_identical(geovctrs_cpp_convert(NA_collection_, geo_segment()), NA_segment_)
 
   # NA_xy_ is POINT EMPTY
-  expect_identical(geovctrs_cpp_convert(NA_xy_, geo_wkt()), geo_wkt("POINT EMPTY"))
-  expect_identical(geovctrs_cpp_convert(NA_xy_, geo_wkb()), as_wkb(geo_wkt("POINT EMPTY")))
+  expect_identical(geovctrs_cpp_convert(NA_xy_, wkt()), wkt("POINT EMPTY"))
+  expect_identical(geovctrs_cpp_convert(NA_xy_, wkb()), as_wkb(wkt("POINT EMPTY")))
   expect_identical(geovctrs_cpp_convert(NA_xy_, geo_collection()), geo_point(geo_xy()))
 
-  expect_identical(geovctrs_cpp_convert(NA_segment_, geo_wkt()), NA_wkt_)
-  expect_identical(geovctrs_cpp_convert(NA_segment_, geo_wkb()), NA_wkb_)
+  expect_identical(geovctrs_cpp_convert(NA_segment_, wkt()), NA_wkt_)
+  expect_identical(geovctrs_cpp_convert(NA_segment_, wkb()), NA_wkb_)
   expect_identical(geovctrs_cpp_convert(NA_segment_, geo_collection()), NA_collection_)
   expect_identical(geovctrs_cpp_convert(NA_segment_, geo_xy()), NA_xy_)
 
-  expect_identical(geovctrs_cpp_convert(NA_rect_, geo_wkt()), NA_wkt_)
-  expect_identical(geovctrs_cpp_convert(NA_rect_, geo_wkb()), NA_wkb_)
+  expect_identical(geovctrs_cpp_convert(NA_rect_, wkt()), NA_wkt_)
+  expect_identical(geovctrs_cpp_convert(NA_rect_, wkb()), NA_wkb_)
   expect_identical(geovctrs_cpp_convert(NA_rect_, geo_collection()), NA_collection_)
   expect_identical(geovctrs_cpp_convert(NA_rect_, geo_xy()), NA_xy_)
 })
@@ -397,7 +397,7 @@ test_that("error occurs with unknown object in conversions", {
   # test WKT and WKB because the readers/writers both need to handle these cases
   # this is a mostly a test of the deleters and whether or not they cause segfaults
   expect_error(geovctrs_cpp_convert(as.Date("2020-01-01"), new_wk_wkt()), "Can't resolve")
-  expect_error(geovctrs_cpp_convert(geo_wkt("POINT EMPTY"), as.Date("2020-01-01")), "Can't resolve")
+  expect_error(geovctrs_cpp_convert(wkt("POINT EMPTY"), as.Date("2020-01-01")), "Can't resolve")
 
   expect_error(geovctrs_cpp_convert(as.Date("2020-01-01"), new_wk_wkb()), "Can't resolve")
   expect_error(geovctrs_cpp_convert(as_wkb("POINT EMPTY"), as.Date("2020-01-01")), "Can't resolve")
@@ -417,5 +417,5 @@ test_that("error occurs with invalid objects", {
   # test WKT and WKB because the readers/writers both need to handle these cases
   # this is a mostly a test of the deleters and whether or not they cause segfaults
   expect_error(geovctrs_cpp_convert(wkb, new_wk_wkt()), "ParseException")
-  expect_error(geovctrs_cpp_convert(new_wk_wkt("POINT NOPE"), geo_wkb()), "ParseException")
+  expect_error(geovctrs_cpp_convert(new_wk_wkt("POINT NOPE"), wkb()), "ParseException")
 })
