@@ -2,12 +2,12 @@
 % Please edit documentation in R/geo-wkb.R
 \name{geo_wkb}
 \alias{geo_wkb}
-\alias{as_geo_wkb}
+\alias{as_wkb.geovctr}
 \title{Create and validate well-known binary}
 \usage{
 geo_wkb(x = list())
 
-as_geo_wkb(x, ..., include_srid = NA, dimensions = 3, endian = NA)
+\method{as_wkb}{geovctr}(x, ...)
 }
 \arguments{
 \item{x}{A \code{\link[=list]{list()}} of \code{\link[=raw]{raw()}} objects, each of which
@@ -18,9 +18,6 @@ represent well-known binary}
 \item{include_srid}{Use \code{TRUE} to always include, \code{FALSE}
 to never include, or \code{NA} to only include if the SRID
 is non-zero.}
-
-\item{dimensions}{The maximum number of dimensions to consider
-when generating text.}
 
 \item{endian}{Use \code{0} for big endian, \code{1} for little endian
 or \code{NA} to use the default on your system.}
@@ -46,8 +43,8 @@ wkb_item <- as.raw(
 wkb <- geo_wkb(list(wkb_item))
 wkb
 
-# use as_geo_wkb() to use conversion options
-as_geo_wkb(wkb, endian = 0)
+# use as_wkb() to use conversion options
+as_wkb(wkb, endian = 0)
 
 # use parse_wkb() to identify parse errors
 wkb_item[2] <- as.raw(0x11)

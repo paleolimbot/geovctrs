@@ -65,7 +65,7 @@ geo_has_z.default <- function(x) {
 
 #' @export
 geo_has_z.geovctr <- function(x) {
-  geo_has_z(as_geo_wkb(x))
+  geo_has_z(as_wkb(x))
 }
 
 #' @export
@@ -103,7 +103,7 @@ geo_z_range.wk_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 
 #' @export
 geo_z_range.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  geo_z_range.wk_wkb(as_geo_wkb(x), na.rm = na.rm, finite = finite)
+  geo_z_range.wk_wkb(as_wkb(x), na.rm = na.rm, finite = finite)
 }
 
 #' @rdname geo_set_z
@@ -131,5 +131,5 @@ geo_z_envelope.wk_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 
 #' @export
 geo_z_envelope.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  geo_z_envelope.wk_wkb(as_geo_wkb(x), na.rm = na.rm, finite = finite)
+  geo_z_envelope.wk_wkb(as_wkb(x), na.rm = na.rm, finite = finite)
 }

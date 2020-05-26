@@ -30,8 +30,8 @@
 #' wkb <- geo_wkb(list(wkb_item))
 #' wkb
 #'
-#' # use as_geo_wkb() to use conversion options
-#' as_geo_wkb(wkb, endian = 0)
+#' # use as_wkb() to use conversion options
+#' as_wkb(wkb, endian = 0)
 #'
 #' # use parse_wkb() to identify parse errors
 #' wkb_item[2] <- as.raw(0x11)
@@ -43,12 +43,7 @@ geo_wkb <- function(x = list()) {
 
 #' @export
 #' @rdname geo_wkb
-as_geo_wkb <- function(x, ..., include_srid = NA, dimensions = 3, endian = NA) {
-  UseMethod("as_geo_wkb")
-}
-
-#' @export
-as_geo_wkb.default <- function(x, ..., include_srid = NA, dimensions = 3, endian = NA) {
+as_wkb.geovctr <- function(x, ...) {
   vec_cast(x, new_wk_wkb())
 }
 

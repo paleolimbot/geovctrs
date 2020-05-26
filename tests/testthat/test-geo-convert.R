@@ -69,22 +69,22 @@ test_that("wkb writer options are respected", {
   )
 
   expect_identical(
-    unclass(as_geo_wkb(collection_with_srid, endian = 1))[[1]][1],
+    unclass(as_wkb(collection_with_srid, endian = 1))[[1]][1],
     as.raw(0x01)
   )
 
   expect_identical(
-    unclass(as_geo_wkb(collection_with_srid, endian = 0))[[1]][1],
+    unclass(as_wkb(collection_with_srid, endian = 0))[[1]][1],
     as.raw(0x00)
   )
 
   expect_identical(
-    geo_srid(as_geo_wkb(collection_with_srid)),
+    geo_srid(as_wkb(collection_with_srid)),
     c(12L, 27L)
   )
 
   expect_identical(
-    geo_srid(as_geo_wkb(collection_with_srid, include_srid = TRUE)),
+    geo_srid(as_wkb(collection_with_srid, include_srid = TRUE)),
     c(12L, 27L)
   )
 
@@ -102,7 +102,7 @@ test_that("wkb writer options are respected", {
     TRUE
   )
 
-  wkb <- as_geo_wkb(geo_wkt("POINT Z (1 2 3)"))
+  wkb <- as_wkb(geo_wkt("POINT Z (1 2 3)"))
   expect_identical(geovctrs_cpp_convert(wkb, new_wk_wkb(dimensions = 3)), wkb)
 })
 
@@ -116,7 +116,7 @@ test_that("roundtrip to- and from- geo_collection() works", {
       ),
       geo_wkb()
     ),
-    as_geo_wkb(geo_example_wkt)
+    as_wkb(geo_example_wkt)
   )
 })
 
@@ -379,7 +379,7 @@ test_that("missings are propogated through conversions between wkt, wkb, and col
 
   # NA_xy_ is POINT EMPTY
   expect_identical(geovctrs_cpp_convert(NA_xy_, geo_wkt()), geo_wkt("POINT EMPTY"))
-  expect_identical(geovctrs_cpp_convert(NA_xy_, geo_wkb()), as_geo_wkb(geo_wkt("POINT EMPTY")))
+  expect_identical(geovctrs_cpp_convert(NA_xy_, geo_wkb()), as_wkb(geo_wkt("POINT EMPTY")))
   expect_identical(geovctrs_cpp_convert(NA_xy_, geo_collection()), geo_point(geo_xy()))
 
   expect_identical(geovctrs_cpp_convert(NA_segment_, geo_wkt()), NA_wkt_)

@@ -11,10 +11,10 @@ test_that("geo_format works", {
   expect_match(formatted_long[!is.na(wkts) & geo_is_empty(wkts)], "EMPTY")
   expect_match(formatted_long[!is.na(wkts) & geo_geometry_type(wkts) == "point"], "POINT")
 
-  expect_output(geo_print(as_geo_wkb(wkts)), "POINT")
+  expect_output(geo_print(as_wkb(wkts)), "POINT")
 
   expect_output(print(tibble(geom = wkts)), "tibble")
-  expect_output(print(tibble(geom = as_geo_wkb(wkts))), "tibble")
+  expect_output(print(tibble(geom = as_wkb(wkts))), "tibble")
   expect_output(print(tibble(geom = as_geo_collection(wkts))), "tibble")
 
   # default method

@@ -53,7 +53,7 @@ geo_srid(geo_set_srid(geometries, NA))
 
 # SRIDs are propogated through conversions,
 # or discarded with a warning
-geo_srid(as_geo_wkb(geometries))
+geo_srid(as_wkb(geometries))
 geo_srid(as_geo_xy(geometries))
 
 }

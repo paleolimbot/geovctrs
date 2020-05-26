@@ -50,7 +50,7 @@ geo_bbox.wk_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 
 #' @export
 geo_bbox.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  geo_bbox(as_geo_wkb(x), na.rm = na.rm, finite = finite)
+  geo_bbox(as_wkb(x), na.rm = na.rm, finite = finite)
 }
 
 #' @rdname geo_bbox
@@ -104,7 +104,7 @@ geo_envelope.wk_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 
 #' @export
 geo_envelope.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  geo_envelope.wk_wkb(as_geo_wkb(x), na.rm = na.rm, finite = finite)
+  geo_envelope.wk_wkb(as_wkb(x), na.rm = na.rm, finite = finite)
 }
 
 #' @export

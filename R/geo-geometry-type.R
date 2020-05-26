@@ -22,7 +22,7 @@ geo_geometry_type.default <- function(x) {
 #' @rdname geo_geometry_type
 #' @export
 geo_geometry_type.geovctr <- function(x) {
-  geo_geometry_type(as_geo_wkb(x))
+  geo_geometry_type(as_wkb(x))
 }
 
 #' @rdname geo_geometry_type

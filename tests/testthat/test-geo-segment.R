@@ -12,7 +12,7 @@ test_that("geo_segment class works", {
 test_that("geo_segment() c() works", {
   segment <- geo_segment(start = geo_xy(0:5, 0:5), end = geo_xy(1:6, 1:6))
   expect_is(c(segment, geo_wkt("POINT (30 10)")), "wk_wkt")
-  expect_is(c(segment, as_geo_wkb(geo_wkt("POINT (30 10)"))), "wk_wkb")
+  expect_is(c(segment, as_wkb(geo_wkt("POINT (30 10)"))), "wk_wkb")
   expect_is(c(segment, segment), "geovctrs_segment")
   expect_error(vec_c(5, segment), class = "vctrs_error_incompatible_type")
 })
@@ -51,12 +51,12 @@ test_that("coersion to segment works", {
 
   # wkb
   expect_identical(
-    as_geo_segment(as_geo_wkb(geo_wkt("LINESTRING (10 10, 20 20)"))),
+    as_geo_segment(as_wkb(geo_wkt("LINESTRING (10 10, 20 20)"))),
     geo_segment(geo_xy(10, 10), geo_xy(20, 20))
   )
 
   expect_identical(
-    vec_cast(as_geo_wkb(geo_wkt("LINESTRING (10 10, 20 20)")), geo_segment()),
+    vec_cast(as_wkb(geo_wkt("LINESTRING (10 10, 20 20)")), geo_segment()),
     geo_segment(geo_xy(10, 10), geo_xy(20, 20))
   )
 

@@ -22,13 +22,13 @@ test_that("c() works for wkb", {
 })
 
 test_that("subset assignment works for WKB class", {
-  wkbs <- as_geo_wkb(geo_example_wkt)
+  wkbs <- as_wkb(geo_example_wkt)
 
-  wkbs[2] <- as_geo_wkb(geo_wkt("POINT (1000 1000)"))
-  expect_identical(wkbs[2], as_geo_wkb(geo_wkt("POINT (1000 1000)")))
+  wkbs[2] <- as_wkb(geo_wkt("POINT (1000 1000)"))
+  expect_identical(wkbs[2], as_wkb(geo_wkt("POINT (1000 1000)")))
 
   wkbs[2] <- geo_wkt("POINT (1234 4321)")
-  expect_identical(wkbs[2], as_geo_wkb(geo_wkt("POINT (1234 4321)")))
+  expect_identical(wkbs[2], as_wkb(geo_wkt("POINT (1234 4321)")))
 })
 
 test_that("wkb casting and coersion works", {
@@ -43,41 +43,39 @@ test_that("wkb casting and coersion works", {
   wkb <- geo_wkb(list(wkb_raw))
   expect_identical(vec_cast(wkb, geo_wkb()), wkb)
 
-  expect_error(as_geo_wkb(5), class = "vctrs_error_incompatible_type")
-
   wkt <- vec_cast(wkb, geo_wkt())
   wkb_roundtrip <- vec_cast(wkt, geo_wkb())
   expect_identical(wkb, wkb_roundtrip)
   expect_identical(as_geo_wkt(wkb), wkt)
-  expect_identical(as_geo_wkb(wkt), wkb)
+  expect_identical(as_wkb(wkt), wkb)
 
   expect_identical(
-    vec_cast(as_geo_wkb(geo_wkt("POINT (1 2)")), geo_xy()),
+    vec_cast(as_wkb(geo_wkt("POINT (1 2)")), geo_xy()),
     geo_xy(1, 2)
   )
 
   expect_identical(
-    vec_cast(as_geo_wkb(geo_wkt("POINT Z (1 2 3)")), geo_xy()),
+    vec_cast(as_wkb(geo_wkt("POINT Z (1 2 3)")), geo_xy()),
     geo_xyz(1, 2, 3)
   )
 
   expect_identical(
-    vec_cast(as_geo_wkb(geo_wkt("POINT Z (1 2 3)")), geo_xyz()),
+    vec_cast(as_wkb(geo_wkt("POINT Z (1 2 3)")), geo_xyz()),
     geo_xyz(1, 2, 3)
   )
 
   expect_identical(
     vec_cast(geo_segment(geo_xy(0, 1), geo_xy(10, 11)), geo_wkb()),
-    as_geo_wkb(geo_segment(geo_xy(0, 1), geo_xy(10, 11)), geo_wkb())
+    as_wkb(geo_segment(geo_xy(0, 1), geo_xy(10, 11)), geo_wkb())
   )
 
   expect_identical(
     vec_cast(geo_rect(0, 1, 10, 11), geo_wkb()),
-    as_geo_wkb(geo_rect(0, 1, 10, 11), geo_wkb())
+    as_wkb(geo_rect(0, 1, 10, 11), geo_wkb())
   )
 
   expect_identical(
     vec_cast(geo_point(geo_xy(1, 2)), geo_wkb()),
-    as_geo_wkb(geo_point(geo_xy(1, 2)), geo_wkb())
+    as_wkb(geo_point(geo_xy(1, 2)), geo_wkb())
   )
 })

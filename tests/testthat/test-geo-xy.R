@@ -62,12 +62,12 @@ test_that("coersion to xy works", {
 
   # wkb
   expect_identical(
-    as_geo_xy(as_geo_wkb(geo_wkt("POINT (30 10)"))),
+    as_geo_xy(as_wkb(geo_wkt("POINT (30 10)"))),
     geo_xy(30, 10)
   )
 
   expect_identical(
-    vec_cast(as_geo_wkb(geo_wkt("POINT (30 10)")), geo_xy()),
+    vec_cast(as_wkb(geo_wkt("POINT (30 10)")), geo_xy()),
     geo_xy(30, 10)
   )
 

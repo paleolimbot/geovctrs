@@ -270,7 +270,7 @@ vec_ptype_abbr.geovctrs_collection <- function(x, ...) {
 #' @export
 format.geovctrs_collection <- function(x, ..., trunc_width = 40, max_coords = 5, col = FALSE) {
   formatted_wkt <- format_wkt_summary(
-    wk::wkb_format(as_geo_wkb(x), max_coords = max_coords),
+    wk::wkb_format(as_wkb(x), max_coords = max_coords),
     trunc_width = trunc_width,
     col = col
   )

@@ -41,11 +41,11 @@ test_that("geo_has_missing works", {
   expect_true(geo_has_missing(geo_wkt("POINT (nan 10)")))
 
   expect_identical(geo_has_missing(NA_wkb_), NA)
-  expect_true(geo_has_missing(as_geo_wkb(geo_wkt("LINESTRING (nan 1, 2 3)"))))
-  expect_true(geo_has_missing(as_geo_wkb(geo_wkt("LINESTRING (1 1, 2 nan)"))))
-  expect_false(geo_has_missing(as_geo_wkb(geo_wkt("LINESTRING (1 1, 2 3)"))))
-  expect_true(geo_has_missing(as_geo_wkb(geo_wkt("LINESTRING (nan nan, nan nan)"))))
-  expect_true(geo_has_missing(as_geo_wkb(geo_wkt("POLYGON ((1 1, nan nan, nan nan, 1 1))"))))
+  expect_true(geo_has_missing(as_wkb(geo_wkt("LINESTRING (nan 1, 2 3)"))))
+  expect_true(geo_has_missing(as_wkb(geo_wkt("LINESTRING (1 1, 2 nan)"))))
+  expect_false(geo_has_missing(as_wkb(geo_wkt("LINESTRING (1 1, 2 3)"))))
+  expect_true(geo_has_missing(as_wkb(geo_wkt("LINESTRING (nan nan, nan nan)"))))
+  expect_true(geo_has_missing(as_wkb(geo_wkt("POLYGON ((1 1, nan nan, nan nan, 1 1))"))))
 
   expect_true(geo_has_missing(NA_xy_))
   expect_true(geo_has_missing(geo_xy(NA, NA)))
@@ -108,12 +108,12 @@ test_that("geo_is_finite works", {
   expect_false(geo_is_finite(geo_wkt("POINT (30 inf)")))
 
   expect_identical(geo_is_finite(NA_wkb_), NA)
-  expect_false(geo_is_finite(as_geo_wkb(geo_wkt("LINESTRING (nan 1, 2 3)"))))
-  expect_false(geo_is_finite(as_geo_wkb(geo_wkt("LINESTRING (1 1, 2 nan)"))))
-  expect_true(geo_is_finite(as_geo_wkb(geo_wkt("LINESTRING EMPTY"))))
-  expect_true(geo_is_finite(as_geo_wkb(geo_wkt("LINESTRING (1 1, 2 3)"))))
-  expect_false(geo_is_finite(as_geo_wkb(geo_wkt("LINESTRING (nan nan, nan nan)"))))
-  expect_false(geo_is_finite(as_geo_wkb(geo_wkt("POLYGON ((1 1, nan nan, nan nan, 1 1))"))))
+  expect_false(geo_is_finite(as_wkb(geo_wkt("LINESTRING (nan 1, 2 3)"))))
+  expect_false(geo_is_finite(as_wkb(geo_wkt("LINESTRING (1 1, 2 nan)"))))
+  expect_true(geo_is_finite(as_wkb(geo_wkt("LINESTRING EMPTY"))))
+  expect_true(geo_is_finite(as_wkb(geo_wkt("LINESTRING (1 1, 2 3)"))))
+  expect_false(geo_is_finite(as_wkb(geo_wkt("LINESTRING (nan nan, nan nan)"))))
+  expect_false(geo_is_finite(as_wkb(geo_wkt("POLYGON ((1 1, nan nan, nan nan, 1 1))"))))
 
   expect_false(geo_is_finite(geo_xy(Inf, -Inf)))
   expect_false(geo_is_finite(geo_xy(NA, 1)))
@@ -174,12 +174,12 @@ test_that("geo_is_empty works", {
   expect_false(geo_is_empty(geo_wkt("MULTIPOINT (nan nan)")))
   expect_false(geo_is_empty(geo_wkt("POINT (1 nan)")))
 
-  expect_false(geo_is_empty(as_geo_wkb(geo_wkt("POINT (nan nan)"))))
-  expect_false(geo_is_empty(as_geo_wkb(geo_wkt("POINT EMPTY")))) # no empty point in WKB
-  expect_true(geo_is_empty(as_geo_wkb(geo_wkt("MULTIPOINT EMPTY"))))
-  expect_false(geo_is_empty(as_geo_wkb(geo_wkt("MULTIPOINT (1 nan)"))))
+  expect_false(geo_is_empty(as_wkb(geo_wkt("POINT (nan nan)"))))
+  expect_false(geo_is_empty(as_wkb(geo_wkt("POINT EMPTY")))) # no empty point in WKB
+  expect_true(geo_is_empty(as_wkb(geo_wkt("MULTIPOINT EMPTY"))))
+  expect_false(geo_is_empty(as_wkb(geo_wkt("MULTIPOINT (1 nan)"))))
   # "MULTIPOINT (nan nan)" currently cannot be written to WKB
-  # expect_true(geo_is_empty(as_geo_wkb(geo_wkt("MULTIPOINT (nan nan)"))))
+  # expect_true(geo_is_empty(as_wkb(geo_wkt("MULTIPOINT (nan nan)"))))
 
   expect_true(geo_is_empty(geo_xy(NA, NA)))
   expect_false(geo_is_empty(geo_xy(1, NA)))

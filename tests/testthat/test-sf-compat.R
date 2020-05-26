@@ -49,7 +49,7 @@ test_that("casting and c() work with sfc", {
   skip_if_not_installed("sf")
 
   wkt <- geo_wkt("POINT (30 10)")
-  wkb <- as_geo_wkb(wkt)
+  wkb <- as_wkb(wkt)
   col <- as_geo_collection(wkt)
   xy <- as_geo_xy(wkt)
   seg <- geo_segment(geo_xy(0, 0), geo_xy(30, 10))
