@@ -36,5 +36,5 @@ test_that("coersion to rect works", {
   expect_identical(as_geo_rect(geo_rect()), geo_rect())
 
   # error cast
-  expect_error(vec_cast(394, geo_rect()), class = "vctrs_error_incompatible_cast")
+  expect_error(vec_cast(394, geo_rect()), class = "vctrs_error_incompatible_type")
 })

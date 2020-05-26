@@ -12,37 +12,8 @@ test_that("geo_wkb class works", {
   expect_match(format(wkb), "POINT")
   expect_output(print(tibble(wkb)), "wkb")
   expect_is(wkb, "wk_wkb")
-  expect_true(is_wk_wkb(wkb))
   expect_true(vec_is(wkb))
   expect_equal(vec_size(wkb), 1)
-})
-
-test_that("geo_wkb parse validation works", {
-  wkb_raw <- as.raw(
-    c(
-      0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-      0x00, 0x00, 0x00, 0x3e, 0x40, 0x00, 0x00, 0x00,
-      0x00, 0x00, 0x00, 0x24, 0x40
-    )
-  )
-
-  # scrambled a bit
-  wkb_bad <- as.raw(
-    c(
-      0xFF, 0xE9, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-      0x00, 0x00, 0x044, 0x3e, 0x40, 0x28, 0x00, 0x00,
-      0x00, 0x00, 0x00, 0x24, 0x40, 0xFF, 0xF2
-    )
-  )
-
-  wkb <- new_wk_wkb(list(wkb_raw, wkb_bad))
-  expect_warning(
-    expect_equivalent(
-      parse_wkb(list(wkb_raw, wkb_bad)),
-      geo_wkb(list(wkb_raw, NULL))
-    ),
-    "parsing failure"
-  )
 })
 
 test_that("c() works for wkb", {
@@ -69,27 +40,10 @@ test_that("wkb casting and coersion works", {
     )
   )
 
-  # scrambled a bit
-  wkb_bad <- as.raw(
-    c(
-      0xFF, 0xE9, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-      0x00, 0x00, 0x044, 0x3e, 0x40, 0x28, 0x00, 0x00,
-      0x00, 0x00, 0x00, 0x24, 0x40, 0xFF, 0xF2
-    )
-  )
-
   wkb <- geo_wkb(list(wkb_raw))
-
   expect_identical(vec_cast(wkb, geo_wkb()), wkb)
-  expect_identical(vec_cast(list(wkb_raw), geo_wkb()), wkb)
 
-  expect_identical(vec_cast(list(wkb_raw), geo_wkb()), as_geo_wkb(wkb))
-  expect_identical(as_geo_wkb(list(wkb_raw)), wkb)
-
-  expect_error(as_geo_wkb(list(wkb_bad)), "Unrecognized geometry")
-  expect_error(vec_cast(list(wkb_bad), geo_wkb()), "Unrecognized geometry")
-
-  expect_error(as_geo_wkb(5), class = "vctrs_error_incompatible_cast")
+  expect_error(as_geo_wkb(5), class = "vctrs_error_incompatible_type")
 
   wkt <- vec_cast(wkb, geo_wkt())
   wkb_roundtrip <- vec_cast(wkt, geo_wkb())
@@ -126,33 +80,4 @@ test_that("wkb casting and coersion works", {
     vec_cast(geo_point(geo_xy(1, 2)), geo_wkb()),
     as_geo_wkb(geo_point(geo_xy(1, 2)), geo_wkb())
   )
-
-  expect_identical(
-    as_geo_wkb("POINT Z (21 23 13)"),
-    as_geo_wkb(geo_wkt("POINT Z (21 23 13)"))
-  )
-})
-
-test_that("casting and coercion respects options", {
-  skip("skipping wkb creation  options")
-  wkb <- as_geo_wkb(geo_wkt("POINT Z (1 2 3)"))
-  expect_true(wk::wkb_meta(as_geo_wkb(wkb, dimensions = 3))$has_z)
-  expect_false(wk::wkb_meta(as_geo_wkb(wkb, dimensions = 2))$has_z)
-  expect_identical(as.list(as_geo_wkb(wkb, endian = 0))[[1]][1], as.raw(0x00))
-})
-
-test_that("geo_wkb can handle empty (multi)points", {
-  expect_identical(as_geo_wkt(as_geo_wkb(geo_wkt("POINT EMPTY"))), geo_wkt("POINT EMPTY"))
-  expect_identical(as_geo_wkt(as_geo_wkb(geo_wkt("POINT (nan nan)"))), geo_wkt("POINT EMPTY"))
-  expect_identical(
-    as_geo_wkt(as_geo_wkb(geo_wkt("MULTIPOINT EMPTY"))),
-    geo_wkt("MULTIPOINT EMPTY")
-  )
-  # "MULTIPOINT (nan nan)" currently cannot be written to WKB
-  # expect_identical(
-  #   as_geo_wkt(as_geo_wkb(geo_wkt("MULTIPOINT (nan nan)"))),
-  #   geo_wkt("MULTIPOINT EMPTY")
-  # )
-  expect_identical(as_geo_xy(as_geo_wkb(geo_xy(NA, NA))), geo_xy(NA, NA))
-  expect_identical(as_geo_collection(as_geo_wkb(geo_point(geo_xy()))), geo_point(geo_xy()))
 })

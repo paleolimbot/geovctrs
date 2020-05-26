@@ -36,7 +36,7 @@ test_that("coersion to segment works", {
   expect_identical(vec_cast(geo_segment(), geo_segment()), geo_segment())
 
   # error cast
-  expect_error(vec_cast(394, geo_segment()), class = "vctrs_error_incompatible_cast")
+  expect_error(vec_cast(394, geo_segment()), class = "vctrs_error_incompatible_type")
 
   # wkt
   expect_identical(

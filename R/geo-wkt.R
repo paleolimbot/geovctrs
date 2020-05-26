@@ -49,67 +49,8 @@ as_geo_wkt.default <- function(x, ..., trim = TRUE, precision = 16, dimensions =
   vec_cast(x, new_wk_wkt())
 }
 
-#' S3 details for wk_wkt
-#'
-#' @inheritParams geo_wkt
-#' @param y,to A prototype to cast to. See [vctrs::vec_cast()] and
-#'   [vctrs::vec_ptype2()]
-#'
-#' @export
-#'
-#' @examples
-#' wkt <- geo_wkt("POINT (30 10)")
-#' is_wk_wkt(wkt)
-#'
-is_wk_wkt <- function(x) {
-  inherits(x, "wk_wkt")
-}
-
-#' @export
-`[<-.wk_wkt` <- function(x, i, value) {
-  x <- unclass(x)
-  x[i] <- as_wkt(value)
-  new_wk_wkt(x)
-}
-
-#' @method vec_cast wk_wkt
-#' @export
-#' @export vec_cast.wk_wkt
-#' @rdname is_wk_wkt
-vec_cast.wk_wkt <- function(x, to, ...) {
-  UseMethod("vec_cast.wk_wkt")
-}
-
-#' @method vec_cast.wk_wkt default
-#' @export
-vec_cast.wk_wkt.default <- function(x, to, ...) {
-  vec_default_cast(x, to)
-}
-
-#' @method vec_cast.wk_wkt wk_wkt
-#' @export
-vec_cast.wk_wkt.wk_wkt <- function(x, to, ...) {
-  x
-}
-
-#' @method vec_cast.wk_wkt character
-#' @export
-vec_cast.wk_wkt.character <- function(x, to, ...) {
-  geovctrs_cpp_convert(geo_wkt(x), to)
-}
-
-#' @method vec_cast.character wk_wkt
-#' @export
-vec_cast.character.wk_wkt <- function(x, to, ...) {
-  vec_data(x)
-}
-
-#' @method vec_cast.wk_wkt wk_wkb
-#' @export
-vec_cast.wk_wkt.wk_wkb <- function(x, to, ...) {
-  geovctrs_cpp_convert(x, to)
-}
-
+#' @importFrom wk validate_wk_wkt
+#' @importFrom wk vec_cast.wk_wkt
 #' @method vec_cast.wk_wkt geovctrs_rect
 #' @export
 vec_cast.wk_wkt.geovctrs_rect <- function(x, to, ...) {
@@ -140,33 +81,7 @@ vec_cast.wk_wkt.geovctrs_collection <- function(x, to, ...) {
   geovctrs_cpp_convert(x, to)
 }
 
-#' @method vec_ptype2 wk_wkt
-#' @export
-#' @export vec_ptype2.wk_wkt
-#' @rdname is_wk_wkt
-vec_ptype2.wk_wkt <- function(x, y, ...) {
-  UseMethod("vec_ptype2.wk_wkt", y)
-}
-
-#' @method vec_ptype2.wk_wkt default
-#' @export
-vec_ptype2.wk_wkt.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg) # nocov
-}
-
-#' @method vec_ptype2.wk_wkt wk_wkt
-#' @export
-vec_ptype2.wk_wkt.wk_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  # always use default conversion args when combining to avoid loosing data
-  geo_wkt()
-}
-
-#' @method vec_ptype2.wk_wkt wk_wkb
-#' @export
-vec_ptype2.wk_wkt.wk_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_wkb()
-}
-
+#' @importFrom wk vec_ptype2.wk_wkt
 #' @method vec_ptype2.wk_wkt geovctrs_collection
 #' @export
 vec_ptype2.wk_wkt.geovctrs_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {

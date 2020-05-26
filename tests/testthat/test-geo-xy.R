@@ -47,7 +47,7 @@ test_that("coersion to xy works", {
   expect_identical(as_geo_xy(geo_xy()), geo_xy())
 
   # error cast
-  expect_error(vec_cast(394, geo_xy()), class = "vctrs_error_incompatible_cast")
+  expect_error(vec_cast(394, geo_xy()), class = "vctrs_error_incompatible_type")
 
   # wkt
   expect_identical(

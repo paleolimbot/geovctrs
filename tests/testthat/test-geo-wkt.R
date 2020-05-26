@@ -6,63 +6,19 @@ test_that("geo_wkt class works", {
   expect_match(format(wkt), "POINT")
   expect_output(print(tibble(wkt)), "wkt")
   expect_is(wkt, "wk_wkt")
-  expect_true(is_wk_wkt(wkt))
   expect_true(vec_is(wkt))
   expect_equal(vec_size(wkt), 1)
-})
-
-test_that("parse problems for WKT are detected", {
-  expect_warning(
-    expect_equivalent(
-      parse_wkt(c("POINT EMPTY", "POINT EMTPY")),
-      geo_wkt(c("POINT EMPTY", NA))
-    ),
-    "parsing failure"
-  )
-
-  expect_identical(
-    wk::validate_wk_wkt(new_wk_wkt("POINT (30 10)")),
-    new_wk_wkt("POINT (30 10)")
-  )
-
-
-  expect_error(
-    wk::validate_wk_wkt(new_wk_wkt("POINT FISH")),
-    "parse problem"
-  )
-
-  expect_error(
-    wk::validate_wk_wkt(rep(new_wk_wkt("POINT FISH"), 21)),
-    "parse problems"
-  )
-})
-
-test_that("subset assignment works for WKT class", {
-  wkts <- geo_example_wkt
-
-  wkts[2] <- geo_wkt("POINT (1234 4321)")
-  expect_identical(wkts[2], geo_wkt("POINT (1234 4321)"))
-
-  wkts[2] <- as_geo_wkb(geo_wkt("POINT (1000 1000)"))
-  expect_identical(wkts[2], geo_wkt("POINT (1000 1000)"))
 })
 
 test_that("coersion and casting works for wkt types", {
   wkt <- geo_wkt("POINT (30 10)")
 
   expect_identical(vec_cast(wkt, geo_wkt()), wkt)
-  expect_identical(vec_cast("POINT (30 10)", geo_wkt()), wkt)
-  expect_identical(vec_cast(wkt, character()), "POINT (30 10)")
-  expect_error(vec_cast(5, geo_wkt()), class = "vctrs_error_incompatible_cast")
+  expect_error(vec_cast(5, geo_wkt()), class = "vctrs_error_incompatible_type")
 
   expect_identical(as_geo_wkt(wkt), wkt)
-  expect_identical(as_geo_wkt("POINT (30 10)"), wkt)
   expect_identical(as.character(wkt), "POINT (30 10)")
-  expect_error(as_geo_wkt(5), class = "vctrs_error_incompatible_cast")
-
-
-  expect_error(as_geo_wkt("FISH"), "parse problem")
-  expect_error(vec_cast("FISH", geo_wkt()), "parse problem")
+  expect_error(as_geo_wkt(5), class = "vctrs_error_incompatible_type")
 
   wkb <- vec_cast(wkt, geo_wkb())
   wkt_roundtrip <- vec_cast(wkb, geo_wkt())

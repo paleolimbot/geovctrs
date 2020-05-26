@@ -125,7 +125,7 @@ vec_cast.geovctrs_xy.geovctrs_xy <- function(x, to, ...) {
 vec_cast.geovctrs_xy.geovctrs_xyz <- function(x, to, ...) {
   x_data <- vec_data(x)
   result <- new_geovctrs_xy(list(x = x_data$x, y = x_data$y))
-  maybe_lossy_cast(result, x, to, lossy = !is.na(x_data$z))
+  maybe_lossy_cast(result, x, to, lossy = !is.na(x_data$z), ...)
   result
 }
 

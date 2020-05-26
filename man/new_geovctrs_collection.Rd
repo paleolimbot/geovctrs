@@ -27,13 +27,7 @@ as_geo_collection(x, ...)
 \arguments{
 \item{x}{A (possibly) \code{\link[=geo_collection]{geo_collection()}}}
 
-\item{...}{Unused}
-
-\item{to}{A prototype to cast to. See \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} and
-\code{\link[vctrs:vec_ptype2]{vctrs::vec_ptype2()}}}
-
-\item{y}{A prototype to cast to. See \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} and
-\code{\link[vctrs:vec_ptype2]{vctrs::vec_ptype2()}}}
+\item{to, y, x_arg, y_arg}{See \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} and \code{\link[vctrs:vec_ptype2]{vctrs::vec_ptype2()}}}
 }
 \description{
 S3 Details for geovctrs_collection

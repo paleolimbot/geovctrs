@@ -43,12 +43,6 @@ geo_wkb <- function(x = list()) {
 
 #' @export
 #' @rdname geo_wkb
-parse_wkb <- function(x) {
-  validate_provider(new_wk_wkb(x), wk::wkb_problems(x))
-}
-
-#' @export
-#' @rdname geo_wkb
 as_geo_wkb <- function(x, ..., include_srid = NA, dimensions = 3, endian = NA) {
   UseMethod("as_geo_wkb")
 }
@@ -58,103 +52,8 @@ as_geo_wkb.default <- function(x, ..., include_srid = NA, dimensions = 3, endian
   vec_cast(x, new_wk_wkb())
 }
 
-#' S3 details for wk_wkb
-#'
-#' @inheritParams geo_wkb
-#' @inheritParams is_wk_wkt
-#'
-#' @export
-#'
-#' @examples
-#' wkb_raw <- as.raw(
-#'   c(
-#'     0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-#'     0x00, 0x00, 0x00, 0x3e, 0x40, 0x00, 0x00, 0x00,
-#'     0x00, 0x00, 0x00, 0x24, 0x40
-#'   )
-#' )
-#' wkb <- geo_wkb(list(wkb_raw))
-#' is_wk_wkb(wkb)
-#'
-#' # to skip parse validation if you know your object is
-#' # valid, use new_wk_wkb()
-#' new_wk_wkb(list(wkb_raw))
-#'
-is_wk_wkb <- function(x) {
-  inherits(x, "wk_wkb")
-}
-
-#' @export
-`[<-.wk_wkb` <- function(x, i, value) {
-  x <- unclass(x)
-  x[i] <- as_wkb(value)
-  new_wk_wkb(x)
-}
-
-#' @rdname is_wk_wkb
-#' @export
-validate_wk_wkb <- function(x) {
-  stop_for_non_parseable(validate_provider(x, wk::wkb_problems(x)))
-  invisible(x)
-}
-
-#' @export
-vec_ptype_abbr.wk_wkb <- function(x, ...) {
-  "wkb"
-}
-
-#' @export
-vec_proxy.wk_wkb <- function(x, ...) {
-  unclass(x)
-}
-
-#' @export
-vec_restore.wk_wkb <- function(x, ...) {
-  wk::new_wk_wkb(x)
-}
-
-#' @method vec_cast wk_wkb
-#' @export
-#' @export vec_cast.wk_wkb
-#' @rdname is_wk_wkb
-vec_cast.wk_wkb <- function(x, to, ...) {
-  UseMethod("vec_cast.wk_wkb")
-}
-
-#' @method vec_cast.wk_wkb default
-#' @export
-vec_cast.wk_wkb.default <- function(x, to, ...) {
-  vec_default_cast(x, to)
-}
-
-#' @method vec_cast.wk_wkb wk_wkb
-#' @export
-vec_cast.wk_wkb.wk_wkb <- function(x, to, ...) {
-  if (identical(attributes(x), attributes(to))) {
-    x
-  } else {
-    geovctrs_cpp_convert(x, to)
-  }
-}
-
-#' @method vec_cast.wk_wkb character
-#' @export
-vec_cast.wk_wkb.character <- function(x, to, ...) {
-  geovctrs_cpp_convert(geo_wkt(x), to)
-}
-
-#' @method vec_cast.wk_wkb list
-#' @export
-vec_cast.wk_wkb.list <- function(x, to, ...) {
-  geovctrs_cpp_convert(geo_wkb(x), to)
-}
-
-#' @method vec_cast.wk_wkb wk_wkt
-#' @export
-vec_cast.wk_wkb.wk_wkt <- function(x, to, ...) {
-  geovctrs_cpp_convert(x, to)
-}
-
+#' @importFrom wk validate_wk_wkb
+#' @importFrom wk vec_cast.wk_wkb
 #' @method vec_cast.wk_wkb geovctrs_rect
 #' @export
 vec_cast.wk_wkb.geovctrs_rect <- function(x, to, ...) {
@@ -185,32 +84,7 @@ vec_cast.wk_wkb.geovctrs_collection <- function(x, to, ...) {
   geovctrs_cpp_convert(x, to)
 }
 
-#' @method vec_ptype2 wk_wkb
-#' @export
-#' @export vec_ptype2.wk_wkb
-#' @rdname is_wk_wkb
-vec_ptype2.wk_wkb <- function(x, y, ...) {
-  UseMethod("vec_ptype2.wk_wkb", y)
-}
-
-#' @method vec_ptype2.wk_wkb default
-#' @export
-vec_ptype2.wk_wkb.default <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  vec_default_ptype2(x, y, x_arg = x_arg, y_arg = y_arg) # nocov
-}
-
-#' @method vec_ptype2.wk_wkb wk_wkb
-#' @export
-vec_ptype2.wk_wkb.wk_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_wkb()
-}
-
-#' @method vec_ptype2.wk_wkb wk_wkt
-#' @export
-vec_ptype2.wk_wkb.wk_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_wkt()
-}
-
+#' @importFrom wk vec_ptype2.wk_wkb
 #' @method vec_ptype2.wk_wkb geovctrs_collection
 #' @export
 vec_ptype2.wk_wkb.geovctrs_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {

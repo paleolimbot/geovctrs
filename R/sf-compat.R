@@ -87,8 +87,8 @@ vec_cast.wk_wkb.sfc <- function(x, to, ...) {
 }
 
 vec_cast.sfc.wk_wkb <- function(x, to, ...) {
-  wkb <- as_geo_wkb(x)
-  wkb[is.na(wkb)] <- as_geo_wkb("GEOMETRYCOLLECTION EMPTY")
+  wkb <- as_wkb(x)
+  wkb[is.na(wkb)] <- as_wkb("GEOMETRYCOLLECTION EMPTY")
   class(wkb) <- "WKB"
   sf::st_as_sfc(wkb, ..., EWKB = TRUE)
 }
