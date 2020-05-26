@@ -17,7 +17,6 @@ as_wkt.geovctr <- function(x, ...) {
   vec_cast(x, new_wk_wkt())
 }
 
-#' @importFrom wk validate_wk_wkt
 #' @importFrom wk vec_cast.wk_wkt
 #' @method vec_cast.wk_wkt geovctrs_rect
 #' @export
@@ -99,7 +98,6 @@ as_wkb.geovctr <- function(x, ...) {
   vec_cast(x, new_wk_wkb())
 }
 
-#' @importFrom wk validate_wk_wkb
 #' @importFrom wk vec_cast.wk_wkb
 #' @method vec_cast.wk_wkb geovctrs_rect
 #' @export
