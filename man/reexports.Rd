@@ -6,9 +6,11 @@
 \alias{tibble}
 \alias{as_wkt}
 \alias{wkt}
+\alias{new_wk_wkt}
 \alias{parse_wkt}
 \alias{as_wkb}
 \alias{wkb}
+\alias{new_wk_wkb}
 \alias{parse_wkb}
 \title{Objects exported from other packages}
 \keyword{internal}
@@ -19,6 +21,6 @@ below to see their documentation.
 \describe{
   \item{tibble}{\code{\link[tibble]{tibble}}}
 
-  \item{wk}{\code{\link[wk]{as_wkb}}, \code{\link[wk]{as_wkt}}, \code{\link[wk]{parse_wkb}}, \code{\link[wk]{parse_wkt}}, \code{\link[wk]{wkb}}, \code{\link[wk]{wkt}}}
+  \item{wk}{\code{\link[wk]{as_wkb}}, \code{\link[wk]{as_wkt}}, \code{\link[wk]{new_wk_wkb}}, \code{\link[wk]{new_wk_wkt}}, \code{\link[wk]{parse_wkb}}, \code{\link[wk]{parse_wkt}}, \code{\link[wk]{wkb}}, \code{\link[wk]{wkt}}}
 }}
 

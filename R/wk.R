@@ -7,6 +7,10 @@ wk::as_wkt
 #' @export
 wk::wkt
 
+#' @importFrom wk new_wk_wkt
+#' @export
+wk::new_wk_wkt
+
 #' @importFrom wk parse_wkt
 #' @export
 wk::parse_wkt
@@ -87,6 +91,10 @@ wk::as_wkb
 #' @importFrom wk wkb
 #' @export
 wk::wkb
+
+#' @importFrom wk new_wk_wkb
+#' @export
+wk::new_wk_wkb
 
 #' @importFrom wk parse_wkb
 #' @export
