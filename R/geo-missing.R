@@ -168,7 +168,7 @@ geo_is_empty.default <- function(x) {
 #' @export
 geo_is_empty.geovctr <- function(x) {
   # for now
-  geo_is_empty(as_geo_wkt(x))
+  geo_is_empty(as_wkt(x))
 }
 
 #' @export

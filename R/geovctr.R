@@ -147,7 +147,7 @@ expect_geovctr <- function(x) {
 
   # must have implementations for as_WKT, WKB, and collection
   testthat::expect_is(as_wkb(x), "wk_wkb")
-  testthat::expect_is(as_geo_wkt(x), "wk_wkt")
+  testthat::expect_is(as_wkt(x), "wk_wkt")
   testthat::expect_is(as_geo_collection(x), "geovctrs_collection")
 
   # must be combinable with wkb, wkt, and  collection

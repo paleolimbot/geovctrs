@@ -21,8 +21,8 @@
 #' # use geo_wkt() to "mark" a vector as well-known text
 #' geo_wkt("POINT (30 10)")
 #'
-#' # use as_geo_wkt() to use conversion options
-#' as_geo_wkt("POINT (30 10)", trim = FALSE, precision = 2)
+#' # use as_wkt() to use conversion options
+#' as_wkt("POINT (30 10)", trim = FALSE, precision = 2)
 #'
 #' # use parse_wkt() to identify parsing failures
 #' parse_wkt("POINT EMTPY")
@@ -40,12 +40,7 @@ parse_wkt <- function(x) {
 
 #' @rdname geo_wkt
 #' @export
-as_geo_wkt <- function(x, ..., trim = TRUE, precision = 16, dimensions = 3) {
-  UseMethod("as_geo_wkt")
-}
-
-#' @export
-as_geo_wkt.default <- function(x, ..., trim = TRUE, precision = 16, dimensions = 3) {
+as_wkt.geovctr <- function(x, ...) {
   vec_cast(x, new_wk_wkt())
 }
 

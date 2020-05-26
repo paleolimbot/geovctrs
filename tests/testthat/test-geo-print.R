@@ -49,7 +49,7 @@ test_that("geo_format() and geo_print() don't error for non-parsable geometries"
 test_that("all geovctrs work in the RStudio viewer", {
   if (FALSE) {
     View(geo_nc) # wkb
-    View(tibble(as_geo_wkt(geo_nc$geometry))) # wkt
+    View(tibble(as_wkt(geo_nc$geometry))) # wkt
     View(tibble(as_geo_collection(geo_nc$geometry))) # collection
     View(geo_summary(geo_nc)) # xy
     View(tibble(geo_segment(geo_xy(0, 0), geo_xy(12, 11)))) # segment

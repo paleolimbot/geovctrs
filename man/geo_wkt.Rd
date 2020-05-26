@@ -3,14 +3,14 @@
 \name{geo_wkt}
 \alias{geo_wkt}
 \alias{parse_wkt}
-\alias{as_geo_wkt}
+\alias{as_wkt.geovctr}
 \title{Create and validate well-known text}
 \usage{
 geo_wkt(x = character())
 
 parse_wkt(x)
 
-as_geo_wkt(x, ..., trim = TRUE, precision = 16, dimensions = 3)
+\method{as_wkt}{geovctr}(x, ...)
 }
 \arguments{
 \item{x}{A character vector containing well-known text}
@@ -37,8 +37,8 @@ To skip validation, use \code{\link[wk:new_wk_wkt]{wk::new_wk_wkt()}}.
 # use geo_wkt() to "mark" a vector as well-known text
 geo_wkt("POINT (30 10)")
 
-# use as_geo_wkt() to use conversion options
-as_geo_wkt("POINT (30 10)", trim = FALSE, precision = 2)
+# use as_wkt() to use conversion options
+as_wkt("POINT (30 10)", trim = FALSE, precision = 2)
 
 # use parse_wkt() to identify parsing failures
 parse_wkt("POINT EMTPY")

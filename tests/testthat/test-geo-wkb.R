@@ -46,7 +46,7 @@ test_that("wkb casting and coersion works", {
   wkt <- vec_cast(wkb, geo_wkt())
   wkb_roundtrip <- vec_cast(wkt, geo_wkb())
   expect_identical(wkb, wkb_roundtrip)
-  expect_identical(as_geo_wkt(wkb), wkt)
+  expect_identical(as_wkt(wkb), wkt)
   expect_identical(as_wkb(wkt), wkb)
 
   expect_identical(

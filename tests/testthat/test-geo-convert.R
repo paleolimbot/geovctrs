@@ -20,12 +20,12 @@ test_that("conversion prototype args are used", {
 
   # make sure casting applies args
   expect_identical(
-    as_geo_wkt(wkt, trim = FALSE, precision = 2, dimensions = 2),
+    as_wkt(wkt, trim = FALSE, precision = 2, dimensions = 2),
     geo_wkt("POINT (10.00 11.00)")
   )
 
   expect_identical(
-    as_geo_wkt(wkt, trim = FALSE, precision = 2, dimensions = 3),
+    as_wkt(wkt, trim = FALSE, precision = 2, dimensions = 3),
     geo_wkt("POINT Z (10.00 11.00 12.00)")
   )
 })
