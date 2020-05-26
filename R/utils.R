@@ -35,7 +35,7 @@ rep_along_or_fail <- function(x, template) {
   template_quo <- rlang::enquo(template)
 
   if (vec_size(x) == 1) {
-    vec_repeat(x, times = vec_size(template))
+    vec_rep(x, times = vec_size(template))
   } else if (vec_size(x) != vec_size(template)) {
     x_label <- rlang::as_label(x_quo)
     abort(
@@ -56,7 +56,7 @@ rep_len_or_fail <- function(x, size) {
   if (size == 1 || vec_size(x) == size) {
     x
   } else if (vec_size(x) == 1) {
-    vec_repeat(x, times = size)
+    vec_rep(x, times = size)
   } else {
     x_label <- rlang::as_label(x_quo)
     abort(
