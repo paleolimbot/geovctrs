@@ -20,8 +20,10 @@
 geo_segment <- function(start = geo_xy(), end = geo_xy(), srid = 0) {
   result <- new_geovctrs_segment(
     vec_recycle_common(
-      start = vec_cast(start, geo_xy()),
-      end = vec_cast(end, geo_xy()),
+      x0 = field(start, "x"),
+      y0 = field(start, "y"),
+      x1 = field(end, "x"),
+      y1 = field(end, "y"),
       srid = as_geo_srid(srid)
     )
   )
@@ -36,9 +38,12 @@ geo_segment <- function(start = geo_xy(), end = geo_xy(), srid = 0) {
 #'
 #' @export
 #'
-new_geovctrs_segment <- function(x = list(start = geo_xy(), end = geo_xy(), srid = integer())) {
-  vec_assert(x$start, geo_xy())
-  vec_assert(x$end, geo_xy())
+new_geovctrs_segment <- function(x = list(x0 = double(), y0 = double(),
+                                          x1 = double(), y1 = double(), srid = integer())) {
+  vec_assert(x$x0, double())
+  vec_assert(x$y0, double())
+  vec_assert(x$x1, double())
+  vec_assert(x$y1, double())
   new_rcrd(x, class = c("geovctrs_segment", "geovctr"))
 }
 
@@ -68,16 +73,16 @@ format.geovctrs_segment <- function(x, ..., col = FALSE) {
   paste0(
     maybe_blue(
       "(",
-      format(field(field(x, "start"), "x"), trim = TRUE, ...),
+      format(field(x, "x0"), trim = TRUE, ...),
       " ",
-      format(field(field(x, "start"), "y"), trim = TRUE, ...),
+      format(field(x, "y0"), trim = TRUE, ...),
       col = col
     ),
     maybe_grey(if(use_utf8()) cli::symbol$arrow_right else cli::symbol$em_dash, col = col),
     maybe_blue(
-      format(field(field(x, "end"), "x"), trim = TRUE, ...),
+      format(field(x, "x1"), trim = TRUE, ...),
       " ",
-      format(field(field(x, "end"), "y"), trim = TRUE, ...),
+      format(field(x, "y1"), trim = TRUE, ...),
       ")",
       col = col
     )

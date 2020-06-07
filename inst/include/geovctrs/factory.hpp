@@ -44,9 +44,13 @@ public:
   static List newSegment(NumericVector x0, NumericVector y0,
                          NumericVector x1, NumericVector y1,
                          IntegerVector srid) {
-    List start = newXY(x0, y0);
-    List end = newXY(x1, y1);
-    List segment = List::create(_["start"] = start, _["end"] = end, _["srid"] = srid);
+    List segment = List::create(
+      _["x0"] = x0,
+      _["y0"] = y0,
+      _["x1"] = x1,
+      _["y1"] = y1,
+      _["srid"] = srid
+    );
     segment.attr("class") = CharacterVector::create(
       "geovctrs_segment", "geovctr",
       "vctrs_rcrd", "vctrs_vctr"

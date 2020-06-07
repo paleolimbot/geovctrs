@@ -90,12 +90,10 @@ geo_has_missing.geovctrs_xy <- function(x) {
 
 #' @export
 geo_has_missing.geovctrs_segment <- function(x) {
-  start <- field(x, "start")
-  end <- field(x, "end")
-  result <- is.na(field(start, "x")) |
-    is.na(field(start, "y")) |
-    is.na(field(end, "x")) |
-    is.na(field(end, "y"))
+  result <- is.na(field(x, "x0")) |
+    is.na(field(x, "y0")) |
+    is.na(field(x, "x1")) |
+    is.na(field(x, "y1"))
   result[is.na(x)] <- NA
   result
 }
@@ -134,12 +132,10 @@ geo_is_finite.geovctrs_xy <- function(x) {
 
 #' @export
 geo_is_finite.geovctrs_segment <- function(x) {
-  start <- field(x, "start")
-  end <- field(x, "end")
-  result <- is.finite(field(start, "x")) &
-    is.finite(field(start, "y")) &
-    is.finite(field(end, "x")) &
-    is.finite(field(end, "y"))
+  result <- is.finite(field(x, "x0")) &
+    is.finite(field(x, "y0")) &
+    is.finite(field(x, "x1")) &
+    is.finite(field(x, "y1"))
   result[is.na(x)] <- NA
   result
 }

@@ -5,17 +5,7 @@
   NA_wkb_ <<- new_wk_wkb()[NA_integer_]
   NA_collection_ <<- geo_collection()[NA_integer_]
   NA_xy_ <<- geo_xy()[NA_integer_]
-
-  # something about the nature of geo_segment() here specifically doesn't work
-  # related to nested calling of geo_xy()
-  NA_segment_ <<- new_geovctrs_segment(
-    list(
-      start = new_geovctrs_xy(list(x = NA_real_, y = NA_real_)),
-      end = new_geovctrs_xy(list(x = NA_real_, y = NA_real_)),
-      srid = NA_integer_
-    )
-  )
-
+  NA_segment_ <<- geo_segment()[NA_integer_]
   NA_rect_ <<- geo_rect()[NA_integer_]
 
   # register generics for soft dependencies

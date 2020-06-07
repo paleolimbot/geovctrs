@@ -20,14 +20,14 @@ test_that("geo_segment() c() works", {
 test_that("coersion from segment works", {
   segment <- geo_segment(start = geo_xy(0:5, 0:5), end = geo_xy(1:6, 1:6))
 
-  expect_identical(
+  expect_equal(
     tibble::as_tibble(segment),
-    tibble(start = geo_xy(0:5, 0:5), end = geo_xy(1:6, 1:6), srid = rep(0L, 6))
+    tibble(x0 = 0:5, y0 = 0:5, x1 = 1:6, y1 = 1:6, srid = rep(0L, 6))
   )
 
-  expect_identical(
-    as.data.frame(segment),
-    as.data.frame(tibble(start = geo_xy(0:5, 0:5), end = geo_xy(1:6, 1:6), srid = rep(0L, 6)))
+  expect_equal(
+    as.data.frame(tibble::as_tibble(segment)),
+    as.data.frame(tibble(x0 = 0:5, y0 = 0:5, x1 = 1:6, y1 = 1:6, srid = rep(0L, 6)))
   )
 })
 

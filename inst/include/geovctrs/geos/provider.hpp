@@ -252,12 +252,10 @@ public:
   IntegerVector srid;
 
   GeovctrsGEOSSegmentProvider(List segment) {
-    List start = segment["start"];
-    List end = segment["end"];
-    this->x0 = start["x"];
-    this->y0 = start["y"];
-    this->x1 = end["x"];
-    this->y1 = end["y"];
+    this->x0 = segment["x0"];
+    this->y0 = segment["y0"];
+    this->x1 = segment["x1"];
+    this->y1 = segment["y1"];
     this->srid = segment["srid"];
   }
 
