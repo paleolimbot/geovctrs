@@ -3,9 +3,6 @@
 #'
 #' The [geo_segment()] type is useful as an efficient representation of
 #' line segments stored using column vectors.
-#' Note that `geo_segment(geo_xy(NA, NA), geo_xy(NA, NA))` is considered
-#' an "empty" linestring, whereas `geo_segment(geo_xy(NA, NA), geo_xy(NA, NA), srid = NA)`
-#' is "missing" (see [geo_is_missing()] and [geo_is_empty()]).
 #'
 #' @param start,end [geo_xy()]s for the start and end
 #'   of the segment, respectively.
@@ -18,7 +15,10 @@
 #' geo_plot(geo_segment(geo_xy(0, 0), geo_xy(10, -10:10)))
 #'
 geo_segment <- function(start = geo_xy(), end = geo_xy(), srid = 0) {
-  result <- new_geovctrs_segment(
+  start <- vec_cast(start, geo_xy())
+  end <- vec_cast(end, geo_xy())
+
+  new_geovctrs_segment(
     vec_recycle_common(
       x0 = field(start, "x"),
       y0 = field(start, "y"),
@@ -27,8 +27,6 @@ geo_segment <- function(start = geo_xy(), end = geo_xy(), srid = 0) {
       srid = as_geo_srid(srid)
     )
   )
-
-  result
 }
 
 #' S3 details for geovctrs_segment

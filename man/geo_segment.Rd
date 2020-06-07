@@ -21,9 +21,6 @@ A \code{\link[=new_geovctrs_segment]{new_geovctrs_segment()}}
 \description{
 The \code{\link[=geo_segment]{geo_segment()}} type is useful as an efficient representation of
 line segments stored using column vectors.
-Note that \code{geo_segment(geo_xy(NA, NA), geo_xy(NA, NA))} is considered
-an "empty" linestring, whereas \code{geo_segment(geo_xy(NA, NA), geo_xy(NA, NA), srid = NA)}
-is "missing" (see \code{\link[=geo_is_missing]{geo_is_missing()}} and \code{\link[=geo_is_empty]{geo_is_empty()}}).
 }
 \examples{
 geo_plot(geo_segment(geo_xy(0, 0), geo_xy(10, -10:10)))
