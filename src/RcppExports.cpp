@@ -203,6 +203,79 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cpp_translate_segment_wkt
+CharacterVector cpp_translate_segment_wkt(List segment, int precision, int trim);
+RcppExport SEXP _geovctrs_cpp_translate_segment_wkt(SEXP segmentSEXP, SEXP precisionSEXP, SEXP trimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type segment(segmentSEXP);
+    Rcpp::traits::input_parameter< int >::type precision(precisionSEXP);
+    Rcpp::traits::input_parameter< int >::type trim(trimSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_translate_segment_wkt(segment, precision, trim));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_translate_segment_wkb
+List cpp_translate_segment_wkb(List segment, int endian, int bufferSize);
+RcppExport SEXP _geovctrs_cpp_translate_segment_wkb(SEXP segmentSEXP, SEXP endianSEXP, SEXP bufferSizeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type segment(segmentSEXP);
+    Rcpp::traits::input_parameter< int >::type endian(endianSEXP);
+    Rcpp::traits::input_parameter< int >::type bufferSize(bufferSizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_translate_segment_wkb(segment, endian, bufferSize));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_translate_segment_wksxp
+List cpp_translate_segment_wksxp(List segment);
+RcppExport SEXP _geovctrs_cpp_translate_segment_wksxp(SEXP segmentSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type segment(segmentSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_translate_segment_wksxp(segment));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_translate_wkt_segment
+List cpp_translate_wkt_segment(CharacterVector wkt, int includeSRID);
+RcppExport SEXP _geovctrs_cpp_translate_wkt_segment(SEXP wktSEXP, SEXP includeSRIDSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type wkt(wktSEXP);
+    Rcpp::traits::input_parameter< int >::type includeSRID(includeSRIDSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_translate_wkt_segment(wkt, includeSRID));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_translate_wkb_segment
+List cpp_translate_wkb_segment(List wkb, int includeSRID);
+RcppExport SEXP _geovctrs_cpp_translate_wkb_segment(SEXP wkbSEXP, SEXP includeSRIDSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type wkb(wkbSEXP);
+    Rcpp::traits::input_parameter< int >::type includeSRID(includeSRIDSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_translate_wkb_segment(wkb, includeSRID));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_translate_wksxp_segment
+List cpp_translate_wksxp_segment(List wksxp, int includeSRID);
+RcppExport SEXP _geovctrs_cpp_translate_wksxp_segment(SEXP wksxpSEXP, SEXP includeSRIDSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type wksxp(wksxpSEXP);
+    Rcpp::traits::input_parameter< int >::type includeSRID(includeSRIDSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_translate_wksxp_segment(wksxp, includeSRID));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _geovctrs_RcppExport_validate(const char* sig) { 
@@ -236,6 +309,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_translate_wkt_xyz", (DL_FUNC) &_geovctrs_cpp_translate_wkt_xyz, 1},
     {"_geovctrs_cpp_translate_wkb_xyz", (DL_FUNC) &_geovctrs_cpp_translate_wkb_xyz, 1},
     {"_geovctrs_cpp_translate_wksxp_xyz", (DL_FUNC) &_geovctrs_cpp_translate_wksxp_xyz, 1},
+    {"_geovctrs_cpp_translate_segment_wkt", (DL_FUNC) &_geovctrs_cpp_translate_segment_wkt, 3},
+    {"_geovctrs_cpp_translate_segment_wkb", (DL_FUNC) &_geovctrs_cpp_translate_segment_wkb, 3},
+    {"_geovctrs_cpp_translate_segment_wksxp", (DL_FUNC) &_geovctrs_cpp_translate_segment_wksxp, 1},
+    {"_geovctrs_cpp_translate_wkt_segment", (DL_FUNC) &_geovctrs_cpp_translate_wkt_segment, 2},
+    {"_geovctrs_cpp_translate_wkb_segment", (DL_FUNC) &_geovctrs_cpp_translate_wkb_segment, 2},
+    {"_geovctrs_cpp_translate_wksxp_segment", (DL_FUNC) &_geovctrs_cpp_translate_wksxp_segment, 2},
     {"_geovctrs_RcppExport_registerCCallable", (DL_FUNC) &_geovctrs_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };

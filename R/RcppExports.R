@@ -61,6 +61,30 @@ cpp_translate_wksxp_xyz <- function(wksxp) {
     .Call(`_geovctrs_cpp_translate_wksxp_xyz`, wksxp)
 }
 
+cpp_translate_segment_wkt <- function(segment, precision, trim) {
+    .Call(`_geovctrs_cpp_translate_segment_wkt`, segment, precision, trim)
+}
+
+cpp_translate_segment_wkb <- function(segment, endian, bufferSize) {
+    .Call(`_geovctrs_cpp_translate_segment_wkb`, segment, endian, bufferSize)
+}
+
+cpp_translate_segment_wksxp <- function(segment) {
+    .Call(`_geovctrs_cpp_translate_segment_wksxp`, segment)
+}
+
+cpp_translate_wkt_segment <- function(wkt, includeSRID) {
+    .Call(`_geovctrs_cpp_translate_wkt_segment`, wkt, includeSRID)
+}
+
+cpp_translate_wkb_segment <- function(wkb, includeSRID) {
+    .Call(`_geovctrs_cpp_translate_wkb_segment`, wkb, includeSRID)
+}
+
+cpp_translate_wksxp_segment <- function(wksxp, includeSRID) {
+    .Call(`_geovctrs_cpp_translate_wksxp_segment`, wksxp, includeSRID)
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('_geovctrs_RcppExport_registerCCallable', PACKAGE = 'geovctrs')

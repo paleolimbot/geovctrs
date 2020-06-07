@@ -7,6 +7,8 @@
 #include "wk/sexp-reader.h"
 #include "geovctrs/wk-xy.h"
 #include "geovctrs/wk-xyz.h"
+#include "geovctrs/wk-segment.h"
+#include "wk/geometry-debug-handler.h"
 
 #include <Rcpp.h>
 #include "wk/rcpp-io.h"
@@ -46,6 +48,18 @@ class RcppXYZWriter: public GeovctrsWKXYZWriter<List, NumericVector> {
 public:
   RcppXYZWriter(RcppFieldsExporter& exporter):
     GeovctrsWKXYZWriter<List, NumericVector>(exporter) {}
+};
+
+class RcppSegmentReader: public GeovctrsWKSegmentReader<List, NumericVector, IntegerVector> {
+public:
+  RcppSegmentReader(RcppFieldsProvider& provider):
+    GeovctrsWKSegmentReader<List, NumericVector, IntegerVector>(provider) {}
+};
+
+class RcppSegmentWriter: public GeovctrsWKSegmentWriter<List, NumericVector, IntegerVector> {
+public:
+  RcppSegmentWriter(RcppFieldsExporter& exporter):
+    GeovctrsWKSegmentWriter<List, NumericVector, IntegerVector>(exporter) {}
 };
 
 void cpp_translate_base(WKReader& reader, WKWriter& writer,
@@ -121,6 +135,20 @@ List cpp_translate_base_xyz(WKReader& reader) {
   RcppXYZWriter writer(exporter);
   cpp_translate_base(reader, writer, 2, false, false);
   return xyz;
+}
+
+List cpp_translate_base_segment(WKReader& reader, int includeSRID) {
+  List segment = List::create(
+    _["x0"] = NumericVector(reader.nFeatures()),
+    _["y0"] = NumericVector(reader.nFeatures()),
+    _["x1"] = NumericVector(reader.nFeatures()),
+    _["y1"] = NumericVector(reader.nFeatures())
+  );
+
+  RcppFieldsExporter exporter(segment);
+  RcppSegmentWriter writer(exporter);
+  cpp_translate_base(reader, writer, false, false, includeSRID);
+  return segment;
 }
 
 // -------- XY -----------
@@ -209,4 +237,48 @@ List cpp_translate_wksxp_xyz(List wksxp) {
   WKSEXPProvider provider(wksxp);
   WKSEXPReader reader(provider);
   return cpp_translate_base_xyz(reader);
+}
+
+// -------- segment -----------
+
+// [[Rcpp::export]]
+CharacterVector cpp_translate_segment_wkt(List segment, int precision, int trim) {
+  RcppFieldsProvider provider(segment);
+  RcppSegmentReader reader(provider);
+  return cpp_translate_base_wkt(reader, 0, 0, 0, precision, trim);
+}
+
+// [[Rcpp::export]]
+List cpp_translate_segment_wkb(List segment, int endian, int bufferSize) {
+  RcppFieldsProvider provider(segment);
+  RcppSegmentReader reader(provider);
+  return cpp_translate_base_wkb(reader, 0, 0, 0, endian, bufferSize);
+}
+
+// [[Rcpp::export]]
+List cpp_translate_segment_wksxp(List segment) {
+  RcppFieldsProvider provider(segment);
+  RcppSegmentReader reader(provider);
+  return cpp_translate_base_wksxp(reader, 0, 0, 0);
+}
+
+// [[Rcpp::export]]
+List cpp_translate_wkt_segment(CharacterVector wkt, int includeSRID) {
+  WKCharacterVectorProvider provider(wkt);
+  WKTReader reader(provider);
+  return cpp_translate_base_segment(reader, includeSRID);
+}
+
+// [[Rcpp::export]]
+List cpp_translate_wkb_segment(List wkb, int includeSRID) {
+  WKRawVectorListProvider provider(wkb);
+  WKBReader reader(provider);
+  return cpp_translate_base_segment(reader, includeSRID);
+}
+
+// [[Rcpp::export]]
+List cpp_translate_wksxp_segment(List wksxp, int includeSRID) {
+  WKSEXPProvider provider(wksxp);
+  WKSEXPReader reader(provider);
+  return cpp_translate_base_segment(reader, includeSRID);
 }
