@@ -33,6 +33,34 @@ cpp_translate_wkb_xy <- function(wkb) {
     .Call(`_geovctrs_cpp_translate_wkb_xy`, wkb)
 }
 
+cpp_translate_wksxp_xy <- function(wksxp) {
+    .Call(`_geovctrs_cpp_translate_wksxp_xy`, wksxp)
+}
+
+cpp_translate_xyz_wkt <- function(xyz, precision, trim) {
+    .Call(`_geovctrs_cpp_translate_xyz_wkt`, xyz, precision, trim)
+}
+
+cpp_translate_xyz_wkb <- function(xyz, endian, bufferSize) {
+    .Call(`_geovctrs_cpp_translate_xyz_wkb`, xyz, endian, bufferSize)
+}
+
+cpp_translate_xyz_wksxp <- function(xyz) {
+    .Call(`_geovctrs_cpp_translate_xyz_wksxp`, xyz)
+}
+
+cpp_translate_wkt_xyz <- function(wkt) {
+    .Call(`_geovctrs_cpp_translate_wkt_xyz`, wkt)
+}
+
+cpp_translate_wkb_xyz <- function(wkb) {
+    .Call(`_geovctrs_cpp_translate_wkb_xyz`, wkb)
+}
+
+cpp_translate_wksxp_xyz <- function(wksxp) {
+    .Call(`_geovctrs_cpp_translate_wksxp_xyz`, wksxp)
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('_geovctrs_RcppExport_registerCCallable', PACKAGE = 'geovctrs')

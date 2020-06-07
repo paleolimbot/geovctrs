@@ -101,13 +101,13 @@ vec_cast.geovctrs_xyz.geovctrs_xy <- function(x, to, ...) {
 #' @method vec_cast.geovctrs_xyz wk_wkt
 #' @export
 vec_cast.geovctrs_xyz.wk_wkt <- function(x, to, ...) {
-  geovctrs_cpp_convert(x, to)
+  new_geovctrs_xyz(cpp_translate_wkt_xyz(x))
 }
 
 #' @method vec_cast.geovctrs_xyz wk_wkb
 #' @export
 vec_cast.geovctrs_xyz.wk_wkb <- function(x, to, ...) {
-  geovctrs_cpp_convert(x, to)
+  new_geovctrs_xyz(cpp_translate_wkb_xyz(x))
 }
 
 #' @method vec_cast.geovctrs_xyz geovctrs_collection

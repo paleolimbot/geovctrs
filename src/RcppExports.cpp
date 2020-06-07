@@ -122,6 +122,87 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cpp_translate_wksxp_xy
+List cpp_translate_wksxp_xy(List wksxp);
+RcppExport SEXP _geovctrs_cpp_translate_wksxp_xy(SEXP wksxpSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type wksxp(wksxpSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_translate_wksxp_xy(wksxp));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_translate_xyz_wkt
+CharacterVector cpp_translate_xyz_wkt(List xyz, int precision, int trim);
+RcppExport SEXP _geovctrs_cpp_translate_xyz_wkt(SEXP xyzSEXP, SEXP precisionSEXP, SEXP trimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type xyz(xyzSEXP);
+    Rcpp::traits::input_parameter< int >::type precision(precisionSEXP);
+    Rcpp::traits::input_parameter< int >::type trim(trimSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_translate_xyz_wkt(xyz, precision, trim));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_translate_xyz_wkb
+List cpp_translate_xyz_wkb(List xyz, int endian, int bufferSize);
+RcppExport SEXP _geovctrs_cpp_translate_xyz_wkb(SEXP xyzSEXP, SEXP endianSEXP, SEXP bufferSizeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type xyz(xyzSEXP);
+    Rcpp::traits::input_parameter< int >::type endian(endianSEXP);
+    Rcpp::traits::input_parameter< int >::type bufferSize(bufferSizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_translate_xyz_wkb(xyz, endian, bufferSize));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_translate_xyz_wksxp
+List cpp_translate_xyz_wksxp(List xyz);
+RcppExport SEXP _geovctrs_cpp_translate_xyz_wksxp(SEXP xyzSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type xyz(xyzSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_translate_xyz_wksxp(xyz));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_translate_wkt_xyz
+List cpp_translate_wkt_xyz(CharacterVector wkt);
+RcppExport SEXP _geovctrs_cpp_translate_wkt_xyz(SEXP wktSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type wkt(wktSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_translate_wkt_xyz(wkt));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_translate_wkb_xyz
+List cpp_translate_wkb_xyz(List wkb);
+RcppExport SEXP _geovctrs_cpp_translate_wkb_xyz(SEXP wkbSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type wkb(wkbSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_translate_wkb_xyz(wkb));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_translate_wksxp_xyz
+List cpp_translate_wksxp_xyz(List wksxp);
+RcppExport SEXP _geovctrs_cpp_translate_wksxp_xyz(SEXP wksxpSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type wksxp(wksxpSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_translate_wksxp_xyz(wksxp));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _geovctrs_RcppExport_validate(const char* sig) { 
@@ -148,6 +229,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_translate_xy_wksxp", (DL_FUNC) &_geovctrs_cpp_translate_xy_wksxp, 1},
     {"_geovctrs_cpp_translate_wkt_xy", (DL_FUNC) &_geovctrs_cpp_translate_wkt_xy, 1},
     {"_geovctrs_cpp_translate_wkb_xy", (DL_FUNC) &_geovctrs_cpp_translate_wkb_xy, 1},
+    {"_geovctrs_cpp_translate_wksxp_xy", (DL_FUNC) &_geovctrs_cpp_translate_wksxp_xy, 1},
+    {"_geovctrs_cpp_translate_xyz_wkt", (DL_FUNC) &_geovctrs_cpp_translate_xyz_wkt, 3},
+    {"_geovctrs_cpp_translate_xyz_wkb", (DL_FUNC) &_geovctrs_cpp_translate_xyz_wkb, 3},
+    {"_geovctrs_cpp_translate_xyz_wksxp", (DL_FUNC) &_geovctrs_cpp_translate_xyz_wksxp, 1},
+    {"_geovctrs_cpp_translate_wkt_xyz", (DL_FUNC) &_geovctrs_cpp_translate_wkt_xyz, 1},
+    {"_geovctrs_cpp_translate_wkb_xyz", (DL_FUNC) &_geovctrs_cpp_translate_wkb_xyz, 1},
+    {"_geovctrs_cpp_translate_wksxp_xyz", (DL_FUNC) &_geovctrs_cpp_translate_wksxp_xyz, 1},
     {"_geovctrs_RcppExport_registerCCallable", (DL_FUNC) &_geovctrs_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };
