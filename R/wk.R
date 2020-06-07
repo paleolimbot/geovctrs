@@ -37,7 +37,7 @@ vec_cast.wk_wkt.geovctrs_segment <- function(x, to, ...) {
 #' @method vec_cast.wk_wkt geovctrs_xy
 #' @export
 vec_cast.wk_wkt.geovctrs_xy <- function(x, to, ...) {
-  geovctrs_cpp_convert(x, to)
+  new_wk_wkt(cpp_translate_xy_wkt(x, precision = 16, trim = TRUE))
 }
 
 #' @method vec_cast.wk_wkt geovctrs_xyz
@@ -122,7 +122,7 @@ vec_cast.wk_wkb.geovctrs_segment <- function(x, to, ...) {
 #' @method vec_cast.wk_wkb geovctrs_xy
 #' @export
 vec_cast.wk_wkb.geovctrs_xy <- function(x, to, ...) {
-  geovctrs_cpp_convert(x, to)
+  new_wk_wkb(cpp_translate_xy_wkb(x, endian = wk::wk_platform_endian(), bufferSize = 2048))
 }
 
 #' @method vec_cast.wk_wkb geovctrs_xyz

@@ -63,6 +63,43 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cpp_translate_xy_wkt
+CharacterVector cpp_translate_xy_wkt(List xy, int precision, int trim);
+RcppExport SEXP _geovctrs_cpp_translate_xy_wkt(SEXP xySEXP, SEXP precisionSEXP, SEXP trimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type xy(xySEXP);
+    Rcpp::traits::input_parameter< int >::type precision(precisionSEXP);
+    Rcpp::traits::input_parameter< int >::type trim(trimSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_translate_xy_wkt(xy, precision, trim));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_translate_xy_wkb
+List cpp_translate_xy_wkb(List xy, int endian, int bufferSize);
+RcppExport SEXP _geovctrs_cpp_translate_xy_wkb(SEXP xySEXP, SEXP endianSEXP, SEXP bufferSizeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type xy(xySEXP);
+    Rcpp::traits::input_parameter< int >::type endian(endianSEXP);
+    Rcpp::traits::input_parameter< int >::type bufferSize(bufferSizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_translate_xy_wkb(xy, endian, bufferSize));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_translate_xy_wksxp
+List cpp_translate_xy_wksxp(List xy);
+RcppExport SEXP _geovctrs_cpp_translate_xy_wksxp(SEXP xySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type xy(xySEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_translate_xy_wksxp(xy));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _geovctrs_RcppExport_validate(const char* sig) { 
@@ -84,6 +121,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_geovctrs_cpp_convert", (DL_FUNC) &_geovctrs_geovctrs_cpp_convert, 2},
     {"_geovctrs_geovctrs_cpp_geos_version_runtime", (DL_FUNC) &_geovctrs_geovctrs_cpp_geos_version_runtime, 0},
     {"_geovctrs_geovctrs_cpp_geos_version_build", (DL_FUNC) &_geovctrs_geovctrs_cpp_geos_version_build, 0},
+    {"_geovctrs_cpp_translate_xy_wkt", (DL_FUNC) &_geovctrs_cpp_translate_xy_wkt, 3},
+    {"_geovctrs_cpp_translate_xy_wkb", (DL_FUNC) &_geovctrs_cpp_translate_xy_wkb, 3},
+    {"_geovctrs_cpp_translate_xy_wksxp", (DL_FUNC) &_geovctrs_cpp_translate_xy_wksxp, 1},
     {"_geovctrs_RcppExport_registerCCallable", (DL_FUNC) &_geovctrs_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };

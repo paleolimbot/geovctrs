@@ -13,6 +13,18 @@ geovctrs_cpp_geos_version_build <- function() {
     .Call(`_geovctrs_geovctrs_cpp_geos_version_build`)
 }
 
+cpp_translate_xy_wkt <- function(xy, precision, trim) {
+    .Call(`_geovctrs_cpp_translate_xy_wkt`, xy, precision, trim)
+}
+
+cpp_translate_xy_wkb <- function(xy, endian, bufferSize) {
+    .Call(`_geovctrs_cpp_translate_xy_wkb`, xy, endian, bufferSize)
+}
+
+cpp_translate_xy_wksxp <- function(xy) {
+    .Call(`_geovctrs_cpp_translate_xy_wksxp`, xy)
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('_geovctrs_RcppExport_registerCCallable', PACKAGE = 'geovctrs')
