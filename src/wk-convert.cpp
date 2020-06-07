@@ -142,7 +142,8 @@ List cpp_translate_base_segment(WKReader& reader, int includeSRID) {
     _["x0"] = NumericVector(reader.nFeatures()),
     _["y0"] = NumericVector(reader.nFeatures()),
     _["x1"] = NumericVector(reader.nFeatures()),
-    _["y1"] = NumericVector(reader.nFeatures())
+    _["y1"] = NumericVector(reader.nFeatures()),
+    _["srid"] = IntegerVector(reader.nFeatures())
   );
 
   RcppFieldsExporter exporter(segment);

@@ -138,13 +138,13 @@ vec_cast.geovctrs_segment.geovctrs_segment <- function(x, to, ...) {
 #' @method vec_cast.geovctrs_segment wk_wkt
 #' @export
 vec_cast.geovctrs_segment.wk_wkt <- function(x, to, ...) {
-  geovctrs_cpp_convert(x, to)
+  new_geovctrs_segment(cpp_translate_wkt_segment(x, includeSRID = NA))
 }
 
 #' @method vec_cast.geovctrs_segment wk_wkb
 #' @export
 vec_cast.geovctrs_segment.wk_wkb <- function(x, to, ...) {
-  geovctrs_cpp_convert(x, to)
+  new_geovctrs_segment(cpp_translate_wkb_segment(x, includeSRID = NA))
 }
 
 #' @method vec_cast.geovctrs_segment geovctrs_collection
