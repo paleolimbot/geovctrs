@@ -58,7 +58,7 @@ template<typename ContainerType>
 class GeovctrsFieldsExporter: public WKExporter {
 public:
   GeovctrsFieldsExporter(ContainerType container, size_t size):
-    WKExporter(size), index(0) {}
+    WKExporter(size), container(container), index(0) {}
 
   template<typename ItemType, typename VectorType>
   void setField(size_t field, ItemType value) {
@@ -68,6 +68,16 @@ public:
 
   size_t nFields() {
     return this->container.size();
+  }
+
+  void prepareNextFeature() {}
+
+  void writeNull() {
+    throw std::runtime_error("writeNull() not meaningful for GeovctrsFieldsExporter");
+  }
+
+  void writeNextFeature() {
+    this->index++;
   }
 
 protected:
@@ -89,7 +99,8 @@ protected:
 template<typename ContainerType>
 class GeovctrsWKFieldsWriter: public WKWriter {
 public:
-  GeovctrsWKFieldsWriter(GeovctrsFieldsExporter<ContainerType>& exporter): exporter(exporter) {}
+  GeovctrsWKFieldsWriter(GeovctrsFieldsExporter<ContainerType>& exporter):
+    WKWriter(exporter), exporter(exporter) {}
 
   virtual void nextNull(size_t featureId) = 0;
 

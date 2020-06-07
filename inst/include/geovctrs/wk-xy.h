@@ -36,4 +36,37 @@ public:
   }
 };
 
+template<typename ContainerType, typename RealVectorType>
+class GeovctrsWKXYWriter: public GeovctrsWKFieldsWriter<ContainerType> {
+public:
+  GeovctrsWKXYWriter(GeovctrsFieldsExporter<ContainerType>& exporter):
+    GeovctrsWKFieldsWriter<ContainerType>(exporter) {}
+
+  virtual void nextFeatureStart(size_t featureId) {
+    GeovctrsWKFieldsWriter<ContainerType>::nextFeatureStart(featureId);
+  }
+
+  void nextNull(size_t featureId) {
+    this->exporter.template setField<double, RealVectorType>(0, NAN);
+    this->exporter.template setField<double, RealVectorType>(1, NAN);
+  }
+
+  void nextGeometryStart(const WKGeometryMeta& meta, uint32_t partId) {
+    if (meta.geometryType != WKGeometryType::Point) {
+      throw std::runtime_error("Can't create XY from a non-point");
+    }
+
+    if (meta.size == 0) {
+      this->exporter.template setField<double, RealVectorType>(0, NAN);
+      this->exporter.template setField<double, RealVectorType>(1, NAN);
+    }
+  }
+
+  void nextCoordinate(const WKGeometryMeta& meta, const WKCoord& coord, uint32_t coordId) {
+    this->exporter.template setField<double, RealVectorType>(0, coord.x);
+    this->exporter.template setField<double, RealVectorType>(1, coord.y);
+  }
+
+};
+
 #endif

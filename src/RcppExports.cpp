@@ -100,6 +100,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cpp_translate_wkt_xy
+List cpp_translate_wkt_xy(CharacterVector wkt);
+RcppExport SEXP _geovctrs_cpp_translate_wkt_xy(SEXP wktSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type wkt(wktSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_translate_wkt_xy(wkt));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_translate_wkb_xy
+List cpp_translate_wkb_xy(List wkb);
+RcppExport SEXP _geovctrs_cpp_translate_wkb_xy(SEXP wkbSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type wkb(wkbSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_translate_wkb_xy(wkb));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _geovctrs_RcppExport_validate(const char* sig) { 
@@ -124,6 +146,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_translate_xy_wkt", (DL_FUNC) &_geovctrs_cpp_translate_xy_wkt, 3},
     {"_geovctrs_cpp_translate_xy_wkb", (DL_FUNC) &_geovctrs_cpp_translate_xy_wkb, 3},
     {"_geovctrs_cpp_translate_xy_wksxp", (DL_FUNC) &_geovctrs_cpp_translate_xy_wksxp, 1},
+    {"_geovctrs_cpp_translate_wkt_xy", (DL_FUNC) &_geovctrs_cpp_translate_wkt_xy, 1},
+    {"_geovctrs_cpp_translate_wkb_xy", (DL_FUNC) &_geovctrs_cpp_translate_wkb_xy, 1},
     {"_geovctrs_RcppExport_registerCCallable", (DL_FUNC) &_geovctrs_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };

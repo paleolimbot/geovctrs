@@ -132,13 +132,23 @@ vec_cast.geovctrs_xy.geovctrs_xyz <- function(x, to, ...) {
 #' @method vec_cast.geovctrs_xy wk_wkt
 #' @export
 vec_cast.geovctrs_xy.wk_wkt <- function(x, to, ...) {
-  geovctrs_cpp_convert(x, to)
+  maybe_lossy_cast(
+    new_geovctrs_xy(cpp_translate_wkt_xy(x)),
+    x, to,
+    lossy = geo_has_z(x),
+    ...
+  )
 }
 
 #' @method vec_cast.geovctrs_xy wk_wkb
 #' @export
 vec_cast.geovctrs_xy.wk_wkb <- function(x, to, ...) {
-  geovctrs_cpp_convert(x, to)
+  maybe_lossy_cast(
+    new_geovctrs_xy(cpp_translate_wkb_xy(x)),
+    x, to,
+    lossy = geo_has_z(x),
+    ...
+  )
 }
 
 #' @method vec_cast.geovctrs_xy geovctrs_collection

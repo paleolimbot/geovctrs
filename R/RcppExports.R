@@ -25,6 +25,14 @@ cpp_translate_xy_wksxp <- function(xy) {
     .Call(`_geovctrs_cpp_translate_xy_wksxp`, xy)
 }
 
+cpp_translate_wkt_xy <- function(wkt) {
+    .Call(`_geovctrs_cpp_translate_wkt_xy`, wkt)
+}
+
+cpp_translate_wkb_xy <- function(wkb) {
+    .Call(`_geovctrs_cpp_translate_wkb_xy`, wkb)
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('_geovctrs_RcppExport_registerCCallable', PACKAGE = 'geovctrs')

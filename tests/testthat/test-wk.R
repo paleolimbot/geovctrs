@@ -20,9 +20,9 @@ test_that("coersion and casting works for wkt types", {
     geo_xy(1, 2)
   )
 
-  expect_identical(
+  expect_error(
     vec_cast(wkt("POINT Z (1 2 3)"), geo_xy()),
-    geo_xyz(1, 2, 3)
+    class = "vctrs_error_cast_lossy"
   )
 
   expect_identical(
@@ -75,9 +75,9 @@ test_that("wkb casting and coersion works", {
     geo_xy(1, 2)
   )
 
-  expect_identical(
+  expect_error(
     vec_cast(as_wkb(wkt("POINT Z (1 2 3)")), geo_xy()),
-    geo_xyz(1, 2, 3)
+    class = "vctrs_error_cast_lossy"
   )
 
   expect_identical(
