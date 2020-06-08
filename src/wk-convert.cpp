@@ -8,6 +8,7 @@
 #include "geovctrs/wk-xy.h"
 #include "geovctrs/wk-xyz.h"
 #include "geovctrs/wk-segment.h"
+#include "geovctrs/wk-rect.h"
 #include "wk/geometry-debug-handler.h"
 
 #include <Rcpp.h>
@@ -60,6 +61,12 @@ class RcppSegmentWriter: public GeovctrsWKSegmentWriter<List, NumericVector, Int
 public:
   RcppSegmentWriter(RcppFieldsExporter& exporter):
     GeovctrsWKSegmentWriter<List, NumericVector, IntegerVector>(exporter) {}
+};
+
+class RcppRectReader: public GeovctrsWKRectReader<List, NumericVector, IntegerVector> {
+public:
+  RcppRectReader(RcppFieldsProvider& provider):
+    GeovctrsWKRectReader<List, NumericVector, IntegerVector>(provider) {}
 };
 
 void cpp_translate_base(WKReader& reader, WKWriter& writer,
@@ -282,4 +289,27 @@ List cpp_translate_wksxp_segment(List wksxp, int includeSRID) {
   WKSEXPProvider provider(wksxp);
   WKSEXPReader reader(provider);
   return cpp_translate_base_segment(reader, includeSRID);
+}
+
+// -------- rect ----------
+
+// [[Rcpp::export]]
+CharacterVector cpp_translate_rect_wkt(List rect, int precision, int trim) {
+  RcppFieldsProvider provider(rect);
+  RcppRectReader reader(provider);
+  return cpp_translate_base_wkt(reader, 0, 0, 0, precision, trim);
+}
+
+// [[Rcpp::export]]
+List cpp_translate_rect_wkb(List rect, int endian, int bufferSize) {
+  RcppFieldsProvider provider(rect);
+  RcppRectReader reader(provider);
+  return cpp_translate_base_wkb(reader, 0, 0, 0, endian, bufferSize);
+}
+
+// [[Rcpp::export]]
+List cpp_translate_rect_wksxp(List rect) {
+  RcppFieldsProvider provider(rect);
+  RcppRectReader reader(provider);
+  return cpp_translate_base_wksxp(reader, 0, 0, 0);
 }

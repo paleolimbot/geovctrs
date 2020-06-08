@@ -211,14 +211,14 @@ test_that("misssing values have missing envelopes", {
   expect_identical(geo_envelope(NA_collection_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_envelope(NA_xy_), geo_rect(NA, NA, NA, NA, srid = 0))
   expect_identical(geo_envelope(NA_segment_), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
-  expect_identical(geo_envelope(NA_rect_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
+  expect_identical(geo_envelope(NA_rect_), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
 
   expect_identical(geo_envelope(NA_wkt_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_envelope(NA_wkb_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_envelope(NA_collection_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_envelope(NA_xy_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
   expect_identical(geo_envelope(NA_segment_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
-  expect_identical(geo_envelope(NA_rect_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
+  expect_identical(geo_envelope(NA_rect_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
 })
 
 test_that("misssing values have the correct bounding boxes", {
@@ -229,14 +229,14 @@ test_that("misssing values have the correct bounding boxes", {
   expect_identical(geo_bbox(NA_collection_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_bbox(NA_xy_), geo_rect(NA, NA, NA, NA, srid = 0))
   expect_identical(geo_bbox(NA_segment_), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
-  expect_identical(geo_bbox(NA_rect_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
+  expect_identical(geo_bbox(NA_rect_), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
 
   expect_identical(geo_bbox(NA_wkt_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_bbox(NA_wkb_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_bbox(NA_collection_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_bbox(NA_xy_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
   expect_identical(geo_bbox(NA_segment_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
-  expect_identical(geo_bbox(NA_rect_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
+  expect_identical(geo_bbox(NA_rect_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
 })
 
 test_that("lim functions work", {

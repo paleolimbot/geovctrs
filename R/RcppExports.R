@@ -85,6 +85,18 @@ cpp_translate_wksxp_segment <- function(wksxp, includeSRID) {
     .Call(`_geovctrs_cpp_translate_wksxp_segment`, wksxp, includeSRID)
 }
 
+cpp_translate_rect_wkt <- function(rect, precision, trim) {
+    .Call(`_geovctrs_cpp_translate_rect_wkt`, rect, precision, trim)
+}
+
+cpp_translate_rect_wkb <- function(rect, endian, bufferSize) {
+    .Call(`_geovctrs_cpp_translate_rect_wkb`, rect, endian, bufferSize)
+}
+
+cpp_translate_rect_wksxp <- function(rect) {
+    .Call(`_geovctrs_cpp_translate_rect_wksxp`, rect)
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('_geovctrs_RcppExport_registerCCallable', PACKAGE = 'geovctrs')
