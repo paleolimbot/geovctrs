@@ -236,7 +236,7 @@ new_geovctrs_multipolygon <- function(x) {
 #' S3 Details for geovctrs_collection
 #'
 #' @param x A (possibly) [geo_collection()]
-#' @param to,y,x_arg,y_arg See [vctrs::vec_cast()] and [vctrs::vec_ptype2()]
+#' @param to,y,... See [vctrs::vec_cast()] and [vctrs::vec_ptype2()]
 #'
 #' @export
 #'

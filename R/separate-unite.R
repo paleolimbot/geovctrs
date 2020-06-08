@@ -30,9 +30,9 @@
 #' (united <- unite_rect(tbl, "rect", a, b, c, d))
 #' separate_rect(united, rect)
 #'
-#' tbl2 <- tibble(a = geo_xy(1, 2), b = geo_xy(3, 4))
-#' (united <- unite_segment(tbl2, "seg", a, b))
-#' separate_segment(united, seg)
+#' # need to modify geo_segment() constructor!
+#' # (united <- unite_segment(tbl, "seg", a, b, c, d))
+#' # separate_segment(united, seg)
 #'
 unite_xy <- function(data, col, x, y, remove = TRUE) {
   unite_rcrd(data, col, {{ x }}, {{ y }}, remove = remove, constructor = geo_xy)
@@ -70,19 +70,24 @@ separate_xyz <- function(data, col, into = c("x", "y", "z"), remove = TRUE) {
 
 #' @rdname unite_xy
 #' @export
-unite_segment <- function(data, col, start, end, remove = TRUE) {
-  unite_rcrd(data, col, {{ start }}, {{ end }}, remove = remove, constructor = geo_segment)
+unite_segment <- function(data, col, x0, y0, x1, y1, remove = TRUE) {
+  unite_rcrd(
+    data, col,
+    {{ x0 }}, {{ y0 }},
+    {{ x1 }}, {{ y1 }},
+    remove = remove, constructor = geo_segment
+  )
 }
 
 #' @rdname unite_xy
 #' @export
-separate_segment <- function(data, col, into = c("start", "end"), remove = TRUE) {
+separate_segment <- function(data, col, into = c("x0", "y0", "x1", "y1"), remove = TRUE) {
   separate_vctrs_rcrd(
     data, {{ col }},
     into = into,
     remove = remove,
     ptype = geo_segment(),
-    fields = c("start", "end")
+    fields = c("x0", "y0", "x1", "y1")
   )
 }
 

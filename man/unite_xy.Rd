@@ -19,9 +19,9 @@ unite_xyz(data, col, x, y, z, remove = TRUE)
 
 separate_xyz(data, col, into = c("x", "y", "z"), remove = TRUE)
 
-unite_segment(data, col, start, end, remove = TRUE)
+unite_segment(data, col, x0, y0, x1, y1, remove = TRUE)
 
-separate_segment(data, col, into = c("start", "end"), remove = TRUE)
+separate_segment(data, col, into = c("x0", "y0", "x1", "y1"), remove = TRUE)
 
 unite_rect(data, col, xmin, ymin, xmax, ymax, remove = TRUE)
 
@@ -67,8 +67,8 @@ separate_xyz(united, xyz)
 (united <- unite_rect(tbl, "rect", a, b, c, d))
 separate_rect(united, rect)
 
-tbl2 <- tibble(a = geo_xy(1, 2), b = geo_xy(3, 4))
-(united <- unite_segment(tbl2, "seg", a, b))
-separate_segment(united, seg)
+# need to modify geo_segment() constructor!
+# (united <- unite_segment(tbl, "seg", a, b, c, d))
+# separate_segment(united, seg)
 
 }

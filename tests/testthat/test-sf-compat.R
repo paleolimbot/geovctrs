@@ -3,6 +3,7 @@ context("test-sf-compat")
 
 test_that("sf/sfc works with as_geovctr()", {
   skip_if_not_installed("sf")
+  skip("sf might not work with vec_cast")
 
   sf_nc <- sf::read_sf(system.file("shape/nc.shp", package = "sf"))
   sfc_nc <- sf_nc[[attr(sf_nc, "sf_column")]]
@@ -47,6 +48,7 @@ test_that("sf/sfc works with as_geovctr()", {
 
 test_that("casting and c() work with sfc", {
   skip_if_not_installed("sf")
+  skip("sf might not work with vec_ptype2")
 
   wkt <- wkt("POINT (30 10)")
   wkb <- as_wkb(wkt)

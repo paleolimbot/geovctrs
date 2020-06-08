@@ -49,22 +49,22 @@ geo_plot_add.sf <- function(x, ...) {
 # always prefer type that looses the least information (e.g., not WKT because WKT drops CRS)
 
 register_sf_compat <- function() {
-  register_s3_method("sf", "st_as_sfc", "geovctr")
-  register_s3_method("sf", "st_as_sf", "geovctr")
+  vctrs::s3_register("sf::st_as_sfc", "geovctr")
+  vctrs::s3_register("sf::st_as_sf", "geovctr")
 
-  register_s3_method("sf", "vec_cast.sfc", "wk_wkb")
-  register_s3_method("sf", "vec_cast.sfc", "wk_wkt")
-  register_s3_method("sf", "vec_cast.sfc", "geovctrs_collection")
-  register_s3_method("sf", "vec_cast.sfc", "geovctrs_xy")
-  register_s3_method("sf", "vec_cast.sfc", "geovctrs_segment")
-  register_s3_method("sf", "vec_cast.sfc", "geovctrs_rect")
+  vctrs::s3_register("sf::vec_cast.sfc", "wk_wkb")
+  vctrs::s3_register("sf::vec_cast.sfc", "wk_wkt")
+  vctrs::s3_register("sf::vec_cast.sfc", "geovctrs_collection")
+  vctrs::s3_register("sf::vec_cast.sfc", "geovctrs_xy")
+  vctrs::s3_register("sf::vec_cast.sfc", "geovctrs_segment")
+  vctrs::s3_register("sf::vec_cast.sfc", "geovctrs_rect")
 
-  register_s3_method("sf", "vec_ptype2.sfc", "wk_wkb")
-  register_s3_method("sf", "vec_ptype2.sfc", "wk_wkt")
-  register_s3_method("sf", "vec_ptype2.sfc", "geovctrs_collection")
-  register_s3_method("sf", "vec_ptype2.sfc", "geovctrs_xy")
-  register_s3_method("sf", "vec_ptype2.sfc", "geovctrs_segment")
-  register_s3_method("sf", "vec_ptype2.sfc", "geovctrs_rect")
+  vctrs::s3_register("sf::vec_ptype2.sfc", "wk_wkb")
+  vctrs::s3_register("sf::vec_ptype2.sfc", "wk_wkt")
+  vctrs::s3_register("sf::vec_ptype2.sfc", "geovctrs_collection")
+  vctrs::s3_register("sf::vec_ptype2.sfc", "geovctrs_xy")
+  vctrs::s3_register("sf::vec_ptype2.sfc", "geovctrs_segment")
+  vctrs::s3_register("sf::vec_ptype2.sfc", "geovctrs_rect")
 }
 
 # ----- wkb ------
