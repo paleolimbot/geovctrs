@@ -41,7 +41,7 @@ test_that("envelope works with nested collections", {
 
 test_that("envelope works with corner cases", {
   expect_identical(geo_envelope(geo_xy()), geo_rect())
-  expect_identical(geo_envelope(geo_xy(NA, NA), na.rm = FALSE), geo_rect(NA, NA, NA, NA))
+  expect_identical(geo_envelope(geo_xy(NA, NA), na.rm = FALSE), geo_rect(Inf, Inf, -Inf, -Inf))
   expect_identical(geo_envelope(geo_xy(NA, NA), na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf))
 
   expect_identical(geo_envelope(geo_rect()), geo_rect())
@@ -93,7 +93,6 @@ test_that("envelope works with corner cases", {
     geo_rect(Inf, Inf, -Inf, -Inf)
   )
 
-  # even multipoints are funky
   expect_identical(
     geo_envelope("MULTIPOINT (nan nan)", na.rm = FALSE),
     geo_rect(NA, NA, NA, NA)
@@ -198,7 +197,7 @@ test_that("bbox works with corner cases", {
 test_that("misssing values have missing envelopes", {
   expect_identical(geo_envelope(NA_wkt_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_envelope(NA_wkb_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
-  expect_identical(geo_envelope(NA_xy_), geo_rect(NA, NA, NA, NA, srid = 0))
+  expect_identical(geo_envelope(NA_xy_), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
   expect_identical(geo_envelope(NA_segment_), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
   expect_identical(geo_envelope(NA_rect_), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
 

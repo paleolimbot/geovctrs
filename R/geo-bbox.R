@@ -137,12 +137,12 @@ geo_envelope.geovctrs_xy <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   xmax <- xs
   ymax <- ys
 
-  if (na.rm) {
-    xmin[is.na(xs)] <- Inf
-    ymin[is.na(ys)] <- Inf
-    xmax[is.na(xs)] <- -Inf
-    ymax[is.na(ys)] <- -Inf
-  }
+  # na.rm is not meaningful here (always TRUE)
+  # because geo_xy(NA, NA) is POINT EMPTY
+  xmin[is.na(xs)] <- Inf
+  ymin[is.na(ys)] <- Inf
+  xmax[is.na(xs)] <- -Inf
+  ymax[is.na(ys)] <- -Inf
 
   geo_rect(xmin, ymin, xmax, ymax)
 }
