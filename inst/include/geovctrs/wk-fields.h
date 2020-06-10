@@ -2,6 +2,8 @@
 #ifndef GEOVCTRS_WK_FIELDS_H
 #define GEOVCTRS_WK_FIELDS_H
 
+#include <cstdint>
+
 #include "wk/io.h"
 #include "wk/reader.h"
 #include "wk/writer.h"
@@ -9,8 +11,8 @@
 template<typename ContainerType>
 class GeovctrsFieldsProvider: public WKProvider {
 public:
-  GeovctrsFieldsProvider(ContainerType container, size_t size):
-    container(container), size(size), index(SIZE_T_MAX) {}
+  GeovctrsFieldsProvider(ContainerType container, uint32_t size):
+    container(container), size(size), index(UINT32_MAX) {}
 
   template<typename ItemType, typename VectorType>
   ItemType field(size_t field) {
@@ -34,11 +36,11 @@ public:
   }
 
   void reset() {
-    this->index = SIZE_T_MAX;
+    this->index = UINT32_MAX;
   }
 
   bool seekNextFeature() {
-    if (this->index == SIZE_T_MAX) {
+    if (this->index == UINT32_MAX) {
       this->index = 0;
     } else {
       this->index++;
@@ -50,8 +52,8 @@ protected:
   ContainerType container;
 
 private:
-  size_t size;
-  size_t index;
+  uint32_t size;
+  uint32_t index;
 };
 
 template<typename ContainerType>

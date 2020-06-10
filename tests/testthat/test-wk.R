@@ -142,14 +142,4 @@ test_that("coersion and casting works for wksxp types", {
     vec_cast(geo_rect(0, 1, 10, 11), wksxp()),
     as_wksxp(geo_rect(0, 1, 10, 11), wksxp())
   )
-
-  expect_identical(
-    vec_cast(geo_point(geo_xy(1, 2)), wksxp()),
-    as_wksxp(geo_point(geo_xy(1, 2)), wksxp())
-  )
-
-  expect_identical(
-    vec_cast(geo_point(geo_xyz(1, 2, 3)), wksxp()),
-    as_wksxp(geo_point(geo_xyz(1, 2, 3)), wksxp())
-  )
 })
