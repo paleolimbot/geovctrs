@@ -151,6 +151,17 @@ vec_cast.geovctrs_xy.wk_wkb <- function(x, to, ...) {
   )
 }
 
+#' @method vec_cast.geovctrs_xy wk_wksxp
+#' @export
+vec_cast.geovctrs_xy.wk_wksxp <- function(x, to, ...) {
+  maybe_lossy_cast(
+    new_geovctrs_xy(cpp_translate_wksxp_xy(x)),
+    x, to,
+    lossy = geo_has_z(x),
+    ...
+  )
+}
+
 #' @method vec_cast.geovctrs_xy geovctrs_collection
 #' @export
 vec_cast.geovctrs_xy.geovctrs_collection <- function(x, to, ...) {
@@ -195,6 +206,12 @@ vec_ptype2.geovctrs_xy.wk_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
 #' @export
 vec_ptype2.geovctrs_xy.wk_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   wkb()
+}
+
+#' @method vec_ptype2.geovctrs_xy wk_wksxp
+#' @export
+vec_ptype2.geovctrs_xy.wk_wksxp <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  wksxp()
 }
 
 #' @method vec_ptype2.geovctrs_xy geovctrs_collection

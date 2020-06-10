@@ -167,3 +167,88 @@ vec_ptype2.wk_wkb.geovctrs_segment <- function(x, y, ..., x_arg = "x", y_arg = "
 vec_ptype2.wk_wkb.geovctrs_rect <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   wkb()
 }
+
+
+#' @importFrom wk as_wksxp
+#' @export
+wk::as_wksxp
+
+#' @importFrom wk wksxp
+#' @export
+wk::wksxp
+
+#' @importFrom wk new_wk_wksxp
+#' @export
+wk::new_wk_wksxp
+
+#' @importFrom wk parse_wksxp
+#' @export
+wk::parse_wksxp
+
+#' @importFrom wk as_wksxp
+#' @export
+as_wksxp.geovctr <- function(x, ...) {
+  vec_cast(x, new_wk_wksxp())
+}
+
+#' @importFrom wk vec_cast.wk_wksxp
+#' @method vec_cast.wk_wksxp geovctrs_rect
+#' @export
+vec_cast.wk_wksxp.geovctrs_rect <- function(x, to, ...) {
+  new_wk_wksxp(cpp_translate_rect_wksxp(x))
+}
+
+#' @method vec_cast.wk_wksxp geovctrs_segment
+#' @export
+vec_cast.wk_wksxp.geovctrs_segment <- function(x, to, ...) {
+  new_wk_wksxp(cpp_translate_segment_wksxp(x))
+}
+
+#' @method vec_cast.wk_wksxp geovctrs_xy
+#' @export
+vec_cast.wk_wksxp.geovctrs_xy <- function(x, to, ...) {
+  new_wk_wksxp(cpp_translate_xy_wksxp(x))
+}
+
+#' @method vec_cast.wk_wksxp geovctrs_xyz
+#' @export
+vec_cast.wk_wksxp.geovctrs_xyz <- function(x, to, ...) {
+  new_wk_wksxp(cpp_translate_xyz_wksxp(x))
+}
+
+#' @method vec_cast.wk_wksxp geovctrs_collection
+#' @export
+vec_cast.wk_wksxp.geovctrs_collection <- function(x, to, ...) {
+  geovctrs_cpp_convert(x, to)
+}
+
+#' @importFrom wk vec_ptype2.wk_wksxp
+#' @method vec_ptype2.wk_wksxp geovctrs_collection
+#' @export
+vec_ptype2.wk_wksxp.geovctrs_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  wksxp()
+}
+
+#' @method vec_ptype2.wk_wksxp geovctrs_xy
+#' @export
+vec_ptype2.wk_wksxp.geovctrs_xy <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  wksxp()
+}
+
+#' @method vec_ptype2.wk_wksxp geovctrs_xyz
+#' @export
+vec_ptype2.wk_wksxp.geovctrs_xyz <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  wksxp()
+}
+
+#' @method vec_ptype2.wk_wksxp geovctrs_segment
+#' @export
+vec_ptype2.wk_wksxp.geovctrs_segment <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  wksxp()
+}
+
+#' @method vec_ptype2.wk_wksxp geovctrs_rect
+#' @export
+vec_ptype2.wk_wksxp.geovctrs_rect <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  wksxp()
+}

@@ -12,6 +12,10 @@
 \alias{wkb}
 \alias{new_wk_wkb}
 \alias{parse_wkb}
+\alias{as_wksxp}
+\alias{wksxp}
+\alias{new_wk_wksxp}
+\alias{parse_wksxp}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -21,6 +25,6 @@ below to see their documentation.
 \describe{
   \item{tibble}{\code{\link[tibble]{tibble}}}
 
-  \item{wk}{\code{\link[wk]{as_wkb}}, \code{\link[wk]{as_wkt}}, \code{\link[wk]{new_wk_wkb}}, \code{\link[wk]{new_wk_wkt}}, \code{\link[wk]{parse_wkb}}, \code{\link[wk]{parse_wkt}}, \code{\link[wk]{wkb}}, \code{\link[wk]{wkt}}}
+  \item{wk}{\code{\link[wk]{as_wkb}}, \code{\link[wk]{as_wksxp}}, \code{\link[wk]{as_wkt}}, \code{\link[wk]{new_wk_wkb}}, \code{\link[wk]{new_wk_wksxp}}, \code{\link[wk]{new_wk_wkt}}, \code{\link[wk]{parse_wkb}}, \code{\link[wk]{parse_wksxp}}, \code{\link[wk]{parse_wkt}}, \code{\link[wk]{wkb}}, \code{\link[wk]{wksxp}}, \code{\link[wk]{wkt}}}
 }}
 

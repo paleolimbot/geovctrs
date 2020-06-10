@@ -100,3 +100,56 @@ test_that("wkb casting and coersion works", {
     as_wkb(geo_point(geo_xy(1, 2)), wkb())
   )
 })
+
+
+test_that("coersion and casting works for wksxp types", {
+  wksxp <- as_wksxp("POINT (30 10)")
+
+  expect_identical(vec_cast(wksxp, wksxp()), wksxp)
+  expect_error(vec_cast(5, wksxp()), class = "vctrs_error_incompatible_type")
+
+  expect_identical(as_wksxp(wksxp), wksxp)
+  expect_identical(as.character(wksxp), "<POINT (30 10)>")
+
+  wkb <- vec_cast(wksxp, wkb())
+  wksxp_roundtrip <- vec_cast(wkb, wksxp())
+  expect_identical(wksxp_roundtrip, wksxp)
+
+  expect_identical(vec_cast(wksxp, wkb()), wkb)
+  expect_identical(as_wksxp(wkb), wksxp_roundtrip)
+
+  expect_identical(
+    vec_cast(as_wksxp("POINT (1 2)"), geo_xy()),
+    geo_xy(1, 2)
+  )
+
+  expect_error(
+    vec_cast(as_wksxp("POINT Z (1 2 3)"), geo_xy()),
+    class = "vctrs_error_cast_lossy"
+  )
+
+  expect_identical(
+    vec_cast(as_wksxp("POINT Z (1 2 3)"), geo_xyz()),
+    geo_xyz(1, 2, 3)
+  )
+
+  expect_identical(
+    vec_cast(geo_segment(0, 1, 10, 11), wksxp()),
+    as_wksxp(geo_segment(0, 1, 10, 11), wksxp())
+  )
+
+  expect_identical(
+    vec_cast(geo_rect(0, 1, 10, 11), wksxp()),
+    as_wksxp(geo_rect(0, 1, 10, 11), wksxp())
+  )
+
+  expect_identical(
+    vec_cast(geo_point(geo_xy(1, 2)), wksxp()),
+    as_wksxp(geo_point(geo_xy(1, 2)), wksxp())
+  )
+
+  expect_identical(
+    vec_cast(geo_point(geo_xyz(1, 2, 3)), wksxp()),
+    as_wksxp(geo_point(geo_xyz(1, 2, 3)), wksxp())
+  )
+})

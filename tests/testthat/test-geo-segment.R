@@ -60,6 +60,17 @@ test_that("coersion to segment works", {
     geo_segment(10, 10, 20, 20)
   )
 
+  # wksxp
+  expect_identical(
+    as_geo_segment(as_wksxp(wkt("LINESTRING (10 10, 20 20)"))),
+    geo_segment(10, 10, 20, 20)
+  )
+
+  expect_identical(
+    vec_cast(as_wksxp(wkt("LINESTRING (10 10, 20 20)")), geo_segment()),
+    geo_segment(10, 10, 20, 20)
+  )
+
   # collection
   expect_identical(
     as_geo_segment(geo_linestring(geo_xy(c(10, 20), c(10, 20)))),

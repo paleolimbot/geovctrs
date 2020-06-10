@@ -164,6 +164,12 @@ vec_ptype2.geovctrs_rect.wk_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y")
   wkb()
 }
 
+#' @method vec_ptype2.geovctrs_rect wk_wksxp
+#' @export
+vec_ptype2.geovctrs_rect.wk_wksxp <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  wksxp()
+}
+
 #' @method vec_ptype2.geovctrs_rect geovctrs_collection
 #' @export
 vec_ptype2.geovctrs_rect.geovctrs_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
