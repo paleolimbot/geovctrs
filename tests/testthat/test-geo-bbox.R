@@ -10,11 +10,6 @@ test_that("envelope works", {
     geo_envelope(wkt("LINESTRING (0 2, 10 11)")),
     geo_rect(0, 2, 10, 11)
   )
-
-  expect_identical(
-    geo_envelope(geo_linestring(c(geo_xy(0, 2), geo_xy(10, 11)))),
-    geo_rect(0, 2, 10, 11)
-  )
 })
 
 test_that("envelope works with nested collections", {
@@ -203,14 +198,12 @@ test_that("bbox works with corner cases", {
 test_that("misssing values have missing envelopes", {
   expect_identical(geo_envelope(NA_wkt_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_envelope(NA_wkb_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
-  expect_identical(geo_envelope(NA_collection_), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_envelope(NA_xy_), geo_rect(NA, NA, NA, NA, srid = 0))
   expect_identical(geo_envelope(NA_segment_), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
   expect_identical(geo_envelope(NA_rect_), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
 
   expect_identical(geo_envelope(NA_wkt_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_envelope(NA_wkb_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
-  expect_identical(geo_envelope(NA_collection_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_envelope(NA_xy_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
   expect_identical(geo_envelope(NA_segment_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
   expect_identical(geo_envelope(NA_rect_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))

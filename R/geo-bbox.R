@@ -96,13 +96,6 @@ geo_envelope.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 }
 
 #' @export
-geo_envelope.wk_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  ranges <- unclass(wk::wkb_feature_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
-  ranges$srid <- geo_srid(x)
-  new_geovctrs_rect(ranges)
-}
-
-#' @export
 geo_envelope.wk_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   ranges <- unclass(wk::wkt_feature_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
   ranges$srid <- geo_srid(x)
@@ -110,8 +103,22 @@ geo_envelope.wk_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 }
 
 #' @export
+geo_envelope.wk_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  ranges <- unclass(wk::wkb_feature_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
+  ranges$srid <- geo_srid(x)
+  new_geovctrs_rect(ranges)
+}
+
+#' @export
+geo_envelope.wk_wksxp <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  ranges <- unclass(wk::wksxp_feature_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
+  ranges$srid <- geo_srid(x)
+  new_geovctrs_rect(ranges)
+}
+
+#' @export
 geo_envelope.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  geo_envelope.wk_wkb(as_wkb(x), na.rm = na.rm, finite = finite)
+  geo_envelope(as_wksxp(x), na.rm = na.rm, finite = finite)
 }
 
 #' @export
