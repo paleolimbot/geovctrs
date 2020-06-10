@@ -31,8 +31,8 @@ test_that("coersion and casting works for wkt types", {
   )
 
   expect_identical(
-    vec_cast(geo_segment(geo_xy(0, 1), geo_xy(10, 11)), wkt()),
-    as_wkt(geo_segment(geo_xy(0, 1), geo_xy(10, 11)), wkt())
+    vec_cast(geo_segment(0, 1, 10, 11), wkt()),
+    as_wkt(geo_segment(0, 1, 10, 11), wkt())
   )
 
   expect_identical(
@@ -86,8 +86,8 @@ test_that("wkb casting and coersion works", {
   )
 
   expect_identical(
-    vec_cast(geo_segment(geo_xy(0, 1), geo_xy(10, 11)), wkb()),
-    as_wkb(geo_segment(geo_xy(0, 1), geo_xy(10, 11)), wkb())
+    vec_cast(geo_segment(0, 1, 10, 11), wkb()),
+    as_wkb(geo_segment(0, 1, 10, 11), wkb())
   )
 
   expect_identical(

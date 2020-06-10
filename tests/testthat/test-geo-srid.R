@@ -28,7 +28,7 @@ test_that("SRID extraction works", {
   expect_error(geo_set_srid(geo_xy(0, 0), 1L), "Can't store SRID")
 
   # segment
-  expect_identical(geo_srid(geo_segment(geo_xy(0, 0), geo_xy(1, 1), srid = 1)), 1L)
+  expect_identical(geo_srid(geo_segment(0, 0, 1, 1), srid = 1), 1L)
   expect_identical(
     geo_set_srid(geo_segment(geo_xy(0, 0), geo_xy(1, 1), srid = 1), 2L),
     geo_segment(geo_xy(0, 0), geo_xy(1, 1), srid = 2)

@@ -335,7 +335,7 @@ test_that("xy conversion works", {
 })
 
 test_that("segment conversion works", {
-  segment <- geo_segment(geo_xy(0, 10), geo_xy(20, 30))
+  segment <- geo_segment(0, 10, 20, 30)
 
   expect_identical(
     geovctrs_cpp_convert(wkt("LINESTRING (0 10, 20 30)"), geo_segment()),
@@ -350,7 +350,7 @@ test_that("segment conversion works", {
   # empty == all NAs
   expect_identical(
     geovctrs_cpp_convert(wkt("LINESTRING EMPTY"), geo_segment()),
-    geo_segment(geo_xy(NA, NA), geo_xy(NA, NA))
+    geo_segment(NA, NA, NA, NA)
   )
 
   # errors: non linestring, more than two points

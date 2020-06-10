@@ -32,7 +32,7 @@ test_that("printing works without unicode/colour support", {
   withr::with_options(list(crayon.enabled = FALSE, cli.unicode = FALSE), {
     expect_output(geo_print(geo_nc, col = TRUE), "MULTIPOLYGON")
     expect_output(print(geo_rect(1, 2, 3, 4)), "...")
-    expect_output(print(geo_segment(geo_xy(1, 2), geo_xy(3, 4))), "---")
+    expect_output(print(geo_segment(1, 2, 3, 4)), "---")
   })
 })
 
@@ -52,7 +52,7 @@ test_that("all geovctrs work in the RStudio viewer", {
     View(tibble(as_wkt(geo_nc$geometry))) # wkt
     View(tibble(as_geo_collection(geo_nc$geometry))) # collection
     View(geo_summary(geo_nc)) # xy
-    View(tibble(geo_segment(geo_xy(0, 0), geo_xy(12, 11)))) # segment
+    View(tibble(geo_segment(0, 0, 12, 11))) # segment
     View(tibble(geo_envelope(geo_nc))) # rect
   }
 

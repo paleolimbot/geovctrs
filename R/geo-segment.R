@@ -4,26 +4,23 @@
 #' The [geo_segment()] type is useful as an efficient representation of
 #' line segments stored using column vectors.
 #'
-#' @param start,end [geo_xy()]s for the start and end
-#'   of the segment, respectively.
+#' @param x0,y0,x1,y1 Values for the start and end coordinates.
 #' @inheritParams geo_srid
 #'
 #' @return A [new_geovctrs_segment()]
 #' @export
 #'
 #' @examples
-#' geo_plot(geo_segment(geo_xy(0, 0), geo_xy(10, -10:10)))
+#' geo_plot(geo_segment(0, 0, 10, -10:10))
 #'
-geo_segment <- function(start = geo_xy(), end = geo_xy(), srid = 0) {
-  start <- vec_cast(start, geo_xy())
-  end <- vec_cast(end, geo_xy())
-
+geo_segment <- function(x0 = double(), y0 = double(),
+                        x1 = double(), y1 = double(), srid = 0) {
   new_geovctrs_segment(
     vec_recycle_common(
-      x0 = field(start, "x"),
-      y0 = field(start, "y"),
-      x1 = field(end, "x"),
-      y1 = field(end, "y"),
+      x0 = vec_cast(x0, double()),
+      y0 = vec_cast(y0, double()),
+      x1 = vec_cast(x1, double()),
+      y1 = vec_cast(y1, double()),
       srid = as_geo_srid(srid)
     )
   )

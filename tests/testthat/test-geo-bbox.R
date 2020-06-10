@@ -61,11 +61,11 @@ test_that("envelope works with corner cases", {
 
   expect_identical(geo_envelope(geo_segment()), geo_rect())
   expect_identical(
-    geo_envelope(geo_segment(geo_xy(NA, NA), geo_xy(NA, NA))),
+    geo_envelope(geo_segment(NA, NA, NA, NA)),
     geo_rect(Inf, Inf, -Inf, -Inf)
   )
   expect_identical(
-    geo_envelope(geo_segment(geo_xy(NA, NA), geo_xy(NA, NA)), na.rm = TRUE),
+    geo_envelope(geo_segment(NA, NA, NA, NA), na.rm = TRUE),
     geo_rect(Inf, Inf, -Inf, -Inf)
   )
 
@@ -167,7 +167,7 @@ test_that("bbox works", {
   )
 
   expect_identical(
-    geo_bbox(geo_segment(geo_xy(0, 2), geo_xy(10, 11))),
+    geo_bbox(geo_segment(0, 2, 10, 11)),
     geo_rect(0, 2, 10, 11)
   )
 
@@ -196,11 +196,11 @@ test_that("bbox works with corner cases", {
 
   expect_identical(geo_bbox(geo_segment()), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(
-    geo_bbox(geo_segment(geo_xy(NA, NA), geo_xy(NA, NA))),
+    geo_bbox(geo_segment(NA, NA, NA, NA)),
     geo_rect(Inf, Inf, -Inf, -Inf)
   )
   expect_identical(
-    geo_bbox(geo_segment(geo_xy(NA, NA), geo_xy(NA, NA)), na.rm = TRUE),
+    geo_bbox(geo_segment(NA, NA, NA, NA), na.rm = TRUE),
     geo_rect(Inf, Inf, -Inf, -Inf)
   )
 })

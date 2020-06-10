@@ -54,7 +54,7 @@ test_that("casting and c() work with sfc", {
   wkb <- as_wkb(wkt)
   col <- as_geo_collection(wkt)
   xy <- as_geo_xy(wkt)
-  seg <- geo_segment(geo_xy(0, 0), geo_xy(30, 10))
+  seg <- geo_segment(0, 0, 30, 10)
   rect <- geo_rect(0, 0, 30, 10)
   sfc <- sf::st_sfc(sf::st_point(c(30, 10)))
   sfc_seg <- sf::st_sfc(sf::st_linestring(rbind(c(0, 0), c(30, 10))))

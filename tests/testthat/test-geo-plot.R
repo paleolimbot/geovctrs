@@ -75,7 +75,7 @@ test_that("plot generics work", {
 
   vdiffr::expect_doppelganger(
     "geo_segment generic",
-    function() plot(geo_segment(geo_xy(0, 0), geo_xy(10, -10:10)))
+    function() plot(geo_segment(0, 0, 10, -10:10))
   )
 
   vdiffr::expect_doppelganger(

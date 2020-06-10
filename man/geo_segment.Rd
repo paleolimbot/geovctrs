@@ -4,11 +4,16 @@
 \alias{geo_segment}
 \title{Line segments}
 \usage{
-geo_segment(start = geo_xy(), end = geo_xy(), srid = 0)
+geo_segment(
+  x0 = double(),
+  y0 = double(),
+  x1 = double(),
+  y1 = double(),
+  srid = 0
+)
 }
 \arguments{
-\item{start, end}{\code{\link[=geo_xy]{geo_xy()}}s for the start and end
-of the segment, respectively.}
+\item{x0, y0, x1, y1}{Values for the start and end coordinates.}
 
 \item{srid}{A spatial reference identifier, coerced to
 an integer by \code{\link[=as_geo_srid]{as_geo_srid()}}. These identifiers can
@@ -23,6 +28,6 @@ The \code{\link[=geo_segment]{geo_segment()}} type is useful as an efficient rep
 line segments stored using column vectors.
 }
 \examples{
-geo_plot(geo_segment(geo_xy(0, 0), geo_xy(10, -10:10)))
+geo_plot(geo_segment(0, 0, 10, -10:10))
 
 }

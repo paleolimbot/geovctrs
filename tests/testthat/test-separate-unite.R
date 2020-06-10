@@ -74,18 +74,18 @@ test_that("separate_xyz() works", {
 })
 
 test_that("unite_segment() works", {
-  tbl <- tibble(a = geo_xy(392, 191), b = geo_xy(102, 191))
+  tbl <- tibble(a = 392, b = 191, c = 102, d = 191)
   expect_identical(
-    unite_segment(tbl, "s", a, b, remove = TRUE),
-    tibble(s = geo_segment(geo_xy(392, 191), geo_xy(102, 191)))
+    unite_segment(tbl, "s", a, b, c, d, remove = TRUE),
+    tibble(s = geo_segment(392, 191, 102, 191))
   )
 
   expect_identical(
-    unite_segment(tbl, "s", a, b, remove = FALSE),
+    unite_segment(tbl, "s", a, b, c, d, remove = FALSE),
     tibble(
-      a = geo_xy(392, 191),
-      s = geo_segment(geo_xy(392, 191), geo_xy(102, 191)),
-      b = geo_xy(102, 191)
+      a = 392,
+      s = geo_segment(392, 191, 102, 191),
+      b = 191, c = 102, d = 191
     )
   )
 })
