@@ -35,13 +35,6 @@ geo_bbox.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 }
 
 #' @export
-geo_bbox.wk_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  ranges <- unclass(wk::wkb_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
-  ranges$srid <- summarise_srids(geo_srid(x))
-  new_geovctrs_rect(ranges)
-}
-
-#' @export
 geo_bbox.wk_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   ranges <- unclass(wk::wkt_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
   ranges$srid <- summarise_srids(geo_srid(x))
@@ -49,8 +42,22 @@ geo_bbox.wk_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 }
 
 #' @export
+geo_bbox.wk_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  ranges <- unclass(wk::wkb_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
+  ranges$srid <- summarise_srids(geo_srid(x))
+  new_geovctrs_rect(ranges)
+}
+
+#' @export
+geo_bbox.wk_wksxp <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  ranges <- unclass(wk::wksxp_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
+  ranges$srid <- summarise_srids(geo_srid(x))
+  new_geovctrs_rect(ranges)
+}
+
+#' @export
 geo_bbox.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  geo_bbox(as_wkb(x), na.rm = na.rm, finite = finite)
+  geo_bbox(as_wksxp(x), na.rm = na.rm, finite = finite)
 }
 
 #' @rdname geo_bbox

@@ -114,6 +114,19 @@ geo_set_srid.wk_wkb <- function(x, srid) {
 }
 
 #' @export
+geo_srid.wk_wksxp <- function(x) {
+  srid <- wk::wksxp_meta(x, recursive = FALSE)$srid
+  srid[is.na(srid)] <- 0L
+  srid[is.na(x)] <- NA_integer_
+  srid
+}
+
+#' @export
+geo_set_srid.wk_wksxp <- function(x, srid) {
+  abort("not implemented")
+}
+
+#' @export
 #' @rdname geo_srid
 as_geo_srid <- function(x) {
   UseMethod("as_geo_srid")
