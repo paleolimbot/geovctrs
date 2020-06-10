@@ -86,7 +86,7 @@ is_linestring.geovctrs_rect <- function(x) {
   rep_len(FALSE, length(x))
 }
 
-is_linestring(geo_segment(geo_xy(0, 0), geo_xy(1, 1)))
+is_linestring(geo_segment(0, 0, 1, 1))
 is_linestring(geo_xy(0, 0))
 is_linestring(geo_rect(0, 0, 1, 1))
 ```

@@ -9,9 +9,9 @@
 #' @param data A [tibble::tibble()] or data frame
 #' @param col A column name for the united object
 #' @param into Column names for the separated vectors
-#' @param x,y,z,xmin,ymin,xmax,ymax,start,end Column specifications for x and y coordinate
-#'   columns, respectively. Use [dplyr::select()] syntax. These correspond
-#'   to the arguments in [geo_xy()], [geo_segment()], and [geo_rect()].
+#' @inheritParams geo_xy
+#' @inheritParams geo_segment
+#' @inheritParams geo_rect
 #' @param remove Use `remove = FALSE` to keep the source columns
 #'   in the output.
 #'
