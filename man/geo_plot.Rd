@@ -55,6 +55,8 @@ and multipolygon geometries.}
 \item{asp, xlab, ylab}{Passed to \code{\link[graphics:plot]{graphics::plot()}}}
 
 \item{bbox}{The limits of the plot. Defaults to \code{geo_bbox(x, finite = TRUE)}.}
+
+\item{rule}{The rule to use for filling polygons (see \code{\link[graphics:polypath]{graphics::polypath()}})}
 }
 \value{
 \code{x}, invisibly.

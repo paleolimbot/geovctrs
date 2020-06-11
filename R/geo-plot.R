@@ -11,6 +11,7 @@
 #'   and multipolygon geometries.
 #' @param bbox The limits of the plot. Defaults to `geo_bbox(x, finite = TRUE)`.
 #' @param asp,xlab,ylab Passed to [graphics::plot()]
+#' @param rule The rule to use for filling polygons (see [graphics::polypath()])
 #'
 #' @return `x`, invisibly.
 #' @export
