@@ -10,6 +10,7 @@
 \alias{geo_plot_add.geovctrs_xy}
 \alias{geo_plot_add.geovctrs_segment}
 \alias{geo_plot_add.geovctrs_rect}
+\alias{geo_plot_add.wk_wksxp}
 \alias{geo_plot_add.geovctrs_collection}
 \alias{geo_plot_add.sf}
 \title{Plot geometry vectors}
@@ -38,6 +39,8 @@ geo_plot_add(x, ...)
 \method{geo_plot_add}{geovctrs_segment}(x, ...)
 
 \method{geo_plot_add}{geovctrs_rect}(x, ...)
+
+\method{geo_plot_add}{wk_wksxp}(x, ..., rule = "evenodd")
 
 \method{geo_plot_add}{geovctrs_collection}(x, ...)
 

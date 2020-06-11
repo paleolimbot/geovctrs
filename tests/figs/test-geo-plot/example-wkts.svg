@@ -58,10 +58,8 @@
 <circle cx='439.73' cy='402.13' r='2.70pt' style='stroke-width: 0.75;' clip-path='url(#cpNTkuMDR8Njg5Ljc2fDUwMi41Nnw1OS4wNA==)' />
 <polyline points='253.07,402.13 346.40,308.80 253.07,122.13 ' style='stroke-width: 0.75;' clip-path='url(#cpNTkuMDR8Njg5Ljc2fDUwMi41Nnw1OS4wNA==)' />
 <polyline points='533.07,122.13 439.73,215.47 533.07,308.80 439.73,402.13 ' style='stroke-width: 0.75;' clip-path='url(#cpNTkuMDR8Njg5Ljc2fDUwMi41Nnw1OS4wNA==)' />
-<path d='M 439.73 308.80 L 579.73 122.13 L 253.07 122.13 L 439.73 308.80 Z' style='fill-rule: evenodd; stroke-width: 0.75;' clip-path='url(#cpNTkuMDR8Njg5Ljc2fDUwMi41Nnw1OS4wNA==)' />
-<path d='M 299.73 448.80 L 533.07 402.13 L 253.07 308.80 L 206.40 402.13 L 299.73 448.80 Z' style='fill-rule: evenodd; stroke-width: 0.75;' clip-path='url(#cpNTkuMDR8Njg5Ljc2fDUwMi41Nnw1OS4wNA==)' />
-<path d='M 533.07 122.13 L 346.40 75.47 L 579.73 215.47 L 533.07 122.13 Z' style='fill-rule: evenodd; stroke-width: 0.75;' clip-path='url(#cpNTkuMDR8Njg5Ljc2fDUwMi41Nnw1OS4wNA==)' />
-<path d='M 346.40 168.80 L 253.07 215.47 L 253.07 402.13 L 439.73 448.80 L 579.73 308.80 L 346.40 168.80 ZM 439.73 308.80 L 346.40 355.47 L 346.40 262.13 L 439.73 308.80 Z' style='fill-rule: evenodd; stroke-width: 0.75;' clip-path='url(#cpNTkuMDR8Njg5Ljc2fDUwMi41Nnw1OS4wNA==)' />
+<path d='M 439.73 308.80 L 579.73 122.13 L 253.07 122.13 L 439.73 308.80 ZM 299.73 448.80 L 533.07 402.13 L 253.07 308.80 L 206.40 402.13 L 299.73 448.80 Z' style='fill-rule: evenodd; stroke-width: 0.75;' clip-path='url(#cpNTkuMDR8Njg5Ljc2fDUwMi41Nnw1OS4wNA==)' />
+<path d='M 533.07 122.13 L 346.40 75.47 L 579.73 215.47 L 533.07 122.13 ZM 346.40 168.80 L 253.07 215.47 L 253.07 402.13 L 439.73 448.80 L 579.73 308.80 L 346.40 168.80 ZM 439.73 308.80 L 346.40 355.47 L 346.40 262.13 L 439.73 308.80 Z' style='fill-rule: evenodd; stroke-width: 0.75;' clip-path='url(#cpNTkuMDR8Njg5Ljc2fDUwMi41Nnw1OS4wNA==)' />
 <circle cx='533.07' cy='402.13' r='2.70pt' style='stroke-width: 0.75;' clip-path='url(#cpNTkuMDR8Njg5Ljc2fDUwMi41Nnw1OS4wNA==)' />
 <polyline points='253.07,402.13 346.40,308.80 253.07,122.13 ' style='stroke-width: 0.75;' clip-path='url(#cpNTkuMDR8Njg5Ljc2fDUwMi41Nnw1OS4wNA==)' />
 <path d='M 533.07 122.13 L 346.40 75.47 L 579.73 215.47 L 533.07 122.13 Z' style='fill-rule: evenodd; stroke-width: 0.75;' clip-path='url(#cpNTkuMDR8Njg5Ljc2fDUwMi41Nnw1OS4wNA==)' />

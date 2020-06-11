@@ -71,7 +71,7 @@ geo_plot_add.default <- function(x, ...) {
 #' @rdname geo_plot
 #' @export
 geo_plot_add.geovctr <- function(x, ...) {
-  geo_plot_add(as_geo_collection(x), ...)
+  geo_plot_add(as_wksxp(x), ...)
   invisible(x)
 }
 
@@ -128,6 +128,45 @@ geo_plot_add.geovctrs_rect <- function(x, ...) {
 
 #' @rdname geo_plot
 #' @export
+geo_plot_add.wk_wksxp <- function(x, ..., rule = "evenodd") {
+  # evaluate dots, wrap scalar types in a list(), and vectorize
+  dots <- rlang::list2(..., rule = rule)
+  is_scalar <- !vapply(dots, vec_is, logical(1))
+  dots[is_scalar] <- lapply(dots[is_scalar], list)
+  dots_tbl <- vec_recycle_common(!!!dots, .size = length(x))
+  meta <- unclass(wk::wksxp_meta(x, recursive = FALSE))
+
+  # using for() because the user interrupt is respected in RStudio
+  for (i in seq_along(x)) {
+    coords <- wk::wksxp_coords(x[[i]], sep_na = TRUE)[c("x", "y")]
+    if (nrow(coords) == 0) {
+      next
+    }
+
+    dots_item <- lapply(dots_tbl, "[[", i)
+    type_id <- meta$type[i]
+    args <- c(coords, dots_item)
+
+    if (type_id == 1 || type_id == 4) {
+      args$rule <- NULL
+      do.call(graphics::points, args)
+    } else if (type_id == 2 || type_id == 5) {
+      args$rule <- NULL
+      do.call(graphics::lines, args)
+    } else if (type_id == 3 || type_id == 6) {
+      do.call(graphics::polypath, args)
+    } else if (type_id == 7) {
+      do.call(geo_plot_add.wk_wksxp, c(list(wksxp(unclass(x)[[i]])), dots_item))
+    } else {
+      abort("Unknown geometry type") # nocov
+    }
+  }
+
+  invisible(x)
+}
+
+#' @rdname geo_plot
+#' @export
 geo_plot_add.geovctrs_collection <- function(x, ...) {
   features <- field(x, "feature")
 
@@ -137,7 +176,7 @@ geo_plot_add.geovctrs_collection <- function(x, ...) {
   dots[is_scalar] <- lapply(dots[is_scalar], list)
   dots_tbl <- vec_recycle_common(!!!dots, .size = length(features))
 
-  # using for() because the user interupt is respected
+  # using for() because the user interrupt is respected
   for (i in seq_along(features)) {
     dots_item <- lapply(dots_tbl, "[[", i)
     rlang::exec(geo_plot_add, features[[i]], !!!dots_item)
