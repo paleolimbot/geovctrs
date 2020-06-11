@@ -56,6 +56,11 @@ geo_bbox.wk_wksxp <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 }
 
 #' @export
+geo_bbox.geovctrs_collection <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_bbox(geovctrs_cpp_convert(x, wkb()), ..., na.rm = na.rm, finite = finite)
+}
+
+#' @export
 geo_bbox.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   geo_bbox(as_wksxp(x), na.rm = na.rm, finite = finite)
 }
@@ -114,6 +119,11 @@ geo_envelope.wk_wksxp <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   ranges <- unclass(wk::wksxp_feature_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
   ranges$srid <- geo_srid(x)
   new_geovctrs_rect(ranges)
+}
+
+#' @export
+geo_envelope.geovctrs_collection <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_envelope(geovctrs_cpp_convert(x, wkb()), ..., na.rm = na.rm, finite = finite)
 }
 
 #' @export
