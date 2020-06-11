@@ -84,7 +84,7 @@ geo_plot_add.data.frame <- function(x, ...) {
   dots_tbl <- vec_recycle_common(!!!dots_eval, .size = nrow(x))
 
   # plot the features
-  rlang::exec(geo_plot_add, as_geovctr(x), !!!dots_tbl)
+  do.call(geo_plot_add, c(list(as_geovctr(x)), dots_tbl))
 
   # return the input
   invisible(x)
@@ -163,100 +163,6 @@ geo_plot_add.wk_wksxp <- function(x, ..., rule = "evenodd") {
   }
 
   invisible(x)
-}
-
-#' @rdname geo_plot
-#' @export
-geo_plot_add.geovctrs_collection <- function(x, ...) {
-  features <- field(x, "feature")
-
-  # evaluate dots, wrap scalar types in a list(), and vectorize
-  dots <- rlang::list2(...)
-  is_scalar <- !vapply(dots, vec_is, logical(1))
-  dots[is_scalar] <- lapply(dots[is_scalar], list)
-  dots_tbl <- vec_recycle_common(!!!dots, .size = length(features))
-
-  # using for() because the user interrupt is respected
-  for (i in seq_along(features)) {
-    dots_item <- lapply(dots_tbl, "[[", i)
-    rlang::exec(geo_plot_add, features[[i]], !!!dots_item)
-  }
-  invisible(x)
-}
-
-#' @export
-geo_plot_add.geovctrs_point <- function(x, ...) {
-  xy <- field(x, "xy")
-  graphics::points(field(xy, "x"), field(xy, "y"), ...)
-  invisible(x)
-}
-
-#' @export
-geo_plot_add.geovctrs_linestring <- function(x, ...) {
-  xy <- field(x, "xy")
-  graphics::lines(field(xy, "x"), field(xy, "y"), ...)
-  invisible(x)
-}
-
-#' @export
-geo_plot_add.geovctrs_polygon <- function(x, ..., rule = "evenodd") {
-  # have to do one feature at a time because the "holes in polygons" problem
-  xy <- separate_groups_with_na(field(x, "xy"), field(x, "ring"))
-
-  # graphics::polypath doesn't do zero-length coords
-  if (vec_size(xy) > 0) {
-    graphics::polypath(field(xy, "x"), field(xy, "y"), ..., rule = rule)
-  }
-
-  invisible(x)
-}
-
-#' @export
-geo_plot_add.geovctrs_multipoint <- function(x, ...) {
-  xy <- field(x, "xy")
-  graphics::points(field(xy, "x"), field(xy, "y"), ...)
-  invisible(x)
-}
-
-#' @export
-geo_plot_add.geovctrs_multilinestring <- function(x, ...) {
-  xy <- separate_groups_with_na(
-    field(x, "xy"),
-    field(x, "part")
-  )
-  graphics::lines(field(xy, "x"), field(xy, "y"), ...)
-  invisible(x)
-}
-
-#' @export
-geo_plot_add.geovctrs_multipolygon <- function(x, ..., rule = "evenodd") {
-  # have to do one part at a time because the "holes in polygons" problem
-  crds <- tibble::tibble(xy = field(x, "xy"), ring = field(x, "ring"))
-  for (crds_feat in split(crds, field(x, "part"))) {
-    xy_part <- separate_groups_with_na(crds_feat$xy, crds_feat$ring)
-    if (vec_size(xy_part) > 0) {
-      graphics::polypath(field(xy_part, "x"), field(xy_part, "y"), ..., rule = rule)
-    }
-  }
-  invisible(x)
-}
-
-separate_groups_with_na <- function(x, groups) {
-  if (length(x) == 0) {
-    return(x)
-  }
-
-  if (is.factor(groups)) {
-    groups <- as.integer(unclass(groups))
-  }
-
-  n_groups <- n_distinct(groups)
-  lengths <- rle(groups)$lengths
-
-  start_i <- c(0, cumsum(lengths[-length(lengths)]))
-  new_start_i <- start_i + seq_along(lengths) - 1
-  indices <- Map(function(x, y) c(x + seq_len(y), NA), start_i, lengths)
-  x[vec_c(!!!indices)][-(length(x) + n_groups)]
 }
 
 #' @importFrom graphics plot

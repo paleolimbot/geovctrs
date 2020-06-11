@@ -103,20 +103,3 @@ test_that("geo_nc can be plotted", {
     function() geo_plot(geo_nc, col = make_col(BIR79))
   )
 })
-
-test_that("separate with na works", {
-  expect_identical(
-    separate_groups_with_na(numeric(0), numeric(0)),
-    numeric(0)
-  )
-
-  expect_equal(
-    separate_groups_with_na(1:5, c(1, 1, 2, 2, 2)),
-    c(1, 2, NA, 3, 4, 5)
-  )
-
-  expect_equal(
-    separate_groups_with_na(1:5, factor(c(1, 1, 2, 2, 2))),
-    c(1, 2, NA, 3, 4, 5)
-  )
-})
