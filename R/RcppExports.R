@@ -5,6 +5,18 @@ geovctrs_cpp_convert <- function(data, ptype) {
     .Call(`_geovctrs_geovctrs_cpp_convert`, data, ptype)
 }
 
+cpp_wkt_set_srid <- function(wkt, srid, precision = 16L, trim = TRUE) {
+    .Call(`_geovctrs_cpp_wkt_set_srid`, wkt, srid, precision, trim)
+}
+
+cpp_wkb_set_srid <- function(wkb, srid, endian) {
+    .Call(`_geovctrs_cpp_wkb_set_srid`, wkb, srid, endian)
+}
+
+cpp_wksxp_set_srid <- function(wksxp, srid) {
+    .Call(`_geovctrs_cpp_wksxp_set_srid`, wksxp, srid)
+}
+
 geovctrs_cpp_geos_version_runtime <- function() {
     .Call(`_geovctrs_geovctrs_cpp_geos_version_runtime`)
 }

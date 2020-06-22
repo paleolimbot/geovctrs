@@ -79,10 +79,8 @@ geo_srid.wk_wkt <- function(x) {
 
 #' @export
 geo_set_srid.wk_wkt <- function(x, srid) {
-  if (any(srid != 0)) {
-    abort("Can't store SRID with a wkt()")
-  }
-  x
+  recycled <- vec_recycle_common(x, srid)
+  new_wk_wkt(cpp_wkt_set_srid(recycled[[1]], recycled[[2]]))
 }
 
 #' @export
@@ -110,7 +108,8 @@ geo_srid.wk_wkb <- function(x) {
 
 #' @export
 geo_set_srid.wk_wkb <- function(x, srid) {
-  abort("not implemented")
+  recycled <- vec_recycle_common(x, srid)
+  new_wk_wkb(cpp_wkb_set_srid(recycled[[1]], recycled[[2]], endian = wk::wk_platform_endian()))
 }
 
 #' @export
@@ -123,7 +122,8 @@ geo_srid.wk_wksxp <- function(x) {
 
 #' @export
 geo_set_srid.wk_wksxp <- function(x, srid) {
-  abort("not implemented")
+  recycled <- vec_recycle_common(x, srid)
+  new_wk_wksxp(cpp_wksxp_set_srid(recycled[[1]], recycled[[2]]))
 }
 
 #' @export

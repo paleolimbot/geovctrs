@@ -43,6 +43,45 @@ RcppExport SEXP _geovctrs_geovctrs_cpp_convert(SEXP dataSEXP, SEXP ptypeSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// cpp_wkt_set_srid
+CharacterVector cpp_wkt_set_srid(CharacterVector wkt, IntegerVector srid, int precision, bool trim);
+RcppExport SEXP _geovctrs_cpp_wkt_set_srid(SEXP wktSEXP, SEXP sridSEXP, SEXP precisionSEXP, SEXP trimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type wkt(wktSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type srid(sridSEXP);
+    Rcpp::traits::input_parameter< int >::type precision(precisionSEXP);
+    Rcpp::traits::input_parameter< bool >::type trim(trimSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wkt_set_srid(wkt, srid, precision, trim));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_wkb_set_srid
+List cpp_wkb_set_srid(List wkb, IntegerVector srid, int endian);
+RcppExport SEXP _geovctrs_cpp_wkb_set_srid(SEXP wkbSEXP, SEXP sridSEXP, SEXP endianSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type wkb(wkbSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type srid(sridSEXP);
+    Rcpp::traits::input_parameter< int >::type endian(endianSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wkb_set_srid(wkb, srid, endian));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_wksxp_set_srid
+List cpp_wksxp_set_srid(List wksxp, IntegerVector srid);
+RcppExport SEXP _geovctrs_cpp_wksxp_set_srid(SEXP wksxpSEXP, SEXP sridSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type wksxp(wksxpSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type srid(sridSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wksxp_set_srid(wksxp, srid));
+    return rcpp_result_gen;
+END_RCPP
+}
 // geovctrs_cpp_geos_version_runtime
 std::string geovctrs_cpp_geos_version_runtime();
 RcppExport SEXP _geovctrs_geovctrs_cpp_geos_version_runtime() {
@@ -332,6 +371,9 @@ RcppExport SEXP _geovctrs_RcppExport_registerCCallable() {
 
 static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_geovctrs_cpp_convert", (DL_FUNC) &_geovctrs_geovctrs_cpp_convert, 2},
+    {"_geovctrs_cpp_wkt_set_srid", (DL_FUNC) &_geovctrs_cpp_wkt_set_srid, 4},
+    {"_geovctrs_cpp_wkb_set_srid", (DL_FUNC) &_geovctrs_cpp_wkb_set_srid, 3},
+    {"_geovctrs_cpp_wksxp_set_srid", (DL_FUNC) &_geovctrs_cpp_wksxp_set_srid, 2},
     {"_geovctrs_geovctrs_cpp_geos_version_runtime", (DL_FUNC) &_geovctrs_geovctrs_cpp_geos_version_runtime, 0},
     {"_geovctrs_geovctrs_cpp_geos_version_build", (DL_FUNC) &_geovctrs_geovctrs_cpp_geos_version_build, 0},
     {"_geovctrs_cpp_translate_xy_wkt", (DL_FUNC) &_geovctrs_cpp_translate_xy_wkt, 3},
