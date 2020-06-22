@@ -5,10 +5,10 @@
 #include "wk/wkb-reader.hpp"
 #include "wk/rcpp-sexp-writer.hpp"
 #include "wk/rcpp-sexp-reader.hpp"
-#include "geovctrs/wk-xy.h"
-#include "geovctrs/wk-xyz.h"
-#include "geovctrs/wk-segment.h"
-#include "geovctrs/wk-rect.h"
+#include "geovctrs/wk-xy.hpp"
+#include "geovctrs/wk-xyz.hpp"
+#include "geovctrs/wk-segment.hpp"
+#include "geovctrs/wk-rect.hpp"
 
 #include <Rcpp.h>
 #include "wk/rcpp-io.hpp"

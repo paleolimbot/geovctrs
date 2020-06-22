@@ -3,7 +3,7 @@
 #define GEOVCTRS_WK_XY_H
 
 #include <cmath>
-#include "geovctrs/wk-fields.h"
+#include "geovctrs/wk-fields.hpp"
 
 template<typename ContainerType, typename RealVectorType>
 class GeovctrsWKXYReader: public GeovctrsWKFieldsReader<ContainerType> {
