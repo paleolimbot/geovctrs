@@ -4,9 +4,9 @@
 
 #include <cstdint>
 
-#include "wk/io.h"
-#include "wk/reader.h"
-#include "wk/writer.h"
+#include "wk/io.hpp"
+#include "wk/reader.hpp"
+#include "wk/writer.hpp"
 
 template<typename ContainerType>
 class GeovctrsFieldsProvider: public WKProvider {

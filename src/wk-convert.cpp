@@ -1,18 +1,17 @@
 
-#include "wk/wkt-writer.h"
-#include "wk/wkt-reader.h"
-#include "wk/wkb-writer.h"
-#include "wk/wkb-reader.h"
-#include "wk/sexp-writer.h"
-#include "wk/sexp-reader.h"
+#include "wk/wkt-writer.hpp"
+#include "wk/wkt-reader.hpp"
+#include "wk/wkb-writer.hpp"
+#include "wk/wkb-reader.hpp"
+#include "wk/rcpp-sexp-writer.hpp"
+#include "wk/rcpp-sexp-reader.hpp"
 #include "geovctrs/wk-xy.h"
 #include "geovctrs/wk-xyz.h"
 #include "geovctrs/wk-segment.h"
 #include "geovctrs/wk-rect.h"
-#include "wk/geometry-debug-handler.h"
 
 #include <Rcpp.h>
-#include "wk/rcpp-io.h"
+#include "wk/rcpp-io.hpp"
 using namespace Rcpp;
 
 class RcppFieldsProvider: public GeovctrsFieldsProvider<List> {
@@ -112,7 +111,7 @@ List cpp_translate_base_wkb(WKReader& reader,
 List cpp_translate_base_wksxp(WKReader& reader,
                               int includeZ, int includeM, int includeSRID) {
   WKSEXPExporter exporter(reader.nFeatures());
-  WKSEXPWriter writer(exporter);
+  WKRcppSEXPWriter writer(exporter);
 
   cpp_translate_base(reader, writer, includeZ, includeM, includeSRID);
 
@@ -198,8 +197,8 @@ List cpp_translate_wkb_xy(List wkb) {
 
 // [[Rcpp::export]]
 List cpp_translate_wksxp_xy(List wksxp) {
-  WKSEXPProvider provider(wksxp);
-  WKSEXPReader reader(provider);
+  WKRcppSEXPProvider provider(wksxp);
+  WKRcppSEXPReader reader(provider);
   return cpp_translate_base_xy(reader);
 }
 
@@ -242,8 +241,8 @@ List cpp_translate_wkb_xyz(List wkb) {
 
 // [[Rcpp::export]]
 List cpp_translate_wksxp_xyz(List wksxp) {
-  WKSEXPProvider provider(wksxp);
-  WKSEXPReader reader(provider);
+  WKRcppSEXPProvider provider(wksxp);
+  WKRcppSEXPReader reader(provider);
   return cpp_translate_base_xyz(reader);
 }
 
@@ -286,8 +285,8 @@ List cpp_translate_wkb_segment(List wkb, int includeSRID) {
 
 // [[Rcpp::export]]
 List cpp_translate_wksxp_segment(List wksxp, int includeSRID) {
-  WKSEXPProvider provider(wksxp);
-  WKSEXPReader reader(provider);
+  WKRcppSEXPProvider provider(wksxp);
+  WKRcppSEXPReader reader(provider);
   return cpp_translate_base_segment(reader, includeSRID);
 }
 
