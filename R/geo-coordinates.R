@@ -38,7 +38,7 @@ geo_coordinates.default <- function(x, ...) {
 
 #' @export
 geo_coordinates.geovctr <- function(x, ...) {
-  geo_coordinates(as_geo_collection(x), ...)
+  geo_coordinates(as_wksxp(x), ...)
 }
 
 #' @export

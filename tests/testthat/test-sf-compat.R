@@ -52,7 +52,6 @@ test_that("casting and c() work with sfc", {
 
   wkt <- wkt("POINT (30 10)")
   wkb <- as_wkb(wkt)
-  col <- as_geo_collection(wkt)
   xy <- as_geo_xy(wkt)
   seg <- geo_segment(0, 0, 30, 10)
   rect <- geo_rect(0, 0, 30, 10)
@@ -73,14 +72,12 @@ test_that("casting and c() work with sfc", {
 
   expect_is(vec_c(wkb, sfc), "wk_wkb")
   expect_is(vec_c(wkt, sfc), "sfc")
-  expect_is(vec_c(col, sfc), "sfc")
   expect_is(vec_c(xy, sfc), "sfc")
   expect_is(vec_c(seg, sfc), "sfc")
   expect_is(vec_c(rect, sfc), "sfc")
 
   expect_is(vec_c(sfc, wkb), "wk_wkb")
   expect_is(vec_c(sfc, wkt), "sfc")
-  expect_is(vec_c(sfc, col), "sfc")
   expect_is(vec_c(sfc, xy), "sfc")
   expect_is(vec_c(sfc, seg), "sfc")
   expect_is(vec_c(sfc, rect), "sfc")

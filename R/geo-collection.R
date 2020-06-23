@@ -17,7 +17,7 @@
 #'   matters: the first value encountered will identify the outer ring.
 #' @inheritParams geo_srid
 #'
-#' @return A [new_geovctrs_collection()] of length 1.
+#' @return A [wk::wksxp()] of length 1.
 #' @export
 #'
 #' @examples
@@ -31,34 +31,34 @@
 #' geo_polygon(geo_xy(c(0, 10, 0, 0), c(0, 0, 10, 0)))
 #'
 #' # polygon with a hole
-#' poly_hole <- geo_polygon(
-#'   geo_xy(
-#'     c(35, 45, 15, 10, 35, 20, 35, 30, 20),
-#'     c(10, 45, 40, 20, 10, 30, 35, 20, 30)
-#'   ),
-#'   ring = c(1, 1, 1, 1, 1, 2, 2, 2, 2)
-#' )
+#' # poly_hole <- geo_polygon(
+#' #   geo_xy(
+#' #     c(35, 45, 15, 10, 35, 20, 35, 30, 20),
+#' #     c(10, 45, 40, 20, 10, 30, 35, 20, 30)
+#' #   ),
+#' #   ring = c(1, 1, 1, 1, 1, 2, 2, 2, 2)
+#' #)
 #'
 #' # multipoint
-#' geo_multipoint(
-#'   c(geo_point(geo_xy(10, 30)), geo_point(geo_xy(12, 11)))
-#' )
+#' #geo_multipoint(
+#' #   c(geo_point(geo_xy(10, 30)), geo_point(geo_xy(12, 11)))
+#' # )
 #'
 #' # multilinestring
-#' geo_multilinestring(
-#'   c(
-#'     geo_linestring(geo_xy(0:1, 0:1)),
-#'     geo_linestring(geo_xy(c(12, 30), c(11, 10)))
-#'   )
-#' )
+#' # geo_multilinestring(
+#' #   c(
+#' #     geo_linestring(geo_xy(0:1, 0:1)),
+#' #     geo_linestring(geo_xy(c(12, 30), c(11, 10)))
+#' # )
+#' #)
 #'
 #' # multipolygon
-#' geo_multipolygon(
-#'   geo_polygon(geo_xy(c(0, 10, 0, 0), c(0, 0, 10, 0)))
-#' )
+#' #geo_multipolygon(
+#' #   geo_polygon(geo_xy(c(0, 10, 0, 0), c(0, 0, 10, 0)))
+#' #)
 #'
 #' # nested geo_collection()
-#' c(geo_point(geo_xy(0, 1)), geo_collection(geo_point(geo_xy(1, 2))))
+#' # c(geo_point(geo_xy(0, 1)), geo_collection(geo_point(geo_xy(1, 2))))
 #'
 geo_collection <- function(feature = list(), srid = 0) {
   abort("Not implemented")
@@ -66,29 +66,45 @@ geo_collection <- function(feature = list(), srid = 0) {
 
 #' @rdname geo_collection
 #' @export
-geo_point <- function(xy, srid = 0)  {
-  xy <- cast_xy_or_xyz(xy)
-  stopifnot(vec_size(srid) == 1)
-
-
+geo_point <- function(xy, srid = NA)  {
+  construct_wksxp(
+    structure(as.matrix(xy), class = "wk_point"),
+    xy,
+    srid
+  )
 }
 
 #' @rdname geo_collection
 #' @export
-geo_linestring <- function(xy, srid = 0)  {
-  xy <- cast_xy_or_xyz(xy)
-  stopifnot(vec_size(srid) == 1)
-
-
+geo_linestring <- function(xy, srid = NA)  {
+  construct_wksxp(
+    structure(as.matrix(xy), class = "wk_linestring"),
+    xy,
+    srid
+  )
 }
 
 #' @rdname geo_collection
 #' @export
-geo_polygon <- function(xy, ring = 1L, srid = 0)  {
-  xy <- cast_xy_or_xyz(xy)
+geo_polygon <- function(xy, ring = 1L, srid = NA)  {
+  if (vec_size(xy) == 0) {
+    return(new_wk_wksxp(list(structure(list(), class = "wk_polygon"))))
+  }
   stopifnot(vec_size(srid) == 1)
 
+  data <- vec_data(xy)
+  raw_wksxp <- wk::coords_polygon_translate_wksxp(
+    data$x,
+    data$y,
+    data$z %||% NA_real_,
+    ring_id = ring
+  )
 
+  if (!is.na(srid)) {
+    attr(raw_wksxp[[1]], "srid") <- as_geo_srid(srid)
+  }
+
+  new_wk_wksxp(raw_wksxp)
 }
 
 #' @rdname geo_collection
@@ -122,9 +138,13 @@ cast_xy_or_xyz <- function(x) {
   }
 }
 
-assert_has_xy_or_xyz <- function(x) {
-  if (!inherits(x$xy, "geovctrs_xy")) {
-    abort("`xy` must be a `geo_xy()` or a `geo_xyz()`")
+construct_wksxp <- function(feature, xy, srid) {
+  stopifnot(vec_size(srid) == 1)
+
+  attr(feature, "has_z") <- inherits(xy, "geovctrs_xyz")
+  if (!is.na(srid)) {
+    attr(feature, "srid") <- as_geo_srid(srid)
   }
-  invisible(x)
+
+  wksxp(list(feature))
 }

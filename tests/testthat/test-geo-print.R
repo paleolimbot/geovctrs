@@ -49,7 +49,6 @@ test_that("all geovctrs work in the RStudio viewer", {
   if (FALSE) {
     View(geo_nc) # wkb
     View(tibble(as_wkt(geo_nc$geometry))) # wkt
-    View(tibble(as_geo_collection(geo_nc$geometry))) # collection
     View(geo_summary(geo_nc)) # xy
     View(tibble(geo_segment(0, 0, 12, 11))) # segment
     View(tibble(geo_envelope(geo_nc))) # rect
