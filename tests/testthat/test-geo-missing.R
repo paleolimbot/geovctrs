@@ -2,7 +2,6 @@
 test_that("built-in missing values are missing", {
   expect_true(is.na(NA_wkt_))
   expect_true(is.na(NA_wkb_))
-  expect_true(is.na(NA_collection_))
   expect_true(is.na(NA_xy_))
   expect_true(is.na(NA_segment_))
   expect_true(is.na(NA_rect_))

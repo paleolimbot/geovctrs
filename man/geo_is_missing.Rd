@@ -18,7 +18,7 @@ An object of class \code{wk_wkt} (inherits from \code{wk_vctr}, \code{geovctr}) 
 
 An object of class \code{wk_wkb} (inherits from \code{wk_vctr}, \code{geovctr}) of length 1.
 
-An object of class \code{geovctrs_collection} (inherits from \code{geovctr}, \code{vctrs_rcrd}, \code{vctrs_vctr}) of length 1.
+An object of class \code{NULL} of length 0.
 
 An object of class \code{geovctrs_xy} (inherits from \code{geovctr}, \code{vctrs_rcrd}, \code{vctrs_vctr}) of length 1.
 

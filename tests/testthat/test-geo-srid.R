@@ -68,7 +68,6 @@ test_that("geo_set_srid() is vectorized along x and srid", {
 test_that("misssing values have missing SRIDs", {
   expect_identical(geo_srid(NA_wkt_), NA_integer_)
   expect_identical(geo_srid(NA_wkb_), NA_integer_)
-  expect_identical(geo_srid(NA_collection_), NA_integer_)
   expect_identical(geo_srid(NA_xy_), NA_integer_)
   expect_identical(geo_srid(NA_segment_), NA_integer_)
   expect_identical(geo_srid(NA_rect_), NA_integer_)
