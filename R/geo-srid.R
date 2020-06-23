@@ -22,9 +22,11 @@
 #'
 #' @examples
 #' # two points with an SRID
-#' geometries <- c(
-#'   geo_point(geo_xy(259473, 4876249), srid = 26920),
-#'   geo_point(geo_xy(-66, 44), srid = 4326)
+#' geometries <- wkt(
+#'   c(
+#'     "SRID=26920;POINT (259473 4876249)",
+#'     "SRID=4326;POINT (-66 44)"
+#'   )
 #' )
 #'
 #' geo_srid(geometries)

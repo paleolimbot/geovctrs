@@ -70,9 +70,9 @@ used wherever a geometry is appropriate.
 
 For an object to be a "geovctr", it must:
 \itemize{
-\item Be a vctr (\code{\link[vctrs:vec_is]{vctrs::vec_is()}} must be \code{TRUE}). This ensures that it will
+\item Be a vctr (\code{\link[vctrs:vec_assert]{vctrs::vec_is()}} must be \code{TRUE}). This ensures that it will
 work with \code{\link[tibble:tibble]{tibble::tibble()}} and other tidyverse functions such as
-\code{\link[tidyr:unnest]{tidyr::unnest()}} and \code{\link[dplyr:group_by]{dplyr::group_by()}} / \code{\link[dplyr:mutate]{dplyr::mutate()}} /
+\code{\link[tidyr:nest]{tidyr::unnest()}} and \code{\link[dplyr:group_by]{dplyr::group_by()}} / \code{\link[dplyr:mutate]{dplyr::mutate()}} /
 \code{\link[dplyr:summarise]{dplyr::summarise()}}.
 \item Inherit from \code{"geovctr"}. This makes it work automatically with
 functions like \code{\link[=geo_plot]{geo_plot()}} and \code{\link[=geo_bbox]{geo_bbox()}} that have a default

@@ -25,6 +25,6 @@ below to see their documentation.
 \describe{
   \item{tibble}{\code{\link[tibble]{tibble}}}
 
-  \item{wk}{\code{\link[wk]{as_wkb}}, \code{\link[wk]{as_wksxp}}, \code{\link[wk]{as_wkt}}, \code{\link[wk]{new_wk_wkb}}, \code{\link[wk]{new_wk_wksxp}}, \code{\link[wk]{new_wk_wkt}}, \code{\link[wk]{parse_wkb}}, \code{\link[wk]{parse_wksxp}}, \code{\link[wk]{parse_wkt}}, \code{\link[wk]{wkb}}, \code{\link[wk]{wksxp}}, \code{\link[wk]{wkt}}}
+  \item{wk}{\code{\link[wk:wkb]{as_wkb}}, \code{\link[wk:wksxp]{as_wksxp}}, \code{\link[wk:wkt]{as_wkt}}, \code{\link[wk]{new_wk_wkb}}, \code{\link[wk]{new_wk_wksxp}}, \code{\link[wk]{new_wk_wkt}}, \code{\link[wk:wkb]{parse_wkb}}, \code{\link[wk:wksxp]{parse_wksxp}}, \code{\link[wk:wkt]{parse_wkt}}, \code{\link[wk]{wkb}}, \code{\link[wk]{wksxp}}, \code{\link[wk]{wkt}}}
 }}
 

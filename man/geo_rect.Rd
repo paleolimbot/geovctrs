@@ -14,7 +14,7 @@ geo_rect(
 }
 \arguments{
 \item{xmin, ymin, xmax, ymax}{Border values, recycled to a common
-length using \code{\link[vctrs:vec_recycle_common]{vctrs::vec_recycle_common()}}.}
+length using \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.}
 
 \item{srid}{A spatial reference identifier, coerced to
 an integer by \code{\link[=as_geo_srid]{as_geo_srid()}}. These identifiers can

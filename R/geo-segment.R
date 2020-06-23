@@ -148,12 +148,6 @@ vec_cast.geovctrs_segment.wk_wksxp <- function(x, to, ...) {
   new_geovctrs_segment(cpp_translate_wksxp_segment(x, includeSRID = NA))
 }
 
-#' @method vec_cast.geovctrs_segment geovctrs_collection
-#' @export
-vec_cast.geovctrs_segment.geovctrs_collection <- function(x, to, ...) {
-  geovctrs_cpp_convert(x, to)
-}
-
 # ------------- prototypes ------------
 
 #' @method vec_ptype2 geovctrs_segment
@@ -192,10 +186,4 @@ vec_ptype2.geovctrs_segment.wk_wkb <- function(x, y, ..., x_arg = "x", y_arg = "
 #' @export
 vec_ptype2.geovctrs_segment.wk_wksxp <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   wksxp()
-}
-
-#' @method vec_ptype2.geovctrs_segment geovctrs_collection
-#' @export
-vec_ptype2.geovctrs_segment.geovctrs_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_collection()
 }

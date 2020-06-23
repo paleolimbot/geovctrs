@@ -69,11 +69,6 @@ geo_plot_add.default <- function(x, ...) {
   invisible(x)
 }
 
-#' @export
-geo_plot_add.geovctrs_collection <- function(x, ...) {
-  geo_plot(geovctrs_cpp_convert(x, wkb()), ...)
-}
-
 #' @rdname geo_plot
 #' @export
 geo_plot_add.geovctr <- function(x, ...) {

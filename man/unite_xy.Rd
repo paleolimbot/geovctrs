@@ -57,16 +57,16 @@ in the output.}
 \item{y1}{Values for the start and end coordinates.}
 
 \item{xmin}{Border values, recycled to a common
-length using \code{\link[vctrs:vec_recycle_common]{vctrs::vec_recycle_common()}}.}
+length using \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.}
 
 \item{ymin}{Border values, recycled to a common
-length using \code{\link[vctrs:vec_recycle_common]{vctrs::vec_recycle_common()}}.}
+length using \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.}
 
 \item{xmax}{Border values, recycled to a common
-length using \code{\link[vctrs:vec_recycle_common]{vctrs::vec_recycle_common()}}.}
+length using \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.}
 
 \item{ymax}{Border values, recycled to a common
-length using \code{\link[vctrs:vec_recycle_common]{vctrs::vec_recycle_common()}}.}
+length using \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.}
 }
 \value{
 \code{data}, with new column(s) \code{col}/\code{into}

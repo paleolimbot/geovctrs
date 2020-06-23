@@ -122,11 +122,6 @@ geo_envelope.wk_wksxp <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 }
 
 #' @export
-geo_envelope.geovctrs_collection <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  geo_envelope(geovctrs_cpp_convert(x, wkb()), ..., na.rm = na.rm, finite = finite)
-}
-
-#' @export
 geo_envelope.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   geo_envelope(as_wksxp(x), na.rm = na.rm, finite = finite)
 }

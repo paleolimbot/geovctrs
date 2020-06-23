@@ -116,12 +116,6 @@ vec_cast.geovctrs_xyz.wk_wksxp <- function(x, to, ...) {
   new_geovctrs_xyz(cpp_translate_wksxp_xyz(x))
 }
 
-#' @method vec_cast.geovctrs_xyz geovctrs_collection
-#' @export
-vec_cast.geovctrs_xyz.geovctrs_collection <- function(x, to, ...) {
-  geovctrs_cpp_convert(x, to)
-}
-
 # ------------- prototypes ------------
 
 #' @method vec_ptype2 geovctrs_xyz
@@ -166,10 +160,4 @@ vec_ptype2.geovctrs_xyz.wk_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") 
 #' @export
 vec_ptype2.geovctrs_xyz.wk_wksxp <- function(x, y, ..., x_arg = "x", y_arg = "y") {
   wksxp()
-}
-
-#' @method vec_ptype2.geovctrs_xyz geovctrs_collection
-#' @export
-vec_ptype2.geovctrs_xyz.geovctrs_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_collection()
 }

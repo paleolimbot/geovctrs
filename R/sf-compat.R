@@ -54,14 +54,12 @@ register_sf_compat <- function() {
 
   vctrs::s3_register("sf::vec_cast.sfc", "wk_wkb")
   vctrs::s3_register("sf::vec_cast.sfc", "wk_wkt")
-  vctrs::s3_register("sf::vec_cast.sfc", "geovctrs_collection")
   vctrs::s3_register("sf::vec_cast.sfc", "geovctrs_xy")
   vctrs::s3_register("sf::vec_cast.sfc", "geovctrs_segment")
   vctrs::s3_register("sf::vec_cast.sfc", "geovctrs_rect")
 
   vctrs::s3_register("sf::vec_ptype2.sfc", "wk_wkb")
   vctrs::s3_register("sf::vec_ptype2.sfc", "wk_wkt")
-  vctrs::s3_register("sf::vec_ptype2.sfc", "geovctrs_collection")
   vctrs::s3_register("sf::vec_ptype2.sfc", "geovctrs_xy")
   vctrs::s3_register("sf::vec_ptype2.sfc", "geovctrs_segment")
   vctrs::s3_register("sf::vec_ptype2.sfc", "geovctrs_rect")
@@ -115,28 +113,6 @@ vec_cast.wk_wkt.sfc <- function(x, to, ...) {
 vec_cast.sfc.wk_wkt <- function(x, to, ...) {
   # need to use this rather than sf::st_as_sfc() because missings
   # aren't handled by sf::st_as_sfc(), which uses OGR to parse
-  vec_cast(vec_cast(x, wkb()), sf::st_sfc())
-}
-
-# ----- collection ------
-
-#' @method vec_ptype2.geovctrs_collection sfc
-#' @export
-vec_ptype2.geovctrs_collection.sfc <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  sf::st_sfc()
-}
-
-vec_ptype2.sfc.geovctrs_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  sf::st_sfc()
-}
-
-#' @method vec_cast.geovctrs_collection sfc
-#' @export
-vec_cast.geovctrs_collection.sfc <- function(x, to, ...) {
-  vec_cast(vec_cast(x, wkb()), geo_collection())
-}
-
-vec_cast.sfc.geovctrs_collection <- function(x, to, ...) {
   vec_cast(vec_cast(x, wkb()), sf::st_sfc())
 }
 

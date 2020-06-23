@@ -61,7 +61,6 @@ test_that("casting and c() work with sfc", {
 
   expect_is(vec_cast(sfc, wkb()), "wk_wkb")
   expect_is(vec_cast(sfc, wkt()), "wk_wkt")
-  expect_is(vec_cast(sfc, geo_collection()), "geovctrs_collection")
   expect_is(vec_cast(sfc, geo_xy()), "geovctrs_xy")
   expect_is(vec_cast(sfc_seg, geo_segment()), "geovctrs_segment")
 

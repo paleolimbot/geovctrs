@@ -52,7 +52,7 @@ for point and multipoint geometries, \code{\link[graphics:lines]{graphics::lines
 and multilinestring geometries, and \code{\link[graphics:polypath]{graphics::polypath()}} for polygon
 and multipolygon geometries.}
 
-\item{asp, xlab, ylab}{Passed to \code{\link[graphics:plot]{graphics::plot()}}}
+\item{asp, xlab, ylab}{Passed to \code{\link[graphics:plot.default]{graphics::plot()}}}
 
 \item{bbox}{The limits of the plot. Defaults to \code{geo_bbox(x, finite = TRUE)}.}
 

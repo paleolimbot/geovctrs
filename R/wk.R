@@ -46,19 +46,7 @@ vec_cast.wk_wkt.geovctrs_xyz <- function(x, to, ...) {
   new_wk_wkt(cpp_translate_xyz_wkt(x, precision = 16, trim = TRUE))
 }
 
-#' @method vec_cast.wk_wkt geovctrs_collection
-#' @export
-vec_cast.wk_wkt.geovctrs_collection <- function(x, to, ...) {
-  geovctrs_cpp_convert(x, to)
-}
-
 #' @importFrom wk vec_ptype2.wk_wkt
-#' @method vec_ptype2.wk_wkt geovctrs_collection
-#' @export
-vec_ptype2.wk_wkt.geovctrs_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  wkt()
-}
-
 #' @method vec_ptype2.wk_wkt geovctrs_xy
 #' @export
 vec_ptype2.wk_wkt.geovctrs_xy <- function(x, y, ..., x_arg = "x", y_arg = "y") {
@@ -131,19 +119,7 @@ vec_cast.wk_wkb.geovctrs_xyz <- function(x, to, ...) {
   new_wk_wkb(cpp_translate_xyz_wkb(x, endian = wk::wk_platform_endian(), bufferSize = 2048))
 }
 
-#' @method vec_cast.wk_wkb geovctrs_collection
-#' @export
-vec_cast.wk_wkb.geovctrs_collection <- function(x, to, ...) {
-  geovctrs_cpp_convert(x, to)
-}
-
 #' @importFrom wk vec_ptype2.wk_wkb
-#' @method vec_ptype2.wk_wkb geovctrs_collection
-#' @export
-vec_ptype2.wk_wkb.geovctrs_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_collection()
-}
-
 #' @method vec_ptype2.wk_wkb geovctrs_xy
 #' @export
 vec_ptype2.wk_wkb.geovctrs_xy <- function(x, y, ..., x_arg = "x", y_arg = "y") {
@@ -216,19 +192,7 @@ vec_cast.wk_wksxp.geovctrs_xyz <- function(x, to, ...) {
   new_wk_wksxp(cpp_translate_xyz_wksxp(x))
 }
 
-#' @method vec_cast.wk_wksxp geovctrs_collection
-#' @export
-vec_cast.wk_wksxp.geovctrs_collection <- function(x, to, ...) {
-  geovctrs_cpp_convert(x, to)
-}
-
 #' @importFrom wk vec_ptype2.wk_wksxp
-#' @method vec_ptype2.wk_wksxp geovctrs_collection
-#' @export
-vec_ptype2.wk_wksxp.geovctrs_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  wksxp()
-}
-
 #' @method vec_ptype2.wk_wksxp geovctrs_xy
 #' @export
 vec_ptype2.wk_wksxp.geovctrs_xy <- function(x, y, ..., x_arg = "x", y_arg = "y") {

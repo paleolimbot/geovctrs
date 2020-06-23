@@ -3,7 +3,6 @@ context("test-geovctr")
 test_that("all geovctrs pass expect_geovctr", {
   expect_geovctr(wkt())
   expect_geovctr(wkb())
-  expect_geovctr(geo_collection())
   expect_geovctr(geo_xy())
   expect_geovctr(geo_xyz())
   expect_geovctr(geo_segment())
