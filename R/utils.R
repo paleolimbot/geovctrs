@@ -1,16 +1,4 @@
 
-assert_geos_version <- function(version) {
-  if (geos_version_build() < version) {
-    abort(
-      sprintf(
-        "GEOS >= %s is required (this package was built with GEOS %s)",
-        version,
-        geos_version_build()
-      )
-    )
-  }
-}
-
 stop_for_non_parseable <- function(x) {
   if (!is.null(attr(x, "problems"))) {
     n <- nrow(attr(x, "problems"))
@@ -120,4 +108,3 @@ recycle_parameter <- function(x, ...) {
     vec_recycle_common(..., .size = vec_size(x))
   }
 }
-

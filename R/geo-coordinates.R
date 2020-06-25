@@ -82,8 +82,3 @@ geo_coordinates_from_coords <- function(coords) {
     nrow = nrow(coords)
   )
 }
-
-#' @export
-geo_coordinates.geovctrs_collection <- function(x, ...) {
-  geo_coordinates(geovctrs_cpp_convert(x, wkb()), ...)
-}

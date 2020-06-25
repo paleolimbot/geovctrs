@@ -1,6 +1,5 @@
 ^geovctrs\.Rproj$
 ^\.Rproj\.user$
-^src/Makevars$
 ^windows$
 ^\.github$
 ^README\.Rmd$
