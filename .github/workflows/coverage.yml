@@ -26,11 +26,13 @@ jobs:
         with:
           path: ${{ env.R_LIBS_USER }}
           key: macOS-r-3.6-${{ hashFiles('depends.Rds') }}
-          restore-keys: macOS-r-3.6-
+          restore-keys: macOS-r-4.0-
 
       - name: Install system dependencies (MacOS)
         run: |
           brew install geos
+          brew install gdal
+          brew install udunits
           brew install cairo
           brew cask install xquartz
 

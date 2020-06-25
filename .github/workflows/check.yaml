@@ -18,11 +18,9 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: '3.6', variant: 'reg'}
-          - {os: macOS-latest, r: '3.6', variant: 'reg'}
-          - {os: ubuntu-16.04, r: '3.6', variant: 'reg'}
-          - {os: ubuntu-16.04, r: '3.6', variant: 'ubuntugis'}
-          - {os: ubuntu-18.04, r: '3.6', variant: 'reg'}
+          - {os: windows-latest, r: '4.0', variant: 'reg'}
+          - {os: macOS-latest, r: '4.0', variant: 'reg'}
+          - {os: ubuntu-16.04, r: '4.0', variant: 'ubuntugis'}
           - {os: ubuntu-18.04, r: '3.6', variant: 'ubuntugis'}
 
     env:
@@ -75,7 +73,7 @@ jobs:
       - name: Install system dependencies (Linux)
         if: runner.os == 'Linux'
         run: |
-          sudo apt install libgeos-dev libcurl4-openssl-dev
+          sudo apt install libcurl4-openssl-dev
 
       - name: Install dependencies
         run: |
