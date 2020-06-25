@@ -10,19 +10,19 @@
 \alias{geo_multipolygon}
 \title{Geometry constructors}
 \usage{
-geo_collection(feature = list(), srid = 0)
+geo_collection(feature = character(), srid = NA)
 
-geo_point(xy, srid = NA)
+geo_point(xy = geo_xy(), srid = NA)
 
-geo_linestring(xy, srid = NA)
+geo_linestring(xy = geo_xy(), srid = NA)
 
-geo_polygon(xy, ring = 1L, srid = NA)
+geo_polygon(xy = geo_xy(), ring = 1L, srid = NA)
 
-geo_multipoint(feature, srid = 0)
+geo_multipoint(feature = character(), srid = NA)
 
-geo_multilinestring(feature, srid = 0)
+geo_multilinestring(feature = character(), srid = NA)
 
-geo_multipolygon(feature, srid = 0)
+geo_multipolygon(feature = character(), srid = NA)
 }
 \arguments{
 \item{feature}{A \code{\link[=geo_collection]{geo_collection()}} of one or more features.
@@ -52,7 +52,7 @@ or more objects of type \code{\link[=geo_point]{geo_point()}}, \code{\link[=geo_
 \code{\link[=geo_multipolygon]{geo_multipolygon()}}.
 }
 \examples{
-# geo_point() and family all return a geo_collection() of length 1
+# geo_point() and family all return a wk::wksxp() of length 1
 c(geo_point(geo_xy(0, 1)), geo_point(geo_xy(1, 2)))
 
 # linestring
@@ -62,33 +62,33 @@ geo_linestring(geo_xy(1:5, 2:6))
 geo_polygon(geo_xy(c(0, 10, 0, 0), c(0, 0, 10, 0)))
 
 # polygon with a hole
-# poly_hole <- geo_polygon(
-#   geo_xy(
-#     c(35, 45, 15, 10, 35, 20, 35, 30, 20),
-#     c(10, 45, 40, 20, 10, 30, 35, 20, 30)
-#   ),
-#   ring = c(1, 1, 1, 1, 1, 2, 2, 2, 2)
-#)
+poly_hole <- geo_polygon(
+  geo_xy(
+    c(35, 45, 15, 10, 35, 20, 35, 30, 20),
+    c(10, 45, 40, 20, 10, 30, 35, 20, 30)
+  ),
+  ring = c(1, 1, 1, 1, 1, 2, 2, 2, 2)
+)
 
 # multipoint
-#geo_multipoint(
-#   c(geo_point(geo_xy(10, 30)), geo_point(geo_xy(12, 11)))
-# )
+geo_multipoint(
+  c(geo_point(geo_xy(10, 30)), geo_point(geo_xy(12, 11)))
+)
 
 # multilinestring
-# geo_multilinestring(
-#   c(
-#     geo_linestring(geo_xy(0:1, 0:1)),
-#     geo_linestring(geo_xy(c(12, 30), c(11, 10)))
-# )
-#)
+geo_multilinestring(
+  c(
+    geo_linestring(geo_xy(0:1, 0:1)),
+    geo_linestring(geo_xy(c(12, 30), c(11, 10)))
+  )
+)
 
 # multipolygon
-#geo_multipolygon(
-#   geo_polygon(geo_xy(c(0, 10, 0, 0), c(0, 0, 10, 0)))
-#)
+geo_multipolygon(
+  geo_polygon(geo_xy(c(0, 10, 0, 0), c(0, 0, 10, 0)))
+)
 
 # nested geo_collection()
-# c(geo_point(geo_xy(0, 1)), geo_collection(geo_point(geo_xy(1, 2))))
+c(geo_point(geo_xy(0, 1)), geo_collection(geo_point(geo_xy(1, 2))))
 
 }

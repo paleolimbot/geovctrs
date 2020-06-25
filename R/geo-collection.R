@@ -21,7 +21,7 @@
 #' @export
 #'
 #' @examples
-#' # geo_point() and family all return a geo_collection() of length 1
+#' # geo_point() and family all return a wk::wksxp() of length 1
 #' c(geo_point(geo_xy(0, 1)), geo_point(geo_xy(1, 2)))
 #'
 #' # linestring
@@ -31,62 +31,59 @@
 #' geo_polygon(geo_xy(c(0, 10, 0, 0), c(0, 0, 10, 0)))
 #'
 #' # polygon with a hole
-#' # poly_hole <- geo_polygon(
-#' #   geo_xy(
-#' #     c(35, 45, 15, 10, 35, 20, 35, 30, 20),
-#' #     c(10, 45, 40, 20, 10, 30, 35, 20, 30)
-#' #   ),
-#' #   ring = c(1, 1, 1, 1, 1, 2, 2, 2, 2)
-#' #)
+#' poly_hole <- geo_polygon(
+#'   geo_xy(
+#'     c(35, 45, 15, 10, 35, 20, 35, 30, 20),
+#'     c(10, 45, 40, 20, 10, 30, 35, 20, 30)
+#'   ),
+#'   ring = c(1, 1, 1, 1, 1, 2, 2, 2, 2)
+#' )
 #'
 #' # multipoint
-#' #geo_multipoint(
-#' #   c(geo_point(geo_xy(10, 30)), geo_point(geo_xy(12, 11)))
-#' # )
+#' geo_multipoint(
+#'   c(geo_point(geo_xy(10, 30)), geo_point(geo_xy(12, 11)))
+#' )
 #'
 #' # multilinestring
-#' # geo_multilinestring(
-#' #   c(
-#' #     geo_linestring(geo_xy(0:1, 0:1)),
-#' #     geo_linestring(geo_xy(c(12, 30), c(11, 10)))
-#' # )
-#' #)
+#' geo_multilinestring(
+#'   c(
+#'     geo_linestring(geo_xy(0:1, 0:1)),
+#'     geo_linestring(geo_xy(c(12, 30), c(11, 10)))
+#'   )
+#' )
 #'
 #' # multipolygon
-#' #geo_multipolygon(
-#' #   geo_polygon(geo_xy(c(0, 10, 0, 0), c(0, 0, 10, 0)))
-#' #)
+#' geo_multipolygon(
+#'   geo_polygon(geo_xy(c(0, 10, 0, 0), c(0, 0, 10, 0)))
+#' )
 #'
 #' # nested geo_collection()
-#' # c(geo_point(geo_xy(0, 1)), geo_collection(geo_point(geo_xy(1, 2))))
+#' c(geo_point(geo_xy(0, 1)), geo_collection(geo_point(geo_xy(1, 2))))
 #'
-geo_collection <- function(feature = list(), srid = 0) {
-  abort("Not implemented")
+geo_collection <- function(feature = character(), srid = NA) {
+  feature <- structure(as_wksxp(feature), class = "wk_geometrycollection")
+  construct_wksxp(feature, srid)
 }
 
 #' @rdname geo_collection
 #' @export
-geo_point <- function(xy, srid = NA)  {
-  construct_wksxp(
-    structure(as.matrix(xy), class = "wk_point"),
-    xy,
-    srid
-  )
+geo_point <- function(xy = geo_xy(), srid = NA)  {
+  feature <- structure(as.matrix(xy), class = "wk_point")
+  attr(feature, "has_z") <- inherits(xy, "geovctrs_xyz")
+  construct_wksxp(feature, srid)
 }
 
 #' @rdname geo_collection
 #' @export
-geo_linestring <- function(xy, srid = NA)  {
-  construct_wksxp(
-    structure(as.matrix(xy), class = "wk_linestring"),
-    xy,
-    srid
-  )
+geo_linestring <- function(xy = geo_xy(), srid = NA)  {
+  feature <- structure(as.matrix(xy), class = "wk_linestring")
+  attr(feature, "has_z") <- inherits(xy, "geovctrs_xyz")
+  construct_wksxp(feature, srid)
 }
 
 #' @rdname geo_collection
 #' @export
-geo_polygon <- function(xy, ring = 1L, srid = NA)  {
+geo_polygon <- function(xy = geo_xy(), ring = 1L, srid = NA)  {
   if (vec_size(xy) == 0) {
     return(new_wk_wksxp(list(structure(list(), class = "wk_polygon"))))
   }
@@ -109,39 +106,35 @@ geo_polygon <- function(xy, ring = 1L, srid = NA)  {
 
 #' @rdname geo_collection
 #' @export
-geo_multipoint <- function(feature, srid = 0) {
-  abort("Not implemented")
+geo_multipoint <- function(feature = character(), srid = NA) {
+  construct_multi_type(feature, type_id = 1, srid = srid)
 }
 
 #' @rdname geo_collection
 #' @export
-geo_multilinestring <- function(feature, srid = 0) {
-  abort("Not implemented")
+geo_multilinestring <- function(feature = character(), srid = NA) {
+  construct_multi_type(feature, type_id = 2, srid = srid)
 }
 
 #' @rdname geo_collection
 #' @export
-geo_multipolygon <- function(feature, srid = 0) {
-  abort("Not implemented")
+geo_multipolygon <- function(feature = character(), srid = NA) {
+  construct_multi_type(feature, type_id = 3, srid = srid)
 }
 
-
-# utils just for collections
-cast_xy_or_xyz <- function(x) {
-  if (is_geovctrs_xy(x)) {
-    x
-  } else if (is_geovctr(x)) {
-    # this particular conversion should give an XYZ to avoid data loss
-    geovctrs_cpp_convert(x, geo_xy())
-  } else {
-    vec_cast(x, geo_xy())
+construct_multi_type <- function(feature, type_id, srid) {
+  type <- wk::wk_geometry_type(type_id)
+  feature <- as_wksxp(feature)
+  feature_meta <- wk::wksxp_meta(feature)
+  if (!all(feature_meta$type_id == type_id)) {
+    abort(sprintf("All elements of `feature` must be of type '%s'", type))
   }
+
+  construct_wksxp(structure(feature, class = paste0("wk_multi", type)), srid)
 }
 
-construct_wksxp <- function(feature, xy, srid) {
+construct_wksxp <- function(feature, srid) {
   stopifnot(vec_size(srid) == 1)
-
-  attr(feature, "has_z") <- inherits(xy, "geovctrs_xyz")
   if (!is.na(srid)) {
     attr(feature, "srid") <- as_geo_srid(srid)
   }
