@@ -53,31 +53,6 @@ test_that("limiting with bbox works", {
 })
 
 test_that("plot generics work", {
-  vdiffr::expect_doppelganger(
-    "wkt generic",
-    function() plot(wkt("POINT (30 40)"))
-  )
-
-  vdiffr::expect_doppelganger(
-    "wkb generic",
-    function() plot(as_wkb(wkt("POINT (30 40)")))
-  )
-
-  vdiffr::expect_doppelganger(
-    "geo_xy generic",
-    function() plot(as_geo_xy(wkt("POINT (30 40)")))
-  )
-
-  vdiffr::expect_doppelganger(
-    "geo_segment generic",
-    function() plot(geo_segment(0, 0, 10, -10:10))
-  )
-
-  vdiffr::expect_doppelganger(
-    "geo_rect generic",
-    function() plot(geo_rect(0:5, 1:6, 10:15, 11:16))
-  )
-
   # should work with character via geo_plot_add.default
   vdiffr::expect_doppelganger(
     "geo_plot_add.default",

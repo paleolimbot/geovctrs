@@ -166,9 +166,3 @@ geo_plot_add.wk_wksxp <- function(x, ..., rule = "evenodd") {
 
   invisible(x)
 }
-
-#' @importFrom graphics plot
-#' @export
-plot.geovctr <- function(x, ...) {
-  geo_plot(x, ...)
-}

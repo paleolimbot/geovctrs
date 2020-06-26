@@ -56,7 +56,22 @@ geo_bbox.wk_wksxp <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 }
 
 #' @export
-geo_bbox.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+geo_bbox.geovctrs_xy <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_bbox(as_wksxp(x), na.rm = na.rm, finite = finite)
+}
+
+#' @export
+geo_bbox.geovctrs_xyz <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_bbox(as_wksxp(x), na.rm = na.rm, finite = finite)
+}
+
+#' @export
+geo_bbox.geovctrs_segment <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_bbox(as_wksxp(x), na.rm = na.rm, finite = finite)
+}
+
+#' @export
+geo_bbox.geovctrs_rect <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   geo_bbox(as_wksxp(x), na.rm = na.rm, finite = finite)
 }
 
@@ -117,11 +132,6 @@ geo_envelope.wk_wksxp <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 }
 
 #' @export
-geo_envelope.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  geo_envelope(as_wksxp(x), na.rm = na.rm, finite = finite)
-}
-
-#' @export
 geo_envelope.geovctrs_xy <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   xs <- field(x, "x")
   ys <- field(x, "y")
@@ -145,6 +155,16 @@ geo_envelope.geovctrs_xy <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   ymax[is.na(ys)] <- -Inf
 
   geo_rect(xmin, ymin, xmax, ymax)
+}
+
+#' @export
+geo_envelope.geovctrs_segment <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_envelope(as_wksxp(x), na.rm = na.rm, finite = finite)
+}
+
+#' @export
+geo_envelope.geovctrs_rect <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_envelope(as_wksxp(x), na.rm = na.rm, finite = finite)
 }
 
 #' @rdname geo_bbox

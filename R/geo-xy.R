@@ -32,7 +32,7 @@ geo_xy <- function(x = double(), y = double()) {
 new_geovctrs_xy <- function(x = list(x = double(), y = double())) {
   vec_assert(x$x, double())
   vec_assert(x$y, double())
-  new_rcrd(x, class = c("geovctrs_xy", "geovctr"))
+  new_rcrd(x, class = "geovctrs_xy")
 }
 
 #' @export

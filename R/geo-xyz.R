@@ -17,7 +17,7 @@ new_geovctrs_xyz <- function(x = list(x = double(), y = double(), z = double()))
   vec_assert(x$x, double())
   vec_assert(x$y, double())
   vec_assert(x$z, double())
-  new_rcrd(x, class = c("geovctrs_xyz", "geovctrs_xy", "geovctr"))
+  new_rcrd(x, class = c("geovctrs_xyz", "geovctrs_xy"))
 }
 
 #' @export

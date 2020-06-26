@@ -47,7 +47,7 @@ new_geovctrs_rect <- function(x = list(xmin = double(), ymin = double(),
   vec_assert(x$xmax, double())
   vec_assert(x$ymax, double())
   vec_assert(x$srid, integer())
-  new_rcrd(x, class = c("geovctrs_rect", "geovctr"))
+  new_rcrd(x, class = "geovctrs_rect")
 }
 
 #' @export

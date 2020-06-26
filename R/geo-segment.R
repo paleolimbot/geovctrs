@@ -39,7 +39,7 @@ new_geovctrs_segment <- function(x = list(x0 = double(), y0 = double(),
   vec_assert(x$y0, double())
   vec_assert(x$x1, double())
   vec_assert(x$y1, double())
-  new_rcrd(x, class = c("geovctrs_segment", "geovctr"))
+  new_rcrd(x, class = "geovctrs_segment")
 }
 
 #' @export
