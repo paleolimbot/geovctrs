@@ -1,5 +1,5 @@
 Package: geovctrs
-Title: Common Classes and Data Structures for Geometry Vectors
+Title: Efficient Data Structures for Geometry Vectors
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Dewey",
@@ -7,9 +7,11 @@ Authors@R:
            role = c("aut", "cre"),
            email = "dewey@fishandwhistle.net",
            comment = c(ORCID = "0000-0002-9415-4582"))
-Description: Provides a set of common data structures
-  to unite the plethora of geospatial processing packages
-  in the R package ecosystem.
+Description: Provides a set of data structures
+  to efficiently encode simple geometries such as points,
+  segments, and rectangles. Coercion functions are provided
+  such that any vector of geometry-like objects can be used
+  interchangeably.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
