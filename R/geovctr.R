@@ -72,7 +72,37 @@
 #' as_geovctr(tibble::tibble(geometry = wkt("POINT (30 10)")))
 #'
 is_geovctr <- function(x) {
-  inherits(x, "geovctr")
+  UseMethod("is_geovctr")
+}
+
+#' @export
+is_geovctr.default <- function(x) {
+  FALSE
+}
+
+#' @export
+is_geovctr.wk_vctr <- function(x) {
+  TRUE
+}
+
+#' @export
+is_geovctr.geovctrs_xy <- function(x) {
+  TRUE
+}
+
+#' @export
+is_geovctr.geovctrs_xyz <- function(x) {
+  TRUE
+}
+
+#' @export
+is_geovctr.geovctrs_segment <- function(x) {
+  TRUE
+}
+
+#' @export
+is_geovctr.geovctrs_rect <- function(x) {
+  TRUE
 }
 
 #' @rdname is_geovctr
@@ -81,10 +111,13 @@ as_geovctr <- function(x, ...) {
   UseMethod("as_geovctr")
 }
 
-#' @rdname is_geovctr
 #' @export
-as_geovctr.geovctr <- function(x, ...) {
-  x
+as_geovctr.default <- function(x, ...) {
+  if (is_geovctr(x)) {
+    x
+  } else {
+    as_wksxp(x)
+  }
 }
 
 #' @rdname is_geovctr
@@ -143,18 +176,23 @@ expect_geovctr <- function(x) {
   # must be castable to WKT, WKB, and wksxp
   testthat::expect_is(vec_cast(x, wkb()), "wk_wkb")
   testthat::expect_is(vec_cast(x, wkt()), "wk_wkt")
+  testthat::expect_is(vec_cast(x, wksxp()), "wk_wksxp")
 
   # must have implementations for as_WKT, WKB, and wksxp
   testthat::expect_is(as_wkb(x), "wk_wkb")
   testthat::expect_is(as_wkt(x), "wk_wkt")
+  testthat::expect_is(as_wksxp(x), "wk_wksxp")
 
   # must be combinable with wkb, wkt, and wksxp
   testthat::expect_silent(vec_c(wkb(), x))
   testthat::expect_silent(vec_c(wkt(), x))
+  testthat::expect_silent(vec_c(wksxp(), x))
+
 
   # must be reverse combinable with wkb, wkt, and wksxp
   testthat::expect_silent(vec_c(x, wkb()))
   testthat::expect_silent(vec_c(x, wkt()))
+  testthat::expect_silent(vec_c(x, wksxp()))
 
   invisible(x)
 }

@@ -3,7 +3,6 @@
 \name{is_geovctr}
 \alias{is_geovctr}
 \alias{as_geovctr}
-\alias{as_geovctr.geovctr}
 \alias{as_geovctr.character}
 \alias{as_geovctr.data.frame}
 \alias{restore_geovctr}
@@ -19,8 +18,6 @@
 is_geovctr(x)
 
 as_geovctr(x, ...)
-
-\method{as_geovctr}{geovctr}(x, ...)
 
 \method{as_geovctr}{character}(x, ...)
 

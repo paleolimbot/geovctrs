@@ -182,12 +182,6 @@ geo_is_empty.default <- function(x) {
 }
 
 #' @export
-geo_is_empty.geovctr <- function(x) {
-  # for now
-  geo_is_empty(as_wkt(x))
-}
-
-#' @export
 geo_is_empty.wk_wkt <- function(x) {
   is.na(x) | wk::wkt_meta(x)$size == 0
 }
@@ -195,6 +189,33 @@ geo_is_empty.wk_wkt <- function(x) {
 #' @export
 geo_is_empty.wk_wkb <- function(x) {
   is.na(x) | wk::wkb_meta(x)$size == 0
+}
+
+#' @export
+geo_is_empty.wk_wksxp <- function(x) {
+  is.na(x) | wk::wksxp_meta(x)$size == 0
+}
+
+#' @export
+geo_is_empty.geovctrs_xy <- function(x) {
+  is.na(x)
+}
+
+#' @export
+geo_is_empty.geovctrs_xyz <- function(x) {
+  is.na(x)
+}
+
+#' @export
+geo_is_empty.geovctrs_segment <- function(x) {
+  x <- vec_data(x)
+  is.na(x$x0) & is.na(x$y0) & is.na(x$x1) & is.na(x$y1)
+}
+
+#' @export
+geo_is_empty.geovctrs_rect <- function(x) {
+  # rules are more complex for rect because of Inf, -Inf
+  geo_is_empty(as_wksxp(x))
 }
 
 # ----- missing values (assigned in .onLoad) --------

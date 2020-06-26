@@ -17,8 +17,23 @@ wk::parse_wkt
 
 #' @importFrom wk as_wkt
 #' @export
-as_wkt.geovctr <- function(x, ...) {
-  vec_cast(x, new_wk_wkt())
+as_wkt.geovctrs_xy <- function(x, ..., precision = NULL, trim = NULL) {
+  new_wk_wkt(cpp_translate_xy_wkt(x, precision = NULL %||% 16, trim = trim %||% TRUE))
+}
+
+#' @export
+as_wkt.geovctrs_xyz <- function(x, ..., precision = NULL, trim = NULL) {
+  new_wk_wkt(cpp_translate_xyz_wkt(x, precision = NULL %||% 16, trim = trim %||% TRUE))
+}
+
+#' @export
+as_wkt.geovctrs_segment <- function(x, ..., precision = NULL, trim = NULL) {
+  new_wk_wkt(cpp_translate_segment_wkt(x, precision = NULL %||% 16, trim = trim %||% TRUE))
+}
+
+#' @export
+as_wkt.geovctrs_rect <- function(x, ...,  precision = NULL, trim = NULL) {
+  new_wk_wkt(cpp_translate_rect_wkt(x, precision = NULL %||% 16, trim = trim %||% TRUE))
 }
 
 #' @importFrom wk vec_cast.wk_wkt
@@ -90,8 +105,47 @@ wk::parse_wkb
 
 #' @importFrom wk as_wkb
 #' @export
-as_wkb.geovctr <- function(x, ...) {
-  vec_cast(x, new_wk_wkb())
+as_wkb.geovctrs_xy <- function(x, ..., endian = NULL, bufferSize = NULL) {
+  new_wk_wkb(
+    cpp_translate_xy_wkb(
+      x,
+      endian = endian %||% wk::wk_platform_endian(),
+      bufferSize = bufferSize %||% 2048
+    )
+  )
+}
+
+#' @export
+as_wkb.geovctrs_xyz <- function(x, ..., endian = NULL, bufferSize = NULL) {
+  new_wk_wkb(
+    cpp_translate_xyz_wkb(
+      x,
+      endian = endian %||% wk::wk_platform_endian(),
+      bufferSize = bufferSize %||% 2048
+    )
+  )
+}
+
+#' @export
+as_wkb.geovctrs_segment <- function(x, ..., endian = NULL, bufferSize = NULL) {
+  new_wk_wkb(
+    cpp_translate_segment_wkb(
+      x,
+      endian = endian %||% wk::wk_platform_endian(),
+      bufferSize = bufferSize %||% 2048
+    )
+  )
+}
+
+#' @export
+as_wkb.geovctrs_rect <- function(x, ..., endian = NULL, bufferSize = NULL) {
+  new_wk_wkb(
+    cpp_translate_rect_wkb(
+      x,
+      endian = endian %||% wk::wk_platform_endian(),
+      bufferSize = bufferSize %||% 2048
+    )
+  )
 }
 
 #' @importFrom wk vec_cast.wk_wkb
@@ -163,8 +217,23 @@ wk::parse_wksxp
 
 #' @importFrom wk as_wksxp
 #' @export
-as_wksxp.geovctr <- function(x, ...) {
-  vec_cast(x, new_wk_wksxp())
+as_wksxp.geovctrs_xy <- function(x, ...) {
+  new_wk_wksxp(cpp_translate_xy_wksxp(x))
+}
+
+#' @export
+as_wksxp.geovctrs_xyz <- function(x, ...) {
+  new_wk_wksxp(cpp_translate_xyz_wksxp(x))
+}
+
+#' @export
+as_wksxp.geovctrs_segment <- function(x, ...) {
+  new_wk_wksxp(cpp_translate_segment_wksxp(x))
+}
+
+#' @export
+as_wksxp.geovctrs_rect <- function(x, ...) {
+  new_wk_wksxp(cpp_translate_rect_wksxp(x))
 }
 
 #' @importFrom wk vec_cast.wk_wksxp

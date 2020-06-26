@@ -16,13 +16,7 @@ geo_geometry_type <- function(x) {
 #' @rdname geo_geometry_type
 #' @export
 geo_geometry_type.default <- function(x) {
-  geo_geometry_type(as_geovctr(x))
-}
-
-#' @rdname geo_geometry_type
-#' @export
-geo_geometry_type.geovctr <- function(x) {
-  geo_geometry_type(as_wkb(x))
+  geo_geometry_type(as_wksxp(as_geovctr(x)))
 }
 
 #' @rdname geo_geometry_type
@@ -35,4 +29,10 @@ geo_geometry_type.wk_wkt <- function(x) {
 #' @export
 geo_geometry_type.wk_wkb <- function(x) {
   wk::wk_geometry_type(wk::wkb_meta(x)$type_id)
+}
+
+#' @rdname geo_geometry_type
+#' @export
+geo_geometry_type.wk_wksxp <- function(x) {
+  wk::wk_geometry_type(wk::wksxp_meta(x)$type_id)
 }
