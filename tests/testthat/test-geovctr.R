@@ -28,7 +28,6 @@ test_that("data.frame works with as_geovctr()", {
   # check with transformation functions
   expect_is(geo_envelope(geo_nc), "data.frame")
 
-  skip("setting srid not implemented")
   expect_is(geo_set_srid(geo_nc, 26920), "data.frame")
 
   # check with vectorization
