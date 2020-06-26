@@ -11,9 +11,7 @@ name: R-CMD-check
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
-
     name: ${{ matrix.config.os }} (${{ matrix.config.variant }}, R ${{ matrix.config.r }})
-
     strategy:
       fail-fast: false
       matrix:
@@ -21,7 +19,7 @@ jobs:
           - {os: windows-latest, r: '4.0', variant: 'reg'}
           - {os: macOS-latest, r: '4.0', variant: 'reg'}
           - {os: ubuntu-16.04, r: '4.0', variant: 'ubuntugis'}
-          - {os: ubuntu-18.04, r: '3.6', variant: 'ubuntugis'}
+          - {os: ubuntu-18.04, r: '4.0', variant: 'ubuntugis'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true

@@ -25,7 +25,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: macOS-r-3.6-${{ hashFiles('depends.Rds') }}
+          key: macOS-r-4.0-${{ hashFiles('depends.Rds') }}
           restore-keys: macOS-r-4.0-
 
       - name: Install system dependencies (MacOS)
@@ -38,8 +38,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages(c("remotes"))
-          remotes::install_deps(dependencies = TRUE, type = "binary")
+          install.packages("remotes")
+          remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("covr")
         shell: Rscript {0}
 
