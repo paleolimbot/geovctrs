@@ -94,6 +94,11 @@ format.geovctrs_lim <- function(x, ...) {
   )
 }
 
+#' @export
+as.character.geovctrs_lim <- function(x, ...) {
+  format(x, ...)
+}
+
 #' @rdname new_geovctrs_lim
 #' @export
 as_geo_lim <- function(x, ...) {

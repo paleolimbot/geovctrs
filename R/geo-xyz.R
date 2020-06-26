@@ -42,6 +42,11 @@ format.geovctrs_xyz <- function(x, ...) {
 }
 
 #' @export
+as.character.geovctrs_xyz <- function(x, ...) {
+  format(x, ...)
+}
+
+#' @export
 #' @rdname new_geovctrs_xy
 as_geo_xyz.matrix <- function(x, ...) {
   names <- colnames(x)

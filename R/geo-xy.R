@@ -56,6 +56,11 @@ format.geovctrs_xy <- function(x, ...) {
 }
 
 #' @export
+as.character.geovctrs_xy <- function(x, ...) {
+  format(x, ...)
+}
+
+#' @export
 #' @importFrom tibble as_tibble
 as_tibble.geovctrs_xy <- function(x, ...) {
   as_tibble(vec_data(x), ...)

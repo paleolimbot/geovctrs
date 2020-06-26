@@ -66,22 +66,21 @@ format.geovctrs_segment <- function(x, ..., col = FALSE) {
   }
 
   paste0(
-    maybe_blue(
-      "(",
-      format(field(x, "x0"), trim = TRUE, ...),
-      " ",
-      format(field(x, "y0"), trim = TRUE, ...),
-      col = col
-    ),
-    maybe_grey(if(use_utf8()) cli::symbol$arrow_right else cli::symbol$em_dash, col = col),
-    maybe_blue(
-      format(field(x, "x1"), trim = TRUE, ...),
-      " ",
-      format(field(x, "y1"), trim = TRUE, ...),
-      ")",
-      col = col
-    )
+    "(",
+    format(field(x, "x0"), trim = TRUE, ...),
+    " ",
+    format(field(x, "y0"), trim = TRUE, ...),
+    "---",
+    format(field(x, "x1"), trim = TRUE, ...),
+    " ",
+    format(field(x, "y1"), trim = TRUE, ...),
+    ")"
   )
+}
+
+#' @export
+as.character.geovctrs_segment <- function(x, ...) {
+  format(x, ...)
 }
 
 #' @export

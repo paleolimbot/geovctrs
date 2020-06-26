@@ -62,28 +62,27 @@ vec_ptype_abbr.geovctrs_rect <- function(x, ...) {
 }
 
 #' @export
-format.geovctrs_rect <- function(x, ..., col = FALSE) {
+format.geovctrs_rect <- function(x, ...) {
   if (length(x) == 0) {
     return(character(0))
   }
 
   paste0(
-    maybe_blue(
-      "(",
-      format(field(x, "xmin"), trim = TRUE, ...),
-      " ",
-      format(field(x, "ymin"), trim = TRUE, ...),
-      col = col
-    ),
-    maybe_grey(if (use_utf8()) "\U2197" else  cli::symbol$ellipsis, col = col),
-    maybe_blue(
-      format(field(x, "xmax"), trim = TRUE, ...),
-      " ",
-      format(field(x, "ymax"), trim = TRUE, ...),
-      ")",
-      col = col
-    )
+    "(",
+    format(field(x, "xmin"), trim = TRUE, ...),
+    " ",
+    format(field(x, "ymin"), trim = TRUE, ...),
+    "...",
+    format(field(x, "xmax"), trim = TRUE, ...),
+    " ",
+    format(field(x, "ymax"), trim = TRUE, ...),
+    ")"
   )
+}
+
+#' @export
+as.character.geovctrs_rect <- function(x, ...) {
+  format(x, ...)
 }
 
 #' @export
