@@ -49,4 +49,9 @@ test_that("geo_range() works", {
     geo_range(c(geo_lim(81, NA), geo_lim(-100, 12)), na.rm = TRUE),
     geo_lim(-100, 81)
   )
+
+  expect_identical(
+    geo_range(c(geo_lim(Inf, -Inf), geo_lim(Inf, -Inf))),
+    geo_lim(Inf, -Inf)
+  )
 })
