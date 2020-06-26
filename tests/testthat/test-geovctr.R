@@ -31,11 +31,8 @@ test_that("data.frame works with as_geovctr()", {
   expect_is(geo_set_srid(geo_nc, 26920), "data.frame")
 
   # check with vectorization
-  skip("set with set z")
   expect_identical(
     geo_set_z(geo_nc[1, ], 4:6),
     geo_set_z(geo_nc[c(1, 1, 1), ], 4:6)
   )
 })
-
-

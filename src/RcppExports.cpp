@@ -5,45 +5,6 @@
 
 using namespace Rcpp;
 
-// cpp_wkt_set_srid
-CharacterVector cpp_wkt_set_srid(CharacterVector wkt, IntegerVector srid, int precision, bool trim);
-RcppExport SEXP _geovctrs_cpp_wkt_set_srid(SEXP wktSEXP, SEXP sridSEXP, SEXP precisionSEXP, SEXP trimSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< CharacterVector >::type wkt(wktSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type srid(sridSEXP);
-    Rcpp::traits::input_parameter< int >::type precision(precisionSEXP);
-    Rcpp::traits::input_parameter< bool >::type trim(trimSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_wkt_set_srid(wkt, srid, precision, trim));
-    return rcpp_result_gen;
-END_RCPP
-}
-// cpp_wkb_set_srid
-List cpp_wkb_set_srid(List wkb, IntegerVector srid, int endian);
-RcppExport SEXP _geovctrs_cpp_wkb_set_srid(SEXP wkbSEXP, SEXP sridSEXP, SEXP endianSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< List >::type wkb(wkbSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type srid(sridSEXP);
-    Rcpp::traits::input_parameter< int >::type endian(endianSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_wkb_set_srid(wkb, srid, endian));
-    return rcpp_result_gen;
-END_RCPP
-}
-// cpp_wksxp_set_srid
-List cpp_wksxp_set_srid(List wksxp, IntegerVector srid);
-RcppExport SEXP _geovctrs_cpp_wksxp_set_srid(SEXP wksxpSEXP, SEXP sridSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< List >::type wksxp(wksxpSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type srid(sridSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_wksxp_set_srid(wksxp, srid));
-    return rcpp_result_gen;
-END_RCPP
-}
 // cpp_translate_xy_wkt
 CharacterVector cpp_translate_xy_wkt(List xy, int precision, int trim);
 RcppExport SEXP _geovctrs_cpp_translate_xy_wkt(SEXP xySEXP, SEXP precisionSEXP, SEXP trimSEXP) {
@@ -294,11 +255,86 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cpp_wkt_set_srid
+CharacterVector cpp_wkt_set_srid(CharacterVector wkt, IntegerVector srid, int precision, bool trim);
+RcppExport SEXP _geovctrs_cpp_wkt_set_srid(SEXP wktSEXP, SEXP sridSEXP, SEXP precisionSEXP, SEXP trimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type wkt(wktSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type srid(sridSEXP);
+    Rcpp::traits::input_parameter< int >::type precision(precisionSEXP);
+    Rcpp::traits::input_parameter< bool >::type trim(trimSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wkt_set_srid(wkt, srid, precision, trim));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_wkb_set_srid
+List cpp_wkb_set_srid(List wkb, IntegerVector srid, int endian);
+RcppExport SEXP _geovctrs_cpp_wkb_set_srid(SEXP wkbSEXP, SEXP sridSEXP, SEXP endianSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type wkb(wkbSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type srid(sridSEXP);
+    Rcpp::traits::input_parameter< int >::type endian(endianSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wkb_set_srid(wkb, srid, endian));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_wksxp_set_srid
+List cpp_wksxp_set_srid(List wksxp, IntegerVector srid);
+RcppExport SEXP _geovctrs_cpp_wksxp_set_srid(SEXP wksxpSEXP, SEXP sridSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type wksxp(wksxpSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type srid(sridSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wksxp_set_srid(wksxp, srid));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_wkt_set_z
+CharacterVector cpp_wkt_set_z(CharacterVector wkt, NumericVector z, int precision, bool trim);
+RcppExport SEXP _geovctrs_cpp_wkt_set_z(SEXP wktSEXP, SEXP zSEXP, SEXP precisionSEXP, SEXP trimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type wkt(wktSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type z(zSEXP);
+    Rcpp::traits::input_parameter< int >::type precision(precisionSEXP);
+    Rcpp::traits::input_parameter< bool >::type trim(trimSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wkt_set_z(wkt, z, precision, trim));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_wkb_set_z
+List cpp_wkb_set_z(List wkb, NumericVector z, int endian);
+RcppExport SEXP _geovctrs_cpp_wkb_set_z(SEXP wkbSEXP, SEXP zSEXP, SEXP endianSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type wkb(wkbSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type z(zSEXP);
+    Rcpp::traits::input_parameter< int >::type endian(endianSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wkb_set_z(wkb, z, endian));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_wksxp_set_z
+List cpp_wksxp_set_z(List wksxp, NumericVector z);
+RcppExport SEXP _geovctrs_cpp_wksxp_set_z(SEXP wksxpSEXP, SEXP zSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type wksxp(wksxpSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type z(zSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wksxp_set_z(wksxp, z));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_geovctrs_cpp_wkt_set_srid", (DL_FUNC) &_geovctrs_cpp_wkt_set_srid, 4},
-    {"_geovctrs_cpp_wkb_set_srid", (DL_FUNC) &_geovctrs_cpp_wkb_set_srid, 3},
-    {"_geovctrs_cpp_wksxp_set_srid", (DL_FUNC) &_geovctrs_cpp_wksxp_set_srid, 2},
     {"_geovctrs_cpp_translate_xy_wkt", (DL_FUNC) &_geovctrs_cpp_translate_xy_wkt, 3},
     {"_geovctrs_cpp_translate_xy_wkb", (DL_FUNC) &_geovctrs_cpp_translate_xy_wkb, 3},
     {"_geovctrs_cpp_translate_xy_wksxp", (DL_FUNC) &_geovctrs_cpp_translate_xy_wksxp, 1},
@@ -320,6 +356,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_translate_rect_wkt", (DL_FUNC) &_geovctrs_cpp_translate_rect_wkt, 3},
     {"_geovctrs_cpp_translate_rect_wkb", (DL_FUNC) &_geovctrs_cpp_translate_rect_wkb, 3},
     {"_geovctrs_cpp_translate_rect_wksxp", (DL_FUNC) &_geovctrs_cpp_translate_rect_wksxp, 1},
+    {"_geovctrs_cpp_wkt_set_srid", (DL_FUNC) &_geovctrs_cpp_wkt_set_srid, 4},
+    {"_geovctrs_cpp_wkb_set_srid", (DL_FUNC) &_geovctrs_cpp_wkb_set_srid, 3},
+    {"_geovctrs_cpp_wksxp_set_srid", (DL_FUNC) &_geovctrs_cpp_wksxp_set_srid, 2},
+    {"_geovctrs_cpp_wkt_set_z", (DL_FUNC) &_geovctrs_cpp_wkt_set_z, 4},
+    {"_geovctrs_cpp_wkb_set_z", (DL_FUNC) &_geovctrs_cpp_wkb_set_z, 3},
+    {"_geovctrs_cpp_wksxp_set_z", (DL_FUNC) &_geovctrs_cpp_wksxp_set_z, 2},
     {NULL, NULL, 0}
 };
 

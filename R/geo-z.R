@@ -1,7 +1,7 @@
 
 #' Work with Z values
 #'
-#' Currently, geovctrs supports X, Y, and Z coordinates. These functions help extract,
+#' Currently, geovctrs supports X, Y, and Z coordinates. These functions extract,
 #' set, and drop Z values.
 #'
 #' @inheritParams geo_bbox
@@ -11,6 +11,8 @@
 #' @export
 #'
 #' @examples
+#' geo_set_z(c("POINT (2 3)", "POINT Z (2 3 4)"), 10)
+#' geo_drop_z(c("POINT (2 3)", "POINT Z (2 3 4)"))
 #' geo_has_z(c("POINT (2 3)", "POINT Z (2 3 4)"))
 #' geo_z_range(c("POINT (2 3)", "POINT Z (2 3 4)"), na.rm = TRUE)
 #' geo_z_envelope(c("POINT (2 3)", "POINT Z (2 3 4)"), na.rm = TRUE)
@@ -21,7 +23,43 @@ geo_set_z <- function(x, z) {
 
 #' @export
 geo_set_z.default <- function(x, z) {
-  abort("Not implemented")
+  restore_geovctr(x, geo_set_z(as_geovctr(x), z))
+}
+
+#' @export
+geo_set_z.wk_wksxp <- function(x, z) {
+  recycled <- vec_recycle_common(x, z)
+  new_wk_wksxp(cpp_wksxp_set_z(recycled[[1]], recycled[[2]]))
+}
+
+#' @export
+geo_set_z.wk_wkb <- function(x, z) {
+  recycled <- vec_recycle_common(x, z)
+  new_wk_wkb(cpp_wkb_set_z(recycled[[1]], recycled[[2]], endian = wk::wk_platform_endian()))
+}
+
+#' @export
+geo_set_z.wk_wkt <- function(x, z) {
+  recycled <- vec_recycle_common(x, z)
+  new_wk_wkt(cpp_wkt_set_z(recycled[[1]], recycled[[2]]))
+}
+
+#' @export
+geo_set_z.geovctrs_xy <- function(x, z) {
+  if (all(is.na(z))) {
+    x
+  } else {
+    geo_xyz(field(x, "x"), field(x, "y"), z)
+  }
+}
+
+#' @export
+geo_set_z.geovctrs_xyz <- function(x, z) {
+  if (all(is.na(z))) {
+    geo_drop_z(x)
+  } else {
+    geo_xyz(field(x, "x"), field(x, "y"), z)
+  }
 }
 
 #' @rdname geo_set_z
@@ -32,12 +70,7 @@ geo_drop_z <- function(x) {
 
 #' @export
 geo_drop_z.default <- function(x) {
-  restore_geovctr(x, geo_drop_z(as_geovctr(x)))
-}
-
-#' @export
-geo_drop_z.geovctr <- function(x) {
-  abort("Not implemented")
+  geo_set_z(x, NA_real_)
 }
 
 #' @export
