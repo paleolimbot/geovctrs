@@ -71,13 +71,6 @@ geo_plot_add.default <- function(x, ...) {
 
 #' @rdname geo_plot
 #' @export
-geo_plot_add.geovctr <- function(x, ...) {
-  geo_plot_add(as_wksxp(x), ...)
-  invisible(x)
-}
-
-#' @rdname geo_plot
-#' @export
 geo_plot_add.data.frame <- function(x, ...) {
   # evaluate the dots
   dots <- rlang::quos(...)
@@ -125,6 +118,20 @@ geo_plot_add.geovctrs_rect <- function(x, ...) {
     ...
   )
 
+  invisible(x)
+}
+
+#' @rdname geo_plot
+#' @export
+geo_plot_add.wk_wkt <- function(x, ..., rule = "evenodd") {
+  geo_plot_add(as_wksxp(x), ..., rule = rule)
+  invisible(x)
+}
+
+#' @rdname geo_plot
+#' @export
+geo_plot_add.wk_wkb <- function(x, ..., rule = "evenodd") {
+  geo_plot_add(as_wksxp(x), ..., rule = rule)
   invisible(x)
 }
 

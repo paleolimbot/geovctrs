@@ -55,11 +55,11 @@ is_linestring <- function(x) {
 }
 
 is_linestring.default <- function(x) {
-  is_linestring(as_geovctr(x))
-}
-
-is_linestring.geovctr <- function(x) {
-  geo_geometry_type(x) == "linestring"
+  if (is_geovctr(x)) {
+    geo_geometry_type(as_wksxp(x)) == "linestring"
+  } else {
+    is_linestring(as_geovctr(x))
+  }
 }
 ```
 
@@ -125,18 +125,20 @@ centroid <- function(x) {
 }
 
 centroid.default <- function(x) {
-  result <- centroid(as_geovctr(x))
-  restore_geovctr(x, result)
-}
-
-centroid.geovctr <- function(x) {
-  envelope_tbl <- as_tibble(geo_envelope(x))
-  geo_xy(
-    (envelope_tbl$xmax + envelope_tbl$xmin) / 2,
-    (envelope_tbl$ymax + envelope_tbl$ymin) / 2
-  )
+  if (is_geovctr(x)) {
+    envelope_tbl <- as_tibble(geo_envelope(as_wksxp(x)))
+    geo_xy(
+      (envelope_tbl$xmax + envelope_tbl$xmin) / 2,
+      (envelope_tbl$ymax + envelope_tbl$ymin) / 2
+    )
+  } else {
+    result <- centroid(as_geovctr(x))
+    restore_geovctr(x, result)
+  }
 }
 ```
+
+You'll notice that "geovctr" here isn't a class (for a variety of reasons), but has a few things you can count on: `is_geovctr()` will always return `TRUE`, and it will always be coercible to `wk::wkt()`, `wk::wkb()`, and `wk::wksxp()`. In this example, we take advantage of the guarantee of a `as_wksxp()` method to implement a default method that will work for any "geovctr".
 
 Here, `centroid()` will work on all the types supported by `as_geovctr()`:
 
@@ -148,9 +150,7 @@ centroid(tibble(geom = geometries)) # data.frame
 
 ## New geometry vector classes
 
-The geovctrs package provides three "generic" geometry vector classes (`wkt()`, `wkb()`, and `geo_collection()` can represent any feature) and three simple geometry vector classes (`geo_xy()`, `geo_segment()`, and `geo_rect()` are all efficient representations of specific features). To make a new type of vector work with geovctrs functions, you can either (1) implement `as_geovctr()` and (optionally) `restore_geovctr()`, or (2) go all-out and implement your class as a [vctrs](https://vctrs.r-lib.org/) class that inherits from `"geovctr"`.
-
-### The easy way
+The geovctrs package re-exports three "generic" geometry vector classes from the [wk package](https://paleolimbot.github.io/wk) (`wkt()`, `wkb()`, and `geo_collection()` can represent almost any point, line, or polygon feature) and three simple geometry vector classes (`geo_xy()`, `geo_segment()`, and `geo_rect()` are all efficient representations of specific types of features). To make a new type of vector work with geovctrs functions, you can either implement `as_geovctr()` and (optionally) `restore_geovctr()`.
 
 As an example, consider a class that represents a vector of circles. Circles can be parameterized by their center and their radius, whereas generic geometry types would need to store a large number of coordinates. A simple class based on vctrs would look like this:
 
@@ -241,7 +241,3 @@ Now, the `circles` vector works with geovctrs functions!
 geo_envelope(circles)
 geo_plot(circles, lty = 1:3)
 ```
-
-### The hard way
-
-The hard way to make a vectorized geometry class is to make a full `vctrs::vec_cast()` and `vctrs::vec_ptype2()` implementation that ensures your class can be casted to the other generic geometry types. This is outside the scope of this vignette, but you may find the `expect_geovctr()` function and `vignette("s3-vector", package = "vctrs")` useful. The main advantage of a full vctrs implementation is that users will be able to combine your class with other geometry vectors in a `dplyr::bind_rows()` operation (or similar).

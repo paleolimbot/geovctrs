@@ -4,12 +4,13 @@
 \alias{geo_plot}
 \alias{geo_plot_add}
 \alias{geo_plot_add.default}
-\alias{geo_plot_add.geovctr}
 \alias{geo_plot_add.data.frame}
 \alias{geo_plot_add.NULL}
 \alias{geo_plot_add.geovctrs_xy}
 \alias{geo_plot_add.geovctrs_segment}
 \alias{geo_plot_add.geovctrs_rect}
+\alias{geo_plot_add.wk_wkt}
+\alias{geo_plot_add.wk_wkb}
 \alias{geo_plot_add.wk_wksxp}
 \alias{geo_plot_add.sf}
 \title{Plot geometry vectors}
@@ -27,8 +28,6 @@ geo_plot_add(x, ...)
 
 \method{geo_plot_add}{default}(x, ...)
 
-\method{geo_plot_add}{geovctr}(x, ...)
-
 \method{geo_plot_add}{data.frame}(x, ...)
 
 \method{geo_plot_add}{`NULL`}(x, ...)
@@ -38,6 +37,10 @@ geo_plot_add(x, ...)
 \method{geo_plot_add}{geovctrs_segment}(x, ...)
 
 \method{geo_plot_add}{geovctrs_rect}(x, ...)
+
+\method{geo_plot_add}{wk_wkt}(x, ..., rule = "evenodd")
+
+\method{geo_plot_add}{wk_wkb}(x, ..., rule = "evenodd")
 
 \method{geo_plot_add}{wk_wksxp}(x, ..., rule = "evenodd")
 

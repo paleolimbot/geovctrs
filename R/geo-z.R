@@ -97,11 +97,6 @@ geo_has_z.default <- function(x) {
 }
 
 #' @export
-geo_has_z.geovctr <- function(x) {
-  geo_has_z(as_wkb(x))
-}
-
-#' @export
 geo_has_z.wk_wkb <- function(x) {
   wk::wkb_meta(x)$has_z
 }
@@ -109,6 +104,31 @@ geo_has_z.wk_wkb <- function(x) {
 #' @export
 geo_has_z.wk_wkt <- function(x) {
   wk::wkt_meta(x)$has_z
+}
+
+#' @export
+geo_has_z.wk_wksxp <- function(x) {
+  wk::wksxp_meta(x)$has_z
+}
+
+#' @export
+geo_has_z.geovctrs_xy <- function(x) {
+  rep_len(FALSE, length(x))
+}
+
+#' @export
+geo_has_z.geovctrs_xyz <- function(x) {
+  !is.na(field(x, "z"))
+}
+
+#' @export
+geo_has_z.geovctrs_segment <- function(x) {
+  rep_len(FALSE, length(x))
+}
+
+#' @export
+geo_has_z.geovctrs_rect <- function(x) {
+  rep_len(FALSE, length(x))
 }
 
 #' @rdname geo_set_z
@@ -135,8 +155,18 @@ geo_z_range.wk_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 }
 
 #' @export
-geo_z_range.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  geo_z_range.wk_wkb(as_wkb(x), na.rm = na.rm, finite = finite)
+geo_z_range.geovctrs_xy <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_z_range(as_wksxp(x), na.rm = na.rm, finite = finite)
+}
+
+#' @export
+geo_z_range.geovctrs_segment <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_z_range(as_wksxp(x), na.rm = na.rm, finite = finite)
+}
+
+#' @export
+geo_z_range.geovctrs_rect <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_z_range(as_wksxp(x), na.rm = na.rm, finite = finite)
 }
 
 #' @rdname geo_set_z
@@ -151,18 +181,34 @@ geo_z_envelope.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 }
 
 #' @export
-geo_z_envelope.wk_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  ranges <- wk::wkb_feature_ranges(x, na.rm, finite)
-  new_geovctrs_lim(list(lower = ranges$zmin, upper = ranges$zmax))
-}
-
-#' @export
 geo_z_envelope.wk_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   ranges <- wk::wkt_feature_ranges(x, na.rm, finite)
   new_geovctrs_lim(list(lower = ranges$zmin, upper = ranges$zmax))
 }
 
 #' @export
-geo_z_envelope.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  geo_z_envelope.wk_wkb(as_wkb(x), na.rm = na.rm, finite = finite)
+geo_z_envelope.wk_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  ranges <- wk::wkb_feature_ranges(x, na.rm, finite)
+  new_geovctrs_lim(list(lower = ranges$zmin, upper = ranges$zmax))
+}
+
+#' @export
+geo_z_envelope.wk_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  ranges <- wk::wksxp_feature_ranges(x, na.rm, finite)
+  new_geovctrs_lim(list(lower = ranges$zmin, upper = ranges$zmax))
+}
+
+#' @export
+geo_z_envelope.geovctrs_xy <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_z_envelope(as_wksxp(x), na.rm = na.rm, finite = finite)
+}
+
+#' @export
+geo_z_envelope.geovctrs_segment <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_z_envelope(as_wksxp(x), na.rm = na.rm, finite = finite)
+}
+
+#' @export
+geo_z_envelope.geovctrs_rect <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_z_envelope(as_wksxp(x), na.rm = na.rm, finite = finite)
 }

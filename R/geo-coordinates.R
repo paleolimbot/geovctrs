@@ -37,11 +37,6 @@ geo_coordinates.default <- function(x, ...) {
 }
 
 #' @export
-geo_coordinates.geovctr <- function(x, ...) {
-  geo_coordinates(as_wksxp(x), ...)
-}
-
-#' @export
 geo_coordinates.wk_wkt <- function(x, ...) {
   coords <- wk::wkt_coords(x, sep_na = FALSE)
   geo_coordinates_from_coords(coords)
@@ -57,6 +52,21 @@ geo_coordinates.wk_wkb <- function(x, ...) {
 geo_coordinates.wk_wksxp <- function(x, ...) {
   coords <- wk::wksxp_coords(x, sep_na = FALSE)
   geo_coordinates_from_coords(coords)
+}
+
+#' @export
+geo_coordinates.geovctrs_xy <- function(x, ...) {
+  geo_coordinates(as_wksxp(x), ...)
+}
+
+#' @export
+geo_coordinates.geovctrs_segment <- function(x, ...) {
+  geo_coordinates(as_wksxp(x), ...)
+}
+
+#' @export
+geo_coordinates.geovctrs_rect <- function(x, ...) {
+  geo_coordinates(as_wksxp(x), ...)
 }
 
 geo_coordinates_from_coords <- function(coords) {
