@@ -32,8 +32,6 @@ test_that("geo_is_missing works", {
 })
 
 test_that("geo_has_missing works", {
-  skip("skipping has_missing now")
-
   expect_identical(geo_has_missing(wkt(NA)), NA)
   expect_false(geo_has_missing(wkt("POINT (30 10)")))
   expect_true(geo_has_missing(wkt("POINT (30 nan)")))
@@ -74,8 +72,6 @@ test_that("geo_has_missing works", {
 })
 
 test_that("geo_has_missing works with nested collections", {
-  skip("skipping has_missing now")
-
   expect_false(
     geo_has_missing(wkt("GEOMETRYCOLLECTION (GEOMETRYCOLLECTION EMPTY)"))
   )
@@ -98,8 +94,6 @@ test_that("geo_has_missing works with nested collections", {
 })
 
 test_that("geo_is_finite works", {
-  skip("skipping is_finite now")
-
   expect_identical(geo_is_finite(wkt(NA)), NA)
   expect_true(geo_is_finite(wkt("POINT (30 10)")))
   expect_false(geo_is_finite(wkt("POINT (30 nan)")))
@@ -143,8 +137,6 @@ test_that("geo_is_finite works", {
 })
 
 test_that("geo_is_finite works with nested collections", {
-  skip("skipping is_finite now")
-
   expect_true(
     geo_is_finite(wkt("GEOMETRYCOLLECTION (GEOMETRYCOLLECTION EMPTY)"))
   )
@@ -204,8 +196,6 @@ test_that("geo_is_empty works", {
 })
 
 test_that("handling of empty points is consistent across geovctrs", {
-  skip("skipping missing/finite for now")
-
   expect_true(geo_is_missing(NA_xy_))
 
   expect_false(geo_is_missing(wkt("POINT (nan nan)")))
@@ -216,18 +206,18 @@ test_that("handling of empty points is consistent across geovctrs", {
   expect_false(geo_is_missing(geo_xy(1, NA)))
   expect_false(geo_is_missing(geo_xy(NA, 1)))
 
-  expect_true(geo_is_finite(wkt("POINT (nan nan)")))
+  expect_false(geo_is_finite(wkt("POINT (nan nan)")))
   expect_true(geo_is_finite(wkt("POINT EMPTY")))
   expect_true(geo_is_finite(wkt("MULTIPOINT EMPTY")))
-  expect_true(geo_is_finite(wkt("MULTIPOINT (nan nan)")))
+  expect_false(geo_is_finite(wkt("MULTIPOINT (nan nan)")))
   expect_false(geo_is_finite(geo_xy(NA, NA)))
   expect_false(geo_is_finite(geo_xy(1, NA)))
   expect_false(geo_is_finite(geo_xy(NA, 1)))
 
-  expect_false(geo_has_missing(wkt("POINT (nan nan)")))
+  expect_true(geo_has_missing(wkt("POINT (nan nan)")))
   expect_false(geo_has_missing(wkt("POINT EMPTY")))
   expect_false(geo_has_missing(wkt("MULTIPOINT EMPTY")))
-  expect_false(geo_has_missing(wkt("MULTIPOINT (nan nan)")))
+  expect_true(geo_has_missing(wkt("MULTIPOINT (nan nan)")))
   expect_true(geo_has_missing(geo_xy(NA, NA)))
   expect_true(geo_has_missing(geo_xy(1, NA)))
   expect_true(geo_has_missing(geo_xy(NA, 1)))

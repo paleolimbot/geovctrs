@@ -333,6 +333,72 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cpp_wkt_has_non_finite
+LogicalVector cpp_wkt_has_non_finite(CharacterVector wkt);
+RcppExport SEXP _geovctrs_cpp_wkt_has_non_finite(SEXP wktSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type wkt(wktSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wkt_has_non_finite(wkt));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_wkb_has_non_finite
+LogicalVector cpp_wkb_has_non_finite(List wkb);
+RcppExport SEXP _geovctrs_cpp_wkb_has_non_finite(SEXP wkbSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type wkb(wkbSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wkb_has_non_finite(wkb));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_wksxp_has_non_finite
+LogicalVector cpp_wksxp_has_non_finite(List wksxp);
+RcppExport SEXP _geovctrs_cpp_wksxp_has_non_finite(SEXP wksxpSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type wksxp(wksxpSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wksxp_has_non_finite(wksxp));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_wkt_has_missing
+LogicalVector cpp_wkt_has_missing(CharacterVector wkt);
+RcppExport SEXP _geovctrs_cpp_wkt_has_missing(SEXP wktSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type wkt(wktSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wkt_has_missing(wkt));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_wkb_has_missing
+LogicalVector cpp_wkb_has_missing(List wkb);
+RcppExport SEXP _geovctrs_cpp_wkb_has_missing(SEXP wkbSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type wkb(wkbSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wkb_has_missing(wkb));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_wksxp_has_missing
+LogicalVector cpp_wksxp_has_missing(List wksxp);
+RcppExport SEXP _geovctrs_cpp_wksxp_has_missing(SEXP wksxpSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type wksxp(wksxpSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wksxp_has_missing(wksxp));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_translate_xy_wkt", (DL_FUNC) &_geovctrs_cpp_translate_xy_wkt, 3},
@@ -362,6 +428,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_wkt_set_z", (DL_FUNC) &_geovctrs_cpp_wkt_set_z, 4},
     {"_geovctrs_cpp_wkb_set_z", (DL_FUNC) &_geovctrs_cpp_wkb_set_z, 3},
     {"_geovctrs_cpp_wksxp_set_z", (DL_FUNC) &_geovctrs_cpp_wksxp_set_z, 2},
+    {"_geovctrs_cpp_wkt_has_non_finite", (DL_FUNC) &_geovctrs_cpp_wkt_has_non_finite, 1},
+    {"_geovctrs_cpp_wkb_has_non_finite", (DL_FUNC) &_geovctrs_cpp_wkb_has_non_finite, 1},
+    {"_geovctrs_cpp_wksxp_has_non_finite", (DL_FUNC) &_geovctrs_cpp_wksxp_has_non_finite, 1},
+    {"_geovctrs_cpp_wkt_has_missing", (DL_FUNC) &_geovctrs_cpp_wkt_has_missing, 1},
+    {"_geovctrs_cpp_wkb_has_missing", (DL_FUNC) &_geovctrs_cpp_wkb_has_missing, 1},
+    {"_geovctrs_cpp_wksxp_has_missing", (DL_FUNC) &_geovctrs_cpp_wksxp_has_missing, 1},
     {NULL, NULL, 0}
 };
 

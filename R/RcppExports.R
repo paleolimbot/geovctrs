@@ -109,3 +109,27 @@ cpp_wksxp_set_z <- function(wksxp, z) {
     .Call(`_geovctrs_cpp_wksxp_set_z`, wksxp, z)
 }
 
+cpp_wkt_has_non_finite <- function(wkt) {
+    .Call(`_geovctrs_cpp_wkt_has_non_finite`, wkt)
+}
+
+cpp_wkb_has_non_finite <- function(wkb) {
+    .Call(`_geovctrs_cpp_wkb_has_non_finite`, wkb)
+}
+
+cpp_wksxp_has_non_finite <- function(wksxp) {
+    .Call(`_geovctrs_cpp_wksxp_has_non_finite`, wksxp)
+}
+
+cpp_wkt_has_missing <- function(wkt) {
+    .Call(`_geovctrs_cpp_wkt_has_missing`, wkt)
+}
+
+cpp_wkb_has_missing <- function(wkb) {
+    .Call(`_geovctrs_cpp_wkb_has_missing`, wkb)
+}
+
+cpp_wksxp_has_missing <- function(wksxp) {
+    .Call(`_geovctrs_cpp_wksxp_has_missing`, wksxp)
+}
+

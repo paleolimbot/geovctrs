@@ -7,10 +7,6 @@
 #include "wk/wkb-reader.hpp"
 #include "wk/rcpp-sexp-writer.hpp"
 #include "wk/rcpp-sexp-reader.hpp"
-#include "geovctrs/wk-xy.hpp"
-#include "geovctrs/wk-xyz.hpp"
-#include "geovctrs/wk-segment.hpp"
-#include "geovctrs/wk-rect.hpp"
 #include "geovctrs/wk-filter.hpp"
 
 #include <Rcpp.h>
