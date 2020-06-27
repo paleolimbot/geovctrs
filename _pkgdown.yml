@@ -18,10 +18,11 @@ reference:
   - geo_bbox
   - geo_srid
   - geo_is_missing
-  - geo_print
   - geo_set_z
   - geo_coordinates
   - geo_coalesce
+  - geo_geometry_type
+  - plot.geovctrs_xy
 
 - title: Utility functioons
   desc: These might get moved to another package, but for now they live here
@@ -39,4 +40,3 @@ reference:
   desc: The nitty gritty details of creating and validating the S3 classes that live in this package
   contents:
   - starts_with("new_")
-  - geos_version_runtime
