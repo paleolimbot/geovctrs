@@ -110,7 +110,7 @@ List cpp_translate_base_wkb(WKReader& reader,
 
 List cpp_translate_base_wksxp(WKReader& reader,
                               int includeZ, int includeM, int includeSRID) {
-  WKSEXPExporter exporter(reader.nFeatures());
+  WKRcppSEXPExporter exporter(reader.nFeatures());
   WKRcppSEXPWriter writer(exporter);
 
   cpp_translate_base(reader, writer, includeZ, includeM, includeSRID);

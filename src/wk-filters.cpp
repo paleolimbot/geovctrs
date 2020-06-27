@@ -150,7 +150,7 @@ List cpp_wksxp_set_srid(List wksxp, IntegerVector srid) {
   WKRcppSEXPProvider provider(wksxp);
   WKRcppSEXPReader reader(provider);
 
-  WKSEXPExporter exporter(wksxp.size());
+  WKRcppSEXPExporter exporter(wksxp.size());
   WKRcppSEXPWriter writer(exporter);
   set_srid_base(reader, writer, srid);
   return exporter.output;
@@ -198,7 +198,7 @@ List cpp_wksxp_set_z(List wksxp, NumericVector z) {
   WKRcppSEXPProvider provider(wksxp);
   WKRcppSEXPReader reader(provider);
 
-  WKSEXPExporter exporter(wksxp.size());
+  WKRcppSEXPExporter exporter(wksxp.size());
   WKRcppSEXPWriter writer(exporter);
   set_z_base(reader, writer, z);
   return exporter.output;
