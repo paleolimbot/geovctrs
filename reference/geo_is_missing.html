@@ -46,8 +46,8 @@ them in R. The geo_is_missing() function can be used to identify
 these values, similar to is.na(). Missing coordinates (NA or NaN)
 can be identified using geo_has_missing(), and geo_is_finite()
 can be used to ensure that all coordinates are finite. Note that
-geo_xy(NA, NA), geo_wkt(&quot;POINT (nan nan)&quot;), and
-geo_wkt(&quot;MULTIPOINT (nan nan)&quot;) are all considered empty points,
+geo_xy(NA, NA), wkt(&quot;POINT (nan nan)&quot;), and
+wkt(&quot;MULTIPOINT (nan nan)&quot;) are all considered empty points,
 and are therefore non-misssing, contain no missing coordinates, and
 are finite (use is.na() and/or stringr::str_detect()) if you
 would like to specifically detect these cases)." />
@@ -138,36 +138,36 @@ would like to specifically detect these cases)." />
     <div class="ref-description">
     <p>Whereas EMPTY geometries are a concept at the geometry level,
 missing values are a concept of the in-memory vectors used to store
-them in R. The <code>geo_is_missing()</code> function can be used to identify
+them in R. The <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_missing()</a></code> function can be used to identify
 these values, similar to <code><a href='https://rdrr.io/r/base/NA.html'>is.na()</a></code>. Missing coordinates (<code>NA</code> or <code>NaN</code>)
-can be identified using <code>geo_has_missing()</code>, and <code>geo_is_finite()</code>
+can be identified using <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_has_missing()</a></code>, and <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_finite()</a></code>
 can be used to ensure that all coordinates are finite. Note that
-<code><a href='geo_xy.html'>geo_xy(NA, NA)</a></code>, <code><a href='geo_wkt.html'>geo_wkt("POINT (nan nan)")</a></code>, and
-<code><a href='geo_wkt.html'>geo_wkt("MULTIPOINT (nan nan)")</a></code> are all considered empty points,
+<code><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy(NA, NA)</a></code>, <code><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt("POINT (nan nan)")</a></code>, and
+<code><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt("MULTIPOINT (nan nan)")</a></code> are all considered empty points,
 and are therefore non-misssing, contain no missing coordinates, and
 are finite (use <code><a href='https://rdrr.io/r/base/NA.html'>is.na()</a></code> and/or <code><a href='https://stringr.tidyverse.org/reference/str_detect.html'>stringr::str_detect()</a></code>) if you
 would like to specifically detect these cases).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>geo_is_missing</span>(<span class='no'>x</span>)
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_missing</a></span>(<span class='kw'>x</span>)
 
-<span class='fu'>geo_has_missing</span>(<span class='no'>x</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_has_missing</a></span>(<span class='kw'>x</span>)
 
-<span class='fu'>geo_is_finite</span>(<span class='no'>x</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_finite</a></span>(<span class='kw'>x</span>)
 
-<span class='fu'>geo_is_empty</span>(<span class='no'>x</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_empty</a></span>(<span class='kw'>x</span>)
 
-<span class='no'>NA_wkt_</span>
+<span class='kw'>NA_wkt_</span>
 
-<span class='no'>NA_wkb_</span>
+<span class='kw'>NA_wkb_</span>
 
-<span class='no'>NA_collection_</span>
+<span class='kw'>NA_collection_</span>
 
-<span class='no'>NA_xy_</span>
+<span class='kw'>NA_xy_</span>
 
-<span class='no'>NA_segment_</span>
+<span class='kw'>NA_segment_</span>
 
-<span class='no'>NA_rect_</span></pre>
+<span class='kw'>NA_rect_</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -175,34 +175,33 @@ would like to specifically detect these cases).</p>
     <tr>
       <th>x</th>
       <td><p>A geometry-like object, or one that can be
-coerced to a geometry-like object using <code><a href='is_geovctr.html'>as_geovctr()</a></code>.</p></td>
+coerced to a geometry-like object using <code><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>as_geovctr()</a></code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>An object of class <code>geovctrs_wkt</code> (inherits from <code>geovctr</code>, <code>vctrs_vctr</code>) of length 1.</p>
-<p>An object of class <code>geovctrs_wkb</code> (inherits from <code>geovctr</code>, <code>vctrs_vctr</code>) of length 1.</p>
-<p>An object of class <code>geovctrs_collection</code> (inherits from <code>geovctr</code>, <code>vctrs_rcrd</code>, <code>vctrs_vctr</code>) of length 1.</p>
-<p>An object of class <code>geovctrs_xy</code> (inherits from <code>geovctr</code>, <code>vctrs_rcrd</code>, <code>vctrs_vctr</code>) of length 1.</p>
-<p>An object of class <code>geovctrs_segment</code> (inherits from <code>geovctr</code>, <code>vctrs_rcrd</code>, <code>vctrs_vctr</code>) of length 1.</p>
-<p>An object of class <code>geovctrs_rect</code> (inherits from <code>geovctr</code>, <code>vctrs_rcrd</code>, <code>vctrs_vctr</code>) of length 1.</p>
+    <p>An object of class <code>wk_wkt</code> (inherits from <code>wk_vctr</code>) of length 1.</p>
+<p>An object of class <code>wk_wkb</code> (inherits from <code>wk_vctr</code>) of length 1.</p>
+<p>An object of class <code>NULL</code> of length 0.</p>
+<p>An object of class <code>geovctrs_xy</code> (inherits from <code>vctrs_rcrd</code>, <code>vctrs_vctr</code>) of length 1.</p>
+<p>An object of class <code>geovctrs_segment</code> (inherits from <code>vctrs_rcrd</code>, <code>vctrs_vctr</code>) of length 1.</p>
+<p>An object of class <code>geovctrs_rect</code> (inherits from <code>vctrs_rcrd</code>, <code>vctrs_vctr</code>) of length 1.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A logical vector</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>geo_is_missing</span>(<span class='no'>NA_wkt_</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>geo_has_missing</span>(<span class='no'>NA_wkt_</span>)</div><div class='output co'>#&gt; [1] NA</div><div class='input'><span class='fu'>geo_is_finite</span>(<span class='no'>NA_wkt_</span>)</div><div class='output co'>#&gt; [1] NA</div><div class='input'><span class='fu'>geo_is_empty</span>(<span class='no'>NA_wkt_</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
-<span class='fu'>geo_is_missing</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"LINESTRING (10 inf, nan 2)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>geo_has_missing</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"LINESTRING (10 inf, nan 2)"</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>geo_is_finite</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"LINESTRING (10 inf, nan 2)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>geo_is_empty</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"LINESTRING (10 inf, nan 2)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
-<span class='fu'>geo_is_missing</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"LINESTRING (10 inf, 1 2)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>geo_has_missing</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"LINESTRING (10 inf, 1 2)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>geo_is_finite</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"LINESTRING (10 inf, 1 2)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>geo_is_empty</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"LINESTRING (10 inf, 1 2)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_missing</a></span>(<span class='kw'>NA_wkt_</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_has_missing</a></span>(<span class='kw'>NA_wkt_</span>)</div><div class='output co'>#&gt; [1] NA</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_finite</a></span>(<span class='kw'>NA_wkt_</span>)</div><div class='output co'>#&gt; [1] NA</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_empty</a></span>(<span class='kw'>NA_wkt_</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_missing</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"LINESTRING (10 inf, nan 2)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_has_missing</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"LINESTRING (10 inf, nan 2)"</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_finite</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"LINESTRING (10 inf, nan 2)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_empty</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"LINESTRING (10 inf, nan 2)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_missing</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"LINESTRING (10 inf, 1 2)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_has_missing</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"LINESTRING (10 inf, 1 2)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_finite</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"LINESTRING (10 inf, 1 2)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_empty</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"LINESTRING (10 inf, 1 2)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
 <span class='co'># EMPTY geometries are considered finite and non-missing</span>
-<span class='fu'>geo_is_missing</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"LINESTRING EMPTY"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>geo_has_missing</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"LINESTRING EMPTY"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>geo_is_finite</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"LINESTRING EMPTY"</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>geo_is_empty</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"LINESTRING EMPTY"</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_missing</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"LINESTRING EMPTY"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_has_missing</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"LINESTRING EMPTY"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_finite</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"LINESTRING EMPTY"</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_empty</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"LINESTRING EMPTY"</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># POINT EMPTY, POINT (nan nan), and geo_xy(NA, NA)</span>
 <span class='co'># are all empty points</span>
-<span class='fu'>geo_is_missing</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"POINT EMPTY"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>geo_has_missing</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"POINT EMPTY"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>geo_is_finite</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"POINT EMPTY"</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>geo_is_empty</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"POINT EMPTY"</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
-<span class='fu'>geo_is_missing</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"POINT (nan nan)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>geo_has_missing</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"POINT (nan nan)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>geo_is_finite</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"POINT (nan nan)"</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>geo_is_empty</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"POINT (nan nan)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
-<span class='fu'>geo_is_missing</span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>geo_has_missing</span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>geo_is_finite</span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>geo_is_empty</span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
-</div></pre>
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_missing</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"POINT EMPTY"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_has_missing</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"POINT EMPTY"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_finite</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"POINT EMPTY"</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_empty</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"POINT EMPTY"</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_missing</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"POINT (nan nan)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_has_missing</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"POINT (nan nan)"</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_finite</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"POINT (nan nan)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_empty</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"POINT (nan nan)"</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_missing</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_has_missing</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_finite</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>))</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_is_missing.html'>geo_is_empty</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

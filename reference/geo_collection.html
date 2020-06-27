@@ -40,13 +40,13 @@
 
 
 <meta property="og:title" content="Geometry constructors — geo_collection" />
-<meta property="og:description" content="A geo_collection() is an in-memory R-native format that can store most
-geometries. It is used to power geo_plot() in addition to providing
-constructors for geometries from data frames (possibly using
-dplyr::group_by() and dplyr::summarise()). Collections contain zero
+<meta property="og:description" content="These functions provide a means to construct geometries from data
+frames, possibly using
+dplyr::group_by() and dplyr::summarise(). Collections contain zero
 or more objects of type geo_point(), geo_linestring(), geo_polygon(),
 geo_multipoint(), geo_multilinestring(), and/or
-geo_multipolygon()." />
+geo_multipolygon(). See wk::coords_point_translate_wkb() and related
+functions for high-performance methods to create these vectors." />
 
 
 
@@ -132,48 +132,48 @@ geo_multipolygon()." />
     </div>
 
     <div class="ref-description">
-    <p>A <code>geo_collection()</code> is an in-memory R-native format that can store most
-geometries. It is used to power <code><a href='geo_plot.html'>geo_plot()</a></code> in addition to providing
-constructors for geometries from data frames (possibly using
-<code>dplyr::group_by()</code> and <code>dplyr::summarise()</code>). Collections contain zero
-or more objects of type <code>geo_point()</code>, <code>geo_linestring()</code>, <code>geo_polygon()</code>,
-<code>geo_multipoint()</code>, <code>geo_multilinestring()</code>, and/or
-<code>geo_multipolygon()</code>.</p>
+    <p>These functions provide a means to construct geometries from data
+frames, possibly using
+<code>dplyr::group_by()</code> and <code>dplyr::summarise()</code>. Collections contain zero
+or more objects of type <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_point()</a></code>, <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_linestring()</a></code>, <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_polygon()</a></code>,
+<code><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_multipoint()</a></code>, <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_multilinestring()</a></code>, and/or
+<code><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_multipolygon()</a></code>. See <code><a href='https://rdrr.io/pkg/wk/man/coords_point_translate_wkt.html'>wk::coords_point_translate_wkb()</a></code> and related
+functions for high-performance methods to create these vectors.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>geo_collection</span>(<span class='kw'>feature</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fl'>0</span>)
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_collection</a></span>(feature = <span class='fu'><a href='https://rdrr.io/pkg/wk/man/wksxp.html'>wksxp</a></span>(), srid = <span class='fl'>NA</span>)
 
-<span class='fu'>geo_point</span>(<span class='no'>xy</span>, <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fl'>0</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_point</a></span>(xy = <span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(), srid = <span class='fl'>NA</span>)
 
-<span class='fu'>geo_linestring</span>(<span class='no'>xy</span>, <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fl'>0</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_linestring</a></span>(xy = <span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(), srid = <span class='fl'>NA</span>)
 
-<span class='fu'>geo_polygon</span>(<span class='no'>xy</span>, <span class='kw'>ring</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fl'>0</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_polygon</a></span>(xy = <span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(), ring = <span class='fl'>1L</span>, srid = <span class='fl'>NA</span>)
 
-<span class='fu'>geo_multipoint</span>(<span class='no'>feature</span>, <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fl'>0</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_multipoint</a></span>(feature = <span class='fu'><a href='https://rdrr.io/pkg/wk/man/wksxp.html'>wksxp</a></span>(), srid = <span class='fl'>NA</span>)
 
-<span class='fu'>geo_multilinestring</span>(<span class='no'>feature</span>, <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fl'>0</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_multilinestring</a></span>(feature = <span class='fu'><a href='https://rdrr.io/pkg/wk/man/wksxp.html'>wksxp</a></span>(), srid = <span class='fl'>NA</span>)
 
-<span class='fu'>geo_multipolygon</span>(<span class='no'>feature</span>, <span class='kw'>srid</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_multipolygon</a></span>(feature = <span class='fu'><a href='https://rdrr.io/pkg/wk/man/wksxp.html'>wksxp</a></span>(), srid = <span class='fl'>NA</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>feature</th>
-      <td><p>A <code>geo_collection()</code> of one or more features.
-for multi geometries, this must be a collection that only contains
+      <td><p>A vector of one or more features.
+For multi geometries, this must be a collection that only contains
 that type (e.g., multipolygons can only be composed of polygons).</p></td>
     </tr>
     <tr>
       <th>srid</th>
       <td><p>A spatial reference identifier, coerced to
-an integer by <code><a href='geo_srid.html'>as_geo_srid()</a></code>. These identifiers can
+an integer by <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_srid.html'>as_geo_srid()</a></code>. These identifiers can
 and should be managed outside of geovctrs except for
 0, which is interpreted as "not set".</p></td>
     </tr>
     <tr>
       <th>xy</th>
-      <td><p>A <code><a href='geo_xy.html'>geo_xy()</a></code> of coordinates</p></td>
+      <td><p>A <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy()</a></code> of coordinates</p></td>
     </tr>
     <tr>
       <th>ring</th>
@@ -184,49 +184,48 @@ matters: the first value encountered will identify the outer ring.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code><a href='new_geovctrs_collection.html'>new_geovctrs_collection()</a></code> of length 1.</p>
+    <p>A <code><a href='https://rdrr.io/pkg/wk/man/wksxp.html'>wk::wksxp()</a></code> of length 1.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># geo_point() and family all return a geo_collection() of length 1</span>
-<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'>geo_point</span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>)), <span class='fu'>geo_point</span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>)))</div><div class='output co'>#&gt; &lt;geovctrs_collection[2]&gt;
-#&gt; [1] &lt;<span style='color: #555555;'>POINT </span><span style='color: #0000BB;'>(0 1)</span><span>&gt; &lt;</span><span style='color: #555555;'>POINT </span><span style='color: #0000BB;'>(1 2)</span><span>&gt;</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='co'># geo_point() and family all return a wk::wksxp() of length 1</span>
+<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_point</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>)), <span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_point</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>)))</div><div class='output co'>#&gt; &lt;wk_wksxp[2]&gt;
+#&gt; [1] &lt;POINT (0 1)&gt; &lt;POINT (1 2)&gt;</div><div class='input'>
 <span class='co'># linestring</span>
-<span class='fu'>geo_linestring</span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>1</span>:<span class='fl'>5</span>, <span class='fl'>2</span>:<span class='fl'>6</span>))</div><div class='output co'>#&gt; &lt;geovctrs_collection[1]&gt;
-#&gt; [1] &lt;</span><span style='color: #555555;'>LINESTRING </span><span style='color: #0000BB;'>(1 2, 2 3, 3 4, 4 5, 5 6...</span><span>&gt;</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, <span class='fl'>2</span><span class='op'>:</span><span class='fl'>6</span>))</div><div class='output co'>#&gt; &lt;wk_wksxp[1]&gt;
+#&gt; [1] &lt;LINESTRING (1 2, 2 3, 3 4...&gt;</div><div class='input'>
 <span class='co'># a polygon</span>
-<span class='fu'>geo_polygon</span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>0</span>, <span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>0</span>)))</div><div class='output co'>#&gt; &lt;geovctrs_collection[1]&gt;
-#&gt; [1] &lt;</span><span style='color: #555555;'>POLYGON </span><span style='color: #0000BB;'>((0 0, 10 0, 0 10, 0 0))</span><span>&gt;</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>0</span>, <span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>0</span>)))</div><div class='output co'>#&gt; &lt;wk_wksxp[1]&gt;
+#&gt; [1] &lt;POLYGON ((0 0, 10 0, 0 10...&gt;</div><div class='input'>
 <span class='co'># polygon with a hole</span>
-<span class='no'>poly_hole</span> <span class='kw'>&lt;-</span> <span class='fu'>geo_polygon</span>(
-  <span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(
+<span class='kw'>poly_hole</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_polygon</a></span>(
+  <span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(
     <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>35</span>, <span class='fl'>45</span>, <span class='fl'>15</span>, <span class='fl'>10</span>, <span class='fl'>35</span>, <span class='fl'>20</span>, <span class='fl'>35</span>, <span class='fl'>30</span>, <span class='fl'>20</span>),
     <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>, <span class='fl'>45</span>, <span class='fl'>40</span>, <span class='fl'>20</span>, <span class='fl'>10</span>, <span class='fl'>30</span>, <span class='fl'>35</span>, <span class='fl'>20</span>, <span class='fl'>30</span>)
   ),
-  <span class='kw'>ring</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>2</span>)
+  ring = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>2</span>, <span class='fl'>2</span>)
 )
 
 <span class='co'># multipoint</span>
-<span class='fu'>geo_multipoint</span>(
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'>geo_point</span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>10</span>, <span class='fl'>30</span>)), <span class='fu'>geo_point</span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>12</span>, <span class='fl'>11</span>)))
-)</div><div class='output co'>#&gt; &lt;geovctrs_collection[1]&gt;
-#&gt; [1] &lt;</span><span style='color: #555555;'>MULTIPOINT </span><span style='color: #0000BB;'>((10 30), (12 11))</span><span>&gt;</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_multipoint</a></span>(
+  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_point</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(<span class='fl'>10</span>, <span class='fl'>30</span>)), <span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_point</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(<span class='fl'>12</span>, <span class='fl'>11</span>)))
+)</div><div class='output co'>#&gt; &lt;wk_wksxp[1]&gt;
+#&gt; [1] &lt;MULTIPOINT ((10 30), (12 11))&gt;</div><div class='input'>
 <span class='co'># multilinestring</span>
-<span class='fu'>geo_multilinestring</span>(
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_multilinestring</a></span>(
   <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(
-    <span class='fu'>geo_linestring</span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>0</span>:<span class='fl'>1</span>, <span class='fl'>0</span>:<span class='fl'>1</span>)),
-    <span class='fu'>geo_linestring</span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>30</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>11</span>, <span class='fl'>10</span>)))
+    <span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(<span class='fl'>0</span><span class='op'>:</span><span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>:</span><span class='fl'>1</span>)),
+    <span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_linestring</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>12</span>, <span class='fl'>30</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>11</span>, <span class='fl'>10</span>)))
   )
-)</div><div class='output co'>#&gt; &lt;geovctrs_collection[1]&gt;
-#&gt; [1] &lt;</span><span style='color: #555555;'>MULTILINESTRING </span><span style='color: #0000BB;'>((0 0, 1 1), (12 11, 30…</span><span>&gt;</div><div class='input'>
+)</div><div class='output co'>#&gt; &lt;wk_wksxp[1]&gt;
+#&gt; [1] &lt;MULTILINESTRING ((0 0, 1 1), (12 11...&gt;</div><div class='input'>
 <span class='co'># multipolygon</span>
-<span class='fu'>geo_multipolygon</span>(
-  <span class='fu'>geo_polygon</span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>0</span>, <span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>0</span>)))
-)</div><div class='output co'>#&gt; &lt;geovctrs_collection[1]&gt;
-#&gt; [1] &lt;</span><span style='color: #555555;'>MULTIPOLYGON </span><span style='color: #0000BB;'>(((0 0, 10 0, 0 10, 0 0)))</span><span>&gt;</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_multipolygon</a></span>(
+  <span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>0</span>, <span class='fl'>0</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>0</span>)))
+)</div><div class='output co'>#&gt; &lt;wk_wksxp[1]&gt;
+#&gt; [1] &lt;MULTIPOLYGON (((0 0, 10 0, 0 10...&gt;</div><div class='input'>
 <span class='co'># nested geo_collection()</span>
-<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'>geo_point</span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>)), <span class='fu'>geo_collection</span>(<span class='fu'>geo_point</span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>))))</div><div class='output co'>#&gt; &lt;geovctrs_collection[2]&gt;
-#&gt; [1] &lt;</span><span style='color: #555555;'>POINT </span><span style='color: #0000BB;'>(0 1)</span><span>&gt;                      &lt;</span><span style='color: #555555;'>GEOMETRYCOLLECTION </span><span style='color: #0000BB;'>(POINT (1 2))</span><span>&gt;</div><div class='input'>
-</div></span></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_point</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>)), <span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_collection</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_point</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>))))</div><div class='output co'>#&gt; &lt;wk_wksxp[2]&gt;
+#&gt; [1] &lt;POINT (0 1)&gt;                      &lt;GEOMETRYCOLLECTION (POINT (1 2))&gt;</div><div class='input'></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

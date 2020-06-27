@@ -41,7 +41,7 @@
 
 <meta property="og:title" content="Test for geovctrs — is_geovctr" />
 <meta property="og:description" content="A geovctr is a geometry-like collection of objects. In the geovctrs
-package, geo_wkt(), geo_wkb(), geo_collection(),
+package, wkt(), wkb(), geo_collection(),
 geo_xy(), geo_rect(), and geo_segment() are all geovctrs.
 Extension packages can either use these types or
 implement the as_geovctr() generic
@@ -133,48 +133,45 @@ coercion, plotting, and summary information." />
 
     <div class="ref-description">
     <p>A geovctr is a geometry-like collection of objects. In the geovctrs
-package, <code><a href='geo_wkt.html'>geo_wkt()</a></code>, <code><a href='geo_wkb.html'>geo_wkb()</a></code>, <code><a href='geo_collection.html'>geo_collection()</a></code>,
-<code><a href='geo_xy.html'>geo_xy()</a></code>, <code><a href='geo_rect.html'>geo_rect()</a></code>, and <code><a href='geo_segment.html'>geo_segment()</a></code> are all geovctrs.
+package, <code><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt()</a></code>, <code><a href='https://rdrr.io/pkg/wk/man/wkb.html'>wkb()</a></code>, <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_collection.html'>geo_collection()</a></code>,
+<code><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy()</a></code>, <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_rect.html'>geo_rect()</a></code>, and <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_segment.html'>geo_segment()</a></code> are all geovctrs.
 Extension packages can either use these types or
-implement the <code>as_geovctr()</code> generic
+implement the <code><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>as_geovctr()</a></code> generic
 to take advantage of a wide range of processing functions, including
 coercion, plotting, and summary information.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>is_geovctr</span>(<span class='no'>x</span>)
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>is_geovctr</a></span>(<span class='kw'>x</span>)
 
-<span class='fu'>as_geovctr</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for geovctr</span>
-<span class='fu'>as_geovctr</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>as_geovctr</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for character</span>
-<span class='fu'>as_geovctr</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>as_geovctr</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>as_geovctr</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>as_geovctr</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
-<span class='fu'>restore_geovctr</span>(<span class='no'>x</span>, <span class='no'>result</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>restore_geovctr</a></span>(<span class='kw'>x</span>, <span class='kw'>result</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>restore_geovctr</span>(<span class='no'>x</span>, <span class='no'>result</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>restore_geovctr</a></span>(<span class='kw'>x</span>, <span class='kw'>result</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>restore_geovctr</span>(<span class='no'>x</span>, <span class='no'>result</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>restore_geovctr</a></span>(<span class='kw'>x</span>, <span class='kw'>result</span>, <span class='kw'>...</span>)
 
-<span class='fu'>expect_geovctr</span>(<span class='no'>x</span>)
-
-<span class='co'># S3 method for sfc</span>
-<span class='fu'>as_geovctr</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for sf</span>
-<span class='fu'>as_geovctr</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>expect_geovctr</a></span>(<span class='kw'>x</span>)
 
 <span class='co'># S3 method for sfc</span>
-<span class='fu'>restore_geovctr</span>(<span class='no'>x</span>, <span class='no'>result</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>as_geovctr</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for sf</span>
-<span class='fu'>restore_geovctr</span>(<span class='no'>x</span>, <span class='no'>result</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>as_geovctr</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+
+<span class='co'># S3 method for sfc</span>
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>restore_geovctr</a></span>(<span class='kw'>x</span>, <span class='kw'>result</span>, <span class='kw'>...</span>)
+
+<span class='co'># S3 method for sf</span>
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>restore_geovctr</a></span>(<span class='kw'>x</span>, <span class='kw'>result</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -199,52 +196,51 @@ coercion, plotting, and summary information.</p>
 representations of geometry, as there are many examples where
 simple geometries can be efficiently parameterized without
 resorting to storing every coordinate of every vertex
-(built-in examples include <code><a href='geo_xy.html'>geo_xy()</a></code>, <code><a href='geo_segment.html'>geo_segment()</a></code>, and
-<code><a href='geo_rect.html'>geo_rect()</a></code>). These types do, however, have unambiguous
+(built-in examples include <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy()</a></code>, <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_segment.html'>geo_segment()</a></code>, and
+<code><a href='https://rdrr.io/pkg/geovctrs/man/geo_rect.html'>geo_rect()</a></code>). These types do, however, have unambiguous
 representations as geometries, and thus should be able to be
 used wherever a geometry is appropriate.</p>
 <p>For an object to be a "geovctr", it must:</p><ul>
-<li><p>Be a vctr (<code><a href='https://rdrr.io/pkg/vctrs/man/vec_assert.html'>vctrs::vec_is()</a></code> must be <code>TRUE</code>). This ensures that it will
+<li><p>Be a vctr (<code><a href='https://vctrs.r-lib.org/reference/vec_assert.html'>vctrs::vec_is()</a></code> must be <code>TRUE</code>). This ensures that it will
 work with <code><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble::tibble()</a></code> and other tidyverse functions such as
 <code>tidyr::unnest()</code> and <code>dplyr::group_by()</code> / <code>dplyr::mutate()</code> /
 <code>dplyr::summarise()</code>.</p></li>
-<li><p>Inherit from <code>"geovctr"</code>. This makes it work automatically with
-functions like <code><a href='geo_plot.html'>geo_plot()</a></code> and <code><a href='geo_bbox.html'>geo_bbox()</a></code> that have a default
-implementation for something that can be coerced to <code><a href='geo_wkt.html'>geo_wkt()</a></code>,
-<code><a href='geo_wkb.html'>geo_wkb()</a></code>, or <code><a href='geo_collection.html'>geo_collection()</a></code>.</p></li>
-<li><p>Have the ability to be casted to <code><a href='geo_wkt.html'>geo_wkt()</a></code>, <code><a href='geo_wkb.html'>geo_wkb()</a></code>, and <code><a href='geo_collection.html'>geo_collection()</a></code>
-using <code>vec_cast()</code>. These casts power the default implementations of
-functions like <code><a href='geo_plot.html'>geo_plot()</a></code> and <code><a href='geo_bbox.html'>geo_bbox()</a></code>, and allow geometries to
-be combined using <code><a href='https://rdrr.io/pkg/vctrs/man/vec_c.html'>vctrs::vec_c()</a></code> (which powers row-binding in
-tidyverse functions). This means implementing the appropriate
-<code><a href='https://rdrr.io/pkg/vctrs/man/vec_cast.html'>vctrs::vec_cast()</a></code> methods for a class.</p></li>
-<li><p>Have the ability to be combined with <code><a href='geo_wkt.html'>geo_wkt()</a></code>, <code><a href='geo_wkb.html'>geo_wkb()</a></code>, and <code><a href='geo_collection.html'>geo_collection()</a></code>
+<li><p>Have <code><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>is_geovctr()</a></code> return <code>TRUE</code>. This makes it work automatically with
+functions like <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_bbox.html'>geo_bbox()</a></code> that have a default
+implementation for something that can be coerced to <code><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt()</a></code>,
+<code><a href='https://rdrr.io/pkg/wk/man/wkb.html'>wkb()</a></code>, or <code><a href='https://rdrr.io/pkg/wk/man/wksxp.html'>wksxp()</a></code>.</p></li>
+<li><p>Have the ability to be coerced to <code><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt()</a></code>, <code><a href='https://rdrr.io/pkg/wk/man/wkb.html'>wkb()</a></code>, and <code><a href='https://rdrr.io/pkg/wk/man/wksxp.html'>wksxp()</a></code>
+using <code><a href='https://rdrr.io/pkg/wk/man/wkt.html'>as_wkt()</a></code>, <code><a href='https://rdrr.io/pkg/wk/man/wkb.html'>as_wkb()</a></code>, and <code><a href='https://rdrr.io/pkg/wk/man/wksxp.html'>as_wksxp()</a></code>.
+These casts power the default implementations of
+functions like <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_bbox.html'>geo_bbox()</a></code>. In addition, a <code><a href='https://vctrs.r-lib.org/reference/vec_cast.html'>vctrs::vec_cast()</a></code>
+method should be provided so that row-binding and other vector
+operations work with functions that might return a simpler type.</p></li>
+<li><p>Have the ability to be combined with <code><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt()</a></code>, <code><a href='https://rdrr.io/pkg/wk/man/wkb.html'>wkb()</a></code>, and <code><a href='https://rdrr.io/pkg/wk/man/wksxp.html'>wksxp()</a></code>
 using <code>vec_c()</code> in both directions. This helps support processing functions
 that return a class to be combined with the output of other functions.
-This might require a <code><a href='https://rdrr.io/pkg/vctrs/man/vec_ptype.html'>vctrs::vec_ptype()</a></code> implementation for
+This might require a <code><a href='https://vctrs.r-lib.org/reference/vec_ptype.html'>vctrs::vec_ptype()</a></code> implementation for
 a class.</p></li>
 </ul>
 
-<p>You can test these expectations for a given object using <code>expect_geovctr()</code>.</p>
+<p>You can test these expectations for a given object using <code><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>expect_geovctr()</a></code>.</p>
 <p>A secondary class of object is one that <em>could</em>  be interpreted as a geovctr,
 but in most cases can't be. One example of this is a character vector,
 which <em>could</em> be well-known text, but probably isn't. However, when the
-user passes it to a function like <code><a href='geo_plot.html'>geo_plot()</a></code> or <code><a href='geo_bbox.html'>geo_bbox()</a></code>, it
+user passes it to a function like <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_bbox.html'>geo_bbox()</a></code>, it
 probably <em>is</em> well-known text. Similarly, a <code>data.frame</code> or
 <code><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble::tibble()</a></code> probably doesn't contain a geometry column,
 but when passed to a function that operates on geometries,
 it's likely that it does. The geovctrs package supports these
-objects with the <code>as_geovctr()</code> generic, which means you can
+objects with the <code><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>as_geovctr()</a></code> generic, which means you can
 pass these objects anywhere you would pass a first-class
 geometry vector.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>is_geovctr</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>())</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>is_geovctr</span>(<span class='kw'>NULL</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
-<span class='fu'>as_geovctr</span>(<span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"POINT (30 10)"</span>))</div><div class='output co'>#&gt; &lt;geovctrs_wkt[1]&gt;
-#&gt; [1] <span style='color: #555555;'>POINT </span><span style='color: #0000BB;'>(30 10)</span><span></div><div class='input'><span class='fu'>as_geovctr</span>(<span class='st'>"POINT (30 10)"</span>)</div><div class='output co'>#&gt; &lt;geovctrs_wkt[1]&gt;
-#&gt; [1] </span><span style='color: #555555;'>POINT </span><span style='color: #0000BB;'>(30 10)</span><span></div><div class='input'><span class='fu'>as_geovctr</span>(<span class='kw pkg'>tibble</span><span class='kw ns'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span>(<span class='kw'>geometry</span> <span class='kw'>=</span> <span class='fu'><a href='geo_wkt.html'>geo_wkt</a></span>(<span class='st'>"POINT (30 10)"</span>)))</div><div class='output co'>#&gt; &lt;geovctrs_wkt[1]&gt;
-#&gt; [1] </span><span style='color: #555555;'>POINT </span><span style='color: #0000BB;'>(30 10)</span><span></div><div class='input'>
-</div></span></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>is_geovctr</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>())</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>is_geovctr</a></span>(<span class='kw'>NULL</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>as_geovctr</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"POINT (30 10)"</span>))</div><div class='output co'>#&gt; &lt;wk_wkt[1]&gt;
+#&gt; [1] POINT (30 10)</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>as_geovctr</a></span>(<span class='st'>"POINT (30 10)"</span>)</div><div class='output co'>#&gt; &lt;wk_wkt[1]&gt;
+#&gt; [1] POINT (30 10)</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>as_geovctr</a></span>(<span class='kw'>tibble</span>::<span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span>(geometry = <span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"POINT (30 10)"</span>)))</div><div class='output co'>#&gt; &lt;wk_wkt[1]&gt;
+#&gt; [1] POINT (30 10)</div><div class='input'></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
