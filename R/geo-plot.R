@@ -11,6 +11,7 @@
 #'   [graphics::rect()] for rectangles.
 #' @param bbox The limits of the plot. Defaults to `geo_bbox(x, finite = TRUE)`.
 #' @param asp,xlab,ylab Passed to [graphics::plot()]
+#' @param add Should the object be added the current plot?
 #'
 #' @return `x`, invisibly.
 #' @export

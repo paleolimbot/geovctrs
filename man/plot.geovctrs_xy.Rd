@@ -9,7 +9,7 @@
 \method{plot}{geovctrs_xy}(
   x,
   ...,
-  add = FALSSE,
+  add = FALSE,
   asp = 1,
   bbox = geo_bbox(x, finite = TRUE),
   xlab = "",
@@ -19,7 +19,7 @@
 \method{plot}{geovctrs_segment}(
   x,
   ...,
-  add = FALSSE,
+  add = FALSE,
   asp = 1,
   bbox = geo_bbox(x, finite = TRUE),
   xlab = "",
@@ -29,7 +29,7 @@
 \method{plot}{geovctrs_rect}(
   x,
   ...,
-  add = FALSSE,
+  add = FALSE,
   asp = 1,
   bbox = geo_bbox(x, finite = TRUE),
   xlab = "",
@@ -43,6 +43,8 @@ coerced to a geometry-like object using \code{\link[=as_geovctr]{as_geovctr()}}.
 \item{...}{Passed to plotting functions for features: \code{\link[graphics:points]{graphics::points()}}
 for xy vectors, \code{\link[graphics:segments]{graphics::segments()}} for segment vectors, and
 \code{\link[graphics:rect]{graphics::rect()}} for rectangles.}
+
+\item{add}{Should the object be added the current plot?}
 
 \item{asp, xlab, ylab}{Passed to \code{\link[graphics:plot.default]{graphics::plot()}}}
 

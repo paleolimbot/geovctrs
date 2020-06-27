@@ -30,7 +30,7 @@ geometries <- wkt(
   )
 )
 
-geo_plot(geometries)
+geo_bbox(geometries)
 ```
 
 ## Extracting functions
@@ -239,5 +239,5 @@ Now, the `circles` vector works with geovctrs functions!
 
 ```{r}
 geo_envelope(circles)
-geo_plot(circles, lty = 1:3)
+geo_bbox(circles)
 ```

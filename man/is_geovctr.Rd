@@ -93,7 +93,7 @@ You can test these expectations for a given object using \code{\link[=expect_geo
 A secondary class of object is one that \emph{could}  be interpreted as a geovctr,
 but in most cases can't be. One example of this is a character vector,
 which \emph{could} be well-known text, but probably isn't. However, when the
-user passes it to a function like \code{\link[=geo_plot]{geo_plot()}} or \code{\link[=geo_bbox]{geo_bbox()}}, it
+user passes it to a function like \code{\link[=geo_bbox]{geo_bbox()}}, it
 probably \emph{is} well-known text. Similarly, a \code{data.frame} or
 \code{\link[tibble:tibble]{tibble::tibble()}} probably doesn't contain a geometry column,
 but when passed to a function that operates on geometries,

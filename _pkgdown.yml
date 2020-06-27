@@ -16,7 +16,6 @@ reference:
   desc: Functions that take geometry vectors as input
   contents:
   - geo_bbox
-  - geo_plot
   - geo_srid
   - geo_is_missing
   - geo_print

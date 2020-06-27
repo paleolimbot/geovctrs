@@ -48,7 +48,7 @@
 #' A secondary class of object is one that *could*  be interpreted as a geovctr,
 #' but in most cases can't be. One example of this is a character vector,
 #' which *could* be well-known text, but probably isn't. However, when the
-#' user passes it to a function like [geo_plot()] or [geo_bbox()], it
+#' user passes it to a function like [geo_bbox()], it
 #' probably *is* well-known text. Similarly, a `data.frame` or
 #' [tibble::tibble()] probably doesn't contain a geometry column,
 #' but when passed to a function that operates on geometries,
