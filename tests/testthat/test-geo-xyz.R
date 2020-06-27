@@ -35,6 +35,28 @@ test_that("geo_xyz c() works", {
 })
 
 test_that("coersion to xy works", {
+  # null
+  expect_equal(as_geo_xyz(wkt(NA_character_)), geo_xyz(NA, NA, NA))
+  expect_equal(as_geo_xyz(as_wkb(NA_character_)), geo_xyz(NA, NA, NA))
+  expect_equal(as_geo_xyz(as_wksxp(NA_character_)), geo_xyz(NA, NA, NA))
+
+  # empty
+  expect_equal(as_geo_xyz(wkt("POINT EMPTY")), geo_xyz(NA, NA, NA))
+  expect_equal(as_geo_xyz(as_wkb("POINT EMPTY")), geo_xyz(NA, NA, NA))
+  expect_equal(as_geo_xyz(as_wksxp("POINT EMPTY")), geo_xyz(NA, NA, NA))
+
+  # partially non-finite
+  expect_equal(
+    as_geo_xyz(wkt(c("POINT Z (1 2 3)", "POINT (3 4)"))),
+    geo_xyz(c(1, 3), c(2, 4), c(3, NA))
+  )
+
+  # non-point
+  expect_error(
+    as_geo_xyz(wkt("LINESTRING (0 0 , 1 1)")),
+    "Can't create XY", class = "std::runtime_error"
+  )
+
   # self-cast
   expect_identical(vec_cast(geo_xyz(), geo_xyz()), geo_xyz())
   expect_identical(as_geo_xyz(geo_xyz()), geo_xyz())

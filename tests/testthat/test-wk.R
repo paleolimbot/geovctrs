@@ -76,13 +76,23 @@ test_that("wkb casting and coersion works", {
   )
 
   expect_identical(
+    vec_cast(geo_xy(c(0, NA), c(1, NA)), wkb()),
+    as_wkb(c("POINT (0 1)", "POINT EMPTY"))
+  )
+
+  expect_identical(
+    vec_cast(geo_xyz(c(0, NA), c(1, NA), c(2, NA)), wkb()),
+    as_wkb(c("POINT Z (0 1 2)", "POINT Z EMPTY"))
+  )
+
+  expect_identical(
     vec_cast(geo_segment(0, 1, 10, 11), wkb()),
-    as_wkb(geo_segment(0, 1, 10, 11), wkb())
+    as_wkb(geo_segment(0, 1, 10, 11))
   )
 
   expect_identical(
     vec_cast(geo_rect(0, 1, 10, 11), wkb()),
-    as_wkb(geo_rect(0, 1, 10, 11), wkb())
+    as_wkb(geo_rect(0, 1, 10, 11))
   )
 })
 
@@ -116,6 +126,16 @@ test_that("coersion and casting works for wksxp types", {
   expect_identical(
     vec_cast(as_wksxp("POINT Z (1 2 3)"), geo_xyz()),
     geo_xyz(1, 2, 3)
+  )
+
+  expect_identical(
+    vec_cast(geo_xy(c(0, NA), c(1, NA)), wksxp()),
+    as_wksxp(c("POINT (0 1)", "POINT EMPTY"))
+  )
+
+  expect_identical(
+    vec_cast(geo_xyz(c(0, NA), c(1, NA), c(2, NA)), wksxp()),
+    as_wksxp(c("POINT Z (0 1 2)", "POINT Z EMPTY"))
   )
 
   expect_identical(

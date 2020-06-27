@@ -45,3 +45,45 @@ test_that("geo_coordinates() works", {
     tibble(feature = 1L, part = 2L, ring = 0L, xy = geo_xy(30, 10))
   )
 })
+
+test_that("geo_coordinates() works with other formats", {
+  expect_identical(
+    geo_coordinates(as_wkb("POINT (30 10)")),
+    tibble(feature = 1L, part = 1L, ring = 0L, xy = geo_xy(30, 10))
+  )
+
+  expect_identical(
+    geo_coordinates(as_wksxp("POINT (30 10)")),
+    tibble(feature = 1L, part = 1L, ring = 0L, xy = geo_xy(30, 10))
+  )
+
+  expect_identical(
+    geo_coordinates(geo_xy(30, 10)),
+    tibble(feature = 1L, part = 1L, ring = 0L, xy = geo_xy(30, 10))
+  )
+
+  expect_identical(
+    geo_coordinates(geo_segment(30, 10, 0, 1)),
+    tibble(
+      feature = 1L,
+      part = 1L,
+      ring = 0L,
+      xy = c(geo_xy(30, 10), geo_xy(0, 1))
+    )
+  )
+
+  expect_identical(
+    geo_coordinates(geo_rect(0, 0, 1, 1)),
+    tibble(
+      feature = 1L,
+      part = 1L,
+      ring = 1L,
+      xy = geo_xy(c(0, 1, 1, 0, 0), c(0, 0, 1, 1, 0))
+    )
+  )
+})
+
+test_that("geo_coordinates() works with the z coordinate", {
+  expect_identical(geo_coordinates("POINT Z (1 2 3)")$xy, geo_xyz(1, 2, 3))
+  expect_error(geo_coordinates("POINT M (1 2 3)")$xy, "doesn't support the 'm' coordinate")
+})

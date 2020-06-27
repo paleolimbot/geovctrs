@@ -55,7 +55,7 @@ public:
 
   void nextGeometryStart(const WKGeometryMeta& meta, uint32_t partId) {
     if (meta.geometryType != WKGeometryType::Point) {
-      throw std::runtime_error("Can't create XY from a non-point");
+      throw std::runtime_error("Can't create XYZ from a non-point");
     }
 
     if (meta.size == 0) {
