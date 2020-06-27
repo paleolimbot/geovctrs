@@ -1,6 +1,9 @@
 
 test_that("unite_xy() works", {
   tbl <- tibble(x = 1, y = 2)
+
+  expect_error(unite_xy(tbl, "xy", c(x, y), c()), "must refer to a unique")
+
   expect_identical(
     unite_xy(tbl, "xy", x, y, remove = TRUE),
     tibble(xy = geo_xy(1, 2))
@@ -71,6 +74,18 @@ test_that("separate_xyz() works", {
   tbl <- tibble(xy = geo_xyz(1, 2, 3))
   expect_identical(separate_xyz(tbl, xy, remove = TRUE), tibble(x = 1, y = 2, z = 3))
   expect_identical(separate_xyz(tbl, xy, remove = FALSE), tibble(xy = geo_xyz(1, 2, 3), x = 1, y = 2, z = 3))
+})
+
+test_that("separate_segment() works", {
+  tbl <- tibble(segment = geo_segment(0, 1, 2, 3))
+  expect_identical(
+    separate_segment(tbl, segment, remove = FALSE),
+    tibble(segment = geo_segment(0, 1, 2, 3), x0 = 0, y0 = 1, x1 = 2, y1 = 3)
+  )
+  expect_identical(
+    separate_segment(tbl, segment, remove = TRUE),
+    tibble(x0 = 0, y0 = 1, x1 = 2, y1 = 3)
+  )
 })
 
 test_that("unite_segment() works", {

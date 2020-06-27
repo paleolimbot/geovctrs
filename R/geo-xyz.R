@@ -80,13 +80,13 @@ as_geo_xyz.default <- function(x, ...) {
 #' @export vec_cast.geovctrs_xyz
 #' @rdname new_geovctrs_xy
 vec_cast.geovctrs_xyz <- function(x, to, ...) {
-  UseMethod("vec_cast.geovctrs_xyz")
+  UseMethod("vec_cast.geovctrs_xyz") # nocov
 }
 
 #' @method vec_cast.geovctrs_xyz default
 #' @export
 vec_cast.geovctrs_xyz.default <- function(x, to, ...) {
-  vec_default_cast(x, to)
+  vec_default_cast(x, to) # nocov
 }
 
 #' @method vec_cast.geovctrs_xyz geovctrs_xyz
@@ -128,7 +128,7 @@ vec_cast.geovctrs_xyz.wk_wksxp <- function(x, to, ...) {
 #' @export vec_ptype2.geovctrs_xyz
 #' @rdname new_geovctrs_xy
 vec_ptype2.geovctrs_xyz <- function(x, y, ...) {
-  UseMethod("vec_ptype2.geovctrs_xyz", y)
+  UseMethod("vec_ptype2.geovctrs_xyz", y) # nocov
 }
 
 #' @method vec_ptype2.geovctrs_xyz default

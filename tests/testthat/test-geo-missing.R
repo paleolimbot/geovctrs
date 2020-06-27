@@ -50,6 +50,11 @@ test_that("geo_has_missing works", {
   expect_true(geo_has_missing(geo_xy(1, NA)))
   expect_false(geo_has_missing(geo_xy(1, 1)))
 
+  expect_true(geo_has_missing(geo_xyz(NA, NA, NA)))
+  expect_true(geo_has_missing(geo_xyz(NA, 1, 1)))
+  expect_true(geo_has_missing(geo_xyz(1, 1, NA)))
+  expect_false(geo_has_missing(geo_xyz(1, 1, 1)))
+
   expect_identical(geo_has_missing(NA_segment_), NA)
   expect_true(geo_has_missing(geo_segment(NA, NA, NA, NA)))
   expect_true(geo_has_missing(geo_segment(1, NA, NA, NA)))
@@ -114,6 +119,11 @@ test_that("geo_is_finite works", {
   expect_false(geo_is_finite(geo_xy(1, -Inf)))
   expect_true(geo_is_finite(geo_xy(1, 1)))
 
+  expect_false(geo_is_finite(geo_xyz(Inf, -Inf, 1)))
+  expect_false(geo_is_finite(geo_xyz(2, 1, NA)))
+  expect_false(geo_is_finite(geo_xyz(1, 2, -Inf)))
+  expect_true(geo_is_finite(geo_xyz(1, 1, 1)))
+
   expect_identical(geo_is_finite(NA_segment_), NA)
   expect_false(geo_is_finite(geo_segment(NA, NA, NA, NA)))
   expect_false(geo_is_finite(geo_segment(1, NA, NA, NA)))
@@ -175,6 +185,10 @@ test_that("geo_is_empty works", {
   expect_true(geo_is_empty(geo_xy(NA, NA)))
   expect_false(geo_is_empty(geo_xy(1, NA)))
   expect_false(geo_is_empty(geo_xy(NA, 1)))
+
+  expect_true(geo_is_empty(geo_xyz(NA, NA, NA)))
+  expect_false(geo_is_empty(geo_xyz(1, 1, NA)))
+  expect_false(geo_is_empty(geo_xyz(NA, 1, NA)))
 
   expect_identical(geo_is_empty(NA_segment_), TRUE)
   expect_true(geo_is_empty(geo_segment(NA, NA, NA, NA)))
