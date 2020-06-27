@@ -71,17 +71,17 @@ For an object to be a "geovctr", it must:
 work with \code{\link[tibble:tibble]{tibble::tibble()}} and other tidyverse functions such as
 \code{\link[tidyr:nest]{tidyr::unnest()}} and \code{\link[dplyr:group_by]{dplyr::group_by()}} / \code{\link[dplyr:mutate]{dplyr::mutate()}} /
 \code{\link[dplyr:summarise]{dplyr::summarise()}}.
-\item Inherit from \code{"geovctr"}. This makes it work automatically with
-functions like \code{\link[=geo_plot]{geo_plot()}} and \code{\link[=geo_bbox]{geo_bbox()}} that have a default
+\item Have \code{is_geovctr()} return \code{TRUE}. This makes it work automatically with
+functions like \code{\link[=geo_bbox]{geo_bbox()}} that have a default
 implementation for something that can be coerced to \code{\link[=wkt]{wkt()}},
-\code{\link[=wkb]{wkb()}}, or \code{\link[=geo_collection]{geo_collection()}}.
-\item Have the ability to be casted to \code{\link[=wkt]{wkt()}}, \code{\link[=wkb]{wkb()}}, and \code{\link[=geo_collection]{geo_collection()}}
-using \code{\link[=vec_cast]{vec_cast()}}. These casts power the default implementations of
-functions like \code{\link[=geo_plot]{geo_plot()}} and \code{\link[=geo_bbox]{geo_bbox()}}, and allow geometries to
-be combined using \code{\link[vctrs:vec_c]{vctrs::vec_c()}} (which powers row-binding in
-tidyverse functions). This means implementing the appropriate
-\code{\link[vctrs:vec_cast]{vctrs::vec_cast()}} methods for a class.
-\item Have the ability to be combined with \code{\link[=wkt]{wkt()}}, \code{\link[=wkb]{wkb()}}, and \code{\link[=geo_collection]{geo_collection()}}
+\code{\link[=wkb]{wkb()}}, or \code{\link[=wksxp]{wksxp()}}.
+\item Have the ability to be coerced to \code{\link[=wkt]{wkt()}}, \code{\link[=wkb]{wkb()}}, and \code{\link[=wksxp]{wksxp()}}
+using \code{\link[=as_wkt]{as_wkt()}}, \code{\link[=as_wkb]{as_wkb()}}, and \code{\link[=as_wksxp]{as_wksxp()}}.
+These casts power the default implementations of
+functions like \code{\link[=geo_bbox]{geo_bbox()}}. In addition, a \code{\link[vctrs:vec_cast]{vctrs::vec_cast()}}
+method should be provided so that row-binding and other vector
+operations work with functions that might return a simpler type.
+\item Have the ability to be combined with \code{\link[=wkt]{wkt()}}, \code{\link[=wkb]{wkb()}}, and \code{\link[=wksxp]{wksxp()}}
 using \code{\link[=vec_c]{vec_c()}} in both directions. This helps support processing functions
 that return a class to be combined with the output of other functions.
 This might require a \code{\link[vctrs:vec_ptype]{vctrs::vec_ptype()}} implementation for

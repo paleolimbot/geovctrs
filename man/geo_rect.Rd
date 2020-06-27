@@ -34,6 +34,6 @@ is "missing" (see \code{\link[=geo_is_missing]{geo_is_missing()}} and \code{\lin
 values (\code{Inf} and \code{-Inf}) can be used.
 }
 \examples{
-geo_plot(geo_rect(xmin = 0:5, ymin = 0:5, xmax = 2:7, ymax = 2:7))
+plot(geo_rect(xmin = 0:5, ymin = 0:5, xmax = 2:7, ymax = 2:7))
 
 }

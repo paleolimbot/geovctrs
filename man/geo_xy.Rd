@@ -23,7 +23,7 @@ and \code{\link[=geo_is_empty]{geo_is_empty()}}).
 }
 \examples{
 geo_xy(0:5, 1:6)
-geo_plot(geo_xy(0:5, 1:6))
+plot(geo_xy(0:5, 1:6))
 
 geo_xyz(0:5, 1:6, 3)
 

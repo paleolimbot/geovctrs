@@ -26,12 +26,3 @@ restore_geovctr.sf <- function(x, result, ...) {
   x[[attr(x, "sf_column")]] <- restore_geovctr(x[[attr(x, "sf_column")]], result, ...)
   x
 }
-
-#' @rdname geo_plot
-#' @export
-geo_plot_add.sf <- function(x, ...) {
-  geometry_col <- attr(x, "sf_column")
-  as_df <- tibble::as_tibble(unclass(x))
-  as_df[[geometry_col]] <- as_geovctr(x)
-  geo_plot_add(as_df, ...)
-}

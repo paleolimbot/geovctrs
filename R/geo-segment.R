@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-#' geo_plot(geo_segment(0, 0, 10, -10:10))
+#' plot(geo_segment(0, 0, 10, -10:10))
 #'
 geo_segment <- function(x0 = double(), y0 = double(),
                         x1 = double(), y1 = double(), srid = 0) {

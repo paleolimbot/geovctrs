@@ -1,16 +1,16 @@
 
 #' Geometry constructors
 #'
-#' A [geo_collection()] is an in-memory R-native format that can store most
-#' geometries. It is used to power [geo_plot()] in addition to providing
-#' constructors for geometries from data frames (possibly using
-#' [dplyr::group_by()] and [dplyr::summarise()]). Collections contain zero
+#' These functions provide a means to construct geometries from data
+#' frames, possibly using
+#' [dplyr::group_by()] and [dplyr::summarise()]. Collections contain zero
 #' or more objects of type [geo_point()], [geo_linestring()], [geo_polygon()],
 #' [geo_multipoint()], [geo_multilinestring()], and/or
-#' [geo_multipolygon()].
+#' [geo_multipolygon()]. See [wk::coords_point_translate_wkb()] and related
+#' functions for high-performance methods to create these vectors.
 #'
-#' @param feature A [geo_collection()] of one or more features.
-#'   for multi geometries, this must be a collection that only contains
+#' @param feature A vector of one or more features.
+#'   For multi geometries, this must be a collection that only contains
 #'   that type (e.g., multipolygons can only be composed of polygons).
 #' @param xy A [geo_xy()] of coordinates
 #' @param ring A vector whose unique values separate rings. Row order
@@ -60,7 +60,7 @@
 #' # nested geo_collection()
 #' c(geo_point(geo_xy(0, 1)), geo_collection(geo_point(geo_xy(1, 2))))
 #'
-geo_collection <- function(feature = character(), srid = NA) {
+geo_collection <- function(feature = wksxp(), srid = NA) {
   feature <- structure(as_wksxp(feature), class = "wk_geometrycollection")
   construct_wksxp(feature, srid)
 }
@@ -68,6 +68,10 @@ geo_collection <- function(feature = character(), srid = NA) {
 #' @rdname geo_collection
 #' @export
 geo_point <- function(xy = geo_xy(), srid = NA)  {
+  if (!inherits(xy, "geovctrs_xy")) {
+    xy <- as_geo_xy(xy)
+  }
+
   feature <- structure(as.matrix(xy), class = "wk_point")
   attr(feature, "has_z") <- inherits(xy, "geovctrs_xyz")
   construct_wksxp(feature, srid)
@@ -76,6 +80,10 @@ geo_point <- function(xy = geo_xy(), srid = NA)  {
 #' @rdname geo_collection
 #' @export
 geo_linestring <- function(xy = geo_xy(), srid = NA)  {
+  if (!inherits(xy, "geovctrs_xy")) {
+    xy <- as_geo_xy(xy)
+  }
+
   feature <- structure(as.matrix(xy), class = "wk_linestring")
   attr(feature, "has_z") <- inherits(xy, "geovctrs_xyz")
   construct_wksxp(feature, srid)
@@ -88,6 +96,10 @@ geo_polygon <- function(xy = geo_xy(), ring = 1L, srid = NA)  {
     return(new_wk_wksxp(list(structure(list(), class = "wk_polygon"))))
   }
   stopifnot(vec_size(srid) == 1)
+
+  if (!inherits(xy, "geovctrs_xy")) {
+    xy <- as_geo_xy(xy)
+  }
 
   data <- vec_data(xy)
   raw_wksxp <- wk::coords_polygon_translate_wksxp(
@@ -106,19 +118,19 @@ geo_polygon <- function(xy = geo_xy(), ring = 1L, srid = NA)  {
 
 #' @rdname geo_collection
 #' @export
-geo_multipoint <- function(feature = character(), srid = NA) {
+geo_multipoint <- function(feature = wksxp(), srid = NA) {
   construct_multi_type(feature, type_id = 1, srid = srid)
 }
 
 #' @rdname geo_collection
 #' @export
-geo_multilinestring <- function(feature = character(), srid = NA) {
+geo_multilinestring <- function(feature = wksxp(), srid = NA) {
   construct_multi_type(feature, type_id = 2, srid = srid)
 }
 
 #' @rdname geo_collection
 #' @export
-geo_multipolygon <- function(feature = character(), srid = NA) {
+geo_multipolygon <- function(feature = wksxp(), srid = NA) {
   construct_multi_type(feature, type_id = 3, srid = srid)
 }
 

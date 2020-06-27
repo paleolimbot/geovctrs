@@ -28,15 +28,4 @@ test_that("sf/sfc works with as_geovctr()", {
     nrow(geo_set_z(sf_nc[1, ], 4:6)),
     3L
   )
-
-  # check with plot
-  vdiffr::expect_doppelganger(
-    "sfc plot",
-    function() geo_plot(sfc_tiny)
-  )
-
-  vdiffr::expect_doppelganger(
-    "sf plot",
-    function() geo_plot(sf_tiny)
-  )
 })

@@ -25,19 +25,19 @@
 #'   [tidyr::unnest()] and [dplyr::group_by()] / [dplyr::mutate()] /
 #'   [dplyr::summarise()].
 #'
-#' - Inherit from `"geovctr"`. This makes it work automatically with
-#'   functions like [geo_plot()] and [geo_bbox()] that have a default
+#' - Have `is_geovctr()` return `TRUE`. This makes it work automatically with
+#'   functions like [geo_bbox()] that have a default
 #'   implementation for something that can be coerced to [wkt()],
-#'   [wkb()], or [geo_collection()].
+#'   [wkb()], or [wksxp()].
 #'
-#' - Have the ability to be casted to [wkt()], [wkb()], and [geo_collection()]
-#'   using [vec_cast()]. These casts power the default implementations of
-#'   functions like [geo_plot()] and [geo_bbox()], and allow geometries to
-#'   be combined using [vctrs::vec_c()] (which powers row-binding in
-#'   tidyverse functions). This means implementing the appropriate
-#'   [vctrs::vec_cast()] methods for a class.
+#' - Have the ability to be coerced to [wkt()], [wkb()], and [wksxp()]
+#'   using [as_wkt()], [as_wkb()], and [as_wksxp()].
+#'   These casts power the default implementations of
+#'   functions like [geo_bbox()]. In addition, a [vctrs::vec_cast()]
+#'   method should be provided so that row-binding and other vector
+#'   operations work with functions that might return a simpler type.
 #'
-#' - Have the ability to be combined with [wkt()], [wkb()], and [geo_collection()]
+#' - Have the ability to be combined with [wkt()], [wkb()], and [wksxp()]
 #'   using [vec_c()] in both directions. This helps support processing functions
 #'   that return a class to be combined with the output of other functions.
 #'   This might require a [vctrs::vec_ptype()] implementation for

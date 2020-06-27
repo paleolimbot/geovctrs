@@ -14,9 +14,9 @@
 \alias{NA_rect_}
 \title{Missing, empty, and non-finite geometries}
 \format{
-An object of class \code{wk_wkt} (inherits from \code{wk_vctr}, \code{geovctr}) of length 1.
+An object of class \code{wk_wkt} (inherits from \code{wk_vctr}) of length 1.
 
-An object of class \code{wk_wkb} (inherits from \code{wk_vctr}, \code{geovctr}) of length 1.
+An object of class \code{wk_wkb} (inherits from \code{wk_vctr}) of length 1.
 
 An object of class \code{NULL} of length 0.
 

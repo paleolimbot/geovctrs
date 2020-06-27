@@ -28,6 +28,6 @@ The \code{\link[=geo_segment]{geo_segment()}} type is useful as an efficient rep
 line segments stored using column vectors.
 }
 \examples{
-geo_plot(geo_segment(0, 0, 10, -10:10))
+plot(geo_segment(0, 0, 10, -10:10))
 
 }

@@ -10,7 +10,7 @@
 \alias{geo_multipolygon}
 \title{Geometry constructors}
 \usage{
-geo_collection(feature = character(), srid = NA)
+geo_collection(feature = wksxp(), srid = NA)
 
 geo_point(xy = geo_xy(), srid = NA)
 
@@ -18,15 +18,15 @@ geo_linestring(xy = geo_xy(), srid = NA)
 
 geo_polygon(xy = geo_xy(), ring = 1L, srid = NA)
 
-geo_multipoint(feature = character(), srid = NA)
+geo_multipoint(feature = wksxp(), srid = NA)
 
-geo_multilinestring(feature = character(), srid = NA)
+geo_multilinestring(feature = wksxp(), srid = NA)
 
-geo_multipolygon(feature = character(), srid = NA)
+geo_multipolygon(feature = wksxp(), srid = NA)
 }
 \arguments{
-\item{feature}{A \code{\link[=geo_collection]{geo_collection()}} of one or more features.
-for multi geometries, this must be a collection that only contains
+\item{feature}{A vector of one or more features.
+For multi geometries, this must be a collection that only contains
 that type (e.g., multipolygons can only be composed of polygons).}
 
 \item{srid}{A spatial reference identifier, coerced to
@@ -43,13 +43,13 @@ matters: the first value encountered will identify the outer ring.}
 A \code{\link[wk:wksxp]{wk::wksxp()}} of length 1.
 }
 \description{
-A \code{\link[=geo_collection]{geo_collection()}} is an in-memory R-native format that can store most
-geometries. It is used to power \code{\link[=geo_plot]{geo_plot()}} in addition to providing
-constructors for geometries from data frames (possibly using
-\code{\link[dplyr:group_by]{dplyr::group_by()}} and \code{\link[dplyr:summarise]{dplyr::summarise()}}). Collections contain zero
+These functions provide a means to construct geometries from data
+frames, possibly using
+\code{\link[dplyr:group_by]{dplyr::group_by()}} and \code{\link[dplyr:summarise]{dplyr::summarise()}}. Collections contain zero
 or more objects of type \code{\link[=geo_point]{geo_point()}}, \code{\link[=geo_linestring]{geo_linestring()}}, \code{\link[=geo_polygon]{geo_polygon()}},
 \code{\link[=geo_multipoint]{geo_multipoint()}}, \code{\link[=geo_multilinestring]{geo_multilinestring()}}, and/or
-\code{\link[=geo_multipolygon]{geo_multipolygon()}}.
+\code{\link[=geo_multipolygon]{geo_multipolygon()}}. See \code{\link[wk:coords_point_translate_wkt]{wk::coords_point_translate_wkb()}} and related
+functions for high-performance methods to create these vectors.
 }
 \examples{
 # geo_point() and family all return a wk::wksxp() of length 1
