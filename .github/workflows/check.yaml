@@ -55,12 +55,12 @@ jobs:
         shell: Rscript {0}
 
       - name: Check (not linux)
-        if: runner.os != "Linux"
+        if: runner.os != 'Linux'
         run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
       - name: Check (Linux)
-        if: runner.os == "Linux"
+        if: runner.os == 'Linux'
         env:
           _R_CHECK_FORCE_SUGGESTS_: false
         run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning", check_dir = "check")
