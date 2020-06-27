@@ -5,6 +5,7 @@
 #include "wk/wkb-reader.hpp"
 #include "wk/rcpp-sexp-writer.hpp"
 #include "wk/rcpp-sexp-reader.hpp"
+#include "wk/rcpp-translate.hpp"
 #include "geovctrs/wk-xy.hpp"
 #include "geovctrs/wk-xyz.hpp"
 #include "geovctrs/wk-segment.hpp"
@@ -68,56 +69,6 @@ public:
     GeovctrsWKRectReader<List, NumericVector, IntegerVector>(provider) {}
 };
 
-void cpp_translate_base(WKReader& reader, WKWriter& writer,
-                        int includeZ, int includeM, int includeSRID) {
-  writer.setIncludeZ(includeZ);
-  writer.setIncludeM(includeM);
-  writer.setIncludeSRID(includeSRID);
-
-  reader.setHandler(&writer);
-
-  while (reader.hasNextFeature()) {
-    checkUserInterrupt();
-    reader.iterateFeature();
-  }
-}
-
-CharacterVector cpp_translate_base_wkt(WKReader& reader,
-                                       int includeZ, int includeM, int includeSRID,
-                                       int precision, bool trim) {
-  WKCharacterVectorExporter exporter(reader.nFeatures());
-  exporter.setRoundingPrecision(precision);
-  exporter.setTrim(trim);
-  WKTWriter writer(exporter);
-
-  cpp_translate_base(reader, writer, includeZ, includeM, includeSRID);
-
-  return exporter.output;
-}
-
-List cpp_translate_base_wkb(WKReader& reader,
-                            int includeZ, int includeM, int includeSRID,
-                            int endian, int bufferSize) {
-  WKRawVectorListExporter exporter(reader.nFeatures());
-  exporter.setBufferSize(bufferSize);
-  WKBWriter writer(exporter);
-  writer.setEndian(endian);
-
-  cpp_translate_base(reader, writer, includeZ, includeM, includeSRID);
-
-  return exporter.output;
-}
-
-List cpp_translate_base_wksxp(WKReader& reader,
-                              int includeZ, int includeM, int includeSRID) {
-  WKRcppSEXPExporter exporter(reader.nFeatures());
-  WKRcppSEXPWriter writer(exporter);
-
-  cpp_translate_base(reader, writer, includeZ, includeM, includeSRID);
-
-  return exporter.output;
-}
-
 List cpp_translate_base_xy(WKReader& reader) {
   List xy = List::create(
     _["x"] = NumericVector(reader.nFeatures()),
@@ -126,7 +77,7 @@ List cpp_translate_base_xy(WKReader& reader) {
 
   RcppFieldsExporter exporter(xy);
   RcppXYWriter writer(exporter);
-  cpp_translate_base(reader, writer, false, false, false);
+  wk::translate_base(reader, writer, false, false, false);
   return xy;
 }
 
@@ -139,7 +90,7 @@ List cpp_translate_base_xyz(WKReader& reader) {
 
   RcppFieldsExporter exporter(xyz);
   RcppXYZWriter writer(exporter);
-  cpp_translate_base(reader, writer, 2, false, false);
+  wk::translate_base(reader, writer, 2, false, false);
   return xyz;
 }
 
@@ -154,7 +105,7 @@ List cpp_translate_base_segment(WKReader& reader, int includeSRID) {
 
   RcppFieldsExporter exporter(segment);
   RcppSegmentWriter writer(exporter);
-  cpp_translate_base(reader, writer, false, false, includeSRID);
+  wk::translate_base(reader, writer, false, false, includeSRID);
   return segment;
 }
 
@@ -164,21 +115,21 @@ List cpp_translate_base_segment(WKReader& reader, int includeSRID) {
 CharacterVector cpp_translate_xy_wkt(List xy, int precision, int trim) {
   RcppFieldsProvider provider(xy);
   RcppXYReader reader(provider);
-  return cpp_translate_base_wkt(reader, 0, 0, 0, precision, trim);
+  return wk::translate_wkt(reader, precision, trim, 0, 0, 0);
 }
 
 // [[Rcpp::export]]
 List cpp_translate_xy_wkb(List xy, int endian, int bufferSize) {
   RcppFieldsProvider provider(xy);
   RcppXYReader reader(provider);
-  return cpp_translate_base_wkb(reader, 0, 0, 0, endian, bufferSize);
+  return wk::translate_wkb(reader, endian, bufferSize, 0, 0, 0);
 }
 
 // [[Rcpp::export]]
 List cpp_translate_xy_wksxp(List xy) {
   RcppFieldsProvider provider(xy);
   RcppXYReader reader(provider);
-  return cpp_translate_base_wksxp(reader, 0, 0, 0);
+  return wk::translate_wksxp(reader, 0, 0, 0);
 }
 
 // [[Rcpp::export]]
@@ -208,21 +159,21 @@ List cpp_translate_wksxp_xy(List wksxp) {
 CharacterVector cpp_translate_xyz_wkt(List xyz, int precision, int trim) {
   RcppFieldsProvider provider(xyz);
   RcppXYZReader reader(provider);
-  return cpp_translate_base_wkt(reader, true, 0, 0, precision, trim);
+  return wk::translate_wkt(reader, precision, trim, true, 0, 0);
 }
 
 // [[Rcpp::export]]
 List cpp_translate_xyz_wkb(List xyz, int endian, int bufferSize) {
   RcppFieldsProvider provider(xyz);
   RcppXYZReader reader(provider);
-  return cpp_translate_base_wkb(reader, true, 0, 0, endian, bufferSize);
+  return wk::translate_wkb(reader, endian, bufferSize, true, 0, 0);
 }
 
 // [[Rcpp::export]]
 List cpp_translate_xyz_wksxp(List xyz) {
   RcppFieldsProvider provider(xyz);
   RcppXYZReader reader(provider);
-  return cpp_translate_base_wksxp(reader, true, 0, 0);
+  return wk::translate_wksxp(reader, true, 0, 0);
 }
 
 // [[Rcpp::export]]
@@ -252,21 +203,21 @@ List cpp_translate_wksxp_xyz(List wksxp) {
 CharacterVector cpp_translate_segment_wkt(List segment, int precision, int trim) {
   RcppFieldsProvider provider(segment);
   RcppSegmentReader reader(provider);
-  return cpp_translate_base_wkt(reader, 0, 0, 0, precision, trim);
+  return wk::translate_wkt(reader, precision, trim, 0, 0, 0);
 }
 
 // [[Rcpp::export]]
 List cpp_translate_segment_wkb(List segment, int endian, int bufferSize) {
   RcppFieldsProvider provider(segment);
   RcppSegmentReader reader(provider);
-  return cpp_translate_base_wkb(reader, 0, 0, 0, endian, bufferSize);
+  return wk::translate_wkb(reader, endian, bufferSize, 0, 0, 0);
 }
 
 // [[Rcpp::export]]
 List cpp_translate_segment_wksxp(List segment) {
   RcppFieldsProvider provider(segment);
   RcppSegmentReader reader(provider);
-  return cpp_translate_base_wksxp(reader, 0, 0, 0);
+  return wk::translate_wksxp(reader, 0, 0, 0);
 }
 
 // [[Rcpp::export]]
@@ -296,19 +247,19 @@ List cpp_translate_wksxp_segment(List wksxp, int includeSRID) {
 CharacterVector cpp_translate_rect_wkt(List rect, int precision, int trim) {
   RcppFieldsProvider provider(rect);
   RcppRectReader reader(provider);
-  return cpp_translate_base_wkt(reader, 0, 0, 0, precision, trim);
+  return wk::translate_wkt(reader, precision, trim, 0, 0, 0);
 }
 
 // [[Rcpp::export]]
 List cpp_translate_rect_wkb(List rect, int endian, int bufferSize) {
   RcppFieldsProvider provider(rect);
   RcppRectReader reader(provider);
-  return cpp_translate_base_wkb(reader, 0, 0, 0, endian, bufferSize);
+  return wk::translate_wkb(reader, endian, bufferSize, 0, 0, 0);
 }
 
 // [[Rcpp::export]]
 List cpp_translate_rect_wksxp(List rect) {
   RcppFieldsProvider provider(rect);
   RcppRectReader reader(provider);
-  return cpp_translate_base_wksxp(reader, 0, 0, 0);
+  return wk::translate_wksxp(reader, 0, 0, 0);
 }
