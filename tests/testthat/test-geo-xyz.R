@@ -35,6 +35,28 @@ test_that("geo_xyz c() works", {
 })
 
 test_that("coersion to xy works", {
+  # null
+  expect_equal(as_geo_xyz(wkt(NA_character_)), geo_xyz(NA, NA, NA))
+  expect_equal(as_geo_xyz(as_wkb(NA_character_)), geo_xyz(NA, NA, NA))
+  expect_equal(as_geo_xyz(as_wksxp(NA_character_)), geo_xyz(NA, NA, NA))
+
+  # empty
+  expect_equal(as_geo_xyz(wkt("POINT EMPTY")), geo_xyz(NA, NA, NA))
+  expect_equal(as_geo_xyz(as_wkb("POINT EMPTY")), geo_xyz(NA, NA, NA))
+  expect_equal(as_geo_xyz(as_wksxp("POINT EMPTY")), geo_xyz(NA, NA, NA))
+
+  # partially non-finite
+  expect_equal(
+    as_geo_xyz(wkt(c("POINT Z (1 2 3)", "POINT (3 4)"))),
+    geo_xyz(c(1, 3), c(2, 4), c(3, NA))
+  )
+
+  # non-point
+  expect_error(
+    as_geo_xyz(wkt("LINESTRING (0 0 , 1 1)")),
+    "Can't create XY", class = "std::runtime_error"
+  )
+
   # self-cast
   expect_identical(vec_cast(geo_xyz(), geo_xyz()), geo_xyz())
   expect_identical(as_geo_xyz(geo_xyz()), geo_xyz())
@@ -51,34 +73,39 @@ test_that("coersion to xy works", {
   expect_identical(as_geo_xyz(geo_xy(1, 2)), geo_xyz(1, 2, NA))
 
   # error cast
-  expect_error(vec_cast(394, geo_xyz()), class = "vctrs_error_incompatible_cast")
+  expect_error(vec_cast(394, geo_xyz()), class = "vctrs_error_incompatible_type")
   expect_error(vec_cast(geo_xyz(1, 2, 3), geo_xy()), class = "vctrs_error_cast_lossy")
 
   # wkt
   expect_identical(
-    as_geo_xyz(geo_wkt("POINT Z (30 10 20)")),
+    as_geo_xyz(wkt("POINT Z (30 10 20)")),
     geo_xyz(30, 10, 20)
   )
 
   expect_identical(
-    vec_cast(geo_wkt("POINT  Z (30 10 20)"), geo_xyz()),
+    vec_cast(wkt("POINT  Z (30 10 20)"), geo_xyz()),
     geo_xyz(30, 10, 20)
   )
 
   # wkb
   expect_identical(
-    as_geo_xyz(as_geo_wkb(geo_wkt("POINT Z (30 10 20)"))),
+    as_geo_xyz(as_wkb(wkt("POINT Z (30 10 20)"))),
     geo_xyz(30, 10, 20)
   )
 
   expect_identical(
-    vec_cast(as_geo_wkb(geo_wkt("POINT Z (30 10 20)")), geo_xyz()),
+    vec_cast(as_wkb(wkt("POINT Z (30 10 20)")), geo_xyz()),
     geo_xyz(30, 10, 20)
   )
 
-  # collection
+  # wkb
   expect_identical(
-    as_geo_xyz(geo_point(geo_xyz(30, 10, 20))),
+    as_geo_xyz(as_wksxp(wkt("POINT Z (30 10 20)"))),
+    geo_xyz(30, 10, 20)
+  )
+
+  expect_identical(
+    vec_cast(as_wksxp(wkt("POINT Z (30 10 20)")), geo_xyz()),
     geo_xyz(30, 10, 20)
   )
 })

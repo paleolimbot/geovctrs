@@ -4,11 +4,13 @@
 \name{geovctrs-package}
 \alias{geovctrs}
 \alias{geovctrs-package}
-\title{geovctrs: Common Classes and Data Structures for Geometry Vectors}
+\title{geovctrs: Efficient Data Structures for Geometry Vectors}
 \description{
-Provides a set of common data structures
-  to unite the plethora of geospatial processing packages
-  in the R package ecosystem.
+Provides a set of data structures
+  to efficiently encode simple geometries such as points,
+  segments, and rectangles. Coercion functions are provided
+  such that any vector of geometry-like objects can be used
+  interchangeably.
 }
 \seealso{
 Useful links:

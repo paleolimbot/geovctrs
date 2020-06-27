@@ -31,6 +31,17 @@ test_that("geo_xy c() works", {
 })
 
 test_that("coersion to xy works", {
+  # null
+  expect_equal(as_geo_xy(wkt(NA_character_)), geo_xy(NA, NA))
+  expect_equal(as_geo_xy(as_wkb(NA_character_)), geo_xy(NA, NA))
+  expect_equal(as_geo_xy(as_wksxp(NA_character_)), geo_xy(NA, NA))
+
+  # non-point
+  expect_error(
+    as_geo_xy(wkt("LINESTRING (0 0 , 1 1)")),
+    "Can't create XY", class = "std::runtime_error"
+  )
+
   # cast to- and from xy
   expect_identical(vec_cast(geo_xyz(), geo_xy()), geo_xy())
   expect_identical(as_geo_xy(geo_xyz()), geo_xy())
@@ -47,38 +58,38 @@ test_that("coersion to xy works", {
   expect_identical(as_geo_xy(geo_xy()), geo_xy())
 
   # error cast
-  expect_error(vec_cast(394, geo_xy()), class = "vctrs_error_incompatible_cast")
+  expect_error(vec_cast(394, geo_xy()), class = "vctrs_error_incompatible_type")
 
   # wkt
   expect_identical(
-    as_geo_xy(geo_wkt("POINT (30 10)")),
+    as_geo_xy(wkt("POINT (30 10)")),
     geo_xy(30, 10)
   )
 
   expect_identical(
-    vec_cast(geo_wkt("POINT (30 10)"), geo_xy()),
+    vec_cast(wkt("POINT (30 10)"), geo_xy()),
     geo_xy(30, 10)
   )
 
   # wkb
   expect_identical(
-    as_geo_xy(as_geo_wkb(geo_wkt("POINT (30 10)"))),
+    as_geo_xy(as_wkb(wkt("POINT (30 10)"))),
     geo_xy(30, 10)
   )
 
   expect_identical(
-    vec_cast(as_geo_wkb(geo_wkt("POINT (30 10)")), geo_xy()),
+    vec_cast(as_wkb(wkt("POINT (30 10)")), geo_xy()),
     geo_xy(30, 10)
   )
 
-  # collection
+  # wksxp
   expect_identical(
-    as_geo_xy(geo_point(geo_xy(30, 10))),
+    as_geo_xy(as_wksxp(wkt("POINT (30 10)"))),
     geo_xy(30, 10)
   )
 
   expect_identical(
-    as_geo_xy(geo_point(geo_xy(30, 10))),
+    vec_cast(as_wksxp(wkt("POINT (30 10)")), geo_xy()),
     geo_xy(30, 10)
   )
 })

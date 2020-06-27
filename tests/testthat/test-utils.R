@@ -1,68 +1,6 @@
 
-test_that("rep_along_or_fail function works", {
-  expect_identical(rep_along_or_fail(1, 1:3), c(1, 1, 1))
-  expect_identical(rep_along_or_fail(1:3, 1:3), c(1L, 2L, 3L))
-  expect_error(rep_along_or_fail(1:2, 1:3), class = "rep_len_error")
-})
-
-test_that("rep_len_or_fail function works", {
-  expect_identical(rep_len_or_fail(1, 3), c(1, 1, 1))
-  expect_identical(rep_len_or_fail(1:3, 3), c(1L, 2L, 3L))
-  expect_identical(rep_len_or_fail(1:3, 1), c(1L, 2L, 3L))
-  expect_error(rep_len_or_fail(1:2, 3), class = "rep_len_error")
-})
-
-test_that("geos asserter works", {
-  expect_error(assert_geos_version("10.0.0"), "is required")
-})
-
-test_that("as_part_identifier() works", {
-  expect_identical(
-    as_part_identifier(1:5, g = c("zgroup1", "group2", "zgroup1", "group3", "group2")),
-    list(
-      xy = c(1L, 3L, 2L, 5L, 4L),
-      g = c(1L, 1L, 2L, 2L, 3L)
-    )
-  )
-
-  # NAs shouldn't matter (keep with row order)
-  expect_identical(
-    as_part_identifier(1:5, g = c(NA, "group2", NA, "group3", "group2")),
-    list(
-      xy = c(1L, 3L, 2L, 5L, 4L),
-      g = c(1L, 1L, 2L, 2L, 3L)
-    )
-  )
-})
-
 test_that("SRID summariser works", {
   expect_warning(summarise_srids(1:2), "SRID")
   expect_silent(summarise_srids(1))
   expect_silent(summarise_srids(integer()))
-})
-
-test_that("grepl_na works", {
-  expect_identical(grepl_na("something", NA_character_), NA)
-  expect_identical(grepl_na("something", "something"), TRUE)
-  expect_identical(grepl_na("something", "nothing"), FALSE)
-})
-
-test_that("parameter recycler works", {
-  expect_length(recycle_parameter(double(), a = 1)$a, 0)
-  expect_length(recycle_parameter(1, a = 1)$a, 1)
-  expect_length(recycle_parameter(1:2, a = 1)$a, 2)
-  expect_length(recycle_parameter(1:2, a = 1, b = 1:2)$a, 2)
-
-  expect_length(recycle_parameter(1, a = 1:2)$a, 2)
-  expect_length(recycle_parameter(1:2, a = 1:2)$a, 2)
-  expect_length(recycle_parameter(1:2, a = 1:2, b = 1:2)$a, 2)
-
-  expect_error(
-    recycle_parameter(double(), a = 1:2)$a,
-    class = "vctrs_error_recycle_incompatible_size"
-  )
-  expect_error(
-    recycle_parameter(1, a = 1:2, b = 1:3)$a,
-    class = "vctrs_error_incompatible_size"
-  )
 })

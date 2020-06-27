@@ -11,7 +11,7 @@ using namespace Rcpp;
 
 // WKB can't really represent an empty point, but this hack
 // works with the WKB reader in GEOS and sf.
-// other consumers of geo_wkb() objects might want to be careful
+// other consumers of wkb() objects might want to be careful
 // passing this on to external software
 const size_t WKB_HACK_EMPTY_POINT_SIZE = 21;
 const unsigned char WKB_HACK_EMPTY_POINT_LITTLE_ENDIAN[] = {
@@ -46,9 +46,9 @@ public:
   GEOSWKTWriter *wktWriter;
 
   GeovctrsGEOSWKTExporter(CharacterVector ptype) {
-    this->trim = ptype.attr("trim");
-    this->precision = ptype.attr("precision");
-    this->dimensions = ptype.attr("dimensions");
+    this->trim = true;
+    this->precision = 16;
+    this->dimensions = 3;
     this->wktWriter = NULL;
   }
 
@@ -95,9 +95,9 @@ public:
   int endian;
 
   GeovctrsGEOSWKBExporter(List ptype) {
-    this->includeSRID = ptype.attr("include_srid");
-    this->dimensions = ptype.attr("dimensions");
-    this->endian = ptype.attr("endian");
+    this->includeSRID = NA_INTEGER;
+    this->dimensions = 3;
+    this->endian = NA_INTEGER;
     this->wkbWriter = NULL;
   }
 

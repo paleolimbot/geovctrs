@@ -46,10 +46,16 @@ geo_range.default <- function(x, na.rm = FALSE, finite = FALSE) {
 #' @rdname geo_lim
 #' @export
 geo_range.geovctrs_lim <- function(x, na.rm = FALSE, finite = FALSE) {
-  lim_range <- range(
-    c(field(x, "lower"), field(x, "upper")),
-    na.rm = na.rm,
-    finite = finite
+  # remove empty ranges from x such that geo_range(empty, empty) == empty
+  lim_width <- field(x, "upper") - field(x, "lower")
+  x <- x[is.na(lim_width) | (lim_width != -Inf)]
+
+  lim_range <- suppressWarnings(
+    range(
+      c(field(x, "lower"), field(x, "upper")),
+      na.rm = na.rm,
+      finite = finite
+    )
   )
 
   geo_lim(lim_range[1], lim_range[2])
@@ -86,6 +92,11 @@ format.geovctrs_lim <- function(x, ...) {
     format(field(x, "lower"), trim = TRUE, ...),
     format(field(x, "upper"), trim = TRUE, ...)
   )
+}
+
+#' @export
+as.character.geovctrs_lim <- function(x, ...) {
+  format(x, ...)
 }
 
 #' @rdname new_geovctrs_lim

@@ -3,20 +3,20 @@
 \name{geo_geometry_type}
 \alias{geo_geometry_type}
 \alias{geo_geometry_type.default}
-\alias{geo_geometry_type.geovctr}
-\alias{geo_geometry_type.geovctrs_wkt}
-\alias{geo_geometry_type.geovctrs_wkb}
+\alias{geo_geometry_type.wk_wkt}
+\alias{geo_geometry_type.wk_wkb}
+\alias{geo_geometry_type.wk_wksxp}
 \title{Extract feature geometry type}
 \usage{
 geo_geometry_type(x)
 
 \method{geo_geometry_type}{default}(x)
 
-\method{geo_geometry_type}{geovctr}(x)
+\method{geo_geometry_type}{wk_wkt}(x)
 
-\method{geo_geometry_type}{geovctrs_wkt}(x)
+\method{geo_geometry_type}{wk_wkb}(x)
 
-\method{geo_geometry_type}{geovctrs_wkb}(x)
+\method{geo_geometry_type}{wk_wksxp}(x)
 }
 \arguments{
 \item{x}{A geometry-like object, or one that can be

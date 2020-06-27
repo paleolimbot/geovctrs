@@ -43,9 +43,11 @@ guy's SRID!.
 }
 \examples{
 # two points with an SRID
-geometries <- c(
-  geo_point(geo_xy(259473, 4876249), srid = 26920),
-  geo_point(geo_xy(-66, 44), srid = 4326)
+geometries <- wkt(
+  c(
+    "SRID=26920;POINT (259473 4876249)",
+    "SRID=4326;POINT (-66 44)"
+  )
 )
 
 geo_srid(geometries)
@@ -53,7 +55,7 @@ geo_srid(geo_set_srid(geometries, NA))
 
 # SRIDs are propogated through conversions,
 # or discarded with a warning
-geo_srid(as_geo_wkb(geometries))
+geo_srid(as_wkb(geometries))
 geo_srid(as_geo_xy(geometries))
 
 }

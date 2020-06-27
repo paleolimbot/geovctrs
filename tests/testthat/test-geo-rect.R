@@ -11,8 +11,8 @@ test_that("geo_rect class works", {
 
 test_that("geo_rect c() works", {
   rect <- geo_rect(xmin = 0:5, ymin = 0:5, xmax = 1:6, ymax = 1:6)
-  expect_is(c(rect, geo_wkt("POINT (30 10)")), "geovctrs_wkt")
-  expect_is(c(rect, as_geo_wkb(geo_wkt("POINT (30 10)"))), "geovctrs_wkb")
+  expect_is(c(rect, wkt("POINT (30 10)")), "wk_wkt")
+  expect_is(c(rect, as_wkb(wkt("POINT (30 10)"))), "wk_wkb")
   expect_is(c(rect, rect), "geovctrs_rect")
   expect_error(vec_c(5, rect), class = "vctrs_error_incompatible_type")
 })
@@ -36,5 +36,5 @@ test_that("coersion to rect works", {
   expect_identical(as_geo_rect(geo_rect()), geo_rect())
 
   # error cast
-  expect_error(vec_cast(394, geo_rect()), class = "vctrs_error_incompatible_cast")
+  expect_error(vec_cast(394, geo_rect()), class = "vctrs_error_incompatible_type")
 })

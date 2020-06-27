@@ -17,7 +17,7 @@ new_geovctrs_xyz <- function(x = list(x = double(), y = double(), z = double()))
   vec_assert(x$x, double())
   vec_assert(x$y, double())
   vec_assert(x$z, double())
-  new_rcrd(x, class = c("geovctrs_xyz", "geovctrs_xy", "geovctr"))
+  new_rcrd(x, class = c("geovctrs_xyz", "geovctrs_xy"))
 }
 
 #' @export
@@ -39,6 +39,11 @@ format.geovctrs_xyz <- function(x, ...) {
     format(field(x, "y"), trim = TRUE, ...),
     format(field(x, "z"), trim = TRUE, ...)
   )
+}
+
+#' @export
+as.character.geovctrs_xyz <- function(x, ...) {
+  format(x, ...)
 }
 
 #' @export
@@ -75,13 +80,13 @@ as_geo_xyz.default <- function(x, ...) {
 #' @export vec_cast.geovctrs_xyz
 #' @rdname new_geovctrs_xy
 vec_cast.geovctrs_xyz <- function(x, to, ...) {
-  UseMethod("vec_cast.geovctrs_xyz")
+  UseMethod("vec_cast.geovctrs_xyz") # nocov
 }
 
 #' @method vec_cast.geovctrs_xyz default
 #' @export
 vec_cast.geovctrs_xyz.default <- function(x, to, ...) {
-  vec_default_cast(x, to)
+  vec_default_cast(x, to) # nocov
 }
 
 #' @method vec_cast.geovctrs_xyz geovctrs_xyz
@@ -98,22 +103,22 @@ vec_cast.geovctrs_xyz.geovctrs_xy <- function(x, to, ...) {
   new_geovctrs_xyz(x)
 }
 
-#' @method vec_cast.geovctrs_xyz geovctrs_wkt
+#' @method vec_cast.geovctrs_xyz wk_wkt
 #' @export
-vec_cast.geovctrs_xyz.geovctrs_wkt <- function(x, to, ...) {
-  geovctrs_cpp_convert(x, to)
+vec_cast.geovctrs_xyz.wk_wkt <- function(x, to, ...) {
+  new_geovctrs_xyz(cpp_translate_wkt_xyz(x))
 }
 
-#' @method vec_cast.geovctrs_xyz geovctrs_wkb
+#' @method vec_cast.geovctrs_xyz wk_wkb
 #' @export
-vec_cast.geovctrs_xyz.geovctrs_wkb <- function(x, to, ...) {
-  geovctrs_cpp_convert(x, to)
+vec_cast.geovctrs_xyz.wk_wkb <- function(x, to, ...) {
+  new_geovctrs_xyz(cpp_translate_wkb_xyz(x))
 }
 
-#' @method vec_cast.geovctrs_xyz geovctrs_collection
+#' @method vec_cast.geovctrs_xyz wk_wksxp
 #' @export
-vec_cast.geovctrs_xyz.geovctrs_collection <- function(x, to, ...) {
-  geovctrs_cpp_convert(x, to)
+vec_cast.geovctrs_xyz.wk_wksxp <- function(x, to, ...) {
+  new_geovctrs_xyz(cpp_translate_wksxp_xyz(x))
 }
 
 # ------------- prototypes ------------
@@ -123,7 +128,7 @@ vec_cast.geovctrs_xyz.geovctrs_collection <- function(x, to, ...) {
 #' @export vec_ptype2.geovctrs_xyz
 #' @rdname new_geovctrs_xy
 vec_ptype2.geovctrs_xyz <- function(x, y, ...) {
-  UseMethod("vec_ptype2.geovctrs_xyz", y)
+  UseMethod("vec_ptype2.geovctrs_xyz", y) # nocov
 }
 
 #' @method vec_ptype2.geovctrs_xyz default
@@ -144,20 +149,20 @@ vec_ptype2.geovctrs_xyz.geovctrs_xy <- function(x, y, ..., x_arg = "x", y_arg = 
   geo_xyz()
 }
 
-#' @method vec_ptype2.geovctrs_xyz geovctrs_wkt
+#' @method vec_ptype2.geovctrs_xyz wk_wkt
 #' @export
-vec_ptype2.geovctrs_xyz.geovctrs_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_wkt()
+vec_ptype2.geovctrs_xyz.wk_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  wkt()
 }
 
-#' @method vec_ptype2.geovctrs_xyz geovctrs_wkb
+#' @method vec_ptype2.geovctrs_xyz wk_wkb
 #' @export
-vec_ptype2.geovctrs_xyz.geovctrs_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_wkb()
+vec_ptype2.geovctrs_xyz.wk_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  wkb()
 }
 
-#' @method vec_ptype2.geovctrs_xyz geovctrs_collection
+#' @method vec_ptype2.geovctrs_xyz wk_wksxp
 #' @export
-vec_ptype2.geovctrs_xyz.geovctrs_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_collection()
+vec_ptype2.geovctrs_xyz.wk_wksxp <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  wksxp()
 }

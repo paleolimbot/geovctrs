@@ -13,8 +13,8 @@
 #' @export
 #'
 #' @examples
-#' wkt <- geo_wkt(c("POINT (30 10)", "POINT EMPTY", NA))
-#' geo_coalesce(wkt, geo_wkt("POINT (0 0)"))
+#' wkt <- wkt(c("POINT (30 10)", "POINT EMPTY", NA))
+#' geo_coalesce(wkt, wkt("POINT (0 0)"))
 #'
 geo_coalesce <- function(x, ...) {
   UseMethod("geo_coalesce")
@@ -26,7 +26,36 @@ geo_coalesce.default <- function(x, ...) {
 }
 
 #' @export
-geo_coalesce.geovctr <- function(x, ...) {
+geo_coalesce.wk_wkt <- function(x, ...) {
+  geo_coalesce_default(x, ...)
+}
+
+#' @export
+geo_coalesce.wk_wkb <- function(x, ...) {
+  geo_coalesce_default(x, ...)
+}
+
+#' @export
+geo_coalesce.wk_wksxp <- function(x, ...) {
+  geo_coalesce_default(x, ...)
+}
+
+#' @export
+geo_coalesce.geovctrs_xy <- function(x, ...) {
+  geo_coalesce_default(x, ...)
+}
+
+#' @export
+geo_coalesce.geovctrs_segment <- function(x, ...) {
+  geo_coalesce_default(x, ...)
+}
+
+#' @export
+geo_coalesce.geovctrs_rect <- function(x, ...) {
+  geo_coalesce_default(x, ...)
+}
+
+geo_coalesce_default <- function(x, ...) {
   values <- vec_recycle_common(x, ...)
 
   out <- values[[1]]

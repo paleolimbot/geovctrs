@@ -11,7 +11,8 @@
 \title{S3 details for geovctrs_segment}
 \usage{
 new_geovctrs_segment(
-  x = list(start = geo_xy(), end = geo_xy(), srid = integer())
+  x = list(x0 = double(), y0 = double(), x1 = double(), y1 = double(), srid =
+    integer())
 )
 
 is_geovctrs_segment(x)

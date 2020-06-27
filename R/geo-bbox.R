@@ -22,8 +22,8 @@
 #' @export
 #'
 #' @examples
-#' geo_bbox(geo_wkt(c("POINT (30 10)", "POINT EMPTY")))
-#' geo_envelope(geo_wkt(c("POINT (30 10)", "POINT EMPTY")))
+#' geo_bbox(wkt(c("POINT (30 10)", "POINT EMPTY")))
+#' geo_envelope(wkt(c("POINT (30 10)", "POINT EMPTY")))
 #'
 geo_bbox <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   UseMethod("geo_bbox")
@@ -35,22 +35,44 @@ geo_bbox.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 }
 
 #' @export
-geo_bbox.geovctrs_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  ranges <- unclass(wk::wkb_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
-  ranges$srid <- summarise_srids(geo_srid(x))
-  new_geovctrs_rect(ranges)
-}
-
-#' @export
-geo_bbox.geovctrs_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+geo_bbox.wk_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   ranges <- unclass(wk::wkt_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
   ranges$srid <- summarise_srids(geo_srid(x))
   new_geovctrs_rect(ranges)
 }
 
 #' @export
-geo_bbox.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  geo_bbox(as_geo_wkb(x), na.rm = na.rm, finite = finite)
+geo_bbox.wk_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  ranges <- unclass(wk::wkb_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
+  ranges$srid <- summarise_srids(geo_srid(x))
+  new_geovctrs_rect(ranges)
+}
+
+#' @export
+geo_bbox.wk_wksxp <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  ranges <- unclass(wk::wksxp_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
+  ranges$srid <- summarise_srids(geo_srid(x))
+  new_geovctrs_rect(ranges)
+}
+
+#' @export
+geo_bbox.geovctrs_xy <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_bbox(as_wksxp(x), na.rm = na.rm, finite = finite)
+}
+
+#' @export
+geo_bbox.geovctrs_xyz <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_bbox(as_wksxp(x), na.rm = na.rm, finite = finite)
+}
+
+#' @export
+geo_bbox.geovctrs_segment <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_bbox(as_wksxp(x), na.rm = na.rm, finite = finite)
+}
+
+#' @export
+geo_bbox.geovctrs_rect <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_bbox(as_wksxp(x), na.rm = na.rm, finite = finite)
 }
 
 #' @rdname geo_bbox
@@ -89,22 +111,24 @@ geo_envelope.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 }
 
 #' @export
-geo_envelope.geovctrs_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  ranges <- unclass(wk::wkb_feature_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
-  ranges$srid <- geo_srid(x)
-  new_geovctrs_rect(ranges)
-}
-
-#' @export
-geo_envelope.geovctrs_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+geo_envelope.wk_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   ranges <- unclass(wk::wkt_feature_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
   ranges$srid <- geo_srid(x)
   new_geovctrs_rect(ranges)
 }
 
 #' @export
-geo_envelope.geovctr <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  geo_envelope.geovctrs_wkb(as_geo_wkb(x), na.rm = na.rm, finite = finite)
+geo_envelope.wk_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  ranges <- unclass(wk::wkb_feature_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
+  ranges$srid <- geo_srid(x)
+  new_geovctrs_rect(ranges)
+}
+
+#' @export
+geo_envelope.wk_wksxp <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  ranges <- unclass(wk::wksxp_feature_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
+  ranges$srid <- geo_srid(x)
+  new_geovctrs_rect(ranges)
 }
 
 #' @export
@@ -123,14 +147,24 @@ geo_envelope.geovctrs_xy <- function(x, ..., na.rm = FALSE, finite = FALSE) {
   xmax <- xs
   ymax <- ys
 
-  if (na.rm) {
-    xmin[is.na(xs)] <- Inf
-    ymin[is.na(ys)] <- Inf
-    xmax[is.na(xs)] <- -Inf
-    ymax[is.na(ys)] <- -Inf
-  }
+  # na.rm is not meaningful here (always TRUE)
+  # because geo_xy(NA, NA) is POINT EMPTY
+  xmin[is.na(xs)] <- Inf
+  ymin[is.na(ys)] <- Inf
+  xmax[is.na(xs)] <- -Inf
+  ymax[is.na(ys)] <- -Inf
 
   geo_rect(xmin, ymin, xmax, ymax)
+}
+
+#' @export
+geo_envelope.geovctrs_segment <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_envelope(as_wksxp(x), na.rm = na.rm, finite = finite)
+}
+
+#' @export
+geo_envelope.geovctrs_rect <- function(x, ..., na.rm = FALSE, finite = FALSE) {
+  geo_envelope(as_wksxp(x), na.rm = na.rm, finite = finite)
 }
 
 #' @rdname geo_bbox

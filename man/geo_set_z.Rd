@@ -35,12 +35,12 @@ implies \code{na.rm = TRUE}.}
 A modified version of \code{x}.
 }
 \description{
-Currently, geovctrs supports X, Y, and Z coordinates. These functions help extract,
+Currently, geovctrs supports X, Y, and Z coordinates. These functions extract,
 set, and drop Z values.
 }
 \examples{
-geo_set_z("POINT (2 3)", 4)
-geo_drop_z("POINT Z (2 3 4)")
+geo_set_z(c("POINT (2 3)", "POINT Z (2 3 4)"), 10)
+geo_drop_z(c("POINT (2 3)", "POINT Z (2 3 4)"))
 geo_has_z(c("POINT (2 3)", "POINT Z (2 3 4)"))
 geo_z_range(c("POINT (2 3)", "POINT Z (2 3 4)"), na.rm = TRUE)
 geo_z_envelope(c("POINT (2 3)", "POINT Z (2 3 4)"), na.rm = TRUE)

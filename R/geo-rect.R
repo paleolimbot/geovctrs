@@ -17,7 +17,7 @@
 #' @export
 #'
 #' @examples
-#' geo_plot(geo_rect(xmin = 0:5, ymin = 0:5, xmax = 2:7, ymax = 2:7))
+#' plot(geo_rect(xmin = 0:5, ymin = 0:5, xmax = 2:7, ymax = 2:7))
 #'
 geo_rect <- function(xmin = double(), ymin = double(), xmax = double(), ymax = double(), srid = 0) {
   result <- new_geovctrs_rect(
@@ -47,7 +47,7 @@ new_geovctrs_rect <- function(x = list(xmin = double(), ymin = double(),
   vec_assert(x$xmax, double())
   vec_assert(x$ymax, double())
   vec_assert(x$srid, integer())
-  new_rcrd(x, class = c("geovctrs_rect", "geovctr"))
+  new_rcrd(x, class = "geovctrs_rect")
 }
 
 #' @export
@@ -62,28 +62,27 @@ vec_ptype_abbr.geovctrs_rect <- function(x, ...) {
 }
 
 #' @export
-format.geovctrs_rect <- function(x, ..., col = FALSE) {
+format.geovctrs_rect <- function(x, ...) {
   if (length(x) == 0) {
     return(character(0))
   }
 
   paste0(
-    maybe_blue(
-      "(",
-      format(field(x, "xmin"), trim = TRUE, ...),
-      " ",
-      format(field(x, "ymin"), trim = TRUE, ...),
-      col = col
-    ),
-    maybe_grey(if (use_utf8()) "\U2197" else  cli::symbol$ellipsis, col = col),
-    maybe_blue(
-      format(field(x, "xmax"), trim = TRUE, ...),
-      " ",
-      format(field(x, "ymax"), trim = TRUE, ...),
-      ")",
-      col = col
-    )
+    "(",
+    format(field(x, "xmin"), trim = TRUE, ...),
+    " ",
+    format(field(x, "ymin"), trim = TRUE, ...),
+    "...",
+    format(field(x, "xmax"), trim = TRUE, ...),
+    " ",
+    format(field(x, "ymax"), trim = TRUE, ...),
+    ")"
   )
+}
+
+#' @export
+as.character.geovctrs_rect <- function(x, ...) {
+  format(x, ...)
 }
 
 #' @export
@@ -115,13 +114,13 @@ as_geo_rect.default <- function(x, ...) {
 #' @export vec_cast.geovctrs_rect
 #' @rdname new_geovctrs_rect
 vec_cast.geovctrs_rect <- function(x, to, ...) {
-  UseMethod("vec_cast.geovctrs_rect")
+  UseMethod("vec_cast.geovctrs_rect") # nocov
 }
 
 #' @method vec_cast.geovctrs_rect default
 #' @export
 vec_cast.geovctrs_rect.default <- function(x, to, ...) {
-  vec_default_cast(x, to)
+  vec_default_cast(x, to) # nocov
 }
 
 #' @method vec_cast.geovctrs_rect geovctrs_rect
@@ -137,7 +136,7 @@ vec_cast.geovctrs_rect.geovctrs_rect <- function(x, to, ...) {
 #' @export vec_ptype2.geovctrs_rect
 #' @rdname new_geovctrs_rect
 vec_ptype2.geovctrs_rect <- function(x, y, ...) {
-  UseMethod("vec_ptype2.geovctrs_rect", y)
+  UseMethod("vec_ptype2.geovctrs_rect", y) # nocov
 }
 
 #' @method vec_ptype2.geovctrs_rect default
@@ -152,20 +151,20 @@ vec_ptype2.geovctrs_rect.geovctrs_rect <- function(x, y, ..., x_arg = "x", y_arg
   geo_rect()
 }
 
-#' @method vec_ptype2.geovctrs_rect geovctrs_wkt
+#' @method vec_ptype2.geovctrs_rect wk_wkt
 #' @export
-vec_ptype2.geovctrs_rect.geovctrs_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_wkt()
+vec_ptype2.geovctrs_rect.wk_wkt <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  wkt()
 }
 
-#' @method vec_ptype2.geovctrs_rect geovctrs_wkb
+#' @method vec_ptype2.geovctrs_rect wk_wkb
 #' @export
-vec_ptype2.geovctrs_rect.geovctrs_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_wkb()
+vec_ptype2.geovctrs_rect.wk_wkb <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  wkb()
 }
 
-#' @method vec_ptype2.geovctrs_rect geovctrs_collection
+#' @method vec_ptype2.geovctrs_rect wk_wksxp
 #' @export
-vec_ptype2.geovctrs_rect.geovctrs_collection <- function(x, y, ..., x_arg = "x", y_arg = "y") {
-  geo_collection()
+vec_ptype2.geovctrs_rect.wk_wksxp <- function(x, y, ..., x_arg = "x", y_arg = "y") {
+  wksxp()
 }

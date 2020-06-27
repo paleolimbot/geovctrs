@@ -19,9 +19,9 @@ unite_xyz(data, col, x, y, z, remove = TRUE)
 
 separate_xyz(data, col, into = c("x", "y", "z"), remove = TRUE)
 
-unite_segment(data, col, start, end, remove = TRUE)
+unite_segment(data, col, x0, y0, x1, y1, remove = TRUE)
 
-separate_segment(data, col, into = c("start", "end"), remove = TRUE)
+separate_segment(data, col, into = c("x0", "y0", "x1", "y1"), remove = TRUE)
 
 unite_rect(data, col, xmin, ymin, xmax, ymax, remove = TRUE)
 
@@ -37,14 +37,36 @@ separate_rect(
 
 \item{col}{A column name for the united object}
 
-\item{x, y, z, xmin, ymin, xmax, ymax, start, end}{Column specifications for x and y coordinate
-columns, respectively. Use \code{\link[dplyr:select]{dplyr::select()}} syntax. These correspond
-to the arguments in \code{\link[=geo_xy]{geo_xy()}}, \code{\link[=geo_segment]{geo_segment()}}, and \code{\link[=geo_rect]{geo_rect()}}.}
+\item{x}{x, y, and z coordinate vectors}
+
+\item{y}{x, y, and z coordinate vectors}
 
 \item{remove}{Use \code{remove = FALSE} to keep the source columns
 in the output.}
 
 \item{into}{Column names for the separated vectors}
+
+\item{z}{x, y, and z coordinate vectors}
+
+\item{x0}{Values for the start and end coordinates.}
+
+\item{y0}{Values for the start and end coordinates.}
+
+\item{x1}{Values for the start and end coordinates.}
+
+\item{y1}{Values for the start and end coordinates.}
+
+\item{xmin}{Border values, recycled to a common
+length using \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.}
+
+\item{ymin}{Border values, recycled to a common
+length using \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.}
+
+\item{xmax}{Border values, recycled to a common
+length using \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.}
+
+\item{ymax}{Border values, recycled to a common
+length using \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.}
 }
 \value{
 \code{data}, with new column(s) \code{col}/\code{into}
@@ -67,8 +89,8 @@ separate_xyz(united, xyz)
 (united <- unite_rect(tbl, "rect", a, b, c, d))
 separate_rect(united, rect)
 
-tbl2 <- tibble(a = geo_xy(1, 2), b = geo_xy(3, 4))
-(united <- unite_segment(tbl2, "seg", a, b))
-separate_segment(united, seg)
+# need to modify geo_segment() constructor!
+# (united <- unite_segment(tbl, "seg", a, b, c, d))
+# separate_segment(united, seg)
 
 }

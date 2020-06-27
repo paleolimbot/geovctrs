@@ -14,17 +14,17 @@
 \alias{NA_rect_}
 \title{Missing, empty, and non-finite geometries}
 \format{
-An object of class \code{geovctrs_wkt} (inherits from \code{geovctr}, \code{vctrs_vctr}) of length 1.
+An object of class \code{wk_wkt} (inherits from \code{wk_vctr}) of length 1.
 
-An object of class \code{geovctrs_wkb} (inherits from \code{geovctr}, \code{vctrs_vctr}) of length 1.
+An object of class \code{wk_wkb} (inherits from \code{wk_vctr}) of length 1.
 
-An object of class \code{geovctrs_collection} (inherits from \code{geovctr}, \code{vctrs_rcrd}, \code{vctrs_vctr}) of length 1.
+An object of class \code{NULL} of length 0.
 
-An object of class \code{geovctrs_xy} (inherits from \code{geovctr}, \code{vctrs_rcrd}, \code{vctrs_vctr}) of length 1.
+An object of class \code{geovctrs_xy} (inherits from \code{vctrs_rcrd}, \code{vctrs_vctr}) of length 1.
 
-An object of class \code{geovctrs_segment} (inherits from \code{geovctr}, \code{vctrs_rcrd}, \code{vctrs_vctr}) of length 1.
+An object of class \code{geovctrs_segment} (inherits from \code{vctrs_rcrd}, \code{vctrs_vctr}) of length 1.
 
-An object of class \code{geovctrs_rect} (inherits from \code{geovctr}, \code{vctrs_rcrd}, \code{vctrs_vctr}) of length 1.
+An object of class \code{geovctrs_rect} (inherits from \code{vctrs_rcrd}, \code{vctrs_vctr}) of length 1.
 }
 \usage{
 geo_is_missing(x)
@@ -61,8 +61,8 @@ them in R. The \code{\link[=geo_is_missing]{geo_is_missing()}} function can be u
 these values, similar to \code{\link[=is.na]{is.na()}}. Missing coordinates (\code{NA} or \code{NaN})
 can be identified using \code{\link[=geo_has_missing]{geo_has_missing()}}, and \code{\link[=geo_is_finite]{geo_is_finite()}}
 can be used to ensure that all coordinates are finite. Note that
-\code{geo_xy(NA, NA)}, \code{geo_wkt("POINT (nan nan)")}, and
-\code{geo_wkt("MULTIPOINT (nan nan)")} are all considered empty points,
+\code{geo_xy(NA, NA)}, \code{wkt("POINT (nan nan)")}, and
+\code{wkt("MULTIPOINT (nan nan)")} are all considered empty points,
 and are therefore non-misssing, contain no missing coordinates, and
 are finite (use \code{is.na()} and/or \code{\link[stringr:str_detect]{stringr::str_detect()}}) if you
 would like to specifically detect these cases).
@@ -73,33 +73,33 @@ geo_has_missing(NA_wkt_)
 geo_is_finite(NA_wkt_)
 geo_is_empty(NA_wkt_)
 
-geo_is_missing(geo_wkt("LINESTRING (10 inf, nan 2)"))
-geo_has_missing(geo_wkt("LINESTRING (10 inf, nan 2)"))
-geo_is_finite(geo_wkt("LINESTRING (10 inf, nan 2)"))
-geo_is_empty(geo_wkt("LINESTRING (10 inf, nan 2)"))
+geo_is_missing(wkt("LINESTRING (10 inf, nan 2)"))
+geo_has_missing(wkt("LINESTRING (10 inf, nan 2)"))
+geo_is_finite(wkt("LINESTRING (10 inf, nan 2)"))
+geo_is_empty(wkt("LINESTRING (10 inf, nan 2)"))
 
-geo_is_missing(geo_wkt("LINESTRING (10 inf, 1 2)"))
-geo_has_missing(geo_wkt("LINESTRING (10 inf, 1 2)"))
-geo_is_finite(geo_wkt("LINESTRING (10 inf, 1 2)"))
-geo_is_empty(geo_wkt("LINESTRING (10 inf, 1 2)"))
+geo_is_missing(wkt("LINESTRING (10 inf, 1 2)"))
+geo_has_missing(wkt("LINESTRING (10 inf, 1 2)"))
+geo_is_finite(wkt("LINESTRING (10 inf, 1 2)"))
+geo_is_empty(wkt("LINESTRING (10 inf, 1 2)"))
 
 # EMPTY geometries are considered finite and non-missing
-geo_is_missing(geo_wkt("LINESTRING EMPTY"))
-geo_has_missing(geo_wkt("LINESTRING EMPTY"))
-geo_is_finite(geo_wkt("LINESTRING EMPTY"))
-geo_is_empty(geo_wkt("LINESTRING EMPTY"))
+geo_is_missing(wkt("LINESTRING EMPTY"))
+geo_has_missing(wkt("LINESTRING EMPTY"))
+geo_is_finite(wkt("LINESTRING EMPTY"))
+geo_is_empty(wkt("LINESTRING EMPTY"))
 
 # POINT EMPTY, POINT (nan nan), and geo_xy(NA, NA)
 # are all empty points
-geo_is_missing(geo_wkt("POINT EMPTY"))
-geo_has_missing(geo_wkt("POINT EMPTY"))
-geo_is_finite(geo_wkt("POINT EMPTY"))
-geo_is_empty(geo_wkt("POINT EMPTY"))
+geo_is_missing(wkt("POINT EMPTY"))
+geo_has_missing(wkt("POINT EMPTY"))
+geo_is_finite(wkt("POINT EMPTY"))
+geo_is_empty(wkt("POINT EMPTY"))
 
-geo_is_missing(geo_wkt("POINT (nan nan)"))
-geo_has_missing(geo_wkt("POINT (nan nan)"))
-geo_is_finite(geo_wkt("POINT (nan nan)"))
-geo_is_empty(geo_wkt("POINT (nan nan)"))
+geo_is_missing(wkt("POINT (nan nan)"))
+geo_has_missing(wkt("POINT (nan nan)"))
+geo_is_finite(wkt("POINT (nan nan)"))
+geo_is_empty(wkt("POINT (nan nan)"))
 
 geo_is_missing(geo_xy(NA, NA))
 geo_has_missing(geo_xy(NA, NA))

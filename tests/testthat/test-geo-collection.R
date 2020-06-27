@@ -1,157 +1,86 @@
 
-test_that("geo_collection class works", {
-  collection <- geo_collection(list(geo_linestring(geo_xy(c(0, 1, 6), c(0, 2, 4)))))
-  expect_output(print(collection), "geovctrs_collection")
-  expect_output(print(tibble(collection)), "clctn")
-  expect_is(collection, "geovctrs_collection")
-  expect_true(is_geovctrs_collection(collection))
-  expect_true(vec_is(collection))
-
-  # output with nested collection
-  expect_output(print(geo_collection(list(collection))), "GEOMETRYCOLLECTION")
-  expect_match(format(geo_collection(list(collection))), "GEOMETRYCOLLECTION")
-
-  # create a nested collection
-  expect_identical(
-    geo_collection(list(collection)),
-    geo_collection(collection)
-  )
-})
-
-test_that("basic casting and coersion work", {
-  expect_identical(vec_cast(geo_collection(), geo_wkt()), geo_wkt())
-  expect_identical(c(geo_collection(), geo_collection()), geo_collection())
-  expect_identical(c(geo_collection(), geo_wkt()), geo_wkt())
-
-  # erroring
-  expect_error(vec_cast(5, geo_collection()), class = "vctrs_error_incompatible_cast")
-  expect_error(vec_c(geo_collection(), 5), class = "vctrs_error_incompatible_type")
-})
-
 test_that("geo_point() works", {
-  # length 1
-  expect_is(geo_point(geo_xy(10, 30)), "geovctrs_collection")
-  expect_is(field(geo_point(geo_xy(10,  30)), "feature")[[1]], "geovctrs_point")
-  expect_length(geo_point(geo_xy(10, 30)), 1)
-
-  # empty
-  expect_is(geo_point(geo_xy()), "geovctrs_collection")
-  expect_length(geo_point(geo_xy()), 1)
-
-  # error on length 2
-  expect_error(geo_point(geo_xy(10:11, 30:31)), "is not TRUE")
-
-  # formatting
-  expect_output(print(geo_point(geo_xy())), "POINT")
-  expect_output(print(geo_point(geo_xy(30, 10))), "POINT")
+  expect_identical(as_wkt(geo_point()), wkt("POINT EMPTY"))
+  expect_identical(as_wkt(geo_point(geo_xy(1, 2))), wkt("POINT (1 2)"))
+  expect_identical(as_wkt(geo_point(geo_xy(1, 2), srid = 2)), wkt("SRID=2;POINT (1 2)"))
+  expect_identical(as_wkt(geo_point(geo_xyz(1, 2, 3))), wkt("POINT Z (1 2 3)"))
 })
 
 test_that("geo_linestring() works", {
-  # empty
-  expect_is(geo_linestring(geo_xy()), "geovctrs_collection")
-  expect_length(geo_linestring(geo_xy()), 1)
-
-  #  length 2
-  expect_is(geo_linestring(geo_xy(10:11, 30:31)), "geovctrs_collection")
-  expect_is(field(geo_linestring(geo_xy(10:11, 30:31)), "feature")[[1]], "geovctrs_linestring")
-  expect_length(geo_linestring(geo_xy(10:11, 30:31)), 1)
-
-  # length 1 should error
-  expect_error(geo_linestring(geo_xy(10, 30)), "is not TRUE")
-
-  # formatting
-  expect_output(print(geo_linestring(geo_xy())), "LINESTRING")
-  expect_output(print(geo_linestring(geo_xy(10:11, 30:31))), "LINESTRING")
+  expect_identical(as_wkt(geo_linestring()), wkt("LINESTRING EMPTY"))
+  expect_identical(as_wkt(geo_linestring(geo_xy(1:2, 2:3))), wkt("LINESTRING (1 2, 2 3)"))
+  expect_identical(
+    as_wkt(geo_linestring(geo_xy(1:2, 2:3), srid = 2)),
+    wkt("SRID=2;LINESTRING (1 2, 2 3)")
+  )
+  expect_identical(
+    as_wkt(geo_linestring(geo_xyz(1:2, 2:3, 3:4))),
+    wkt("LINESTRING Z (1 2 3, 2 3 4)")
+  )
 })
 
 test_that("geo_polygon() works", {
-  # empty
-  expect_is(geo_polygon(geo_xy()), "geovctrs_collection")
-  expect_length(geo_polygon(geo_xy()), 1)
+  expect_identical(as_wkt(geo_polygon()), wkt("POLYGON EMPTY"))
+  expect_identical(as_wkt(geo_polygon(geo_xy())), wkt("POLYGON EMPTY"))
+  expect_identical(
+    as_wkt(geo_polygon(geo_xy(c(0, 10, 10, 0), c(0, 0, 10, 10)))),
+    wkt("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))")
+  )
+  expect_identical(
+    as_wkt(geo_polygon(geo_xy(c(0, 10, 10, 0), c(0, 0, 10, 10)), srid = 12)),
+    wkt("SRID=12;POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))")
+  )
+  expect_identical(
+    as_wkt(geo_polygon(geo_xyz(c(0, 10, 10, 0), c(0, 0, 10, 10), 3))),
+    wkt("POLYGON Z ((0 0 3, 10 0 3, 10 10 3, 0 10 3, 0 0 3))")
+  )
+})
 
-  # length 3
-  expect_is(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10))), "geovctrs_collection")
-  expect_is(field(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10))), "feature")[[1]], "geovctrs_polygon")
-  expect_length(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10))), 1)
+test_that("geo_collection() works", {
+  expect_identical(as_wkt(geo_collection()), wkt("GEOMETRYCOLLECTION EMPTY"))
+  expect_identical(
+    as_wkt(geo_collection("POINT (30 10)")),
+    wkt("GEOMETRYCOLLECTION (POINT (30 10))")
+  )
+  expect_identical(
+    as_wkt(geo_collection("POINT (30 10)", srid = 12)),
+    wkt("SRID=12;GEOMETRYCOLLECTION (POINT (30 10))")
+  )
+})
 
-  # length 3 with hole
-  poly_hole <- geo_polygon(
-    geo_xy(
-      c(35, 45, 15, 10, 35, 20, 35, 30, 20),
-      c(10, 45, 40, 20, 10, 30, 35, 30, 20)
+test_that("geo_multi*() constructors works", {
+  expect_error(geo_multipoint("LINESTRING (0 0, 1 1)"), "All elements")
+
+  expect_identical(as_wkt(geo_multipoint()), wkt("MULTIPOINT EMPTY"))
+  expect_identical(
+    as_wkt(geo_multipoint(c("POINT (0 0)", "POINT (2 3)"))),
+    wkt("MULTIPOINT ((0 0), (2 3))")
+  )
+  expect_identical(
+    as_wkt(geo_multipoint(c("POINT (0 0)", "POINT (2 3)"), srid = 123)),
+    wkt("SRID=123;MULTIPOINT ((0 0), (2 3))")
+  )
+
+  expect_identical(as_wkt(geo_multilinestring()), wkt("MULTILINESTRING EMPTY"))
+  expect_identical(
+    as_wkt(geo_multilinestring(c("LINESTRING (0 0, 1 1)", "LINESTRING (2 3, 3 4)"))),
+    wkt("MULTILINESTRING ((0 0, 1 1), (2 3, 3 4))")
+  )
+
+  expect_identical(as_wkt(geo_multipolygon()), wkt("MULTIPOLYGON EMPTY"))
+  expect_identical(
+    as_wkt(geo_multipolygon(c("POLYGON ((0 0, 1 1, 0 1, 0 0))", "POLYGON ((0 0, -1 -1, 0 -1, 0 0))"))),
+    wkt("MULTIPOLYGON (((0 0, 1 1, 0 1, 0 0)), ((0 0, -1 -1, 0 -1, 0 0)))")
+  )
+  expect_identical(
+    as_wkt(
+      geo_multipolygon(
+        c("POLYGON ((0 0, 1 1, 0 1, 0 0))", "POLYGON ((0 0, -1 -1, 0 -1, 0 0))"),
+        srid = 12
+      )
     ),
-    ring = c(1, 1, 1, 1, 1, 2, 2, 2, 2)
-  )
-  expect_is(poly_hole, "geovctrs_collection")
-  expect_length(poly_hole, 1)
-  expect_is(field(poly_hole, "feature")[[1]], "geovctrs_polygon")
-
-  #  length 2 should error
-  expect_error(geo_polygon(geo_xy(10:11, 30:31)), "is not TRUE")
-
-  # length 1 should error
-  expect_error(geo_polygon(geo_xy(10, 30)), "is not TRUE")
-
-  # valid with ring that is too small should error
-  expect_error(
-    geo_polygon(
-      geo_xy(c(0, 10, 0, 1), c(0, 0, 10, 1)),
-      ring = c(1, 1, 1, 2)
-    ),
-    "is not TRUE"
+    wkt("SRID=12;MULTIPOLYGON (((0 0, 1 1, 0 1, 0 0)), ((0 0, -1 -1, 0 -1, 0 0)))")
   )
 
-  # output
-  expect_output(print(geo_polygon(geo_xy())), "POLYGON")
-  expect_output(print(geo_polygon(geo_xy(c(0, 10, 0, 0), c(0, 0, 10, 0)))), "POLYGON")
-})
 
-test_that("geo_multipoint() works", {
-  # length 1
-  expect_is(geo_multipoint(geo_point(geo_xy(10, 30))), "geovctrs_collection")
-  expect_is(field(geo_multipoint(geo_point(geo_xy(10, 30))), "feature")[[1]], "geovctrs_multipoint")
-  expect_length(geo_multipoint(geo_point(geo_xy(10, 30))), 1)
-
-  # empty
-  expect_is(geo_multipoint(geo_point(geo_xy())), "geovctrs_collection")
-  expect_length(geo_multipoint(geo_point(geo_xy())), 1)
-
-  # error
-  expect_error(geo_multipoint(geo_linestring(geo_xy())), "All features must be")
-})
-
-test_that("geo_multilinestring() works", {
-  # empty
-  expect_is(geo_multilinestring(geo_linestring(geo_xy())), "geovctrs_collection")
-  expect_length(geo_multilinestring(geo_linestring(geo_xy())), 1)
-
-  #  length 2
-  expect_is(geo_multilinestring(geo_linestring(geo_xy(10:11, 30:31))), "geovctrs_collection")
-  expect_is(
-    field(geo_multilinestring(geo_linestring(geo_xy(10:11, 30:31))), "feature")[[1]],
-    "geovctrs_multilinestring"
-  )
-  expect_length(geo_multilinestring(geo_linestring(geo_xy(10:11, 30:31))), 1)
-
-  # erroring
-  expect_error(geo_multilinestring(geo_point(geo_xy())), "All features must be")
-})
-
-test_that("geo_multipolygon() works", {
-  # empty
-  expect_is(geo_multipolygon(geo_polygon(geo_xy())), "geovctrs_collection")
-  expect_length(geo_multipolygon(geo_polygon(geo_xy())), 1)
-
-  geo_multipolygon(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10))))
-
-  #  length 3
-  expect_is(geo_multipolygon(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10)))), "geovctrs_collection")
-  expect_is(
-    field(geo_multipolygon(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10)))), "feature")[[1]],
-    "geovctrs_multipolygon"
-  )
-  expect_length(geo_multipolygon(geo_polygon(geo_xy(c(0, 10, 0), c(0, 0, 10)))), 1)
-
-  # error
-  expect_error(geo_multipolygon(geo_point(geo_xy())), "All features must be")
 })

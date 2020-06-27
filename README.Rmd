@@ -43,11 +43,11 @@ library(geovctrs)
 
 ## Geometry vectors
 
-This package provides [vctrs](https://vctrs.r-lib.org/) class definitions for [well-known binary](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary) (`geo_wkb()`), [well-known text](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry) (`geo_wkt()`), and several simple geometries that can be efficiently stored using column vectors (`geo_xy()`, `geo_segment()`, and `geo_rect()`). These classes are designed to work with [dplyr](https://dplyr.tidyverse.org/), [tidyr](https://tidyr.tidyverse.org/), and other [tidyverse](https://tidyverse.org/) packages that use vctrs. In addition to providing default implementations of [ generics](#generics), they have print, plot, and coercion, methods so that they "just work":
+This package provides [vctrs](https://vctrs.r-lib.org/) class definitions for [well-known binary](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary) (`wkb()`), [well-known text](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry) (`wkt()`), and several simple geometries that can be efficiently stored using column vectors (`geo_xy()`, `geo_segment()`, and `geo_rect()`). These classes are designed to work with [dplyr](https://dplyr.tidyverse.org/), [tidyr](https://tidyr.tidyverse.org/), and other [tidyverse](https://tidyverse.org/) packages that use vctrs. In addition to providing default implementations of [ generics](#generics), they have print, plot, and coercion, methods so that they "just work".
 
 ```{r}
 head(geo_example_wkt)
-head(as_geo_wkb(geo_example_wkt))
+head(as_wkb(geo_example_wkt))
 ```
 
 ## Constructing and destructing geometries
@@ -89,12 +89,11 @@ geo_coordinates(linestrings) %>%
 
 ## Generics
 
-There are several concepts that show up on repeat in geometry packages. The geovctrs package provides these as generics with reasonable implementations for the bundled [geometry vector classes](#geometry-vectors). Notably, `geo_bbox()` (returns a `geo_rect()`), `geo_plot()` (thin wrapper around `graphics::plot()`), and `geo_summary()` (returns a `tibble()` with basic information about each feature). These generics work on anything that can be interpreted as a geometry vector, including character vectors (interpreted as well-known text), data frames with exactly one geometry column (interpreted as the geometry column), and anything that implements `as_geovctr()` (e.g., [sf](https://r-spatial.github.io/sf) objects).
+There are several concepts that show up on repeat in geometry packages. The geovctrs package provides these as generics with reasonable implementations for the bundled [geometry vector classes](#geometry-vectors). Notably, `geo_bbox()`/`geo_envelope()` (return a `geo_rect()`), `geo_srid()`, and `geo_z()`. These generics work on anything that can be interpreted as a geometry vector, including character vectors (interpreted as well-known text), data frames with exactly one geometry column (interpreted as the geometry column), and anything that implements `as_geovctr()` (e.g., [sf](https://r-spatial.github.io/sf) objects).
 
 ```{r ex-plot}
 geo_bbox(geo_nc)
-geo_plot(geo_nc)
-geo_summary(geo_nc)
+geo_srid(head(geo_nc))
 ```
 
 The geovctrs package also provides a framework for transformers, or functions that accept a vector of geometries and return a vector of geometries. These always return the same type as the input, as dictated by the implementations of `as_geovctr()` and `restore_geovctr()`. This enables transforming functions to work on a wide variety of input types, including sf objects:

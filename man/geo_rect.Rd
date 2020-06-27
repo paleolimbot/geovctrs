@@ -14,7 +14,7 @@ geo_rect(
 }
 \arguments{
 \item{xmin, ymin, xmax, ymax}{Border values, recycled to a common
-length using \code{\link[vctrs:vec_recycle_common]{vctrs::vec_recycle_common()}}.}
+length using \code{\link[vctrs:vec_recycle]{vctrs::vec_recycle_common()}}.}
 
 \item{srid}{A spatial reference identifier, coerced to
 an integer by \code{\link[=as_geo_srid]{as_geo_srid()}}. These identifiers can
@@ -34,6 +34,6 @@ is "missing" (see \code{\link[=geo_is_missing]{geo_is_missing()}} and \code{\lin
 values (\code{Inf} and \code{-Inf}) can be used.
 }
 \examples{
-geo_plot(geo_rect(xmin = 0:5, ymin = 0:5, xmax = 2:7, ymax = 2:7))
+plot(geo_rect(xmin = 0:5, ymin = 0:5, xmax = 2:7, ymax = 2:7))
 
 }

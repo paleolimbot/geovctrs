@@ -22,9 +22,11 @@
 #'
 #' @examples
 #' # two points with an SRID
-#' geometries <- c(
-#'   geo_point(geo_xy(259473, 4876249), srid = 26920),
-#'   geo_point(geo_xy(-66, 44), srid = 4326)
+#' geometries <- wkt(
+#'   c(
+#'     "SRID=26920;POINT (259473 4876249)",
+#'     "SRID=4326;POINT (-66 44)"
+#'   )
 #' )
 #'
 #' geo_srid(geometries)
@@ -32,7 +34,7 @@
 #'
 #' # SRIDs are propogated through conversions,
 #' # or discarded with a warning
-#' geo_srid(as_geo_wkb(geometries))
+#' geo_srid(as_wkb(geometries))
 #' geo_srid(as_geo_xy(geometries))
 #'
 geo_srid <- function(x) {
@@ -70,7 +72,7 @@ geo_set_srid.vctrs_rcrd <- function(x, srid) {
 }
 
 #' @export
-geo_srid.geovctrs_wkt <- function(x) {
+geo_srid.wk_wkt <- function(x) {
   srid <- wk::wkt_meta(x, recursive = FALSE)$srid
   srid[is.na(srid)] <- 0L
   srid[is.na(x)] <- NA_integer_
@@ -78,11 +80,9 @@ geo_srid.geovctrs_wkt <- function(x) {
 }
 
 #' @export
-geo_set_srid.geovctrs_wkt <- function(x, srid) {
-  if (any(srid != 0)) {
-    abort("Can't store SRID with a geo_wkt()")
-  }
-  x
+geo_set_srid.wk_wkt <- function(x, srid) {
+  recycled <- vec_recycle_common(x, srid)
+  new_wk_wkt(cpp_wkt_set_srid(recycled[[1]], recycled[[2]]))
 }
 
 #' @export
@@ -101,7 +101,7 @@ geo_set_srid.geovctrs_xy <- function(x, srid) {
 }
 
 #' @export
-geo_srid.geovctrs_wkb <- function(x) {
+geo_srid.wk_wkb <- function(x) {
   srid <- wk::wkb_meta(x, recursive = FALSE)$srid
   srid[is.na(srid)] <- 0L
   srid[is.na(x)] <- NA_integer_
@@ -109,9 +109,23 @@ geo_srid.geovctrs_wkb <- function(x) {
 }
 
 #' @export
-geo_set_srid.geovctrs_wkb <- function(x, srid) {
-  params <- recycle_parameter(x, srid = as_geo_srid(srid))
-  geovctrs_cpp_set_srid(x, params$srid)
+geo_set_srid.wk_wkb <- function(x, srid) {
+  recycled <- vec_recycle_common(x, srid)
+  new_wk_wkb(cpp_wkb_set_srid(recycled[[1]], recycled[[2]], endian = wk::wk_platform_endian()))
+}
+
+#' @export
+geo_srid.wk_wksxp <- function(x) {
+  srid <- wk::wksxp_meta(x, recursive = FALSE)$srid
+  srid[is.na(srid)] <- 0L
+  srid[is.na(x)] <- NA_integer_
+  srid
+}
+
+#' @export
+geo_set_srid.wk_wksxp <- function(x, srid) {
+  recycled <- vec_recycle_common(x, srid)
+  new_wk_wksxp(cpp_wksxp_set_srid(recycled[[1]], recycled[[2]]))
 }
 
 #' @export
