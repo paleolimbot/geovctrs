@@ -22,7 +22,6 @@ Depends:
 Suggests: 
     testthat (>= 2.1.0),
     sf,
-    vdiffr,
     knitr,
     rmarkdown,
     tidyselect,
