@@ -14,7 +14,7 @@
 #' plot(geo_segment(0, 0, 10, -10:10))
 #'
 geo_segment <- function(x0 = double(), y0 = double(),
-                        x1 = double(), y1 = double(), srid = 0) {
+                        x1 = double(), y1 = double(), srid = NA) {
   new_geovctrs_segment(
     vec_recycle_common(
       x0 = vec_cast(x0, double()),

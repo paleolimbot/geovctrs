@@ -18,9 +18,12 @@ public:
     double y0 = this->provider.template field<double, RealVectorType>(1);
     double x1 = this->provider.template field<double, RealVectorType>(2);
     double y1 = this->provider.template field<double, RealVectorType>(3);
-    uint32_t srid = this->provider.template field<uint32_t, IntVectorType>(4);
+    int srid = this->provider.template field<int, IntVectorType>(4);
 
-    WKGeometryMeta meta(WKGeometryType::LineString, false, false, srid != 0);
+    // Hard-coding NA to avoid importing Rcpp.h here
+    bool hasSrid = srid != -2147483648;
+
+    WKGeometryMeta meta(WKGeometryType::LineString, false, false, hasSrid);
     meta.hasSize = true;
     meta.srid = srid;
 
@@ -75,7 +78,8 @@ public:
       if (this->newMeta.hasSRID) {
         this->exporter.template setField<uint32_t, IntVectorType>(4, meta.srid);
       } else {
-        this->exporter.template setField<uint32_t, IntVectorType>(4, 0);
+        // Hard-coding NA to avoid importing Rcpp.h here
+        this->exporter.template setField<int, IntVectorType>(4, -2147483648);
       }
     }
   }
@@ -91,7 +95,8 @@ public:
       if (this->newMeta.hasSRID) {
         this->exporter.template setField<uint32_t, IntVectorType>(4, meta.srid);
       } else {
-        this->exporter.template setField<uint32_t, IntVectorType>(4, 0);
+        // Hard-coding NA to avoid importing Rcpp.h here
+        this->exporter.template setField<int, IntVectorType>(4, -2147483648);
       }
     } else {
       throw std::runtime_error("Segment geometries can only be created from linestrings of length 0 or 2");

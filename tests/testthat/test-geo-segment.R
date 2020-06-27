@@ -22,12 +22,12 @@ test_that("coersion from segment works", {
 
   expect_equal(
     tibble::as_tibble(segment),
-    tibble(x0 = 0:5, y0 = 0:5, x1 = 1:6, y1 = 1:6, srid = rep(0L, 6))
+    tibble(x0 = 0:5, y0 = 0:5, x1 = 1:6, y1 = 1:6, srid = rep(NA_integer_, 6))
   )
 
   expect_equal(
     as.data.frame(segment),
-    as.data.frame(tibble(x0 = 0:5, y0 = 0:5, x1 = 1:6, y1 = 1:6, srid = rep(0L, 6)))
+    as.data.frame(tibble(x0 = 0:5, y0 = 0:5, x1 = 1:6, y1 = 1:6, srid = rep(NA_integer_, 6)))
   )
 })
 
