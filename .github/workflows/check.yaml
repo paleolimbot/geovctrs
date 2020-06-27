@@ -11,15 +11,14 @@ name: R-CMD-check
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
-    name: ${{ matrix.config.os }} (${{ matrix.config.variant }}, R ${{ matrix.config.r }})
+    name: ${{ matrix.config.os }} (R ${{ matrix.config.r }})
     strategy:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: '4.0', variant: 'reg'}
-          - {os: macOS-latest, r: '4.0', variant: 'reg'}
-          - {os: ubuntu-16.04, r: '4.0', variant: 'ubuntugis'}
-          - {os: ubuntu-18.04, r: '4.0', variant: 'ubuntugis'}
+          - {os: windows-latest, r: '4.0'}
+          - {os: macOS-latest, r: '4.0'}
+          - {os: ubuntu-18.04, r: '4.0'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -27,11 +26,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
-
       - uses: r-lib/actions/setup-r@master
         with:
           r-version: ${{ matrix.config.r }}
-
       - uses: r-lib/actions/setup-pandoc@master
 
       - name: Query dependencies
@@ -45,33 +42,8 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ matrix.config.os }}-${{ matrix.config.variant }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
-          restore-keys: ${{ matrix.config.os }}-${{ matrix.config.variant }}-r-${{ matrix.config.r }}-
-
-      - name: Install system dependencies (MacOS)
-        if: runner.os == 'MacOS'
-        run: |
-          brew install geos
-          brew install gdal
-          brew install udunits
-          brew install cairo
-          brew cask install xquartz
-
-      - name: Use ubuntugis ppa
-        if: matrix.config.variant == 'ubuntugis'
-        run: |
-          sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-          sudo apt update
-          sudo apt install \
-            libudunits2-dev \
-            libgdal-dev \
-            libgeos-dev \
-            libproj-dev
-
-      - name: Install system dependencies (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt install libcurl4-openssl-dev
+          key: ${{ matrix.config.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
+          restore-keys: ${{ matrix.config.os }}-r-${{ matrix.config.r }}-
 
       - name: Install dependencies
         run: |
@@ -82,21 +54,13 @@ jobs:
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
 
-      - name: Check (Windows)
-        if: runner.os == 'Windows'
+      - name: Check
         run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error", check_dir = "check")
-        shell: Rscript {0}
-
-      - name: Check (not Windows)
-        if: runner.os != 'Windows'
-        env:
-          _R_CHECK_FORCE_SUGGESTS_: false
-        run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
       - name: Upload check results
         if: failure()
         uses: actions/upload-artifact@master
         with:
-          name: ${{ matrix.config.os }}-${{ matrix.config.variant }}-r${{ matrix.config.r }}-results
+          name: ${{ matrix.config.os }}-r${{ matrix.config.r }}-results
           path: check

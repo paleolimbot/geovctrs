@@ -28,14 +28,6 @@ jobs:
           key: macOS-r-4.0-${{ hashFiles('depends.Rds') }}
           restore-keys: macOS-r-4.0-
 
-      - name: Install system dependencies (MacOS)
-        run: |
-          brew install geos
-          brew install gdal
-          brew install udunits
-          brew install cairo
-          brew cask install xquartz
-
       - name: Install dependencies
         run: |
           install.packages("remotes")
