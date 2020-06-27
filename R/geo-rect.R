@@ -114,13 +114,13 @@ as_geo_rect.default <- function(x, ...) {
 #' @export vec_cast.geovctrs_rect
 #' @rdname new_geovctrs_rect
 vec_cast.geovctrs_rect <- function(x, to, ...) {
-  UseMethod("vec_cast.geovctrs_rect")
+  UseMethod("vec_cast.geovctrs_rect") # nocov
 }
 
 #' @method vec_cast.geovctrs_rect default
 #' @export
 vec_cast.geovctrs_rect.default <- function(x, to, ...) {
-  vec_default_cast(x, to)
+  vec_default_cast(x, to) # nocov
 }
 
 #' @method vec_cast.geovctrs_rect geovctrs_rect
@@ -136,7 +136,7 @@ vec_cast.geovctrs_rect.geovctrs_rect <- function(x, to, ...) {
 #' @export vec_ptype2.geovctrs_rect
 #' @rdname new_geovctrs_rect
 vec_ptype2.geovctrs_rect <- function(x, y, ...) {
-  UseMethod("vec_ptype2.geovctrs_rect", y)
+  UseMethod("vec_ptype2.geovctrs_rect", y) # nocov
 }
 
 #' @method vec_ptype2.geovctrs_rect default

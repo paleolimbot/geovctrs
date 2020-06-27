@@ -31,6 +31,17 @@ test_that("geo_xy c() works", {
 })
 
 test_that("coersion to xy works", {
+  # null
+  expect_equal(as_geo_xy(wkt(NA_character_)), geo_xy(NA, NA))
+  expect_equal(as_geo_xy(as_wkb(NA_character_)), geo_xy(NA, NA))
+  expect_equal(as_geo_xy(as_wksxp(NA_character_)), geo_xy(NA, NA))
+
+  # non-point
+  expect_error(
+    as_geo_xy(wkt("LINESTRING (0 0 , 1 1)")),
+    "Can't create XY", class = "std::runtime_error"
+  )
+
   # cast to- and from xy
   expect_identical(vec_cast(geo_xyz(), geo_xy()), geo_xy())
   expect_identical(as_geo_xy(geo_xyz()), geo_xy())

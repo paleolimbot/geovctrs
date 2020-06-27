@@ -43,6 +43,7 @@ test_that("envelope works with corner cases", {
   expect_identical(geo_envelope(geo_xy()), geo_rect())
   expect_identical(geo_envelope(geo_xy(NA, NA), na.rm = FALSE), geo_rect(Inf, Inf, -Inf, -Inf))
   expect_identical(geo_envelope(geo_xy(NA, NA), na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf))
+  expect_identical(geo_envelope(geo_xy(NA, NA), finite = TRUE), geo_rect(Inf, Inf, -Inf, -Inf))
 
   expect_identical(geo_envelope(geo_rect()), geo_rect())
   expect_identical(
@@ -170,7 +171,10 @@ test_that("bbox works with corner cases", {
   # empty geometries always have an inf bbox, regardless of na.rm!
 
   expect_identical(geo_bbox(geo_xy()), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
-  expect_identical(geo_bbox(geo_xy(NA, NA), na.rm = FALSE), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
+  expect_identical(
+    geo_bbox(geo_xy(NA, NA), na.rm = FALSE),
+    geo_rect(Inf, Inf, -Inf, -Inf, srid = 0)
+  )
   expect_identical(geo_bbox(geo_xy(NA, NA), na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf))
 
   expect_identical(geo_bbox(geo_rect()), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
@@ -204,7 +208,10 @@ test_that("misssing values have missing envelopes", {
   expect_identical(geo_envelope(NA_wkt_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_envelope(NA_wkb_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = NA))
   expect_identical(geo_envelope(NA_xy_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
-  expect_identical(geo_envelope(NA_segment_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
+  expect_identical(
+    geo_envelope(NA_segment_, na.rm = TRUE),
+    geo_rect(Inf, Inf, -Inf, -Inf, srid = 0)
+  )
   expect_identical(geo_envelope(NA_rect_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf, srid = 0))
 })
 
@@ -229,5 +236,16 @@ test_that("lim functions work", {
   expect_identical(geo_y_range("POINT (30 10)"), geo_lim(10, 10))
   expect_identical(geo_z_range("POINT Z (30 10 20)"), geo_lim(20, 20))
   expect_identical(geo_z_range(c("POINT Z (30 10 20)", "POINT Z (30 10 80)")), geo_lim(20, 80))
-  expect_identical(geo_z_envelope(c("POINT Z (30 10 20)", "POINT Z (30 10 80)")), geo_lim(c(20, 80), c(20, 80)))
+  expect_identical(
+    geo_x_envelope(c("POINT Z (30 10 20)", "POINT Z (40 10 80)")),
+    geo_lim(c(30, 40), c(30, 40))
+  )
+  expect_identical(
+    geo_y_envelope(c("POINT Z (30 20 20)", "POINT Z (30 10 80)")),
+    geo_lim(c(20, 10), c(20, 10))
+  )
+  expect_identical(
+    geo_z_envelope(c("POINT Z (30 10 20)", "POINT Z (30 10 80)")),
+    geo_lim(c(20, 80), c(20, 80))
+  )
 })

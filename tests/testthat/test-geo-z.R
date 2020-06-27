@@ -3,6 +3,15 @@ test_that("set_z works", {
   expect_identical(geo_set_z("POINT Z (2 3 10)", 4), wkt("POINT Z (2 3 4)"))
   expect_identical(geo_set_z("POINT (2 3)", 4), wkt("POINT Z (2 3 4)"))
 
+  expect_identical(geo_set_z(wkt("POINT Z (2 3 10)"), 4), wkt("POINT Z (2 3 4)"))
+  expect_identical(geo_set_z(wkt("POINT (2 3)"), 4), wkt("POINT Z (2 3 4)"))
+
+  expect_identical(geo_set_z(as_wkb("POINT Z (2 3 10)"), 4), as_wkb("POINT Z (2 3 4)"))
+  expect_identical(geo_set_z(as_wkb("POINT (2 3)"), 4), as_wkb("POINT Z (2 3 4)"))
+
+  expect_identical(geo_set_z(as_wksxp("POINT Z (2 3 10)"), 4), as_wksxp("POINT Z (2 3 4)"))
+  expect_identical(geo_set_z(as_wksxp("POINT (2 3)"), 4), as_wksxp("POINT Z (2 3 4)"))
+
   expect_identical(geo_set_z(geo_xyz(2, 3, 10), 4), geo_xyz(2, 3, 4))
   expect_identical(geo_set_z(geo_xy(2, 3), 4), geo_xyz(2, 3, 4))
 

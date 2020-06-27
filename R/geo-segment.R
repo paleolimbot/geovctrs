@@ -114,13 +114,13 @@ as_geo_segment.default <- function(x, ...) {
 #' @export vec_cast.geovctrs_segment
 #' @rdname new_geovctrs_segment
 vec_cast.geovctrs_segment <- function(x, to, ...) {
-  UseMethod("vec_cast.geovctrs_segment")
+  UseMethod("vec_cast.geovctrs_segment") # nocov
 }
 
 #' @method vec_cast.geovctrs_segment default
 #' @export
 vec_cast.geovctrs_segment.default <- function(x, to, ...) {
-  vec_default_cast(x, to)
+  vec_default_cast(x, to) # nocov
 }
 
 #' @method vec_cast.geovctrs_segment geovctrs_segment
@@ -154,7 +154,7 @@ vec_cast.geovctrs_segment.wk_wksxp <- function(x, to, ...) {
 #' @export vec_ptype2.geovctrs_segment
 #' @rdname new_geovctrs_segment
 vec_ptype2.geovctrs_segment <- function(x, y, ...) {
-  UseMethod("vec_ptype2.geovctrs_segment", y)
+  UseMethod("vec_ptype2.geovctrs_segment", y) # nocov
 }
 
 #' @method vec_ptype2.geovctrs_segment default

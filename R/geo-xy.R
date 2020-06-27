@@ -137,10 +137,11 @@ vec_cast.geovctrs_xy.geovctrs_xyz <- function(x, to, ...) {
 #' @method vec_cast.geovctrs_xy wk_wkt
 #' @export
 vec_cast.geovctrs_xy.wk_wkt <- function(x, to, ...) {
+  has_z <- geo_has_z(x)
   maybe_lossy_cast(
     new_geovctrs_xy(cpp_translate_wkt_xy(x)),
     x, to,
-    lossy = geo_has_z(x),
+    lossy = !is.na(has_z) & has_z,
     ...
   )
 }
@@ -148,10 +149,11 @@ vec_cast.geovctrs_xy.wk_wkt <- function(x, to, ...) {
 #' @method vec_cast.geovctrs_xy wk_wkb
 #' @export
 vec_cast.geovctrs_xy.wk_wkb <- function(x, to, ...) {
+  has_z <- geo_has_z(x)
   maybe_lossy_cast(
     new_geovctrs_xy(cpp_translate_wkb_xy(x)),
     x, to,
-    lossy = geo_has_z(x),
+    lossy = !is.na(has_z) & has_z,
     ...
   )
 }
@@ -159,10 +161,11 @@ vec_cast.geovctrs_xy.wk_wkb <- function(x, to, ...) {
 #' @method vec_cast.geovctrs_xy wk_wksxp
 #' @export
 vec_cast.geovctrs_xy.wk_wksxp <- function(x, to, ...) {
+  has_z <- geo_has_z(x)
   maybe_lossy_cast(
     new_geovctrs_xy(cpp_translate_wksxp_xy(x)),
     x, to,
-    lossy = geo_has_z(x),
+    lossy = !is.na(has_z) & has_z,
     ...
   )
 }
