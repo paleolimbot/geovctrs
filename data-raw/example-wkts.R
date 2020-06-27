@@ -27,6 +27,6 @@ geo_example_wkt <- c(
   "GEOMETRYCOLLECTION EMPTY"
 )
 
-geo_example_wkt <- wkt(geo_example_wkt)
+geo_example_wkt <- wk::wkt(geo_example_wkt)
 
 usethis::use_data(geo_example_wkt, overwrite = TRUE)
