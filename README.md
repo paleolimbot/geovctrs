@@ -26,15 +26,6 @@ You can install the development version from
 remotes::install_github("paleolimbot/geovctrs")
 ```
 
-You’ll have to install GEOS to build this package yourself. There will
-come a day when this package won’t require GEOS, but in the words of
-[Aragorn](https://en.wikipedia.org/wiki/Aragorn), that day is not this
-day. On Windows this is taken care of through
-[rwinlib](https://github.com/rwinlib), on MacOS you can install
-[homebrew](https://brew.sh/) and run `brew install geos`, and on Linux
-you can install GEOS from your favourite package manager (`apt-get
-install libgeos-dev` on Debian/Ubuntu).
-
 If you can load the package, you’re good to go\!
 
 ``` r
@@ -44,18 +35,17 @@ library(geovctrs)
 ## Geometry vectors
 
 This package provides [vctrs](https://vctrs.r-lib.org/) class
-definitions for [well-known
-binary](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary)
-(`wkb()`), [well-known
-text](https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry)
-(`wkt()`), and several simple geometries that can be efficiently stored
-using column vectors (`geo_xy()`, `geo_segment()`, and `geo_rect()`).
-These classes are designed to work with
+definitions several simple geometries that can be efficiently stored
+using column vectors (`geo_xy()`, `geo_xyz()`, `geo_segment()`, and
+`geo_rect()`). Well-known geometry (well-known binary and well-known
+text) vectors from the [wk](https://paleolimbot.github.io/wk) package
+are used for generic geometries. These classes are designed to work with
 [dplyr](https://dplyr.tidyverse.org/),
 [tidyr](https://tidyr.tidyverse.org/), and other
 [tidyverse](https://tidyverse.org/) packages that use vctrs. In addition
 to providing default implementations of [generics](#generics), they have
-print, plot, and coercion, methods so that they “just work”.
+print, plot, and coercion methods so that they “just work” when you need
+them to.
 
 ``` r
 head(geo_example_wkt)
@@ -121,7 +111,7 @@ separate_xy(geo_coordinates(linestrings), "xy")
 #> 6       2     2     0    50    20
 ```
 
-In the [upcoming release of
+In the [newest version of
 dplyr](https://www.tidyverse.org/blog/2020/03/dplyr-1-0-0-summarise/),
 this is useful in conjunction with `group_by()` and `summarise()`.
 
@@ -131,10 +121,10 @@ geo_coordinates(linestrings) %>%
   group_by(feature) %>% 
   summarise(geometry = geo_linestring(xy))
 #> # A tibble: 2 x 2
-#>   feature geometry   
-#> *   <int> <clctn>    
-#> 1       1 / (1 0)…+2 
-#> 2       2 / (10 0)…+2
+#>   feature geometry                           
+#>     <int> <wk_wksxp>                         
+#> 1       1 <LINESTRING (1 0, 2 1, 5 2...>     
+#> 2       2 <LINESTRING (10 0, 20 10, 50 20...>
 ```
 
 ## Generics
