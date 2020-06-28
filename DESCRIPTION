@@ -12,7 +12,7 @@ Description: Provides a set of data structures
   segments, and rectangles. Coercion functions are provided
   such that any vector of geometry-like objects can be used
   interchangeably.
-License: GPL-3
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
