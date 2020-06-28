@@ -73,10 +73,7 @@ geo_set_srid.vctrs_rcrd <- function(x, srid) {
 
 #' @export
 geo_srid.wk_wkt <- function(x) {
-  srid <- wk::wkt_meta(x, recursive = FALSE)$srid
-  srid[is.na(srid)] <- 0L
-  srid[is.na(x)] <- NA_integer_
-  srid
+  wk::wkt_meta(x, recursive = FALSE)$srid
 }
 
 #' @export
@@ -102,10 +99,7 @@ geo_set_srid.geovctrs_xy <- function(x, srid) {
 
 #' @export
 geo_srid.wk_wkb <- function(x) {
-  srid <- wk::wkb_meta(x, recursive = FALSE)$srid
-  srid[is.na(srid)] <- 0L
-  srid[is.na(x)] <- NA_integer_
-  srid
+  wk::wkb_meta(x, recursive = FALSE)$srid
 }
 
 #' @export
@@ -116,10 +110,7 @@ geo_set_srid.wk_wkb <- function(x, srid) {
 
 #' @export
 geo_srid.wk_wksxp <- function(x) {
-  srid <- wk::wksxp_meta(x, recursive = FALSE)$srid
-  srid[is.na(srid)] <- 0L
-  srid[is.na(x)] <- NA_integer_
-  srid
+  wk::wksxp_meta(x, recursive = FALSE)$srid
 }
 
 #' @export

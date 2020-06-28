@@ -20,7 +20,7 @@ public:
     double ymax = this->provider.template field<double, RealVectorType>(3);
     uint32_t srid = this->provider.template field<uint32_t, IntVectorType>(4);
 
-    WKGeometryMeta meta(WKGeometryType::Polygon, false, false, srid != 0);
+    WKGeometryMeta meta(WKGeometryType::Polygon, false, false, srid != -2147483648);
     meta.hasSize = true;
     meta.srid = srid;
 

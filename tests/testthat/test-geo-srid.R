@@ -4,7 +4,7 @@ test_that("SRID extraction works", {
   geometries_wkb <- as_wkb(geometries_wkt)
 
   # wkt
-  expect_identical(geo_srid(geometries_wkt), c(26920L, 0L))
+  expect_identical(geo_srid(geometries_wkt), c(26920L, NA))
   expect_identical(geo_srid(geo_set_srid(geometries_wkt, 0)), c(0L, 0L))
   expect_identical(geo_srid(geo_set_srid(geometries_wkt, c(1, 2))), c(1L, 2L))
   expect_identical(geo_set_srid("SRID=4326;POINT (30 10)", 0), wkt("SRID=0;POINT (30 10)"))
@@ -12,14 +12,14 @@ test_that("SRID extraction works", {
   expect_true(all(geo_srid(geo_set_srid(geo_example_wkt, 321)) == 321, na.rm = TRUE))
 
   # wkb
-  expect_identical(geo_srid(geometries_wkb), c(26920L, 0L))
+  expect_identical(geo_srid(geometries_wkb), c(26920L, NA))
   expect_identical(geo_srid(geo_set_srid(geometries_wkb, 0)), c(0L, 0L))
   expect_identical(geo_set_srid(as_wkb("SRID=4326;POINT (30 10)"), 0), as_wkb("SRID=0;POINT (30 10)"))
   expect_identical(geo_set_srid(as_wkb("SRID=4326;POINT (30 10)"), NA), as_wkb("POINT (30 10)"))
   expect_true(all(geo_srid(geo_set_srid(as_wkb(geo_example_wkt), 321)) == 321, na.rm = TRUE))
 
   # wksxp
-  expect_identical(geo_srid(as_wksxp(geometries_wkb)), c(26920L, 0L))
+  expect_identical(geo_srid(as_wksxp(geometries_wkb)), c(26920L, NA))
   expect_identical(geo_srid(geo_set_srid(as_wksxp(geometries_wkb), 0)), c(0L, 0L))
   expect_identical(geo_set_srid(as_wksxp("SRID=4326;POINT (30 10)"), 0), as_wksxp("SRID=0;POINT (30 10)"))
   expect_identical(geo_set_srid(as_wksxp("SRID=4326;POINT (30 10)"), NA), as_wksxp("POINT (30 10)"))
@@ -45,7 +45,8 @@ test_that("SRID extraction works", {
   )
 
   # via as_geovctr()
-  expect_identical(geo_srid("POINT EMPTY"), 0L)
+  expect_identical(geo_srid("POINT EMPTY"), NA_integer_)
+  expect_identical(geo_srid("SRID=0;POINT EMPTY"), 0L)
 })
 
 test_that("geo_set_srid() is vectorized along x and srid", {

@@ -21,9 +21,7 @@ public:
     int srid = this->provider.template field<int, IntVectorType>(4);
 
     // Hard-coding NA to avoid importing Rcpp.h here
-    bool hasSrid = srid != -2147483648;
-
-    WKGeometryMeta meta(WKGeometryType::LineString, false, false, hasSrid);
+    WKGeometryMeta meta(WKGeometryType::LineString, false, false, srid != -2147483648);
     meta.hasSize = true;
     meta.srid = srid;
 

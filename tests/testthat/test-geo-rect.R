@@ -22,11 +22,11 @@ test_that("geo_rect casting works", {
 
   expect_equal(
     as.data.frame(rect),
-    data.frame(xmin = 0:5,  ymin = 0:5, xmax = 1:6, ymax = 1:6, srid = 0)
+    data.frame(xmin = 0:5,  ymin = 0:5, xmax = 1:6, ymax = 1:6, srid = NA_integer_)
   )
   expect_equal(
     tibble::as_tibble(rect),
-    tibble(xmin = 0:5,  ymin = 0:5, xmax = 1:6, ymax = 1:6, srid = 0)
+    tibble(xmin = 0:5,  ymin = 0:5, xmax = 1:6, ymax = 1:6, srid = NA_integer_)
   )
 })
 

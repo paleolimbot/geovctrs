@@ -9,7 +9,7 @@ geo_rect(
   ymin = double(),
   xmax = double(),
   ymax = double(),
-  srid = 0
+  srid = NA
 )
 }
 \arguments{

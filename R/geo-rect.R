@@ -19,7 +19,7 @@
 #' @examples
 #' plot(geo_rect(xmin = 0:5, ymin = 0:5, xmax = 2:7, ymax = 2:7))
 #'
-geo_rect <- function(xmin = double(), ymin = double(), xmax = double(), ymax = double(), srid = 0) {
+geo_rect <- function(xmin = double(), ymin = double(), xmax = double(), ymax = double(), srid = NA) {
   result <- new_geovctrs_rect(
     vec_recycle_common(
       xmin = vec_cast(xmin, double()),
