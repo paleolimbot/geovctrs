@@ -96,7 +96,6 @@
 <span class="co"># install.packages("remotes")</span>
 <span class="kw">remotes</span>::<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"paleolimbot/geovctrs"</span>)
 </pre></div>
-<p>You’ll have to install GEOS to build this package yourself. There will come a day when this package won’t require GEOS, but in the words of <a href="https://en.wikipedia.org/wiki/Aragorn">Aragorn</a>, that day is not this day. On Windows this is taken care of through <a href="https://github.com/rwinlib">rwinlib</a>, on MacOS you can install <a href="https://brew.sh/">homebrew</a> and run <code>brew install geos</code>, and on Linux you can install GEOS from your favourite package manager (<code>apt-get install libgeos-dev</code> on Debian/Ubuntu).</p>
 <p>If you can load the package, you’re good to go!</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://paleolimbot.github.io/geovctrs">geovctrs</a></span>)
@@ -105,7 +104,7 @@
 <div id="geometry-vectors" class="section level2">
 <h2 class="hasAnchor">
 <a href="#geometry-vectors" class="anchor"></a>Geometry vectors</h2>
-<p>This package provides <a href="https://vctrs.r-lib.org/">vctrs</a> class definitions for <a href="https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary">well-known binary</a> (<code><a href="https://rdrr.io/pkg/wk/man/wkb.html">wkb()</a></code>), <a href="https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry">well-known text</a> (<code><a href="https://rdrr.io/pkg/wk/man/wkt.html">wkt()</a></code>), and several simple geometries that can be efficiently stored using column vectors (<code><a href="reference/geo_xy.html">geo_xy()</a></code>, <code><a href="reference/geo_segment.html">geo_segment()</a></code>, and <code><a href="reference/geo_rect.html">geo_rect()</a></code>). These classes are designed to work with <a href="https://dplyr.tidyverse.org/">dplyr</a>, <a href="https://tidyr.tidyverse.org/">tidyr</a>, and other <a href="https://tidyverse.org/">tidyverse</a> packages that use vctrs. In addition to providing default implementations of <a href="#generics">generics</a>, they have print, plot, and coercion, methods so that they “just work”.</p>
+<p>This package provides <a href="https://vctrs.r-lib.org/">vctrs</a> class definitions several simple geometries that can be efficiently stored using column vectors (<code><a href="reference/geo_xy.html">geo_xy()</a></code>, <code><a href="reference/geo_xy.html">geo_xyz()</a></code>, <code><a href="reference/geo_segment.html">geo_segment()</a></code>, and <code><a href="reference/geo_rect.html">geo_rect()</a></code>). Well-known geometry (well-known binary and well-known text) vectors from the <a href="https://paleolimbot.github.io/wk">wk</a> package are used for generic geometries. These classes are designed to work with <a href="https://dplyr.tidyverse.org/">dplyr</a>, <a href="https://tidyr.tidyverse.org/">tidyr</a>, and other <a href="https://tidyverse.org/">tidyverse</a> packages that use vctrs. In addition to providing default implementations of <a href="#generics">generics</a>, they have print, plot, and coercion methods so that they “just work” when you need them to.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw">geo_example_wkt</span>)
 <span class="co">#&gt; &lt;wk_wkt[6]&gt;</span>
@@ -165,17 +164,17 @@
 <span class="co">#&gt; 5       2     2     0    20    10</span>
 <span class="co">#&gt; 6       2     2     0    50    20</span>
 </pre></div>
-<p>In the <a href="https://www.tidyverse.org/blog/2020/03/dplyr-1-0-0-summarise/">upcoming release of dplyr</a>, this is useful in conjunction with <code>group_by()</code> and <code><a href="https://rdrr.io/pkg/sf/man/tidyverse.html">summarise()</a></code>.</p>
+<p>In the <a href="https://www.tidyverse.org/blog/2020/03/dplyr-1-0-0-summarise/">newest version of dplyr</a>, this is useful in conjunction with <code>group_by()</code> and <code><a href="https://rdrr.io/pkg/sf/man/tidyverse.html">summarise()</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">dplyr</span>)
 <span class="fu"><a href="reference/geo_coordinates.html">geo_coordinates</a></span>(<span class="kw">linestrings</span>) <span class="op">%&gt;%</span> 
   <span class="fu">group_by</span>(<span class="kw">feature</span>) <span class="op">%&gt;%</span> 
   <span class="fu">summarise</span>(geometry = <span class="fu"><a href="reference/geo_collection.html">geo_linestring</a></span>(<span class="kw">xy</span>))
 <span class="co">#&gt; # A tibble: 2 x 2</span>
-<span class="co">#&gt;   feature geometry   </span>
-<span class="co">#&gt; *   &lt;int&gt; &lt;clctn&gt;    </span>
-<span class="co">#&gt; 1       1 / (1 0)…+2 </span>
-<span class="co">#&gt; 2       2 / (10 0)…+2</span>
+<span class="co">#&gt;   feature geometry                           </span>
+<span class="co">#&gt;     &lt;int&gt; &lt;wk_wksxp&gt;                         </span>
+<span class="co">#&gt; 1       1 &lt;LINESTRING (1 0, 2 1, 5 2...&gt;     </span>
+<span class="co">#&gt; 2       2 &lt;LINESTRING (10 0, 20 10, 50 20...&gt;</span>
 </pre></div>
 </div>
 <div id="generics" class="section level2">
