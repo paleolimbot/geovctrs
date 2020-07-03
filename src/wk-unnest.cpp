@@ -12,44 +12,28 @@
 #include "wk/rcpp-io.hpp"
 using namespace Rcpp;
 
-class WKUnnestedCounter: public WKGeometryHandler {
-public:
-  size_t nNewFeatures;
-
-  WKUnnestedCounter(bool keepEmpty): nNewFeatures(0), keepEmpty(keepEmpty) {}
-
-  virtual bool shouldUnnest(const WKGeometryMeta& meta) {
-    if (this->keepEmpty && meta.size == 0) {
-      return false;
-    } else {
-      return meta.geometryType >= WKGeometryType::MultiPoint;
-    }
-  }
-
-  void nextNull(size_t featureId) {
-    this->nNewFeatures++;
-  }
-
-  void nextGeometryStart(const WKGeometryMeta& meta, uint32_t partId) {
-    if (!this->shouldUnnest(meta)) {
-      this->nNewFeatures++;
-    }
-  }
-
-private:
-  bool keepEmpty;
-};
-
 class WKUnnester: public WKMetaFilter {
 public:
-  WKUnnester(WKGeometryHandler& handler, bool keepEmpty):
-    WKMetaFilter(handler), newFeatureId(0), topLevelMetaId(0), keepEmpty(keepEmpty) {}
+  WKUnnester(WKGeometryHandler& handler, bool keepEmpty, bool keepMulti, int maxUnnestDepth = INT_MAX):
+    WKMetaFilter(handler), newFeatureId(0), topLevelMetaId(0), keepEmpty(keepEmpty),
+    maxUnnestDepth(maxUnnestDepth), unnestDepth(0) {
+
+    if (keepMulti) {
+      this->minUnnestType = WKGeometryType::GeometryCollection;
+    } else {
+      this->minUnnestType = WKGeometryType::MultiPoint;
+    }
+  }
 
   bool shouldUnnest(const WKGeometryMeta& meta) {
-    if (this->keepEmpty && meta.size == 0) {
+    if (this->unnestDepth > this->maxUnnestDepth) {
       return false;
+    } else if (this->keepEmpty && (meta.size == 0)) {
+      return false;
+    } else if (meta.geometryType >= this->minUnnestType) {
+      return true;
     } else {
-      return meta.geometryType >= WKGeometryType::MultiPoint;
+      return false;
     }
   }
 
@@ -100,6 +84,10 @@ public:
     WKMetaFilter::nextGeometryStart(meta, partId);
   }
 
+  void nextCoordinate(const WKGeometryMeta& meta, const WKCoord& coord, uint32_t coordId) {
+    this->handler.nextCoordinate(this->metaReplacement[meta.id()], coord, coordId);
+  }
+
   void nextGeometryEnd(const WKGeometryMeta& meta, uint32_t partId) {
     if (this->shouldUnnest(meta)) {
       this->unnestDepth--;
@@ -107,12 +95,12 @@ public:
     }
 
     if (meta.id() == this->topLevelMetaId) {
-      this->handler.nextGeometryEnd(this->metaReplacement[meta.id()], partId);
+      this->handler.nextGeometryEnd(this->metaReplacement[meta.id()], WKReader::PART_ID_NONE);
       this->handler.nextFeatureEnd(this->newFeatureId);
       this->newFeatureId++;
       this->topLevelMetaId = 0;
     } else {
-      this->handler.nextGeometryEnd(this->metaReplacement[meta.id()], WKReader::PART_ID_NONE);
+      this->handler.nextGeometryEnd(this->metaReplacement[meta.id()], partId);
     }
 
     // manually handled metaReplacement (no need for WKMetaFilter::nextGeometryEnd())
@@ -122,14 +110,27 @@ private:
   size_t newFeatureId;
   uintptr_t topLevelMetaId;
   bool keepEmpty;
+  int minUnnestType;
+  int maxUnnestDepth;
   int unnestDepth;
   bool newHasSrid;
   uint32_t newSrid;
 };
 
-size_t unnest_all_count(WKReader& reader, bool keepEmpty) {
-  WKUnnestedCounter counter(keepEmpty);
-  reader.setHandler(&counter);
+class WKUnnestedFeatureCounter: public WKGeometryHandler {
+public:
+  size_t nNewFeatures;
+  WKUnnestedFeatureCounter(): nNewFeatures(0) {}
+
+  void nextFeatureStart(size_t featureId) {
+    this->nNewFeatures++;
+  }
+};
+
+size_t unnest_count(WKReader& reader, bool keepEmpty, bool keepMulti, int maxUnnestDepth) {
+  WKUnnestedFeatureCounter counter;
+  WKUnnester unnester(counter, keepEmpty, keepMulti, maxUnnestDepth);
+  reader.setHandler(&unnester);
 
   while (reader.hasNextFeature()) {
     checkUserInterrupt();
@@ -139,8 +140,8 @@ size_t unnest_all_count(WKReader& reader, bool keepEmpty) {
   return counter.nNewFeatures;
 }
 
-void unnest_all_do(WKReader& reader, WKWriter& writer, bool keepEmpty) {
-  WKUnnester unnester(writer, keepEmpty);
+void unnest_do(WKReader& reader, WKWriter& writer, bool keepEmpty, bool keepMulti, int maxUnnestDepth) {
+  WKUnnester unnester(writer, keepEmpty, keepMulti, maxUnnestDepth);
   reader.setHandler(&unnester);
 
   reader.reset();
@@ -151,43 +152,43 @@ void unnest_all_do(WKReader& reader, WKWriter& writer, bool keepEmpty) {
 }
 
 //  [[Rcpp::export]]
-CharacterVector cpp_wkt_unnest_all(CharacterVector wkt, bool keepEmpty) {
+CharacterVector cpp_wkt_unnest(CharacterVector wkt, bool keepEmpty, bool keepMulti, int maxUnnestDepth) {
   WKCharacterVectorProvider provider(wkt);
   WKTReader reader(provider);
 
-  size_t nGeometries = unnest_all_count(reader, keepEmpty);
+  size_t nGeometries = unnest_count(reader, keepEmpty, keepMulti, maxUnnestDepth);
   WKCharacterVectorExporter exporter(nGeometries);
   exporter.setRoundingPrecision(16);
   exporter.setTrim(true);
   WKTWriter writer(exporter);
 
-  unnest_all_do(reader, writer, keepEmpty);
+  unnest_do(reader, writer, keepEmpty, keepMulti, maxUnnestDepth);
   return exporter.output;
 }
 
 //  [[Rcpp::export]]
-List cpp_wkb_unnest_all(List wkb, bool keepEmpty, int endian) {
+List cpp_wkb_unnest(List wkb, bool keepEmpty, bool keepMulti, int maxUnnestDepth, int endian) {
   WKRawVectorListProvider provider(wkb);
   WKBReader reader(provider);
 
-  size_t nGeometries = unnest_all_count(reader, keepEmpty);
+  size_t nGeometries = unnest_count(reader, keepEmpty, keepMulti, maxUnnestDepth);
   WKRawVectorListExporter exporter(nGeometries);
   WKBWriter writer(exporter);
   writer.setEndian(endian);
 
-  unnest_all_do(reader, writer, keepEmpty);
+  unnest_do(reader, writer, keepEmpty, keepMulti, maxUnnestDepth);
   return exporter.output;
 }
 
 //  [[Rcpp::export]]
-List cpp_wksxp_unnest_all(List wkb, bool keepEmpty) {
-  WKRcppSEXPProvider provider(wkb);
+List cpp_wksxp_unnest(List wksxp, bool keepEmpty, bool keepMulti, int maxUnnestDepth) {
+  WKRcppSEXPProvider provider(wksxp);
   WKRcppSEXPReader reader(provider);
 
-  size_t nGeometries = unnest_all_count(reader, keepEmpty);
+  size_t nGeometries = unnest_count(reader, keepEmpty, keepMulti, maxUnnestDepth);
   WKRcppSEXPExporter exporter(nGeometries);
   WKRcppSEXPWriter writer(exporter);
 
-  unnest_all_do(reader, writer, keepEmpty);
+  unnest_do(reader, writer, keepEmpty, keepMulti, maxUnnestDepth);
   return exporter.output;
 }

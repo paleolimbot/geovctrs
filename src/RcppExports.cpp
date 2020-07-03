@@ -399,40 +399,46 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// cpp_wkt_unnest_all
-CharacterVector cpp_wkt_unnest_all(CharacterVector wkt, bool keepEmpty);
-RcppExport SEXP _geovctrs_cpp_wkt_unnest_all(SEXP wktSEXP, SEXP keepEmptySEXP) {
+// cpp_wkt_unnest
+CharacterVector cpp_wkt_unnest(CharacterVector wkt, bool keepEmpty, bool keepMulti, int maxUnnestDepth);
+RcppExport SEXP _geovctrs_cpp_wkt_unnest(SEXP wktSEXP, SEXP keepEmptySEXP, SEXP keepMultiSEXP, SEXP maxUnnestDepthSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< CharacterVector >::type wkt(wktSEXP);
     Rcpp::traits::input_parameter< bool >::type keepEmpty(keepEmptySEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_wkt_unnest_all(wkt, keepEmpty));
+    Rcpp::traits::input_parameter< bool >::type keepMulti(keepMultiSEXP);
+    Rcpp::traits::input_parameter< int >::type maxUnnestDepth(maxUnnestDepthSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wkt_unnest(wkt, keepEmpty, keepMulti, maxUnnestDepth));
     return rcpp_result_gen;
 END_RCPP
 }
-// cpp_wkb_unnest_all
-List cpp_wkb_unnest_all(List wkb, bool keepEmpty, int endian);
-RcppExport SEXP _geovctrs_cpp_wkb_unnest_all(SEXP wkbSEXP, SEXP keepEmptySEXP, SEXP endianSEXP) {
+// cpp_wkb_unnest
+List cpp_wkb_unnest(List wkb, bool keepEmpty, bool keepMulti, int maxUnnestDepth, int endian);
+RcppExport SEXP _geovctrs_cpp_wkb_unnest(SEXP wkbSEXP, SEXP keepEmptySEXP, SEXP keepMultiSEXP, SEXP maxUnnestDepthSEXP, SEXP endianSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< List >::type wkb(wkbSEXP);
     Rcpp::traits::input_parameter< bool >::type keepEmpty(keepEmptySEXP);
+    Rcpp::traits::input_parameter< bool >::type keepMulti(keepMultiSEXP);
+    Rcpp::traits::input_parameter< int >::type maxUnnestDepth(maxUnnestDepthSEXP);
     Rcpp::traits::input_parameter< int >::type endian(endianSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_wkb_unnest_all(wkb, keepEmpty, endian));
+    rcpp_result_gen = Rcpp::wrap(cpp_wkb_unnest(wkb, keepEmpty, keepMulti, maxUnnestDepth, endian));
     return rcpp_result_gen;
 END_RCPP
 }
-// cpp_wksxp_unnest_all
-List cpp_wksxp_unnest_all(List wkb, bool keepEmpty);
-RcppExport SEXP _geovctrs_cpp_wksxp_unnest_all(SEXP wkbSEXP, SEXP keepEmptySEXP) {
+// cpp_wksxp_unnest
+List cpp_wksxp_unnest(List wksxp, bool keepEmpty, bool keepMulti, int maxUnnestDepth);
+RcppExport SEXP _geovctrs_cpp_wksxp_unnest(SEXP wksxpSEXP, SEXP keepEmptySEXP, SEXP keepMultiSEXP, SEXP maxUnnestDepthSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< List >::type wkb(wkbSEXP);
+    Rcpp::traits::input_parameter< List >::type wksxp(wksxpSEXP);
     Rcpp::traits::input_parameter< bool >::type keepEmpty(keepEmptySEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_wksxp_unnest_all(wkb, keepEmpty));
+    Rcpp::traits::input_parameter< bool >::type keepMulti(keepMultiSEXP);
+    Rcpp::traits::input_parameter< int >::type maxUnnestDepth(maxUnnestDepthSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wksxp_unnest(wksxp, keepEmpty, keepMulti, maxUnnestDepth));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -471,9 +477,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_wkt_has_missing", (DL_FUNC) &_geovctrs_cpp_wkt_has_missing, 1},
     {"_geovctrs_cpp_wkb_has_missing", (DL_FUNC) &_geovctrs_cpp_wkb_has_missing, 1},
     {"_geovctrs_cpp_wksxp_has_missing", (DL_FUNC) &_geovctrs_cpp_wksxp_has_missing, 1},
-    {"_geovctrs_cpp_wkt_unnest_all", (DL_FUNC) &_geovctrs_cpp_wkt_unnest_all, 2},
-    {"_geovctrs_cpp_wkb_unnest_all", (DL_FUNC) &_geovctrs_cpp_wkb_unnest_all, 3},
-    {"_geovctrs_cpp_wksxp_unnest_all", (DL_FUNC) &_geovctrs_cpp_wksxp_unnest_all, 2},
+    {"_geovctrs_cpp_wkt_unnest", (DL_FUNC) &_geovctrs_cpp_wkt_unnest, 4},
+    {"_geovctrs_cpp_wkb_unnest", (DL_FUNC) &_geovctrs_cpp_wkb_unnest, 5},
+    {"_geovctrs_cpp_wksxp_unnest", (DL_FUNC) &_geovctrs_cpp_wksxp_unnest, 4},
     {NULL, NULL, 0}
 };
 

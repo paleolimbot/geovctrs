@@ -3,76 +3,59 @@
 #'
 #' @inheritParams geo_bbox
 #' @param keep_empty If `TRUE`, a GEOMETRYCOLLECTION EMPTY is left as-is
-#'   rather than collapsing to length 0
+#'   rather than collapsing to length 0.
+#' @param keep_multi If `TRUE`, MULTI* geometries are not expanded to sub-features.
+#' @param max_depth The maximum recursive GEOMETRYCOLLECTION depth to unnest.
 #'
 #' @export
 #'
 #' @examples
-#' geo_unnest_collection("GEOMETRYCOLLECTION (POINT (1 2), POINT (3 4))")
-#' geo_unnest_collection("GEOMETRYCOLLECTION EMPTY")
-#' geo_unnest_collection("GEOMETRYCOLLECTION EMPTY", keep_empty = TRUE)
+#' geo_unnest("GEOMETRYCOLLECTION (POINT (1 2), POINT (3 4))")
+#' geo_unnest("GEOMETRYCOLLECTION EMPTY")
+#' geo_unnest("GEOMETRYCOLLECTION EMPTY", keep_empty = TRUE)
 #'
-geo_unnest_collection <- function(x, keep_empty = FALSE) {
+#' geo_unnest(geo_example_wkt, keep_multi = TRUE)
+#' geo_unnest(geo_example_wkt, keep_multi = FALSE)
+#'
+geo_unnest <- function(x, ..., keep_empty = FALSE, keep_multi = TRUE, max_depth = 1) {
+  UseMethod("geo_unnest")
+}
+
+#' @rdname geo_unnest
+#' @export
+geo_unnest.default <- function(x, ..., keep_empty = FALSE, keep_multi = TRUE, max_depth = 1) {
   if (is_geovctr(x)) {
-    sxp <- unclass(as_wksxp(x))
+    geo_unnest(
+      as_wksxp(x),
+      keep_empty = keep_empty, keep_multi = keep_multi, max_depth = max_depth
+    )
   } else {
-    sxp <- unclass(as_wksxp(as_geovctr(x)))
-  }
-
-  if (length(sxp) != 1) {
-    abort("`x` must be a geometry collection of length 1")
-  }
-
-  if (is.null(sxp[[1]])) {
-    return(wksxp(list(NULL)))
-  }
-
-  if (!inherits(sxp[[1]], "wk_geometrycollection")) {
-    abort("`x` must be a geometry collection of length 1")
-  }
-
-  if (keep_empty && length(sxp[[1]]) == 0) {
-    restore_geovctr(x, new_wk_wksxp(sxp))
-  } else {
-    out <- lapply(sxp[[1]], function(item) {
-      attr(item, "srid") <- attr(sxp[[1]], "srid")
-      item
-    })
-
-    restore_geovctr(x, wksxp(out))
+    restore_geovctr(
+      x,
+      geo_unnest(
+        as_geovctr(x),
+        keep_empty = keep_empty,
+        keep_multi = keep_multi,
+        max_depth = max_depth
+      )
+    )
   }
 }
 
-#' @rdname geo_unnest_collection
+#' @rdname geo_unnest
 #' @export
-geo_unnest_all <- function(x, keep_empty = FALSE) {
-  UseMethod("geo_unnest_all")
+geo_unnest.wk_wkt <- function(x, ..., keep_empty = FALSE, keep_multi = TRUE, max_depth = 1) {
+  new_wk_wkt(cpp_wkt_unnest(x,keep_empty, keep_multi, max_depth))
 }
 
-#' @rdname geo_unnest_collection
+#' @rdname geo_unnest
 #' @export
-geo_unnest_all.default <- function(x, keep_empty = FALSE) {
-  if (is_geovctr(x)) {
-    geo_unnest_all(as_wksxp(x), keep_empty)
-  } else {
-    restore_geovctr(x, geo_unnest_all(as_geovctr(x), keep_empty))
-  }
+geo_unnest.wk_wkb <- function(x, ..., keep_empty = FALSE, keep_multi = TRUE, max_depth = 1) {
+  new_wk_wkb(cpp_wkb_unnest(x, keep_empty, keep_multi, max_depth, endian = wk::wk_platform_endian()))
 }
 
-#' @rdname geo_unnest_collection
+#' @rdname geo_unnest
 #' @export
-geo_unnest_all.wk_wkt <- function(x, keep_empty = FALSE) {
-  new_wk_wkt(cpp_wkt_unnest_all(x, keep_empty))
-}
-
-#' @rdname geo_unnest_collection
-#' @export
-geo_unnest_all.wk_wkb <- function(x, keep_empty = FALSE) {
-  new_wk_wkb(cpp_wkb_unnest_all(x, keep_empty, endian = wk::wk_platform_endian()))
-}
-
-#' @rdname geo_unnest_collection
-#' @export
-geo_unnest_all.wk_wksxp <- function(x, keep_empty = FALSE) {
-  new_wk_wksxp(cpp_wksxp_unnest_all(x, keep_empty))
+geo_unnest.wk_wksxp <- function(x, ..., keep_empty = FALSE, keep_multi = TRUE, max_depth = 1) {
+  new_wk_wksxp(cpp_wksxp_unnest(x, keep_empty, keep_multi, max_depth))
 }
