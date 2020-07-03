@@ -399,6 +399,43 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cpp_wkt_unnest_all
+CharacterVector cpp_wkt_unnest_all(CharacterVector wkt, bool keepEmpty);
+RcppExport SEXP _geovctrs_cpp_wkt_unnest_all(SEXP wktSEXP, SEXP keepEmptySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type wkt(wktSEXP);
+    Rcpp::traits::input_parameter< bool >::type keepEmpty(keepEmptySEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wkt_unnest_all(wkt, keepEmpty));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_wkb_unnest_all
+List cpp_wkb_unnest_all(List wkb, bool keepEmpty, int endian);
+RcppExport SEXP _geovctrs_cpp_wkb_unnest_all(SEXP wkbSEXP, SEXP keepEmptySEXP, SEXP endianSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type wkb(wkbSEXP);
+    Rcpp::traits::input_parameter< bool >::type keepEmpty(keepEmptySEXP);
+    Rcpp::traits::input_parameter< int >::type endian(endianSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wkb_unnest_all(wkb, keepEmpty, endian));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_wksxp_unnest_all
+List cpp_wksxp_unnest_all(List wkb, bool keepEmpty);
+RcppExport SEXP _geovctrs_cpp_wksxp_unnest_all(SEXP wkbSEXP, SEXP keepEmptySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type wkb(wkbSEXP);
+    Rcpp::traits::input_parameter< bool >::type keepEmpty(keepEmptySEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_wksxp_unnest_all(wkb, keepEmpty));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_translate_xy_wkt", (DL_FUNC) &_geovctrs_cpp_translate_xy_wkt, 3},
@@ -434,6 +471,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_geovctrs_cpp_wkt_has_missing", (DL_FUNC) &_geovctrs_cpp_wkt_has_missing, 1},
     {"_geovctrs_cpp_wkb_has_missing", (DL_FUNC) &_geovctrs_cpp_wkb_has_missing, 1},
     {"_geovctrs_cpp_wksxp_has_missing", (DL_FUNC) &_geovctrs_cpp_wksxp_has_missing, 1},
+    {"_geovctrs_cpp_wkt_unnest_all", (DL_FUNC) &_geovctrs_cpp_wkt_unnest_all, 2},
+    {"_geovctrs_cpp_wkb_unnest_all", (DL_FUNC) &_geovctrs_cpp_wkb_unnest_all, 3},
+    {"_geovctrs_cpp_wksxp_unnest_all", (DL_FUNC) &_geovctrs_cpp_wksxp_unnest_all, 2},
     {NULL, NULL, 0}
 };
 

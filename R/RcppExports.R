@@ -133,3 +133,15 @@ cpp_wksxp_has_missing <- function(wksxp) {
     .Call(`_geovctrs_cpp_wksxp_has_missing`, wksxp)
 }
 
+cpp_wkt_unnest_all <- function(wkt, keepEmpty) {
+    .Call(`_geovctrs_cpp_wkt_unnest_all`, wkt, keepEmpty)
+}
+
+cpp_wkb_unnest_all <- function(wkb, keepEmpty, endian) {
+    .Call(`_geovctrs_cpp_wkb_unnest_all`, wkb, keepEmpty, endian)
+}
+
+cpp_wksxp_unnest_all <- function(wkb, keepEmpty) {
+    .Call(`_geovctrs_cpp_wksxp_unnest_all`, wkb, keepEmpty)
+}
+
