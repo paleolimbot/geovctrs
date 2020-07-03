@@ -9,3 +9,4 @@
 ^data-raw$
 ^\.vscode$
 ^LICENSE\.md$
+^codecov\.yml$
