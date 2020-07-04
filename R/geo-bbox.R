@@ -36,21 +36,21 @@ geo_bbox.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 
 #' @export
 geo_bbox.wk_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  ranges <- unclass(wk::wkt_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
+  ranges <- unclass(wkutils::wkt_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
   ranges$srid <- summarise_srids(geo_srid(x))
   new_geovctrs_rect(ranges)
 }
 
 #' @export
 geo_bbox.wk_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  ranges <- unclass(wk::wkb_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
+  ranges <- unclass(wkutils::wkb_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
   ranges$srid <- summarise_srids(geo_srid(x))
   new_geovctrs_rect(ranges)
 }
 
 #' @export
 geo_bbox.wk_wksxp <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  ranges <- unclass(wk::wksxp_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
+  ranges <- unclass(wkutils::wksxp_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
   ranges$srid <- summarise_srids(geo_srid(x))
   new_geovctrs_rect(ranges)
 }
@@ -112,21 +112,21 @@ geo_envelope.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 
 #' @export
 geo_envelope.wk_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  ranges <- unclass(wk::wkt_feature_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
+  ranges <- unclass(wkutils::wkt_feature_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
   ranges$srid <- geo_srid(x)
   new_geovctrs_rect(ranges)
 }
 
 #' @export
 geo_envelope.wk_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  ranges <- unclass(wk::wkb_feature_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
+  ranges <- unclass(wkutils::wkb_feature_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
   ranges$srid <- geo_srid(x)
   new_geovctrs_rect(ranges)
 }
 
 #' @export
 geo_envelope.wk_wksxp <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  ranges <- unclass(wk::wksxp_feature_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
+  ranges <- unclass(wkutils::wksxp_feature_ranges(x, na.rm, finite))[c("xmin", "ymin", "xmax", "ymax")]
   ranges$srid <- geo_srid(x)
   new_geovctrs_rect(ranges)
 }

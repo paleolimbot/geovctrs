@@ -6,7 +6,7 @@
 #' [dplyr::group_by()] and [dplyr::summarise()]. Collections contain zero
 #' or more objects of type [geo_point()], [geo_linestring()], [geo_polygon()],
 #' [geo_multipoint()], [geo_multilinestring()], and/or
-#' [geo_multipolygon()]. See [wk::coords_point_translate_wkb()] and related
+#' [geo_multipolygon()]. See [wkutils::coords_point_translate_wkb()] and related
 #' functions for high-performance methods to create these vectors.
 #'
 #' @param feature A vector of one or more features.
@@ -102,7 +102,7 @@ geo_polygon <- function(xy = geo_xy(), ring = 1L, srid = NA)  {
   }
 
   data <- vec_data(xy)
-  raw_wksxp <- wk::coords_polygon_translate_wksxp(
+  raw_wksxp <- wkutils::coords_polygon_translate_wksxp(
     data$x,
     data$y,
     data$z %||% NA_real_,
@@ -135,9 +135,9 @@ geo_multipolygon <- function(feature = wksxp(), srid = NA) {
 }
 
 construct_multi_type <- function(feature, type_id, srid) {
-  type <- wk::wk_geometry_type(type_id)
+  type <- wkutils::wk_geometry_type(type_id)
   feature <- as_wksxp(feature)
-  feature_meta <- wk::wksxp_meta(feature)
+  feature_meta <- wkutils::wksxp_meta(feature)
   if (!all(feature_meta$type_id == type_id)) {
     abort(sprintf("All elements of `feature` must be of type '%s'", type))
   }

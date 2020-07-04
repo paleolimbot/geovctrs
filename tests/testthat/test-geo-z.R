@@ -18,7 +18,7 @@ test_that("set_z works", {
   expect_identical(geo_z_range(geo_example_wkt), geo_lim(5, 5))
   example_z <- geo_set_z(geo_example_wkt, 10)
   expect_identical(example_z[1], NA_wkt_)
-  expect_true(all(wk::wkt_meta(example_z[!geo_is_empty(example_z)])$has_z))
+  expect_true(all(wkutils::wkt_meta(example_z[!geo_is_empty(example_z)])$has_z))
   expect_identical(geo_z_range(example_z[!geo_is_empty(example_z)]), geo_lim(10, 10))
   expect_identical(geo_is_empty(example_z), geo_is_empty(geo_example_wkt))
 })
@@ -49,7 +49,7 @@ test_that("drop_z works", {
 
   example_z <- geo_drop_z(geo_example_wkt)
   expect_identical(example_z[1], NA_wkt_)
-  expect_true(all(!wk::wkt_meta(example_z[!geo_is_empty(example_z)])$has_z))
+  expect_true(all(!wkutils::wkt_meta(example_z[!geo_is_empty(example_z)])$has_z))
   expect_identical(geo_z_range(example_z), geo_lim(Inf, -Inf))
   expect_identical(geo_is_empty(example_z), geo_is_empty(geo_example_wkt))
 })

@@ -48,7 +48,7 @@ frames, possibly using
 \code{\link[dplyr:group_by]{dplyr::group_by()}} and \code{\link[dplyr:summarise]{dplyr::summarise()}}. Collections contain zero
 or more objects of type \code{\link[=geo_point]{geo_point()}}, \code{\link[=geo_linestring]{geo_linestring()}}, \code{\link[=geo_polygon]{geo_polygon()}},
 \code{\link[=geo_multipoint]{geo_multipoint()}}, \code{\link[=geo_multilinestring]{geo_multilinestring()}}, and/or
-\code{\link[=geo_multipolygon]{geo_multipolygon()}}. See \code{\link[wk:coords_point_translate_wkt]{wk::coords_point_translate_wkb()}} and related
+\code{\link[=geo_multipolygon]{geo_multipolygon()}}. See \code{\link[wkutils:coords_point_translate_wkt]{wkutils::coords_point_translate_wkb()}} and related
 functions for high-performance methods to create these vectors.
 }
 \examples{

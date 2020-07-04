@@ -2,8 +2,8 @@
 #' Plot geometry vectors
 #'
 #' These functions are basic plot implementations for the geovctrs types.
-#' Similar [plot()] methods are available for [well-known types][wk::plot.wk_wkt]
-#' in the wk package.
+#' Similar [plot()] methods are available for [well-known types][wkutils::plot.wk_wkt]
+#' in the wkutils package.
 #'
 #' @inheritParams geo_bbox
 #' @param ... Passed to plotting functions for features: [graphics::points()]

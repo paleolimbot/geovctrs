@@ -98,17 +98,17 @@ geo_has_z.default <- function(x) {
 
 #' @export
 geo_has_z.wk_wkb <- function(x) {
-  wk::wkb_meta(x)$has_z
+  wkutils::wkb_meta(x)$has_z
 }
 
 #' @export
 geo_has_z.wk_wkt <- function(x) {
-  wk::wkt_meta(x)$has_z
+  wkutils::wkt_meta(x)$has_z
 }
 
 #' @export
 geo_has_z.wk_wksxp <- function(x) {
-  wk::wksxp_meta(x)$has_z
+  wkutils::wksxp_meta(x)$has_z
 }
 
 #' @export
@@ -144,13 +144,13 @@ geo_z_range.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 
 #' @export
 geo_z_range.wk_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  ranges <- wk::wkb_ranges(x, na.rm, finite)
+  ranges <- wkutils::wkb_ranges(x, na.rm, finite)
   new_geovctrs_lim(list(lower = ranges$zmin, upper = ranges$zmax))
 }
 
 #' @export
 geo_z_range.wk_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  ranges <- wk::wkt_ranges(x, na.rm, finite)
+  ranges <- wkutils::wkt_ranges(x, na.rm, finite)
   new_geovctrs_lim(list(lower = ranges$zmin, upper = ranges$zmax))
 }
 
@@ -182,19 +182,19 @@ geo_z_envelope.default <- function(x, ..., na.rm = FALSE, finite = FALSE) {
 
 #' @export
 geo_z_envelope.wk_wkt <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  ranges <- wk::wkt_feature_ranges(x, na.rm, finite)
+  ranges <- wkutils::wkt_feature_ranges(x, na.rm, finite)
   new_geovctrs_lim(list(lower = ranges$zmin, upper = ranges$zmax))
 }
 
 #' @export
 geo_z_envelope.wk_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  ranges <- wk::wkb_feature_ranges(x, na.rm, finite)
+  ranges <- wkutils::wkb_feature_ranges(x, na.rm, finite)
   new_geovctrs_lim(list(lower = ranges$zmin, upper = ranges$zmax))
 }
 
 #' @export
 geo_z_envelope.wk_wkb <- function(x, ..., na.rm = FALSE, finite = FALSE) {
-  ranges <- wk::wksxp_feature_ranges(x, na.rm, finite)
+  ranges <- wkutils::wksxp_feature_ranges(x, na.rm, finite)
   new_geovctrs_lim(list(lower = ranges$zmin, upper = ranges$zmax))
 }
 

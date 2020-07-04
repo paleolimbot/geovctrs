@@ -55,8 +55,8 @@ for xy vectors, \code{\link[graphics:segments]{graphics::segments()}} for segmen
 }
 \description{
 These functions are basic plot implementations for the geovctrs types.
-Similar \code{\link[=plot]{plot()}} methods are available for \link[wk:plot.wk_wkt]{well-known types}
-in the wk package.
+Similar \code{\link[=plot]{plot()}} methods are available for \link[wkutils:plot.wk_wkt]{well-known types}
+in the wkutils package.
 }
 \examples{
 # plot functions for wk types are provided

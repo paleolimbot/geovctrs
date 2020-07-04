@@ -38,19 +38,19 @@ geo_coordinates.default <- function(x, ...) {
 
 #' @export
 geo_coordinates.wk_wkt <- function(x, ...) {
-  coords <- wk::wkt_coords(x, sep_na = FALSE)
+  coords <- wkutils::wkt_coords(x, sep_na = FALSE)
   geo_coordinates_from_coords(coords)
 }
 
 #' @export
 geo_coordinates.wk_wkb <- function(x, ...) {
-  coords <- wk::wkb_coords(x, sep_na = FALSE)
+  coords <- wkutils::wkb_coords(x, sep_na = FALSE)
   geo_coordinates_from_coords(coords)
 }
 
 #' @export
 geo_coordinates.wk_wksxp <- function(x, ...) {
-  coords <- wk::wksxp_coords(x, sep_na = FALSE)
+  coords <- wkutils::wksxp_coords(x, sep_na = FALSE)
   geo_coordinates_from_coords(coords)
 }
 
@@ -84,9 +84,9 @@ geo_coordinates_from_coords <- function(coords) {
 
   tibble::new_tibble(
     list(
-      feature = coords$feature,
-      part = coords$part,
-      ring = coords$ring,
+      feature = coords$feature_id,
+      part = coords$part_id,
+      ring = coords$ring_id,
       xy = xy
     ),
     nrow = nrow(coords)

@@ -195,17 +195,17 @@ geo_is_empty.default <- function(x) {
 
 #' @export
 geo_is_empty.wk_wkt <- function(x) {
-  is.na(x) | wk::wkt_meta(x)$size == 0
+  is.na(x) | wkutils::wkt_meta(x)$size == 0
 }
 
 #' @export
 geo_is_empty.wk_wkb <- function(x) {
-  is.na(x) | wk::wkb_meta(x)$size == 0
+  is.na(x) | wkutils::wkb_meta(x)$size == 0
 }
 
 #' @export
 geo_is_empty.wk_wksxp <- function(x) {
-  is.na(x) | wk::wksxp_meta(x)$size == 0
+  is.na(x) | wkutils::wksxp_meta(x)$size == 0
 }
 
 #' @export
