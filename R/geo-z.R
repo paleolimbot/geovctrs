@@ -29,19 +29,19 @@ geo_set_z.default <- function(x, z) {
 #' @export
 geo_set_z.wk_wksxp <- function(x, z) {
   recycled <- vec_recycle_common(x, z)
-  new_wk_wksxp(cpp_wksxp_set_z(recycled[[1]], recycled[[2]]))
+  new_wk_wksxp(wkutils::wksxp_set_z(recycled[[1]], recycled[[2]]))
 }
 
 #' @export
 geo_set_z.wk_wkb <- function(x, z) {
   recycled <- vec_recycle_common(x, z)
-  new_wk_wkb(cpp_wkb_set_z(recycled[[1]], recycled[[2]], endian = wk::wk_platform_endian()))
+  new_wk_wkb(wkutils::wkb_set_z(recycled[[1]], recycled[[2]]))
 }
 
 #' @export
 geo_set_z.wk_wkt <- function(x, z) {
   recycled <- vec_recycle_common(x, z)
-  new_wk_wkt(cpp_wkt_set_z(recycled[[1]], recycled[[2]]))
+  new_wk_wkt(wkutils::wkt_set_z(recycled[[1]], recycled[[2]]))
 }
 
 #' @export

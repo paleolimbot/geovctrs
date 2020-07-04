@@ -80,17 +80,17 @@ geo_has_missing.default <- function(x) {
 
 #' @export
 geo_has_missing.wk_wkt <- function(x) {
-  cpp_wkt_has_missing(x)
+  wkutils::wkt_has_missing(x)
 }
 
 #' @export
 geo_has_missing.wk_wkb <- function(x) {
-  cpp_wkb_has_missing(x)
+  wkutils::wkb_has_missing(x)
 }
 
 #' @export
 geo_has_missing.wk_wksxp <- function(x) {
-  cpp_wksxp_has_missing(x)
+  wkutils::wksxp_has_missing(x)
 }
 
 #' @export
@@ -136,17 +136,17 @@ geo_is_finite.default <- function(x) {
 
 #' @export
 geo_is_finite.wk_wkt <- function(x) {
-  !cpp_wkt_has_non_finite(x)
+  wkutils::wkt_is_finite(x)
 }
 
 #' @export
 geo_is_finite.wk_wkb <- function(x) {
-  !cpp_wkb_has_non_finite(x)
+  wkutils::wkb_is_finite(x)
 }
 
 #' @export
 geo_is_finite.wk_wksxp <- function(x) {
-  !cpp_wksxp_has_non_finite(x)
+  wkutils::wksxp_is_finite(x)
 }
 
 #' @export

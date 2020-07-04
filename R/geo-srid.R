@@ -4,12 +4,9 @@
 #' The geovctrs package works with spatial reference identifiers
 #' instead of actual CRS objects so that the heavy lifting can
 #' be implemented in other packages. However, most geometry
-#' formats store an integer spatial reference identifier (SRID)
-#' with each feature to propogate this information through
-#' calculations. The difference between 0 and `NA` is
-#' murky at the moment, but it's likely that 0 will mean
-#' "not specified" and `NA` will mean "inherit the other
-#' guy's SRID!.
+#' formats can store an integer spatial reference identifier (SRID)
+#' with each feature to propagate this information through
+#' calculations.
 #'
 #' @inheritParams geo_bbox
 #' @param srid A spatial reference identifier, coerced to
@@ -79,7 +76,7 @@ geo_srid.wk_wkt <- function(x) {
 #' @export
 geo_set_srid.wk_wkt <- function(x, srid) {
   recycled <- vec_recycle_common(x, srid)
-  new_wk_wkt(cpp_wkt_set_srid(recycled[[1]], recycled[[2]]))
+  new_wk_wkt(wkutils::wkt_set_srid(recycled[[1]], recycled[[2]]))
 }
 
 #' @export
@@ -105,7 +102,7 @@ geo_srid.wk_wkb <- function(x) {
 #' @export
 geo_set_srid.wk_wkb <- function(x, srid) {
   recycled <- vec_recycle_common(x, srid)
-  new_wk_wkb(cpp_wkb_set_srid(recycled[[1]], recycled[[2]], endian = wk::wk_platform_endian()))
+  new_wk_wkb(wkutils::wkb_set_srid(recycled[[1]], recycled[[2]]))
 }
 
 #' @export
@@ -116,7 +113,7 @@ geo_srid.wk_wksxp <- function(x) {
 #' @export
 geo_set_srid.wk_wksxp <- function(x, srid) {
   recycled <- vec_recycle_common(x, srid)
-  new_wk_wksxp(cpp_wksxp_set_srid(recycled[[1]], recycled[[2]]))
+  new_wk_wksxp(wkutils::wksxp_set_srid(recycled[[1]], recycled[[2]]))
 }
 
 #' @export

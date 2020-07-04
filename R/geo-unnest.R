@@ -45,7 +45,7 @@ geo_unnest.default <- function(x, ..., keep_empty = FALSE, keep_multi = TRUE, ma
 #' @rdname geo_unnest
 #' @export
 geo_unnest.wk_wkt <- function(x, ..., keep_empty = FALSE, keep_multi = TRUE, max_depth = 1) {
-  result <- cpp_wkt_unnest(x, keep_empty, keep_multi, max_depth)
+  result <- wkutils::wkt_unnest(x, keep_empty, keep_multi, max_depth)
   attr(result, "lengths") <- NULL
   new_wk_wkt(result)
 }
@@ -53,7 +53,7 @@ geo_unnest.wk_wkt <- function(x, ..., keep_empty = FALSE, keep_multi = TRUE, max
 #' @rdname geo_unnest
 #' @export
 geo_unnest.wk_wkb <- function(x, ..., keep_empty = FALSE, keep_multi = TRUE, max_depth = 1) {
-  result <- cpp_wkb_unnest(x, keep_empty, keep_multi, max_depth, endian = wk::wk_platform_endian())
+  result <- wkutils::wkb_unnest(x, keep_empty, keep_multi, max_depth)
   attr(result, "lengths") <- NULL
   new_wk_wkb(result)
 }
@@ -61,7 +61,7 @@ geo_unnest.wk_wkb <- function(x, ..., keep_empty = FALSE, keep_multi = TRUE, max
 #' @rdname geo_unnest
 #' @export
 geo_unnest.wk_wksxp <- function(x, ..., keep_empty = FALSE, keep_multi = TRUE, max_depth = 1) {
-  result <- cpp_wksxp_unnest(x, keep_empty, keep_multi, max_depth)
+  result <- wkutils::wksxp_unnest(x, keep_empty, keep_multi, max_depth)
   attr(result, "lengths") <- NULL
   new_wk_wksxp(result)
 }
@@ -76,17 +76,17 @@ geo_unnest.data.frame <- function(x, ..., keep_empty = FALSE, keep_multi = TRUE,
   col <- as_geovctr(x)
 
   if (inherits(col, "wk_wkt")) {
-    result <- cpp_wkt_unnest(col, keep_empty, keep_multi, max_depth)
+    result <- wkutils::wkt_unnest(col, keep_empty, keep_multi, max_depth)
     lengths <- attr(result, "lengths")
     attr(result, "lengths") <- NULL
     result <- new_wk_wkt(result)
   } else if (inherits(col, "wk_wkb")) {
-    result <- cpp_wkb_unnest(col, keep_empty, keep_multi, max_depth, endian = wk::wk_platform_endian())
+    result <- wkutils::wkb_unnest(col, keep_empty, keep_multi, max_depth)
     lengths <- attr(result, "lengths")
     attr(result, "lengths") <- NULL
     result <- new_wk_wkb(result)
   } else {
-    result <- cpp_wksxp_unnest(as_wksxp(col), keep_empty, keep_multi, max_depth)
+    result <- wkutils::wksxp_unnest(as_wksxp(col), keep_empty, keep_multi, max_depth)
     lengths <- attr(result, "lengths")
     attr(result, "lengths") <- NULL
     result <- new_wk_wksxp(result)

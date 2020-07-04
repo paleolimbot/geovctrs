@@ -117,10 +117,23 @@ test_that("geo_unnest(max_depth) is respected", {
 })
 
 test_that("unnesting works on data frames", {
-  expect_identical(geo_unnest(geo_nc[integer(0), ]), geo_nc[integer(0), ])
+  nc <- geo_nc[c("NAME", "geometry")]
 
-  nc_unnested <- geo_nc[c("NAME", "geometry")] %>% geo_unnest(keep_multi = F)
-  nc_sizes <- wkutils::wkb_meta(geo_nc$geometry)$size
+  expect_identical(geo_unnest(nc[integer(0), ]), nc[integer(0), ])
+
+  nc_unnested <- geo_unnest(nc, keep_multi = FALSE)
+  nc_sizes <- wkutils::wkb_meta(nc$geometry)$size
+  unnested_rle <- rle(nc_unnested$NAME)
+  expect_identical(unnested_rle$lengths, nc_sizes)
+
+  # also check WKT and WKSXP branches
+  nc$geometry <- as_wkt(nc$geometry)
+  nc_unnested <- geo_unnest(nc, keep_multi = FALSE)
+  unnested_rle <- rle(nc_unnested$NAME)
+  expect_identical(unnested_rle$lengths, nc_sizes)
+
+  nc$geometry <- as_wksxp(nc$geometry)
+  nc_unnested <- geo_unnest(nc, keep_multi = FALSE)
   unnested_rle <- rle(nc_unnested$NAME)
   expect_identical(unnested_rle$lengths, nc_sizes)
 })
