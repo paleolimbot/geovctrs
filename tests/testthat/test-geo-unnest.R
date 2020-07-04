@@ -12,7 +12,7 @@ test_that("geo_unnest() works", {
   expect_identical(
     geo_unnest(
       "GEOMETRYCOLLECTION(MULTIPOINT (30 10, 10 10), LINESTRING (0 0, 1 1), GEOMETRYCOLLECTION EMPTY)",
-      keep_multi = FALSE, keep_empty = FALSE, max_depth = 1
+      keep_multi = FALSE, keep_empty = TRUE, max_depth = 2
     ),
     wkt(c("POINT (30 10)", "POINT (10 10)", "LINESTRING (0 0, 1 1)", "GEOMETRYCOLLECTION EMPTY"))
   )
@@ -20,7 +20,7 @@ test_that("geo_unnest() works", {
   expect_identical(
     geo_unnest(
       "GEOMETRYCOLLECTION(MULTIPOINT (30 10, 10 10), LINESTRING (0 0, 1 1), GEOMETRYCOLLECTION EMPTY)",
-      keep_multi = FALSE, keep_empty = TRUE
+      keep_multi = FALSE, keep_empty = TRUE, max_depth = 2
     ),
     wkt(c("POINT (30 10)", "POINT (10 10)", "LINESTRING (0 0, 1 1)", "GEOMETRYCOLLECTION EMPTY"))
   )
@@ -71,5 +71,47 @@ test_that("geo_unnest() works", {
       keep_multi = FALSE, max_depth = 2, keep_empty = FALSE
     ),
     as_wksxp(c("POINT (30 10)", "POINT (10 10)", "LINESTRING (0 0, 1 1)"))
+  )
+})
+
+test_that("geo_unnest(max_depth) is respected", {
+  expect_identical(
+    geo_unnest(
+      "GEOMETRYCOLLECTION (GEOMETRYCOLLECTION (GEOMETRYCOLLECTION (POINT (0 1))))",
+      max_depth = 0
+    ),
+    wkt("GEOMETRYCOLLECTION (GEOMETRYCOLLECTION (GEOMETRYCOLLECTION (POINT (0 1))))")
+  )
+
+  expect_identical(
+    geo_unnest(
+      "GEOMETRYCOLLECTION (GEOMETRYCOLLECTION (GEOMETRYCOLLECTION (POINT (0 1))))",
+      max_depth = 1
+    ),
+    wkt("GEOMETRYCOLLECTION (GEOMETRYCOLLECTION (POINT (0 1)))")
+  )
+
+  expect_identical(
+    geo_unnest(
+      "GEOMETRYCOLLECTION (GEOMETRYCOLLECTION (GEOMETRYCOLLECTION (POINT (0 1))))",
+      max_depth = 2
+    ),
+    wkt("GEOMETRYCOLLECTION (POINT (0 1))")
+  )
+
+  expect_identical(
+    geo_unnest(
+      "GEOMETRYCOLLECTION (GEOMETRYCOLLECTION (GEOMETRYCOLLECTION (POINT (0 1))))",
+      max_depth = 3
+    ),
+    wkt("POINT (0 1)")
+  )
+
+  expect_identical(
+    geo_unnest(
+      "SRID=21;GEOMETRYCOLLECTION (GEOMETRYCOLLECTION (GEOMETRYCOLLECTION (POINT (0 1))))",
+      max_depth = 3
+    ),
+    wkt("SRID=21;POINT (0 1)")
   )
 })

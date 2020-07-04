@@ -25,8 +25,8 @@ public:
     }
   }
 
-  bool shouldUnnest(const WKGeometryMeta& meta) {
-    if (this->unnestDepth > this->maxUnnestDepth) {
+  bool shouldUnnest(const WKGeometryMeta& meta, int unnestDepth) {
+    if (unnestDepth >= this->maxUnnestDepth) {
       return false;
     } else if (this->keepEmpty && (meta.size == 0)) {
       return false;
@@ -35,6 +35,21 @@ public:
     } else {
       return false;
     }
+  }
+
+  // at the start, the unnestDepth is correct
+  bool shouldUnnestStart(const WKGeometryMeta& meta) {
+    if (this->shouldUnnest(meta, this->unnestDepth)) {
+      this->isUnnested.insert(meta.id());
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // at the end, just check if this meta was unnested
+  bool shouldUnnestEnd(const WKGeometryMeta& meta) {
+    return this->isUnnested.count(meta.id()) == 1;
   }
 
   WKGeometryMeta newGeometryMeta(const WKGeometryMeta& meta, uint32_t partId) {
@@ -49,12 +64,13 @@ public:
   }
 
   void nextFeatureStart(size_t featureId) {
+    this->isUnnested.clear();
     this->topLevelMetaId = 0;
     this->unnestDepth = 0;
   }
 
   void nextFeatureEnd(size_t featureId) {
-    // specifically do nothing
+
   }
 
   void nextNull(size_t featureId) {
@@ -65,7 +81,7 @@ public:
   }
 
   void nextGeometryStart(const WKGeometryMeta& meta, uint32_t partId) {
-    if (this->shouldUnnest(meta)) {
+    if (this->shouldUnnestStart(meta)) {
       if (this->unnestDepth == 0) {
         this->newHasSrid = meta.hasSRID;
         this->newSrid = meta.srid;
@@ -89,7 +105,8 @@ public:
   }
 
   void nextGeometryEnd(const WKGeometryMeta& meta, uint32_t partId) {
-    if (this->shouldUnnest(meta)) {
+    if (this->shouldUnnestEnd(meta)) {
+      this->isUnnested.erase(meta.id());
       this->unnestDepth--;
       return;
     }
@@ -112,6 +129,7 @@ private:
   bool keepEmpty;
   int minUnnestType;
   int maxUnnestDepth;
+  std::unordered_set<uintptr_t> isUnnested;
   int unnestDepth;
   bool newHasSrid;
   uint32_t newSrid;
