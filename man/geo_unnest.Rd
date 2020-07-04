@@ -6,6 +6,7 @@
 \alias{geo_unnest.wk_wkt}
 \alias{geo_unnest.wk_wkb}
 \alias{geo_unnest.wk_wksxp}
+\alias{geo_unnest.data.frame}
 \title{Unnest recursive geometry structures}
 \usage{
 geo_unnest(x, ..., keep_empty = FALSE, keep_multi = TRUE, max_depth = 1)
@@ -17,6 +18,8 @@ geo_unnest(x, ..., keep_empty = FALSE, keep_multi = TRUE, max_depth = 1)
 \method{geo_unnest}{wk_wkb}(x, ..., keep_empty = FALSE, keep_multi = TRUE, max_depth = 1)
 
 \method{geo_unnest}{wk_wksxp}(x, ..., keep_empty = FALSE, keep_multi = TRUE, max_depth = 1)
+
+\method{geo_unnest}{data.frame}(x, ..., keep_empty = FALSE, keep_multi = TRUE, max_depth = 1)
 }
 \arguments{
 \item{x}{A geometry-like object, or one that can be

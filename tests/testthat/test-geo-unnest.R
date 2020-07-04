@@ -115,3 +115,12 @@ test_that("geo_unnest(max_depth) is respected", {
     wkt("SRID=21;POINT (0 1)")
   )
 })
+
+test_that("unnesting works on data frames", {
+  expect_identical(geo_unnest(geo_nc[integer(0), ]), geo_nc[integer(0), ])
+
+  nc_unnested <- geo_nc[c("NAME", "geometry")] %>% geo_unnest(keep_multi = F)
+  nc_sizes <- wk::wkb_meta(geo_nc$geometry)$size
+  unnested_rle <- rle(nc_unnested$NAME)
+  expect_identical(unnested_rle$lengths, nc_sizes)
+})

@@ -45,17 +45,57 @@ geo_unnest.default <- function(x, ..., keep_empty = FALSE, keep_multi = TRUE, ma
 #' @rdname geo_unnest
 #' @export
 geo_unnest.wk_wkt <- function(x, ..., keep_empty = FALSE, keep_multi = TRUE, max_depth = 1) {
-  new_wk_wkt(cpp_wkt_unnest(x,keep_empty, keep_multi, max_depth))
+  result <- cpp_wkt_unnest(x, keep_empty, keep_multi, max_depth)
+  attr(result, "lengths") <- NULL
+  new_wk_wkt(result)
 }
 
 #' @rdname geo_unnest
 #' @export
 geo_unnest.wk_wkb <- function(x, ..., keep_empty = FALSE, keep_multi = TRUE, max_depth = 1) {
-  new_wk_wkb(cpp_wkb_unnest(x, keep_empty, keep_multi, max_depth, endian = wk::wk_platform_endian()))
+  result <- cpp_wkb_unnest(x, keep_empty, keep_multi, max_depth, endian = wk::wk_platform_endian())
+  attr(result, "lengths") <- NULL
+  new_wk_wkb(result)
 }
 
 #' @rdname geo_unnest
 #' @export
 geo_unnest.wk_wksxp <- function(x, ..., keep_empty = FALSE, keep_multi = TRUE, max_depth = 1) {
-  new_wk_wksxp(cpp_wksxp_unnest(x, keep_empty, keep_multi, max_depth))
+  result <- cpp_wksxp_unnest(x, keep_empty, keep_multi, max_depth)
+  attr(result, "lengths") <- NULL
+  new_wk_wksxp(result)
+}
+
+# This is probably the most common use-case (data frames), hence the slight duplication
+# of code to get this detail right. This is designed to also work on sf objects (or any
+# data frame subclass).
+
+#' @rdname geo_unnest
+#' @export
+geo_unnest.data.frame <- function(x, ..., keep_empty = FALSE, keep_multi = TRUE, max_depth = 1) {
+  col <- as_geovctr(x)
+
+  if (inherits(col, "wk_wkt")) {
+    result <- cpp_wkt_unnest(col, keep_empty, keep_multi, max_depth)
+    lengths <- attr(result, "lengths")
+    attr(result, "lengths") <- NULL
+    result <- new_wk_wkt(result)
+  } else if (inherits(col, "wk_wkb")) {
+    result <- cpp_wkb_unnest(col, keep_empty, keep_multi, max_depth, endian = wk::wk_platform_endian())
+    lengths <- attr(result, "lengths")
+    attr(result, "lengths") <- NULL
+    result <- new_wk_wkb(result)
+  } else {
+    result <- cpp_wksxp_unnest(as_wksxp(col), keep_empty, keep_multi, max_depth)
+    lengths <- attr(result, "lengths")
+    attr(result, "lengths") <- NULL
+    result <- new_wk_wksxp(result)
+  }
+
+  run_length_enc <- structure(
+    list(lengths = lengths, values = seq_along(lengths)),
+    class = "rle"
+  )
+
+  restore_geovctr(x[inverse.rle(run_length_enc), , drop = FALSE], result)
 }

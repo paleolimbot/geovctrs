@@ -140,22 +140,33 @@ public:
   size_t nNewFeatures;
   WKUnnestedFeatureCounter(): nNewFeatures(0) {}
 
+  size_t reset() {
+    size_t out = this->nNewFeatures;
+    this->nNewFeatures = 0;
+    return out;
+  }
+
   void nextFeatureStart(size_t featureId) {
     this->nNewFeatures++;
   }
 };
 
-size_t unnest_count(WKReader& reader, bool keepEmpty, bool keepMulti, int maxUnnestDepth) {
+IntegerVector unnest_count(WKReader& reader, bool keepEmpty, bool keepMulti, int maxUnnestDepth) {
   WKUnnestedFeatureCounter counter;
   WKUnnester unnester(counter, keepEmpty, keepMulti, maxUnnestDepth);
   reader.setHandler(&unnester);
 
+  R_xlen_t featureId = 0;
+  IntegerVector lengths(reader.nFeatures());
+
   while (reader.hasNextFeature()) {
     checkUserInterrupt();
     reader.iterateFeature();
+    lengths[featureId] = counter.reset();
+    featureId++;
   }
 
-  return counter.nNewFeatures;
+  return lengths;
 }
 
 void unnest_do(WKReader& reader, WKWriter& writer, bool keepEmpty, bool keepMulti, int maxUnnestDepth) {
@@ -169,18 +180,21 @@ void unnest_do(WKReader& reader, WKWriter& writer, bool keepEmpty, bool keepMult
   }
 }
 
-//  [[Rcpp::export]]
+
+// [[Rcpp::export]]
 CharacterVector cpp_wkt_unnest(CharacterVector wkt, bool keepEmpty, bool keepMulti, int maxUnnestDepth) {
   WKCharacterVectorProvider provider(wkt);
   WKTReader reader(provider);
 
-  size_t nGeometries = unnest_count(reader, keepEmpty, keepMulti, maxUnnestDepth);
+  IntegerVector lengths = unnest_count(reader, keepEmpty, keepMulti, maxUnnestDepth);
+  size_t nGeometries = sum(lengths);
   WKCharacterVectorExporter exporter(nGeometries);
   exporter.setRoundingPrecision(16);
   exporter.setTrim(true);
   WKTWriter writer(exporter);
 
   unnest_do(reader, writer, keepEmpty, keepMulti, maxUnnestDepth);
+  exporter.output.attr("lengths") = lengths;
   return exporter.output;
 }
 
@@ -189,12 +203,14 @@ List cpp_wkb_unnest(List wkb, bool keepEmpty, bool keepMulti, int maxUnnestDepth
   WKRawVectorListProvider provider(wkb);
   WKBReader reader(provider);
 
-  size_t nGeometries = unnest_count(reader, keepEmpty, keepMulti, maxUnnestDepth);
+  IntegerVector lengths = unnest_count(reader, keepEmpty, keepMulti, maxUnnestDepth);
+  size_t nGeometries = sum(lengths);
   WKRawVectorListExporter exporter(nGeometries);
   WKBWriter writer(exporter);
   writer.setEndian(endian);
 
   unnest_do(reader, writer, keepEmpty, keepMulti, maxUnnestDepth);
+  exporter.output.attr("lengths") = lengths;
   return exporter.output;
 }
 
@@ -203,10 +219,12 @@ List cpp_wksxp_unnest(List wksxp, bool keepEmpty, bool keepMulti, int maxUnnestD
   WKRcppSEXPProvider provider(wksxp);
   WKRcppSEXPReader reader(provider);
 
-  size_t nGeometries = unnest_count(reader, keepEmpty, keepMulti, maxUnnestDepth);
+  IntegerVector lengths = unnest_count(reader, keepEmpty, keepMulti, maxUnnestDepth);
+  size_t nGeometries = sum(lengths);
   WKRcppSEXPExporter exporter(nGeometries);
   WKRcppSEXPWriter writer(exporter);
 
   unnest_do(reader, writer, keepEmpty, keepMulti, maxUnnestDepth);
+  exporter.output.attr("lengths") = lengths;
   return exporter.output;
 }
