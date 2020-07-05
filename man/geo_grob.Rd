@@ -87,7 +87,8 @@ geo_grob(
 \item{x}{A geometry-like object, or one that can be
 coerced to a geometry-like object using \code{\link[=as_geovctr]{as_geovctr()}}.}
 
-\item{...}{Unused}
+\item{...}{Graphical parameters passed to \code{\link[grid:gpar]{grid::gpar()}}. These are recycled along
+the input. Dynamic dots (e.g., \verb{!!!}) are supported.}
 
 \item{rule}{Use "winding" if polygon rings are correctly encoded with a winding
 direction.}

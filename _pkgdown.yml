@@ -23,6 +23,9 @@ reference:
   - geo_coalesce
   - geo_geometry_type
   - plot.geovctrs_xy
+  - geo_grob
+  - geo_transform
+  - geo_unnest
 
 - title: Utility functioons
   desc: These might get moved to another package, but for now they live here

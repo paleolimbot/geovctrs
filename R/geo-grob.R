@@ -1,8 +1,8 @@
 
 #' Create graphical objects
 #'
-#' @inheritParams geo_bbox
 #' @inheritParams wkutils::wkt_grob
+#' @inheritParams geo_bbox
 #'
 #' @return A [grid graphical object][grid::grob]
 #' @export
