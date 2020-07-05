@@ -11,12 +11,12 @@
 template<typename ContainerType>
 class GeovctrsFieldsProvider: public WKProvider {
 public:
-  GeovctrsFieldsProvider(ContainerType container, uint32_t size):
+  GeovctrsFieldsProvider(const ContainerType& container, uint32_t size):
     container(container), size(size), index(UINT32_MAX) {}
 
   template<typename ItemType, typename VectorType>
   ItemType field(size_t field) {
-    VectorType vector = this->container[field];
+    const VectorType& vector = this->container[field];
     return vector[this->index];
   }
 
@@ -49,7 +49,7 @@ public:
   }
 
 protected:
-  ContainerType container;
+  const ContainerType& container;
 
 private:
   uint32_t size;

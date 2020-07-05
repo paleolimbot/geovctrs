@@ -17,13 +17,13 @@ using namespace Rcpp;
 
 class RcppFieldsProvider: public GeovctrsFieldsProvider<List> {
 public:
-  RcppFieldsProvider(List container):
+  RcppFieldsProvider(const List& container):
     GeovctrsFieldsProvider<List>(container, Rf_xlength(container[0])) {}
 };
 
 class RcppFieldsExporter: public GeovctrsFieldsExporter<List> {
 public:
-  RcppFieldsExporter(List container):
+  RcppFieldsExporter(const List& container):
     GeovctrsFieldsExporter<List>(container, Rf_xlength(container[0])) {}
 };
 
