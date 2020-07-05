@@ -139,6 +139,12 @@ test_that("envelope works with corner cases", {
   )
 })
 
+test_that("empty geometries have empty envelopes", {
+  expect_true(geo_is_empty(geo_envelope("POINT EMPTY")))
+  expect_true(geo_is_empty(geo_envelope(geo_envelope("POINT EMPTY"))))
+  expect_true(geo_is_empty(geo_envelope(geo_rect(NA, NA, NA, NA))))
+})
+
 test_that("bbox works", {
   # character (works because of as_geovctr())
   expect_identical(
@@ -229,6 +235,12 @@ test_that("misssing values have the correct bounding boxes", {
   expect_identical(geo_bbox(NA_xy_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf))
   expect_identical(geo_bbox(NA_segment_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf))
   expect_identical(geo_bbox(NA_rect_, na.rm = TRUE), geo_rect(Inf, Inf, -Inf, -Inf))
+})
+
+test_that("empty geometries have empty bboxes", {
+  expect_true(geo_is_empty(geo_bbox("POINT EMPTY")))
+  expect_true(geo_is_empty(geo_bbox(geo_bbox("POINT EMPTY"))))
+  expect_true(geo_is_empty(geo_bbox(geo_rect(NA, NA, NA, NA))))
 })
 
 test_that("lim functions work", {

@@ -24,11 +24,16 @@ public:
     meta.hasSize = true;
     meta.srid = srid;
 
-    // treat NA, NA -> NA NA or Inf, Inf -> -Inf, -Inf as an empty rectangle
-    if ((std::isnan(xmin)) ||
-        (std::isnan(ymin)) ||
-        (std::isnan(xmax)) ||
-        (std::isnan(ymax))) {
+    // treat any rectangle with a nan or -Inf width or height as empty
+    // width/height of Inf *is* allowed, since this could be used to encode
+    // a rectangle covering everything
+    double width = xmax - xmin;
+    double height = ymax - ymin;
+
+    if ((std::isnan(width)) ||
+        (std::isnan(height)) ||
+        (width == -INFINITY) ||
+        (height == -INFINITY)) {
       meta.size = 0;
       this->handler->nextGeometryStart(meta, WKReader::PART_ID_NONE);
       this->handler->nextGeometryEnd(meta, WKReader::PART_ID_NONE);
