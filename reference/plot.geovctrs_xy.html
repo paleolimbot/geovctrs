@@ -129,7 +129,7 @@ in the wkutils package." />
 
     <div class="ref-description">
     <p>These functions are basic plot implementations for the geovctrs types.
-Similar <code><a href='https://rdrr.io/pkg/sf/man/plot.html'>plot()</a></code> methods are available for <a href='https://rdrr.io/pkg/wkutils/man/plot.wk_wkt.html'>well-known types</a>
+Similar <code><a href='https://rdrr.io/pkg/sf/man/plot.html'>plot()</a></code> methods are available for <a href='https://rdrr.io/pkg/wkutils/man/wkt_plot.html'>well-known types</a>
 in the wkutils package.</p>
     </div>
 
@@ -139,7 +139,7 @@ in the wkutils package.</p>
   <span class='kw'>...</span>,
   add = <span class='fl'>FALSE</span>,
   asp = <span class='fl'>1</span>,
-  bbox = <span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_bbox.html'>geo_bbox</a></span>(<span class='kw'>x</span>, finite = <span class='fl'>TRUE</span>),
+  bbox = <span class='fu'><a href='geo_bbox.html'>geo_bbox</a></span>(<span class='kw'>x</span>, finite = <span class='fl'>TRUE</span>),
   xlab = <span class='st'>""</span>,
   ylab = <span class='st'>""</span>
 )
@@ -150,7 +150,7 @@ in the wkutils package.</p>
   <span class='kw'>...</span>,
   add = <span class='fl'>FALSE</span>,
   asp = <span class='fl'>1</span>,
-  bbox = <span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_bbox.html'>geo_bbox</a></span>(<span class='kw'>x</span>, finite = <span class='fl'>TRUE</span>),
+  bbox = <span class='fu'><a href='geo_bbox.html'>geo_bbox</a></span>(<span class='kw'>x</span>, finite = <span class='fl'>TRUE</span>),
   xlab = <span class='st'>""</span>,
   ylab = <span class='st'>""</span>
 )
@@ -161,7 +161,7 @@ in the wkutils package.</p>
   <span class='kw'>...</span>,
   add = <span class='fl'>FALSE</span>,
   asp = <span class='fl'>1</span>,
-  bbox = <span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_bbox.html'>geo_bbox</a></span>(<span class='kw'>x</span>, finite = <span class='fl'>TRUE</span>),
+  bbox = <span class='fu'><a href='geo_bbox.html'>geo_bbox</a></span>(<span class='kw'>x</span>, finite = <span class='fl'>TRUE</span>),
   xlab = <span class='st'>""</span>,
   ylab = <span class='st'>""</span>
 )</pre>
@@ -172,7 +172,7 @@ in the wkutils package.</p>
     <tr>
       <th>x</th>
       <td><p>A geometry-like object, or one that can be
-coerced to a geometry-like object using <code><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>as_geovctr()</a></code>.</p></td>
+coerced to a geometry-like object using <code><a href='is_geovctr.html'>as_geovctr()</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -190,7 +190,7 @@ for xy vectors, <code><a href='https://rdrr.io/r/graphics/segments.html'>graphic
     </tr>
     <tr>
       <th>bbox</th>
-      <td><p>The limits of the plot. Defaults to <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_bbox.html'>geo_bbox(x, finite = TRUE)</a></code>.</p></td>
+      <td><p>The limits of the plot. Defaults to <code><a href='geo_bbox.html'>geo_bbox(x, finite = TRUE)</a></code>.</p></td>
     </tr>
     </table>
 
@@ -199,18 +199,7 @@ for xy vectors, <code><a href='https://rdrr.io/r/graphics/segments.html'>graphic
     <p><code>x</code>, invisibly.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># plot functions for wk types are provided</span>
-<span class='co'># in the wk package:</span>
-<span class='fu'><a href='https://rdrr.io/pkg/sf/man/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"POINT (10 40)"</span>))</div><div class='img'><img src='plot.geovctrs_xy-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/sf/man/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"LINESTRING (30 10, 10 30, 40 40)"</span>))</div><div class='img'><img src='plot.geovctrs_xy-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/sf/man/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"MULTIPOINT ((10 40), (40 30))"</span>))</div><div class='img'><img src='plot.geovctrs_xy-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/sf/man/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"MULTILINESTRING ((10 10, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))"</span>))</div><div class='img'><img src='plot.geovctrs_xy-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/sf/man/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(<span class='st'>"POLYGON ((30 10, 10 30, 40 40, 30 10))"</span>))</div><div class='img'><img src='plot.geovctrs_xy-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/sf/man/plot.html'>plot</a></span>(
-  <span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkt.html'>wkt</a></span>(
-    <span class='st'>"MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),
-      ((20 35, 10 30, 10 10, 30 5, 45 20, 20 35), (30 20, 20 15, 20 25, 30 20)))"</span>
-      ((20 35, 10 30, 10 10, 30 5, 45 20, 20 35), (30 20, 20 15, 20 25, 30 20)))"
-  ),
-  col = <span class='st'>"grey90"</span>
-)</div><div class='img'><img src='plot.geovctrs_xy-6.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># plot functions with the same arguments are also available:</span>
-<span class='fu'><a href='https://rdrr.io/pkg/sf/man/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_xy.html'>geo_xy</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>))</div><div class='img'><img src='plot.geovctrs_xy-7.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/sf/man/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_segment.html'>geo_segment</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span>))</div><div class='img'><img src='plot.geovctrs_xy-8.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/sf/man/plot.html'>plot</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_rect.html'>geo_rect</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>), col = <span class='st'>"grey90"</span>)</div><div class='img'><img src='plot.geovctrs_xy-9.png' alt='' width='700' height='433' /></div><div class='input'></div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/sf/man/plot.html'>plot</a></span>(<span class='fu'><a href='geo_xy.html'>geo_xy</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>))</div><div class='img'><img src='plot.geovctrs_xy-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/sf/man/plot.html'>plot</a></span>(<span class='fu'><a href='geo_segment.html'>geo_segment</a></span>(<span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span>))</div><div class='img'><img src='plot.geovctrs_xy-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/sf/man/plot.html'>plot</a></span>(<span class='fu'><a href='geo_rect.html'>geo_rect</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>), col = <span class='st'>"grey90"</span>)</div><div class='img'><img src='plot.geovctrs_xy-3.png' alt='' width='700' height='433' /></div><div class='input'></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

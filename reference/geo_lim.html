@@ -128,20 +128,20 @@ works like range(), but also works with geo_lim() vectors." />
     </div>
 
     <div class="ref-description">
-    <p>Vectorized version of <code><a href='https://rdrr.io/r/base/range.html'>range()</a></code> to support <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_bbox.html'>geo_x_range()</a></code>,
-<code><a href='https://rdrr.io/pkg/geovctrs/man/geo_bbox.html'>geo_y_range()</a></code>, and <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_set_z.html'>geo_z_range()</a></code>. The <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_lim.html'>geo_range()</a></code> function
-works like <code><a href='https://rdrr.io/r/base/range.html'>range()</a></code>, but also works with <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_lim.html'>geo_lim()</a></code> vectors.</p>
+    <p>Vectorized version of <code><a href='https://rdrr.io/r/base/range.html'>range()</a></code> to support <code><a href='geo_bbox.html'>geo_x_range()</a></code>,
+<code><a href='geo_bbox.html'>geo_y_range()</a></code>, and <code><a href='geo_set_z.html'>geo_z_range()</a></code>. The <code>geo_range()</code> function
+works like <code><a href='https://rdrr.io/r/base/range.html'>range()</a></code>, but also works with <code>geo_lim()</code> vectors.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_lim.html'>geo_lim</a></span>(lower = <span class='fu'><a href='https://rdrr.io/r/base/double.html'>double</a></span>(), upper = <span class='fu'><a href='https://rdrr.io/r/base/double.html'>double</a></span>())
+    <pre class="usage"><span class='fu'>geo_lim</span>(lower = <span class='fu'><a href='https://rdrr.io/r/base/double.html'>double</a></span>(), upper = <span class='fu'><a href='https://rdrr.io/r/base/double.html'>double</a></span>())
 
-<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_lim.html'>geo_range</a></span>(<span class='kw'>x</span>, na.rm = <span class='fl'>FALSE</span>, finite = <span class='fl'>FALSE</span>)
+<span class='fu'>geo_range</span>(<span class='kw'>x</span>, na.rm = <span class='fl'>FALSE</span>, finite = <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for default</span>
-<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_lim.html'>geo_range</a></span>(<span class='kw'>x</span>, na.rm = <span class='fl'>FALSE</span>, finite = <span class='fl'>FALSE</span>)
+<span class='fu'>geo_range</span>(<span class='kw'>x</span>, na.rm = <span class='fl'>FALSE</span>, finite = <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for geovctrs_lim</span>
-<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_lim.html'>geo_range</a></span>(<span class='kw'>x</span>, na.rm = <span class='fl'>FALSE</span>, finite = <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>geo_range</span>(<span class='kw'>x</span>, na.rm = <span class='fl'>FALSE</span>, finite = <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -152,7 +152,7 @@ works like <code><a href='https://rdrr.io/r/base/range.html'>range()</a></code>,
     </tr>
     <tr>
       <th>x</th>
-      <td><p>A vector of numbers or <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_lim.html'>geo_lim()</a></code>s.</p></td>
+      <td><p>A vector of numbers or <code>geo_lim()</code>s.</p></td>
     </tr>
     <tr>
       <th>na.rm</th>
@@ -167,16 +167,16 @@ implies <code>na.rm = TRUE</code>.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code><a href='https://rdrr.io/pkg/geovctrs/man/new_geovctrs_lim.html'>new_geovctrs_lim()</a></code>.</p>
+    <p>A <code><a href='new_geovctrs_lim.html'>new_geovctrs_lim()</a></code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_lim.html'>geo_lim</a></span>(<span class='fl'>3</span>, <span class='fl'>4</span>)</div><div class='output co'>#&gt; &lt;geovctrs_lim[1]&gt;
+    <pre class="examples"><div class='input'><span class='fu'>geo_lim</span>(<span class='fl'>3</span>, <span class='fl'>4</span>)</div><div class='output co'>#&gt; &lt;geovctrs_lim[1]&gt;
 #&gt; [1] [3, 4]</div><div class='input'>
 <span class='co'># works like range() but returns a geo_lim()</span>
-<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_lim.html'>geo_range</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>)</div><div class='output co'>#&gt; &lt;geovctrs_lim[1]&gt;
+<span class='fu'>geo_range</span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>100</span>)</div><div class='output co'>#&gt; &lt;geovctrs_lim[1]&gt;
 #&gt; [1] [1, 100]</div><div class='input'>
 <span class='co'># you can also pass geo_lim() vectors to geo_range()</span>
-<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_lim.html'>geo_range</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_lim.html'>geo_lim</a></span>(<span class='fl'>81</span>, <span class='fl'>Inf</span>), <span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_lim.html'>geo_lim</a></span>(<span class='op'>-</span><span class='fl'>100</span>, <span class='fl'>12</span>)))</div><div class='output co'>#&gt; &lt;geovctrs_lim[1]&gt;
+<span class='fu'>geo_range</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'>geo_lim</span>(<span class='fl'>81</span>, <span class='fl'>Inf</span>), <span class='fu'>geo_lim</span>(<span class='op'>-</span><span class='fl'>100</span>, <span class='fl'>12</span>)))</div><div class='output co'>#&gt; &lt;geovctrs_lim[1]&gt;
 #&gt; [1] [-100, Inf]</div><div class='input'></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

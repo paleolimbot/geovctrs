@@ -139,17 +139,17 @@ with each feature to propagate this information through
 calculations.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_srid.html'>geo_srid</a></span>(<span class='kw'>x</span>)
+    <pre class="usage"><span class='fu'>geo_srid</span>(<span class='kw'>x</span>)
 
 <span class='co'># S3 method for default</span>
-<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_srid.html'>geo_srid</a></span>(<span class='kw'>x</span>)
+<span class='fu'>geo_srid</span>(<span class='kw'>x</span>)
 
-<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_srid.html'>geo_set_srid</a></span>(<span class='kw'>x</span>, <span class='kw'>srid</span>)
+<span class='fu'>geo_set_srid</span>(<span class='kw'>x</span>, <span class='kw'>srid</span>)
 
 <span class='co'># S3 method for default</span>
-<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_srid.html'>geo_set_srid</a></span>(<span class='kw'>x</span>, <span class='kw'>srid</span>)
+<span class='fu'>geo_set_srid</span>(<span class='kw'>x</span>, <span class='kw'>srid</span>)
 
-<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_srid.html'>as_geo_srid</a></span>(<span class='kw'>x</span>)</pre>
+<span class='fu'>as_geo_srid</span>(<span class='kw'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -157,12 +157,12 @@ calculations.</p>
     <tr>
       <th>x</th>
       <td><p>A geometry-like object, or one that can be
-coerced to a geometry-like object using <code><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>as_geovctr()</a></code>.</p></td>
+coerced to a geometry-like object using <code><a href='is_geovctr.html'>as_geovctr()</a></code>.</p></td>
     </tr>
     <tr>
       <th>srid</th>
       <td><p>A spatial reference identifier, coerced to
-an integer by <code><a href='https://rdrr.io/pkg/geovctrs/man/geo_srid.html'>as_geo_srid()</a></code>. These identifiers can
+an integer by <code>as_geo_srid()</code>. These identifiers can
 and should be managed outside of geovctrs except for
 0, which is interpreted as "not set".</p></td>
     </tr>
@@ -181,10 +181,10 @@ and should be managed outside of geovctrs except for
   )
 )
 
-<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_srid.html'>geo_srid</a></span>(<span class='kw'>geometries</span>)</div><div class='output co'>#&gt; [1] 26920  4326</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_srid.html'>geo_srid</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_srid.html'>geo_set_srid</a></span>(<span class='kw'>geometries</span>, <span class='fl'>NA</span>))</div><div class='output co'>#&gt; [1] NA NA</div><div class='input'>
+<span class='fu'>geo_srid</span>(<span class='kw'>geometries</span>)</div><div class='output co'>#&gt; [1] 26920  4326</div><div class='input'><span class='fu'>geo_srid</span>(<span class='fu'>geo_set_srid</span>(<span class='kw'>geometries</span>, <span class='fl'>NA</span>))</div><div class='output co'>#&gt; [1] NA NA</div><div class='input'>
 <span class='co'># SRIDs are propogated through conversions,</span>
 <span class='co'># or discarded with a warning</span>
-<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_srid.html'>geo_srid</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkb.html'>as_wkb</a></span>(<span class='kw'>geometries</span>))</div><div class='output co'>#&gt; [1] 26920  4326</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_srid.html'>geo_srid</a></span>(<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/new_geovctrs_xy.html'>as_geo_xy</a></span>(<span class='kw'>geometries</span>))</div><div class='output co'>#&gt; [1] 0 0</div><div class='input'></div></pre>
+<span class='fu'>geo_srid</span>(<span class='fu'><a href='https://rdrr.io/pkg/wk/man/wkb.html'>as_wkb</a></span>(<span class='kw'>geometries</span>))</div><div class='output co'>#&gt; [1] 26920  4326</div><div class='input'><span class='fu'>geo_srid</span>(<span class='fu'><a href='new_geovctrs_xy.html'>as_geo_xy</a></span>(<span class='kw'>geometries</span>))</div><div class='output co'>#&gt; [1] 0 0</div><div class='input'></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

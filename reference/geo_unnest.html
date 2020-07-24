@@ -129,22 +129,22 @@
     <p>Unnest recursive geometry structures</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_unnest.html'>geo_unnest</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>, keep_empty = <span class='fl'>FALSE</span>, keep_multi = <span class='fl'>TRUE</span>, max_depth = <span class='fl'>1</span>)
+    <pre class="usage"><span class='fu'>geo_unnest</span>(<span class='kw'>x</span>, <span class='kw'>...</span>, keep_empty = <span class='fl'>FALSE</span>, keep_multi = <span class='fl'>TRUE</span>, max_depth = <span class='fl'>1</span>)
 
 <span class='co'># S3 method for default</span>
-<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_unnest.html'>geo_unnest</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>, keep_empty = <span class='fl'>FALSE</span>, keep_multi = <span class='fl'>TRUE</span>, max_depth = <span class='fl'>1</span>)
+<span class='fu'>geo_unnest</span>(<span class='kw'>x</span>, <span class='kw'>...</span>, keep_empty = <span class='fl'>FALSE</span>, keep_multi = <span class='fl'>TRUE</span>, max_depth = <span class='fl'>1</span>)
 
 <span class='co'># S3 method for wk_wkt</span>
-<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_unnest.html'>geo_unnest</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>, keep_empty = <span class='fl'>FALSE</span>, keep_multi = <span class='fl'>TRUE</span>, max_depth = <span class='fl'>1</span>)
+<span class='fu'>geo_unnest</span>(<span class='kw'>x</span>, <span class='kw'>...</span>, keep_empty = <span class='fl'>FALSE</span>, keep_multi = <span class='fl'>TRUE</span>, max_depth = <span class='fl'>1</span>)
 
 <span class='co'># S3 method for wk_wkb</span>
-<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_unnest.html'>geo_unnest</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>, keep_empty = <span class='fl'>FALSE</span>, keep_multi = <span class='fl'>TRUE</span>, max_depth = <span class='fl'>1</span>)
+<span class='fu'>geo_unnest</span>(<span class='kw'>x</span>, <span class='kw'>...</span>, keep_empty = <span class='fl'>FALSE</span>, keep_multi = <span class='fl'>TRUE</span>, max_depth = <span class='fl'>1</span>)
 
 <span class='co'># S3 method for wk_wksxp</span>
-<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_unnest.html'>geo_unnest</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>, keep_empty = <span class='fl'>FALSE</span>, keep_multi = <span class='fl'>TRUE</span>, max_depth = <span class='fl'>1</span>)
+<span class='fu'>geo_unnest</span>(<span class='kw'>x</span>, <span class='kw'>...</span>, keep_empty = <span class='fl'>FALSE</span>, keep_multi = <span class='fl'>TRUE</span>, max_depth = <span class='fl'>1</span>)
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_unnest.html'>geo_unnest</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>, keep_empty = <span class='fl'>FALSE</span>, keep_multi = <span class='fl'>TRUE</span>, max_depth = <span class='fl'>1</span>)</pre>
+<span class='fu'>geo_unnest</span>(<span class='kw'>x</span>, <span class='kw'>...</span>, keep_empty = <span class='fl'>FALSE</span>, keep_multi = <span class='fl'>TRUE</span>, max_depth = <span class='fl'>1</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -152,7 +152,7 @@
     <tr>
       <th>x</th>
       <td><p>A geometry-like object, or one that can be
-coerced to a geometry-like object using <code><a href='https://rdrr.io/pkg/geovctrs/man/is_geovctr.html'>as_geovctr()</a></code>.</p></td>
+coerced to a geometry-like object using <code><a href='is_geovctr.html'>as_geovctr()</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -175,10 +175,10 @@ rather than collapsing to length 0.</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_unnest.html'>geo_unnest</a></span>(<span class='st'>"GEOMETRYCOLLECTION (POINT (1 2), POINT (3 4))"</span>)</div><div class='output co'>#&gt; &lt;wk_wkt[2]&gt;
-#&gt; [1] POINT (1 2) POINT (3 4)</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_unnest.html'>geo_unnest</a></span>(<span class='st'>"GEOMETRYCOLLECTION EMPTY"</span>)</div><div class='output co'>#&gt; &lt;wk_wkt[0]&gt;</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_unnest.html'>geo_unnest</a></span>(<span class='st'>"GEOMETRYCOLLECTION EMPTY"</span>, keep_empty = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; &lt;wk_wkt[1]&gt;
+    <pre class="examples"><div class='input'><span class='fu'>geo_unnest</span>(<span class='st'>"GEOMETRYCOLLECTION (POINT (1 2), POINT (3 4))"</span>)</div><div class='output co'>#&gt; &lt;wk_wkt[2]&gt;
+#&gt; [1] POINT (1 2) POINT (3 4)</div><div class='input'><span class='fu'>geo_unnest</span>(<span class='st'>"GEOMETRYCOLLECTION EMPTY"</span>)</div><div class='output co'>#&gt; &lt;wk_wkt[0]&gt;</div><div class='input'><span class='fu'>geo_unnest</span>(<span class='st'>"GEOMETRYCOLLECTION EMPTY"</span>, keep_empty = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; &lt;wk_wkt[1]&gt;
 #&gt; [1] GEOMETRYCOLLECTION EMPTY</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_unnest.html'>geo_unnest</a></span>(<span class='kw'>geo_example_wkt</span>, keep_multi = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; &lt;wk_wkt[18]&gt;
+<span class='fu'>geo_unnest</span>(<span class='kw'>geo_example_wkt</span>, keep_multi = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; &lt;wk_wkt[18]&gt;
 #&gt;  [1] &lt;NA&gt;                                    
 #&gt;  [2] POINT (30 10)                           
 #&gt;  [3] POINT EMPTY                             
@@ -196,7 +196,7 @@ rather than collapsing to length 0.</p></td>
 #&gt; [15] MULTIPOLYGON EMPTY                      
 #&gt; [16] POINT (40 10)                           
 #&gt; [17] LINESTRING (10 10, 20 20, 10 40...      
-#&gt; [18] POLYGON ((40 40, 20 45, 45 30...        </div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/geovctrs/man/geo_unnest.html'>geo_unnest</a></span>(<span class='kw'>geo_example_wkt</span>, keep_multi = <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; &lt;wk_wkt[24]&gt;
+#&gt; [18] POLYGON ((40 40, 20 45, 45 30...        </div><div class='input'><span class='fu'>geo_unnest</span>(<span class='kw'>geo_example_wkt</span>, keep_multi = <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; &lt;wk_wkt[24]&gt;
 #&gt;  [1] &lt;NA&gt;                               POINT (30 10)                     
 #&gt;  [3] POINT EMPTY                        POINT Z (1 1 5)                   
 #&gt;  [5] POINT (10 40)                      POINT (40 30)                     
