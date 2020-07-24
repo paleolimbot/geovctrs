@@ -34,7 +34,6 @@ Imports:
     wk,
     wkutils
 Remotes:
-    paleolimbot/wk,
     paleolimbot/wkutils
 URL: https://paleolimbot.github.io/geovctrs, https://github.com/paleolimbot/geovctrs
 BugReports: https://github.com/paleolimbot/geovctrs/issues
