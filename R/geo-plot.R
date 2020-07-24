@@ -2,7 +2,7 @@
 #' Plot geometry vectors
 #'
 #' These functions are basic plot implementations for the geovctrs types.
-#' Similar [plot()] methods are available for [well-known types][wkutils::plot.wk_wkt]
+#' Similar [plot()] methods are available for [well-known types][wkutils::wkt_plot]
 #' in the wkutils package.
 #'
 #' @inheritParams geo_bbox
@@ -17,22 +17,6 @@
 #' @export
 #'
 #' @examples
-#' # plot functions for wk types are provided
-#' # in the wk package:
-#' plot(wkt("POINT (10 40)"))
-#' plot(wkt("LINESTRING (30 10, 10 30, 40 40)"))
-#' plot(wkt("MULTIPOINT ((10 40), (40 30))"))
-#' plot(wkt("MULTILINESTRING ((10 10, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))"))
-#' plot(wkt("POLYGON ((30 10, 10 30, 40 40, 30 10))"))
-#' plot(
-#'   wkt(
-#'     "MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),
-#'       ((20 35, 10 30, 10 10, 30 5, 45 20, 20 35), (30 20, 20 15, 20 25, 30 20)))"
-#'   ),
-#'   col = "grey90"
-#' )
-#'
-#' # plot functions with the same arguments are also available:
 #' plot(geo_xy(1:5, 1:5))
 #' plot(geo_segment(0, 0, 1, 1))
 #' plot(geo_rect(0, 1, 2, 3), col = "grey90")
